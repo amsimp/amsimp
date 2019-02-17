@@ -2,20 +2,32 @@
 
 #Importing Dependencies
 import math
+from scipy.constants import gas_constant
+from astropy import constants as const
 
 #-----------------------------------------------------------------------------------------#
 
 #Predefined Constants.
 #Angular rotation rate of Earth.
-omega = (2 * math.pi) / 24  
+Upomega = (2 * math.pi) / 24
+#Ideal Gas Constant
+R = gas_constant
+#Radius of the Earth.
+a = const.R_earth
+a = a.value
+#Big G.
+G = const.G
+G = G.value
+#Mass of the Earth.
+m = const.M_earth
+m = m.value
 
 #-----------------------------------------------------------------------------------------#
 
 #Zonal velocity calculations.
 #Equation to calculate zonal velocity.
 def u(phi):
-	a = 6378100.0
-	return a * omega * ((math.sin(phi) ** 2) / math.cos(phi))
+	return a * Upomega * ((math.sin(math.radians(phi)) ** 2) / math.cos(math.radians(phi)))
 
 #Creates a list of latitudes (Increments by one degree).
 latitude = list(range(-90, 91))
@@ -32,22 +44,39 @@ zonalvelocity_latitude = dict(zip(latitude, zonal_velocity))
 #-----------------------------------------------------------------------------------------#
 
 #Meridional velocity calculations.
+#Atmospheric pressure calculations.
+#Equation to calculate atmospheric pressure based on height above sea level.
+def v(z):
+	z /= 1000
+	return -832.6777 + (101323.6 - -832.6777) / (1 + (z / 6.527821) ** 2.313703)
+
+#Creates a list with heights above sea level in kilometres between 0 & 50 (Increments by 100 metres).
+height = []
+height_sea_level = 0
+while height_sea_level < 50100:
+	height.append(height_sea_level)
+	height_sea_level += 100
+
+#Creates a list of atmospheric pressure based on the height list.
+pressure = []
+for i in height:
+	i = v(i)
+	pressure.append(i)
+
+#Combines the height above sea level, and the atmospheric density lists into a dictionary.
+pressure_height = dict(zip(height, pressure))
+
+
+
 
 #-----------------------------------------------------------------------------------------#
 
 #Vertical velocity calculations.
 #Atmospheric density calculations.
 #Equation to calculate atmospheric density based on height above sea level.
-def rho(h):
-	h /= 1000 
-	return -0.00666837 + (1.224977 - -0.00666837) / (1 + (h / 8.150575) ** 2.807024)
-
-#Creates a list with heights above sea level in kilometres between 0 & 86 (Increments by 100 metres).
-height = []
-height_sea_level = 0
-while height_sea_level < 50100:
-	height.append(height_sea_level)
-	height_sea_level += 100
+def rho(z):
+	z /= 1000 
+	return -0.00666837 + (1.224977 - -0.00666837) / (1 + (z / 8.150575) ** 2.807024)
 
 #Creates a list of atmospheric densities based on the height list.
 density = []
@@ -57,5 +86,48 @@ for i in height:
 
 #Combines the height above sea level, and the atmospheric density lists into a dictionary.
 density_height = dict(zip(height, density))
+
+#Equation to calculate vertical velocity.
+def omega(rho):
+	return rho
+
+
+
+
+#-----------------------------------------------------------------------------------------#
+
+#Temperature calculations.
+
+
+
+
+#-----------------------------------------------------------------------------------------#
+
+#Geopotential calculations.
+#Equation to calculate geopotential.
+def Upphi(z):
+	return G * m * ((1 / a) - (1 / (a + z)))
+
+#Creates a geopotential list based on the height list.
+geopotential = []
+for i in height:
+	i = Upphi(i)
+	geopotential.append(i)
+
+#Combines the geopotential, and the height lists into a dictionary.
+geopotential_height = dict(zip(height, geopotential))
+
+#-----------------------------------------------------------------------------------------#
+
+#Coriolis Force
+def f(phi):
+	return 2 * Upomega * math.sin(math.radians(phi))
+
+coriolis_force = []
+for i in latitude:
+	i = f(i)
+	coriolis_force.append(i)
+
+coriolisforce_latitude = dict(zip(latitude, coriolis_force))
 
 #-----------------------------------------------------------------------------------------#
