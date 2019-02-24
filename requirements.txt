@@ -1,2 +1,4 @@
 scipy
 astropy
+matplotlib
+sympy

@@ -4,6 +4,7 @@
 import math
 from scipy.constants import gas_constant
 from astropy import constants as const
+import sympy as cal
 
 #-----------------------------------------------------------------------------------------#
 
@@ -40,6 +41,8 @@ for i in latitude:
 
 #Combines zonal velocity, and the latitude lists into a dictionary.
 zonalvelocity_latitude = dict(zip(latitude, zonal_velocity))
+
+#THE ABOVE CALCULATIONS COULD BE WRONG!
 
 #-----------------------------------------------------------------------------------------#
 
@@ -87,12 +90,20 @@ for i in height:
 #Combines the height above sea level, and the atmospheric density lists into a dictionary.
 density_height = dict(zip(height, density))
 
-#Equation to calculate vertical velocity.
+#The equation for vertical velocity.
 def omega(rho):
-	return rho
+	return (-3.63021647664095 * 10 ** -11) * rho ** 1.807024 / ((1.0500276108711 * 10 ** -11) * rho ** 2.807024 + 1) ** 2
 
+#Creates a list of vertical velocities based on atmospheric density.
+vertical_velocity = []
+for i in density:
+	i = omega(i)
+	vertical_velocity.append(i)
 
+#Combines the height above sea level, and the vertical velocity lists into a dictionary.
+verticalvelocity_height = dict(zip(height, vertical_velocity))
 
+#THE ABOVE CALCULATIONS COULD BE WRONG!
 
 #-----------------------------------------------------------------------------------------#
 
