@@ -49,7 +49,7 @@ zonalvelocity_latitude = dict(zip(latitude, zonal_velocity))
 #Meridional velocity calculations.
 #Atmospheric pressure calculations.
 #Equation to calculate atmospheric pressure based on height above sea level.
-def v(z):
+def p(z):
 	z /= 1000
 	return -832.6777 + (101323.6 - -832.6777) / (1 + (z / 6.527821) ** 2.313703)
 
@@ -63,10 +63,10 @@ while height_sea_level < 50100:
 #Creates a list of atmospheric pressure based on the height list.
 pressure = []
 for i in height:
-	i = v(i)
+	i = p(i)
 	pressure.append(i)
 
-#Combines the height above sea level, and the atmospheric density lists into a dictionary.
+#Combines the height above sea level, and the atmospheric pressure lists into a dictionary.
 pressure_height = dict(zip(height, pressure))
 
 
@@ -75,35 +75,18 @@ pressure_height = dict(zip(height, pressure))
 #-----------------------------------------------------------------------------------------#
 
 #Vertical velocity calculations.
-#Atmospheric density calculations.
-#Equation to calculate atmospheric density based on height above sea level.
-def rho(z):
-	z /= 1000 
-	return -0.00666837 + (1.224977 - -0.00666837) / (1 + (z / 8.150575) ** 2.807024)
+#The equation for vertical velocity (derivative of the pressure equation Dp/ Dt).
+def omega(p):
+	return -832.6777 + 102156.2777 / (1.49196723444642e-9* p ** 2.313703 + 1)
 
-#Creates a list of atmospheric densities based on the height list.
-density = []
-for i in height:
-	i = rho(i)
-	density.append(i)
-
-#Combines the height above sea level, and the atmospheric density lists into a dictionary.
-density_height = dict(zip(height, density))
-
-#The equation for vertical velocity.
-def omega(rho):
-	return (-3.63021647664095 * 10 ** -11) * rho ** 1.807024 / ((1.0500276108711 * 10 ** -11) * rho ** 2.807024 + 1) ** 2
-
-#Creates a list of vertical velocities based on atmospheric density.
+#Creates a list of vertical velocities based on atmospheric pressure.
 vertical_velocity = []
-for i in density:
+for i in pressure:
 	i = omega(i)
 	vertical_velocity.append(i)
 
 #Combines the height above sea level, and the vertical velocity lists into a dictionary.
 verticalvelocity_height = dict(zip(height, vertical_velocity))
-
-#THE ABOVE CALCULATIONS COULD BE WRONG!
 
 #-----------------------------------------------------------------------------------------#
 
