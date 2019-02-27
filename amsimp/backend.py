@@ -16,6 +16,7 @@ R = gas_constant
 #Radius of the Earth.
 a = const.R_earth
 a = a.value
+a_in_km = a / 1000
 #Big G.
 G = const.G
 G = G.value
@@ -26,23 +27,24 @@ m = m.value
 #-----------------------------------------------------------------------------------------#
 
 #Zonal velocity calculations.
-#Equation to calculate zonal velocity.
+#Equation to calculate zonal velocity based on the latitude from the equator.
 def u(phi):
-	return a * Upomega * ((math.sin(math.radians(phi)) ** 2) / math.cos(math.radians(phi)))
+	return a_in_km * Upomega * ((math.sin(math.radians(phi)) ** 2 ) / math.cos(math.radians(phi)))
 
-#Creates a list of latitudes (Increments by one degree).
-latitude = list(range(-90, 91))
+#Generates a latitude list (Negatiive numbers describe the Southern Hemisphere. 
+#It increments by one degree. Excludes the poles!
+latitude = list(range(-89, 90))
 
-#Calculates zonal velocity at a particular latitude, and adds it to a list.
+#Creates a zonal velocity list based on the aforementioned equation.
 zonal_velocity = []
 for i in latitude:
 	i = u(i)
 	zonal_velocity.append(i)
 
-#Combines zonal velocity, and the latitude lists into a dictionary.
+#Creates a dictionary that combines the zonal velocity, and latitude lists.
 zonalvelocity_latitude = dict(zip(latitude, zonal_velocity))
 
-#THE ABOVE CALCULATIONS COULD BE WRONG!
+#THESE CALCULATIONS COULD BE WRONG!!!
 
 #-----------------------------------------------------------------------------------------#
 
@@ -114,14 +116,18 @@ geopotential_height = dict(zip(height, geopotential))
 #-----------------------------------------------------------------------------------------#
 
 #Coriolis Force
+#Equation to calculate coriolis force.
 def f(phi):
 	return 2 * Upomega * math.sin(math.radians(phi))
 
+#Creates a coriolis force list.
 coriolis_force = []
 for i in latitude:
 	i = f(i)
 	coriolis_force.append(i)
 
+
+#Combines the coriolis force, and the latitude list into a dictionary.
 coriolisforce_latitude = dict(zip(latitude, coriolis_force))
 
 #-----------------------------------------------------------------------------------------#
