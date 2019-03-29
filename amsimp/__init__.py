@@ -1,3 +1,3 @@
 #AMSIMP Base Module
 
-import amsimp.backend
+from amsimp.backend import Backend

@@ -4,130 +4,118 @@
 import math
 from scipy.constants import gas_constant
 from astropy import constants as const
-import sympy as cal
+import numpy as np
 
 #-----------------------------------------------------------------------------------------#
 
-#Predefined Constants.
-#Angular rotation rate of Earth.
-Upomega = (2 * math.pi) / 24
-#Ideal Gas Constant
-R = gas_constant
-#Radius of the Earth.
-a = const.R_earth
-a = a.value
-a_in_km = a / 1000
-#Big G.
-G = const.G
-G = G.value
-#Mass of the Earth.
-m = const.M_earth
-m = m.value
+class Backend:
+	"""
+	AMSIMP Backend Module - Contains / calculates all the variables needed to utilize the 
+	Primitive Equations. Please do not interact with this class, as it does not have the
+	same level of error checking as other classes.
+	"""
 
-#-----------------------------------------------------------------------------------------#
+	#Predefined Constants.
+	#Angular rotation rate of Earth.
+	Upomega = (2 * math.pi) / 24
+	#Ideal Gas Constant
+	R = gas_constant
+	#Radius of the Earth.
+	a = const.R_earth
+	a = a.value
+	a_in_km = a / 1000
+	#Big G.
+	G = const.G
+	G = G.value
+	#Mass of the Earth.
+	m = const.M_earth
+	m = m.value
 
-#Zonal velocity calculations.
-#Equation to calculate zonal velocity based on the latitude from the equator.
-def u(phi):
-	return a_in_km * Upomega * ((math.sin(math.radians(phi)) ** 2 ) / math.cos(math.radians(phi)))
+	def __init__(self, detail_level = 3):
+		"""
+		Numerical value for the level of detail that will be used in the mathematical 
+		calculations for the computation detail. This value is between 0 and 5. 
+		""" 
+		self.detail_level = detail_level
+		self.detail_level = 10 ** self.detail_level
 
-#Generates a latitude list (Negatiive numbers describe the Southern Hemisphere. 
-#It increments by one degree. Excludes the poles!
-latitude = list(range(-89, 90))
+		if not isinstance(self.detail_level, int):
+			raise ValueError("detail_level must be an integer.")
+		if self.detail_level <= 0 and self.detail_level > 5:
+			raise ValueError("detail_level must be a positive integer between 0 and 5.")
 
-#Creates a zonal velocity list based on the aforementioned equation.
-zonal_velocity = []
-for i in latitude:
-	i = u(i)
-	zonal_velocity.append(i)
+	def longitude_lines(self):
+		#Generates a list of longitude lines.
+		num_of_longitude_lines = 360
 
-#Creates a dictionary that combines the zonal velocity, and latitude lists.
-zonalvelocity_latitude = dict(zip(latitude, zonal_velocity))
+		longitude_lines = [i for i in np.arange(-180, 181, (360 / self.detail_level)) if i >= -180 and i <= 180]
 
-#THESE CALCULATIONS COULD BE WRONG!!!
+		return longitude_lines
 
-#-----------------------------------------------------------------------------------------#
+	def latitude_lines(self):
+		#Generates a list of latitude lines.
+		num_of_latitude_lines = 180
 
-#Meridional velocity calculations.
-#Atmospheric pressure calculations.
-#Equation to calculate atmospheric pressure based on height above sea level.
-def p(z):
-	z /= 1000
-	return -832.6777 + (101323.6 - -832.6777) / (1 + (z / 6.527821) ** 2.313703)
+		latitude_lines = [i for i in np.arange(-90, 91, (180 / self.detail_level)) if i >= -90 and i <= 90]
 
-#Creates a list with heights above sea level in kilometres between 0 & 50 (Increments by 100 metres).
-height = []
-height_sea_level = 0
-while height_sea_level < 50100:
-	height.append(height_sea_level)
-	height_sea_level += 100
+		return latitude_lines
 
-#Creates a list of atmospheric pressure based on the height list.
-pressure = []
-for i in height:
-	i = p(i)
-	pressure.append(i)
+	def altitude_level(self):
+		#Setting the maximum height above sea level (in metres).
+		max_height = 50000
+		mim_height_detail = max_height / 5
 
-#Combines the height above sea level, and the atmospheric pressure lists into a dictionary.
-pressure_height = dict(zip(height, pressure))
+		"""
+		Generates a list which will be used in calculations relating to height above 
+		sea level (array in metres). 
+		"""
+		
+		altitude_level = list(n for n in range(0, max_height + 1) if n % (mim_height_detail / self.detail_level) == 0)
+		return altitude_level
 
+	def coriolis_force(self):
+		"""
+		Generates a list of Coriolis force based on the relevant mathematical formula. 
+		As such, it utilizes the constant, angular rotation of the Earth, and the latitude.
+		"""
+		coriolis_force = []
 
+		for latitude in self.latitude_lines():
+			latitude = 2 * self.Upomega * math.sin(math.radians(latitude))
+			coriolis_force.append(latitude)
 
+		return coriolis_force
 
-#-----------------------------------------------------------------------------------------#
+	def geopotential(self):
+		"""
+		Generates a list of geopotential based on the relevant mathematical formula.
+		As such, it utilizes gravitational constant, the mass and radius of the Earth,
+		and height in metres above sea level.    
+		"""
+		geopotential = []
+		
+		for altitude in self.altitude_level():
+			altitude = self.G * self.m * ((1 / self.a) - (1 / (self.a + altitude)))
+			geopotential.append(altitude)
 
-#Vertical velocity calculations.
-#The equation for vertical velocity (derivative of the pressure equation Dp/ Dt).
-def omega(p):
-	return -832.6777 + 102156.2777 / (1.49196723444642e-9* p ** 2.313703 + 1)
+		return geopotential
 
-#Creates a list of vertical velocities based on atmospheric pressure.
-vertical_velocity = []
-for i in pressure:
-	i = omega(i)
-	vertical_velocity.append(i)
+	def pressure(self):
+		"""
+		Generates a list of atmospheric pressure by utilizing the Barometric Formula
+		for Pressure. As such, it was generated from a height above sea level list.
+		Such a list was created in the function, altitude_level. 
+		"""
+		pressure = []
 
-#Combines the height above sea level, and the vertical velocity lists into a dictionary.
-verticalvelocity_height = dict(zip(height, vertical_velocity))
+		for altitude in self.altitude_level():
+			altitude /= 1000
+			altitude = -832.6777 + (101323.6 + 832.6777) / (1 + (altitude / 6.527821) ** 2.313703)
+			pressure.append(altitude)
 
-#-----------------------------------------------------------------------------------------#
+		return pressure
 
-#Temperature calculations.
-
-
-
-
-#-----------------------------------------------------------------------------------------#
-
-#Geopotential calculations.
-#Equation to calculate geopotential.
-def Upphi(z):
-	return G * m * ((1 / a) - (1 / (a + z)))
-
-#Creates a geopotential list based on the height list.
-geopotential = []
-for i in height:
-	i = Upphi(i)
-	geopotential.append(i)
-
-#Combines the geopotential, and the height lists into a dictionary.
-geopotential_height = dict(zip(height, geopotential))
-
-#-----------------------------------------------------------------------------------------#
-
-#Coriolis Force
-#Equation to calculate coriolis force.
-def f(phi):
-	return 2 * Upomega * math.sin(math.radians(phi))
-
-#Creates a coriolis force list.
-coriolis_force = []
-for i in latitude:
-	i = f(i)
-	coriolis_force.append(i)
-
-
-#Combines the coriolis force, and the latitude list into a dictionary.
-coriolisforce_latitude = dict(zip(latitude, coriolis_force))
-
-#-----------------------------------------------------------------------------------------#
+	def temperature():
+		"""
+		Equation for Temperature: T = 
+		"""
