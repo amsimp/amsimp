@@ -11,8 +11,7 @@ import numpy as np
 class Backend:
 	"""
 	AMSIMP Backend Module - Contains / calculates all the variables needed to utilize the 
-	Primitive Equations. Please do not interact with this class, as it does not have the
-	same level of error checking as other classes.
+	Primitive Equations. 
 	"""
 
 	#Predefined Constants.
@@ -88,14 +87,17 @@ class Backend:
 
 	def geopotential(self):
 		"""
-		Generates a list of geopotential based on the relevant mathematical formula.
+		Generates a list of geopotential based on the relevant equation.
 		As such, it utilizes gravitational constant, the mass and radius of the Earth,
-		and height in metres above sea level.    
+		and height in metres above sea level.
+		
+		Equation: 
+		Integral_0^z{g dz}
 		"""
 		geopotential = []
 		
 		for altitude in self.altitude_level():
-			altitude = self.G * self.m * ((1 / self.a) - (1 / (self.a + altitude)))
+			altitude = ()
 			geopotential.append(altitude)
 
 		return geopotential
@@ -115,7 +117,17 @@ class Backend:
 
 		return pressure
 
-	def temperature():
+	def temperature(self):
 		"""
 		Equation for Temperature: T = 
 		"""
+		return false
+
+	def zonal_velocity(self):
+		return false
+
+	def meridional_velocity(self):
+		return false
+
+	def vertical_velocity(self):
+		return false
