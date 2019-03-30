@@ -50,6 +50,7 @@ class Backend:
 
 		longitude_lines = [i for i in np.arange(-180, 181, (360 / self.detail_level)) if i >= -180 and i <= 180 and i !=0]
 
+		longitude_lines = np.asarray(longitude_lines)
 		return longitude_lines
 
 	def latitude_lines(self):
@@ -58,6 +59,7 @@ class Backend:
 
 		latitude_lines = [i for i in np.arange(-90, 91, (180 / self.detail_level)) if i >= -90 and i <= 90 and i != 0]
 
+		latitude_lines = np.asarray(latitude_lines)
 		return latitude_lines
 
 	def altitude_level(self):
@@ -71,6 +73,8 @@ class Backend:
 		"""
 		
 		altitude_level = list(n for n in range(0, max_height + 1) if n % (mim_height_detail / self.detail_level) == 0)
+
+		altitude_level = np.asarray(altitude_level)
 		return altitude_level
 
 	def coriolis_force(self):
@@ -84,6 +88,7 @@ class Backend:
 			latitude = 2 * self.Upomega * math.sin(math.radians(latitude))
 			coriolis_force.append(latitude)
 
+		coriolis_force = np.asarray(coriolis_force)
 		return coriolis_force
 
 	def geopotential(self):
@@ -98,6 +103,7 @@ class Backend:
 			altitude = (self.G * self.m * ((1 / self.a) - (1 / (self.a + altitude))))
 			geopotential.append(altitude)
 
+		geopotential = np.asarray(geopotential)
 		return geopotential
 
 	def pressure(self):
@@ -113,8 +119,11 @@ class Backend:
 			altitude = -832.6777 + (101323.6 + 832.6777) / (1 + (altitude / 6.527821) ** 2.313703)
 			pressure.append(altitude)
 
+		pressure = np.asarray(pressure)
 		return pressure
 
+#-----------------------------------------------------------------------------------------#
+	
 	def temperature(self):
 		"""
 		The equation for temperature, T, assuming temperature is hydrostatic: T = -p/R * ∂Φ/∂p.     
@@ -136,6 +145,7 @@ class Backend:
 			force = ((-1 / force) * 9.7221235)
 			zonal_velocity.append(force)
 
+		zonal_velocity = np.asarray(zonal_velocity)	
 		return zonal_velocity
 
 	def meridional_velocity(self):
@@ -151,6 +161,7 @@ class Backend:
 			force = ((1 / force) * 9.7221235)
 			meridional_velocity.append(force)
 
+		meridional_velocity = np.asarray(meridional_velocity)
 		return meridional_velocity
 
 	def vertical_velocity(self):
@@ -167,4 +178,24 @@ class Backend:
 			pressure = -832.6777 + 102156.2777 / (1.49196723444642e-9 * pressure ** 2.313703 + 1)
 			vertical_velocity.append(pressure)
 
+		vertical_velocity = np.asarray(vertical_velocity)	
 		return vertical_velocity
+
+#-----------------------------------------------------------------------------------------#
+
+	def absolute_vorticity(self):
+		"""
+		The vorticity is the curl of the velocity. It has components in x, y and z.
+		But at synoptic scales, the vertical component is by far the most important.
+
+		Absolute vorticity is the sum of the relative vorticity, ζ, and the planetary 
+		vorticity, f.
+		"""
+		absolute_vorticity = []
+
+		for force in self.coriolis_force():
+			force = -1 * force
+			absolute_vorticity.append(force)
+
+		absolute_vorticity = np.asarray(absolute_vorticity)
+		return absolute_vorticity
