@@ -131,8 +131,11 @@ class Backend:
 		zonal_velocity = []
 
 		for force in self.coriolis_force():
-			force = ((-1 / force) * 9.7221235)
-			zonal_velocity.append(force)
+			if force != 0:
+				force = ((-1 / force) * 9.7221235)
+				zonal_velocity.append(force)
+			else:
+				zonal_velocity.append(0)
 
 		return zonal_velocity
 
@@ -146,8 +149,11 @@ class Backend:
 		meridional_velocity = []
 
 		for force in self.coriolis_force():
-			force = ((1 / force) * 9.7221235)
-			meridional_velocity.append(force)
+			if force != 0:
+				force = ((1 / force) * 9.7221235)
+				meridional_velocity.append(force)
+			else:
+				meridional_velocity.append(0)
 
 		return meridional_velocity
 
