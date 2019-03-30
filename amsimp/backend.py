@@ -46,7 +46,7 @@ class Backend:
 		#Generates a list of longitude lines.
 		num_of_longitude_lines = 360
 
-		longitude_lines = [i for i in np.arange(-180, 181, (360 / self.detail_level)) if i >= -180 and i <= 180]
+		longitude_lines = [i for i in np.arange(-180, 181, (360 / self.detail_level)) if i >= -180 and i <= 180 and i !=0]
 
 		return longitude_lines
 
@@ -54,7 +54,7 @@ class Backend:
 		#Generates a list of latitude lines.
 		num_of_latitude_lines = 180
 
-		latitude_lines = [i for i in np.arange(-90, 91, (180 / self.detail_level)) if i >= -90 and i <= 90]
+		latitude_lines = [i for i in np.arange(-90, 91, (180 / self.detail_level)) if i >= -90 and i <= 90 and i != 0]
 
 		return latitude_lines
 
@@ -131,11 +131,8 @@ class Backend:
 		zonal_velocity = []
 
 		for force in self.coriolis_force():
-			if force != 0:
-				force = ((-1 / force) * 9.7221235)
-				zonal_velocity.append(force)
-			else:
-				zonal_velocity.append(0)
+			force = ((-1 / force) * 9.7221235)
+			zonal_velocity.append(force)
 
 		return zonal_velocity
 
@@ -149,11 +146,8 @@ class Backend:
 		meridional_velocity = []
 
 		for force in self.coriolis_force():
-			if force != 0:
-				force = ((1 / force) * 9.7221235)
-				meridional_velocity.append(force)
-			else:
-				meridional_velocity.append(0)
+			force = ((1 / force) * 9.7221235)
+			meridional_velocity.append(force)
 
 		return meridional_velocity
 
