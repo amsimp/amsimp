@@ -35,12 +35,14 @@ class Backend:
 		calculations for the computation detail. This value is between 0 and 4. 
 		""" 
 		self.detail_level = detail_level
-		self.detail_level = 10 ** self.detail_level
 
 		if not isinstance(self.detail_level, int):
-			raise ValueError("detail_level must be an integer.")
-		if self.detail_level <= 0 and self.detail_level > 4:
-			raise ValueError("detail_level must be a positive integer between 0 and 4.")
+			raise Exception("detail_level must be an integer. The value of detail_level was: {}".format(self.detail_level))
+
+		if self.detail_level >= 5 or self.detail_level < 0:
+			raise Exception("detail_level must be a positive integer between 0 and 4. The value of detail_level was: {}".format(self.detail_level))
+
+		self.detail_level = 10 ** self.detail_level
 
 	def longitude_lines(self):
 		#Generates a list of longitude lines.
