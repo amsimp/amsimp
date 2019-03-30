@@ -22,7 +22,6 @@ class Backend:
 	#Radius of the Earth.
 	a = const.R_earth
 	a = a.value
-	a_in_km = a / 1000
 	#Big G.
 	G = const.G
 	G = G.value
@@ -33,15 +32,15 @@ class Backend:
 	def __init__(self, detail_level = 3):
 		"""
 		Numerical value for the level of detail that will be used in the mathematical 
-		calculations for the computation detail. This value is between 0 and 5. 
+		calculations for the computation detail. This value is between 0 and 4. 
 		""" 
 		self.detail_level = detail_level
 		self.detail_level = 10 ** self.detail_level
 
 		if not isinstance(self.detail_level, int):
 			raise ValueError("detail_level must be an integer.")
-		if self.detail_level <= 0 and self.detail_level > 5:
-			raise ValueError("detail_level must be a positive integer between 0 and 5.")
+		if self.detail_level <= 0 and self.detail_level > 4:
+			raise ValueError("detail_level must be a positive integer between 0 and 4.")
 
 	def longitude_lines(self):
 		#Generates a list of longitude lines.
@@ -87,17 +86,14 @@ class Backend:
 
 	def geopotential(self):
 		"""
-		Generates a list of geopotential based on the relevant equation.
+		Generates a list of geopotential based on the relevant mathematical formula.
 		As such, it utilizes gravitational constant, the mass and radius of the Earth,
 		and height in metres above sea level.
-		
-		Equation: 
-		Integral_0^z{g dz}
 		"""
 		geopotential = []
 		
 		for altitude in self.altitude_level():
-			altitude = ()
+			altitude = (self.G * self.m * ((1 / self.a) - (1 / (self.a + altitude))))
 			geopotential.append(altitude)
 
 		return geopotential
@@ -119,15 +115,54 @@ class Backend:
 
 	def temperature(self):
 		"""
-		Equation for Temperature: T = 
+		The equation for temperature, T, assuming temperature is hydrostatic: T = -p/R * ∂Φ/∂p.     
 		"""
 		return false
 
 	def zonal_velocity(self):
-		return false
+		"""
+		Generates a list of the quasi-geostrophic approximation of zonal velocity.
+		
+		The Rossby number at synoptic scales is small, which implies that the
+		velocities are nearly geostrophic.
+
+		Equation: u′≈ −1/f * ∂/dy(Φ)
+		"""
+		zonal_velocity = []
+
+		for force in self.coriolis_force():
+			force = ((-1 / force) * 9.7221235)
+			zonal_velocity.append(force)
+
+		return zonal_velocity
 
 	def meridional_velocity(self):
-		return false
+		"""
+		Similar to zonal velocity, this generates a list of the quasi-geostrophic
+		approximation of meridional velocity.
+
+		Equation: v′≈ 1/f * ∂/dx(Φ)
+		"""
+		meridional_velocity = []
+
+		for force in self.coriolis_force():
+			force = ((1 / force) * 9.7221235)
+			meridional_velocity.append(force)
+
+		return meridional_velocity
 
 	def vertical_velocity(self):
-		return false
+		"""
+		Generates a list of vertical velocity (omega) by utilizing the derivative of 
+		the pressure equation (pressure() function).
+
+		Since pressure decreases upward, a negative omega means rising motion, while
+		a positive omega means subsiding motion.
+		"""
+		vertical_velocity = []
+
+		for pressure in self.pressure():
+			pressure = -832.6777 + 102156.2777 / (1.49196723444642e-9 * pressure ** 2.313703 + 1)
+			vertical_velocity.append(pressure)
+
+		return vertical_velocity
