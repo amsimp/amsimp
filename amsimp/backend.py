@@ -18,7 +18,7 @@ class Backend:
 	#Angular rotation rate of Earth.
 	Upomega = (2 * math.pi) / 24
 	#Ideal Gas Constant
-	R = gas_constant
+	R = 287
 	#Radius of the Earth.
 	a = const.R_earth
 	a = a.value
@@ -28,6 +28,8 @@ class Backend:
 	#Mass of the Earth.
 	m = const.M_earth
 	m = m.value
+	#The specific heat on a constant pressure surface for dry air.
+	c_p = 1004
 
 	def __init__(self, detail_level = 3):
 		"""
@@ -77,6 +79,8 @@ class Backend:
 		altitude_level = np.asarray(altitude_level)
 		return altitude_level
 
+#-----------------------------------------------------------------------------------------#
+
 	def coriolis_force(self):
 		"""
 		Generates a list of Coriolis force based on the relevant mathematical formula. 
@@ -123,12 +127,6 @@ class Backend:
 		return pressure
 
 #-----------------------------------------------------------------------------------------#
-	
-	def temperature(self):
-		"""
-		The equation for temperature, T, assuming temperature is hydrostatic: T = -p/R * ∂Φ/∂p.     
-		"""
-		return false
 
 	def zonal_velocity(self):
 		"""
@@ -181,6 +179,41 @@ class Backend:
 		vertical_velocity = np.asarray(vertical_velocity)	
 		return vertical_velocity
 
+	def temperature(self):
+		"""
+		These calculations are based on the International Standard Atmosphere, as such,
+		the temperatures in this model only vary by height, and not by any other variable.
+		I plan, however, of doing this in the future. It would require an extraordinary 
+		amount of coding.
+
+		The International Standard Atmosphere is a static atmospheric model of how the pressure,
+		temperature, density, and viscosity of the Earth's atmosphere change over a wide range
+		of altitudes.
+		"""
+		temperature = []
+
+		T_b = 288.15
+
+		for altitude in self.altitude_level():
+			if altitude <= 11000:
+				altitude = T_b - (altitude * 0.0065)
+				temperature.append(altitude)
+			elif altitude <= 20000:
+				altitude = 216.65
+				temperature.append(altitude)
+			elif altitude <= 32000:
+				altitude = 216.65 + ((altitude - 20000) * 0.001)
+				temperature.append(altitude)
+			elif altitude <= 47000:
+				altitude = 228.65 + ((altitude - 32000) * 0.0028)
+				temperature.append(altitude)
+			else:
+				altitude = 270.65
+				temperature.append(altitude)
+
+		temperature = np.asarray(temperature)
+		return temperature
+		
 #-----------------------------------------------------------------------------------------#
 
 	def absolute_vorticity(self):
@@ -199,3 +232,30 @@ class Backend:
 
 		absolute_vorticity = np.asarray(absolute_vorticity)
 		return absolute_vorticity
+
+	def exner_function(self):
+		"""
+		The Exner function can be viewed as non-dimensionalized pressure.
+		"""
+		exner_function = self.temperature() / self.potential_temperature
+
+		return exner_function
+
+	def potential_temperature(self):
+		"""
+		The potential temperature of a parcel of fluid at pressure P is the temperature
+		that the parcel would attain if adiabatically brought to a standard reference 
+		pressure
+		"""
+		potential_temperature =  self.temperature() * ((self.pressure() / self.pressure()[0]) ** (-self.R / self.c_p))
+
+		potential_temperature = np.asarray(potential_temperature)
+		return potential_temperature
+
+	def sigma(self):
+		"""
+		A vertical coordinate for atmospheric models defined as the difference in pressure.
+		"""
+		sigma = (self.pressure() - self.pressure()[0]) / (self.pressure()[0] - self.pressure()[-1])
+
+		return sigma
