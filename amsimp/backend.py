@@ -18,7 +18,7 @@ class Backend:
 	#Angular rotation rate of Earth.
 	Upomega = (2 * math.pi) / 24
 	#Ideal Gas Constant
-	R = 287
+	R = gas_constant
 	#Radius of the Earth.
 	a = const.R_earth
 	a = a.value
@@ -29,7 +29,7 @@ class Backend:
 	m = const.M_earth
 	m = m.value
 	#The specific heat on a constant pressure surface for dry air.
-	c_p = 1004
+	c_p = 29.086124178397213
 
 	def __init__(self, detail_level = 3):
 		"""
@@ -139,11 +139,13 @@ class Backend:
 		"""
 		zonal_velocity = []
 
-		for force in self.coriolis_force():
-			force = ((-1 / force) * 9.7221235)
-			zonal_velocity.append(force)
+		derivative_geopotential = 3.98712e14 / ((self.altitude_level() + 6378000) ** 2)
 
-		zonal_velocity = np.asarray(zonal_velocity)	
+		for geopotential in derivative_geopotential:
+			u = (-1 / self.coriolis_force()) * geopotential
+			zonal_velocity.append(u)
+		
+		zonal_velocity = np.asarray(zonal_velocity)
 		return zonal_velocity
 
 	def meridional_velocity(self):
@@ -155,10 +157,12 @@ class Backend:
 		"""
 		meridional_velocity = []
 
-		for force in self.coriolis_force():
-			force = ((1 / force) * 9.7221235)
-			meridional_velocity.append(force)
+		derivative_geopotential = 3.98712e14 / ((self.altitude_level() + 6378000) ** 2)
 
+		for geopotential in derivative_geopotential:
+			v = (1 / self.coriolis_force()) * geopotential
+			meridional_velocity.append(v)
+		
 		meridional_velocity = np.asarray(meridional_velocity)
 		return meridional_velocity
 
