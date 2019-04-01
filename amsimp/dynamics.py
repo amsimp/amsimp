@@ -4,6 +4,9 @@
 import math
 from amsimp.backend import Backend
 import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.basemap import Basemap
 
 #-----------------------------------------------------------------------------------------#
 
@@ -11,8 +14,8 @@ class Dynamics(Backend):
 	"""
 	AMSIMP Dynamics Class - This class inherits the AMSIMP Backend Class.
 	Calculates the Zonal and Meridional Wind, which is defined as the derivative of zonal
-	and meridional velocity respectfully. It will also create the vectors, and vector 
-	angles needed for projection on the simulated globe.
+	and meridional velocity respectfully. It will also create the vectors needed for projection
+	onto the simulated globe.
 	"""
 
 	def zonal_wind(self):
@@ -47,7 +50,34 @@ class Dynamics(Backend):
 		for geopotential in derivative_geopotential:
 			vector_v = -1 * (geopotential / (self.coriolis_force() ** 2))
 			vector_v = vector_v.tolist()
-			meridional_wind = np.asarray(meridional_wind)
+			meridional_wind.append(vector_v)
 
 		meridional_wind = np.asarray(meridional_wind)
 		return meridional_wind
+
+	def vector_creation(self):
+		"""
+
+		"""
+		vectors = []
+
+		if len(self.zonal_wind()) == len(self.meridional_wind()):
+			n = 0
+			while n <= len(self.zonal_wind()):
+				n = 0
+				vector = np.sqrt((self.zonal_wind()[n] ** 2) + (self.meridional_wind()[n] ** 2))
+				vector = vector.tolist()
+				vectors.append(vector)
+				n += 1
+
+		vectors = np.asarray(vectors)
+		return vectors
+
+#-----------------------------------------------------------------------------------------#
+
+	def simulate(self):
+		map = Basemap(projection='ortho',lat_0=0, lon_0=0)
+
+		map.bluemarble()
+
+		plt.show() 
