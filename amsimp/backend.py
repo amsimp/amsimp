@@ -10,7 +10,7 @@ import numpy as np
 
 class Backend:
 	"""
-	AMSIMP Backend Module - Contains / calculates all the variables needed to utilize the 
+	AMSIMP Backend Class - Contains / calculates all the variables needed to utilize the 
 	Primitive Equations. 
 	"""
 
@@ -33,27 +33,19 @@ class Backend:
 
 	def __init__(self, detail_level = 3):
 		"""
-		Numerical value for the level of detail that will be used in the mathematical 
-		calculations for the computation detail. This value is between 0 and 4. 
+		Numerical value for the level of computational detail that will be used in the mathematical 
+		calculations. This value is between 1 and 5. 
 		""" 
 		self.detail_level = detail_level
 
 		if not isinstance(self.detail_level, int):
 			raise Exception("detail_level must be an integer. The value of detail_level was: {}".format(self.detail_level))
 
-		if self.detail_level >= 5 or self.detail_level < 0:
-			raise Exception("detail_level must be a positive integer between 0 and 4. The value of detail_level was: {}".format(self.detail_level))
+		if self.detail_level > 5 or self.detail_level <= 0:
+			raise Exception("detail_level must be a positive integer between 1 and 5. The value of detail_level was: {}".format(self.detail_level))
 
+		self.detail_level -= 1
 		self.detail_level = 10 ** self.detail_level
-
-	def longitude_lines(self):
-		#Generates a list of longitude lines.
-		num_of_longitude_lines = 360
-
-		longitude_lines = [i for i in np.arange(-180, 181, (360 / self.detail_level)) if i >= -180 and i <= 180 and i !=0]
-
-		longitude_lines = np.asarray(longitude_lines)
-		return longitude_lines
 
 	def latitude_lines(self):
 		#Generates a list of latitude lines.
@@ -64,13 +56,22 @@ class Backend:
 		latitude_lines = np.asarray(latitude_lines)
 		return latitude_lines
 
+	def longitude_lines(self):
+		#Generates a list of longitude lines.
+		num_of_longitude_lines = 360
+
+		longitude_lines = [i for i in np.arange(-180, 181, (360 / self.detail_level)) if i >= -180 and i <= 180 and i !=0]
+
+		longitude_lines = np.asarray(longitude_lines)
+		return longitude_lines
+
 	def altitude_level(self):
-		#Setting the maximum height above sea level (in metres).
+		#Setting the maximum altitude above sea level (in metres).
 		max_height = 50000
 		mim_height_detail = max_height / 5
 
 		"""
-		Generates a list which will be used in calculations relating to height above 
+		Generates a list which will be used in calculations relating to the altitude above 
 		sea level (array in metres). 
 		"""
 		
@@ -83,8 +84,8 @@ class Backend:
 
 	def coriolis_force(self):
 		"""
-		Generates a list of Coriolis force based on the relevant mathematical formula. 
-		As such, it utilizes the constant, angular rotation of the Earth, and the latitude.
+		Generates a list of the Coriolis parameter at various latitudes on the. Earth's 
+		surface. As such, it also utilizes the constant, angular rotation of the Earth.
 		"""
 		coriolis_force = []
 
@@ -98,8 +99,8 @@ class Backend:
 	def geopotential(self):
 		"""
 		Generates a list of geopotential based on the relevant mathematical formula.
-		As such, it utilizes gravitational constant, the mass and radius of the Earth,
-		and height in metres above sea level.
+		As such, it utilizes the gravitational constant, the mass and radius of 
+		the Earth, and height in metres above sea level.
 		"""
 		geopotential = []
 		
@@ -113,8 +114,8 @@ class Backend:
 	def pressure(self):
 		"""
 		Generates a list of atmospheric pressure by utilizing the Barometric Formula
-		for Pressure. As such, it was generated from a height above sea level list.
-		Such a list was created in the function, altitude_level. 
+		for Pressure. As such, it was generated from an altitude above sea level list.
+		Such a list was created in the function, altitude_level(). 
 		"""
 		pressure = []
 
@@ -199,18 +200,22 @@ class Backend:
 		T_b = 288.15
 
 		for altitude in self.altitude_level():
+			#Troposphere
 			if altitude <= 11000:
 				altitude = T_b - (altitude * 0.0065)
 				temperature.append(altitude)
+			#Tropopause 
 			elif altitude <= 20000:
 				altitude = 216.65
 				temperature.append(altitude)
+			#Stratosphere 
 			elif altitude <= 32000:
 				altitude = 216.65 + ((altitude - 20000) * 0.001)
 				temperature.append(altitude)
 			elif altitude <= 47000:
 				altitude = 228.65 + ((altitude - 32000) * 0.0028)
 				temperature.append(altitude)
+			#Stratopause 
 			else:
 				altitude = 270.65
 				temperature.append(altitude)
