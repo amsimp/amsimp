@@ -11,7 +11,7 @@ import numpy as np
 class Backend:
 	"""
 	AMSIMP Backend Class - Contains / calculates all the variables needed to utilize the 
-	Primitive Equations. 
+	Primitive Equations.  
 	"""
 
 	#Predefined Constants.
