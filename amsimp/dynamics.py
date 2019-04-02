@@ -5,7 +5,6 @@ import math
 from amsimp.backend import Backend
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.basemap import Basemap
 
 #-----------------------------------------------------------------------------------------#
@@ -57,17 +56,21 @@ class Dynamics(Backend):
 
 	def vector_creation(self):
 		"""
-
+		Create the vectors needed for the projection onto the simulated globe.
 		"""
 		vectors = []
 
 		if len(self.zonal_wind()) == len(self.meridional_wind()):
 			n = 0
-			while n <= len(self.zonal_wind()):
-				n = 0
-				vector = np.sqrt((self.zonal_wind()[n] ** 2) + (self.meridional_wind()[n] ** 2))
+			while n < len(self.zonal_wind()):
+				vector_u = np.asarray(self.zonal_wind()[n])
+				vector_v = np.asarray(self.meridional_wind()[n])
+
+				vector = np.sqrt((vector_u ** 2) + (vector_v ** 2))
+
 				vector = vector.tolist()
 				vectors.append(vector)
+
 				n += 1
 
 		vectors = np.asarray(vectors)
@@ -76,8 +79,14 @@ class Dynamics(Backend):
 #-----------------------------------------------------------------------------------------#
 
 	def simulate(self):
+		"""
+		Plots the vector field, vector_creation() (of Zonal and Meridional Winds),
+		onto a globe. 
+		"""
 		map = Basemap(projection='ortho',lat_0=0, lon_0=0)
 
 		map.bluemarble()
+
+		
 
 		plt.show() 
