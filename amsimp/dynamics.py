@@ -5,7 +5,8 @@ import math
 from amsimp.backend import Backend
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.basemap import Basemap
+import cartopy
+import cartopy.crs as ccrs
 
 #-----------------------------------------------------------------------------------------#
 
@@ -83,10 +84,24 @@ class Dynamics(Backend):
 		Plots the vector field, vector_creation() (of Zonal and Meridional Winds),
 		onto a globe. 
 		"""
-		map = Basemap(projection='ortho',lat_0=0, lon_0=0)
+		latitude = self.latitude_lines()
+		longitude = self.longitude_lines()
 
-		map.bluemarble()
+		x, y = np.meshgrid(latitude, longitude)
 
-		
+		u = self.zonal_wind()[0]
+		v = self.meridional_wind()[0]
+
+		ax = plt.axes(projection = ccrs.Orthographic(0, 0))
+
+		ax.add_feature(cartopy.feature.OCEAN, zorder = 0)
+		ax.add_feature(cartopy.feature.LAND, zorder = 0, edgecolor = 'black')
+
+		ax.set_global()
+		ax.gridlines()
+
+		ax.quiver(x, y, u, v)
+
+		plt.title('Vector Field of Zonal and Meridional Winds (At Sea Level)')
 
 		plt.show() 
