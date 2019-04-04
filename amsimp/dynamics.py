@@ -48,34 +48,12 @@ class Dynamics(Backend):
 		derivative_geopotential = 3.98712e14 / ((self.altitude_level() + 6378000) ** 2)
 
 		for geopotential in derivative_geopotential:
-			vector_v = -1 * (geopotential / (self.coriolis_force() ** 2))
+			vector_v = (- geopotential / (self.coriolis_force() ** 2))
 			vector_v = vector_v.tolist()
 			meridional_wind.append(vector_v)
 
 		meridional_wind = np.asarray(meridional_wind)
 		return meridional_wind
-
-	def vector_creation(self):
-		"""
-		Create the vectors needed for the projection onto the simulated globe.
-		"""
-		vectors = []
-
-		if len(self.zonal_wind()) == len(self.meridional_wind()):
-			n = 0
-			while n < len(self.zonal_wind()):
-				vector_u = np.asarray(self.zonal_wind()[n])
-				vector_v = np.asarray(self.meridional_wind()[n])
-
-				vector = np.sqrt((vector_u ** 2) + (vector_v ** 2))
-
-				vector = vector.tolist()
-				vectors.append(vector)
-
-				n += 1
-
-		vectors = np.asarray(vectors)
-		return vectors
 
 #-----------------------------------------------------------------------------------------#
 
@@ -86,22 +64,6 @@ class Dynamics(Backend):
 		"""
 		latitude = self.latitude_lines()
 		longitude = self.longitude_lines()
-
-		x, y = np.meshgrid(latitude, longitude)
-
-		u = self.zonal_wind()[0]
-		v = self.meridional_wind()[0]
-
-		ax = plt.axes(projection = ccrs.Orthographic(0, 0))
-
-		ax.add_feature(cartopy.feature.OCEAN, zorder = 0)
-		ax.add_feature(cartopy.feature.LAND, zorder = 0, edgecolor = 'black')
-
-		ax.set_global()
-		ax.gridlines()
-
-		ax.quiver(x, y, u, v)
-
-		plt.title('Vector Field of Zonal and Meridional Winds (At Sea Level)')
-
-		plt.show() 
+		
+		zonal_wind = self.zonal_wind()[0]
+		meridional_wind = self.meridional_wind()[0]
