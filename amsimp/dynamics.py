@@ -61,11 +61,32 @@ class Dynamics(Backend):
 	def simulate(self):
 		"""
 		Plots the vector field, vector_creation() (of Zonal and Meridional Winds),
-		onto a globe. Defaults to a view of the Earth at a longitude and latitude
-		of 0.
+		onto a globe.
 		"""
 		longitude = self.longitude_lines()
 		latitude = self.latitude_lines()
+
+		if self.detail_level == (10 ** (1 - 1)):
+			raise Exception("detail_level must be greater than 1 in order to utilse amsimp.Dynamics.simulate()")
+		elif self.detail_level == (10 ** (2 - 1)):
+			skip = 1
+		elif self.detail_level == (10 ** (3 - 1)):
+			skip = 9
+			latitude = latitude.tolist()
+			longitude = longitude.tolist()
+			la_median = stats.median(latitude)
+			lo_median = stats.median(longitude)
+			latitude.remove(la_median)
+			longitude.remove(lo_median)
+			latitude = np.asarray(latitude)
+			longitude = np.asarray(longitude)
+		elif self.detail_level == (10 ** (4 - 1)):
+			skip = 63
+		elif self.detail_level == (10 ** (5 - 1)):
+			skip = 441
+			
+		latitude = latitude[::skip]
+		longitude = longitude[::skip]
 
 		points = ccrs.Orthographic().transform_points(ccrs.Geodetic(), longitude, latitude)
 
@@ -74,24 +95,16 @@ class Dynamics(Backend):
 		zonal_wind = self.zonal_wind()[0]
 		meridional_wind = self.meridional_wind()[0]
 
-		if self.detail_level != 100:
+		if self.detail_level != (10 ** (3 - 1)):
 			u_split = np.split(zonal_wind, 2)
 			v_split = np.split(meridional_wind, 2)
 		else:
 			zonal_wind = zonal_wind.tolist()
 			meridional_wind = meridional_wind.tolist()
-			x = x.tolist()
-			y = y.tolist()
 			u_median = stats.median(zonal_wind)
 			v_median = stats.median(meridional_wind)
-			x_median = stats.median(x)
-			y_median = stats.median(y)
 			zonal_wind.remove(u_median)
 			meridional_wind.remove(v_median)
-			x.remove(x_median)
-			y.remove(y_median)
-			x = np.asarray(x)
-			y = np.asarray(x)
 			zonal_wind = np.asarray(zonal_wind)
 			meridional_wind = np.asarray(meridional_wind)
 			u_split = np.split(zonal_wind, 2)
@@ -107,6 +120,9 @@ class Dynamics(Backend):
 
 		u = np.concatenate([u_northern_hemisphere, u_southern_hemisphere])
 		v = np.concatenate([v_northern_hemisphere, v_southern_hemisphere])
+			
+		u = u[::skip]
+		v = v[::skip]
 
 		u_norm = u / np.sqrt(u ** 2.0 + v ** 2.0)
 		v_norm = v / np.sqrt(u ** 2.0 + v ** 2.0)
@@ -121,5 +137,7 @@ class Dynamics(Backend):
 		ax.stock_img()
 
 		ax.quiver(y, x, v_norm, u_norm, np.arctan2(v, u), color = 'r')
+
+		plt.title("Vector Field of Atmospheric Dynamics")
 
 		plt.show()			

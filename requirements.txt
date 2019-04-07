@@ -1,4 +1,5 @@
 scipy
 astropy
 matplotlib
-sympy
+numpy
+cartopy
