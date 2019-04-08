@@ -136,7 +136,7 @@ class Backend:
 		"""
 		zonal_velocity = []
 
-		derivative_geopotential = 3.98712e14 / ((self.altitude_level() + 6378000) ** 2)
+		derivative_geopotential = (self.G * self.m) / ((self.a + self.altitude_level()) ** 2)
 
 		for geopotential in derivative_geopotential:
 			u = (-1 / self.coriolis_force()) * geopotential
@@ -154,7 +154,7 @@ class Backend:
 		"""
 		meridional_velocity = []
 
-		derivative_geopotential = 3.98712e14 / ((self.altitude_level() + 6378000) ** 2)
+		derivative_geopotential = (self.G * self.m) / ((self.a + self.altitude_level()) ** 2)
 
 		for geopotential in derivative_geopotential:
 			v = (1 / self.coriolis_force()) * geopotential

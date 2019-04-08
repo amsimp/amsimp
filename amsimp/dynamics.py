@@ -28,7 +28,7 @@ class Dynamics(Backend):
 		"""
 		zonal_wind = []
 
-		derivative_geopotential = 3.98712e14 / ((self.altitude_level() + 6378000) ** 2)
+		derivative_geopotential = (self.G * self.m) / ((self.a + self.altitude_level()) ** 2)
 
 		for geopotential in derivative_geopotential:
 			vector_u = geopotential / (self.coriolis_force() ** 2)
@@ -46,7 +46,7 @@ class Dynamics(Backend):
 		"""
 		meridional_wind = []
 
-		derivative_geopotential = 3.98712e14 / ((self.altitude_level() + 6378000) ** 2)
+		derivative_geopotential = (self.G * self.m) / ((self.a + self.altitude_level()) ** 2)
 
 		for geopotential in derivative_geopotential:
 			vector_v = (- geopotential / (self.coriolis_force() ** 2))
