@@ -58,11 +58,13 @@ class Dynamics(Backend):
 
 #-----------------------------------------------------------------------------------------#
 
-	def simulate(self):
+	def simulate(self, benchmark = False):
 		"""
 		Plots the vector field, vector_creation() (of Zonal and Meridional Winds),
 		onto a globe.
 		"""
+		self.benchmark = benchmark
+
 		longitude = self.longitude_lines()
 		latitude = self.latitude_lines()
 
@@ -129,6 +131,9 @@ class Dynamics(Backend):
 
 		ax = plt.axes(projection = ccrs.Orthographic())
 
+		if self.benchmark:
+			plt.ion()
+
 		ax.add_feature(cartopy.feature.OCEAN, zorder=0)
 		ax.add_feature(cartopy.feature.LAND, zorder=0, edgecolor='black')
 
@@ -137,7 +142,5 @@ class Dynamics(Backend):
 		ax.stock_img()
 
 		ax.quiver(y, x, v_norm, u_norm, np.arctan2(v, u), color = 'r')
-
-		plt.title("Vector Field of Atmospheric Dynamics")
-
-		plt.show()			
+		
+		plt.show()		
