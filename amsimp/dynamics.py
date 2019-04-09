@@ -40,7 +40,7 @@ class Dynamics(Backend):
 
 	def meridional_wind(self):
 		"""
-		Similar to zonal velocity, this generates a numpy array of zonal wind.
+		Similar to zonal wind, this generates a numpy array of zonal wind.
 
 		Equation: vector{u} = du/dt 
 		"""
