@@ -30,19 +30,27 @@ def write_data(writer, data):
 
 samples = int(input('The number of samples for each level of detail: '))
 
+if not isinstance(samples, int):
+	raise Exception("samples must be an integer. The value of detail_level was: {}".format(self.detail_level))
+
+if samples < 1:
+	raise Exception("samples must be a positive integer. The value of detail_level was: {}".format(self.detail_level))
+
 #-----------------------------------------------------------------------------------------# 
 
 def benchmarking(samples):
 	writer = csv_file()
 	for i in range(samples):
-		for num in range(4):
+		for num in range(5):
 			start = time.time()
-			detail = amsimp.Dynamics(num + 2)
+			detail = amsimp.Dynamics(num + 1)
 			detail.simulate(True)
 			plt.close('all')
 			finish = time.time()
 			t = finish - start
-			write_data(writer, {'detail_level': num + 2, 'time': t})
+			write_data(writer, {'detail_level': num + 1, 'time': t})
+		print('Progress: ' + str(i + 1) + ' samples have been run out of a total of ' + str(samples))
+	print('Benchmarking Complete.')
 
 #-----------------------------------------------------------------------------------------#
 

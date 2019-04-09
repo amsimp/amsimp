@@ -68,9 +68,7 @@ class Dynamics(Backend):
 		longitude = self.longitude_lines()
 		latitude = self.latitude_lines()
 
-		if self.detail_level == (10 ** (1 - 1)):
-			raise Exception("detail_level must be greater than 1 in order to utilse amsimp.Dynamics.simulate()")
-		elif self.detail_level == (10 ** (2 - 1)):
+		if self.detail_level == (10 ** (1 - 1)) or self.detail_level == (10 ** (2 - 1)):
 			skip = 1
 		elif self.detail_level == (10 ** (3 - 1)):
 			skip = 9
