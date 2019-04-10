@@ -238,14 +238,6 @@ class Backend:
 		absolute_vorticity = np.asarray(absolute_vorticity)
 		return absolute_vorticity
 
-	def exner_function(self):
-		"""
-		The Exner function can be viewed as non-dimensionalized pressure.
-		"""
-		exner_function = self.temperature() / self.potential_temperature
-
-		return exner_function
-
 	def potential_temperature(self):
 		"""
 		The potential temperature of a parcel of fluid at pressure P is the temperature
@@ -256,6 +248,14 @@ class Backend:
 
 		potential_temperature = np.asarray(potential_temperature)
 		return potential_temperature
+
+	def exner_function(self):
+		"""
+		The Exner function can be viewed as non-dimensionalized pressure.
+		"""
+		exner_function = self.temperature() / self.potential_temperature()
+
+		return exner_function
 
 	def sigma(self):
 		"""
