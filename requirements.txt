@@ -2,4 +2,4 @@ scipy
 astropy
 matplotlib
 numpy
-cartopy
+Cartopy
