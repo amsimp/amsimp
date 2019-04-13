@@ -1,0 +1,17 @@
+language: generic
+os: osx
+
+git:
+  depth: false
+
+install:
+  - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  - brew install proj
+  - pip install cython
+  - pip install -r requirements.txt
+  - pip install -e .
+
+notifications:
+  email:
+    on_success: always 
+    on_failure: always
