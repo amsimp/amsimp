@@ -6,10 +6,11 @@ git:
 
 install:
   - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  - brew upgrade proj
-  - pip install cython
-  - pip install -r requirements.txt
-  - pip install -e .
+  - brew upgrade proj 
+  - pip3 install cython
+  - pip3 install cartopy
+  - pip3 install -r requirements.txt
+  - pip3 install -e .
 
 notifications:
   email:
