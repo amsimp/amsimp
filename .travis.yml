@@ -10,8 +10,8 @@ before_install:
 install:
   - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   - brew upgrade proj 
-  - pip install setuptools --upgrade
-  - pip install --no-use-pep517 cartopy
+  - pip3 install setuptools --upgrade
+  - pip3 install --no-use-pep517 cartopy
   - pip3 install -r requirements.txt
   - pip3 install -e .
 
