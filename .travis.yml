@@ -8,7 +8,9 @@ install:
   - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   - brew upgrade proj 
   - pip3 install cython
-  - pip3 install cartopy
+  - git clone https://github.com/SciTools/Cartopy
+  - cd Cartopy
+  - python3 setup.py install
   - pip3 install -r requirements.txt
   - pip3 install -e .
 
