@@ -6,7 +6,7 @@ git:
 
 install:
   - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  - brew install proj
+  - brew upgrade proj
   - pip install cython
   - pip install -r requirements.txt
   - pip install -e .
