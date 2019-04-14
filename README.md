@@ -1,5 +1,7 @@
 # AMSIMP - Model for Atmospheric Dynamics
 
+[![Build Status](https://travis-ci.org/amsimp/amsimp.svg?branch=master)](https://travis-ci.org/amsimp/amsimp)
+
 An open source implementation to modeling atmospheric dynamics in the troposphere and the stratosphere. ***ETA: Early May 2019***.
 
 ## Release Date
