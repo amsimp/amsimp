@@ -6,7 +6,13 @@
 ![GitHub stars](https://img.shields.io/github/stars/amsimp/amsimp.svg?style=for-the-badge)
 ![GitHub last commit](https://img.shields.io/github/last-commit/amsimp/amsimp.svg?style=for-the-badge)
 
-An open source implementation to modelling atmospheric dynamics in the troposphere and the stratosphere.
+An open source implementation to modelling atmospheric dynamics in the troposphere and the stratosphere. Read the [paper]()
+
+## Features
+	- Written in Python, and by extension, it can run on macOS, Linux, and Windows.
+	- Simulation of various components of atmospheric dynamics.
+	- Includes a visualisation of said components.
+	- Provides a simulation of prevailing wind vectors onto a simulated globe.
 
 ## Installation
 In order to install this package, you will need to install the latest version of     [Anaconda 3](https://www.anaconda.com/distribution/). You will need this in order to install some of the modules that are not available on PyPi.
