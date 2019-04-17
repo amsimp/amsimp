@@ -1,13 +1,12 @@
 # -----------------------------------------------------------------------------------------#
 
 # Importing Dependencies
-import math
-from amsimp.backend import Backend
+import statistics as stats
 import numpy as np
 import matplotlib.pyplot as plt
 import cartopy
 import cartopy.crs as ccrs
-import statistics as stats
+from amsimp.backend import Backend
 
 # -----------------------------------------------------------------------------------------#
 
