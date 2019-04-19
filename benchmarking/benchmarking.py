@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 # -----------------------------------------------------------------------------------------#
 
-filename = "benchmarking_data.csv"
+filename = raw_input("The name of the CSV file: ")
 
 
 def csv_file():
