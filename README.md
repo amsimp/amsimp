@@ -15,18 +15,12 @@ An open source implementation to modelling atmospheric dynamics in the troposphe
 	- Provides a simulation of prevailing wind vectors onto a simulated globe.
 
 ## Installation
-In order to install this package, you will need to install the latest version of     [Anaconda 3](https://www.anaconda.com/distribution/). You will need this in order to install some of the modules that are not available on PyPi.
+In order to install this package, you will need to install the latest version of [Anaconda 3](https://www.anaconda.com/distribution/). You will need this in order to install some of the modules that are not available on PyPi.
 
-Once Anaconda 3 is installed, you will need to install python.app from Anaconda, as Python needs to be installed as a framework in order for Matplotlib to properly function with this package. This can be done using the following line of code:
-
-```bash
-$ conda install -c anaconda python.app 
-```
-
-Following which, you will need to manually install a package called, proj4, as it is not currently available on PyPi. This package is needed to install Cartopy. This can be done using the following line of code:
+Following the installation of Anaconda, you will need to manually install a package called, Cartopy, as it is not currently available on PyPi. This can be done using the following line of code:
 
 ```bash
-$ conda install -c conda-forge proj4 
+$ conda install -c conda-forge cartopy 
 ```
 
 Now, you can simply install the package using pip:
@@ -35,7 +29,13 @@ Now, you can simply install the package using pip:
 $ pip install amsimp 
 ```
 
-## Usage
+### macOS Users
+Once Anaconda 3 is installed, you will need to install python.app from Anaconda, as Python needs to be installed as a framework in order for Matplotlib to properly function with this package. This can be done using the following line of code:
+
+```bash
+$ conda install -c anaconda python.app 
+```
+
 In order to import the package, you must use python.app. This can be run using the following line of code:
 
 ```bash
