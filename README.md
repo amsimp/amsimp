@@ -47,3 +47,18 @@ Following which, you can use the package as normal:
 ```python
 import amsimp
 ```
+
+### An Example Use Case
+```python
+###############################################
+#Simulation of Prevailing Winds (At Sea Level)#
+###############################################
+
+import amsimp
+
+detail = amsimp.Dynamics(4) #Defines the level of detail that will be used in the simulation.
+
+detail.simulate() #Simulates ...
+```
+
+![Simulation](https://github.com/amsimp/papers/raw/master/SciFest/Images/globe.png)

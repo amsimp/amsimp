@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="AMSIMP",
-    version="0.0.4",
+    name="amsimp",
+    version="0.0.1",
     author="Conor Casey",
     author_email="conorcaseyc@icloud.com",
     description="Model for Atmospheric Dynamics",

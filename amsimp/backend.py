@@ -54,7 +54,7 @@ class Backend:
             )
 
         self.detail_level -= 1
-        self.detail_level = 10 ** self.detail_level
+        self.detail_level = 5 ** self.detail_level
 
     def latitude_lines(self):
         # Generates a list of latitude lines.

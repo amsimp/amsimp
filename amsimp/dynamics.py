@@ -72,10 +72,10 @@ class Dynamics(Backend):
         longitude = self.longitude_lines()
         latitude = self.latitude_lines()
 
-        if self.detail_level == (10 ** (1 - 1)) or self.detail_level == (10 ** (2 - 1)):
+        if self.detail_level == (5 ** (1 - 1)) or self.detail_level == (5 ** (2 - 1)):
             skip = 1
-        elif self.detail_level == (10 ** (3 - 1)):
-            skip = 9
+        elif self.detail_level == (5 ** (3 - 1)):
+            skip = 2
             latitude = latitude.tolist()
             longitude = longitude.tolist()
             la_median = stats.median(latitude)
@@ -84,10 +84,10 @@ class Dynamics(Backend):
             longitude.remove(lo_median)
             latitude = np.asarray(latitude)
             longitude = np.asarray(longitude)
-        elif self.detail_level == (10 ** (4 - 1)):
-            skip = 63
-        elif self.detail_level == (10 ** (5 - 1)):
-            skip = 441
+        elif self.detail_level == (5 ** (4 - 1)):
+            skip = 8
+        elif self.detail_level == (5 ** (5 - 1)):
+            skip = 34
 
         latitude = latitude[::skip]
         longitude = longitude[::skip]
@@ -101,7 +101,7 @@ class Dynamics(Backend):
         zonal_wind = self.zonal_wind()[0]
         meridional_wind = self.meridional_wind()[0]
 
-        if self.detail_level != (10 ** (3 - 1)):
+        if self.detail_level != (5 ** (3 - 1)):
             u_split = np.split(zonal_wind, 2)
             v_split = np.split(meridional_wind, 2)
         else:
