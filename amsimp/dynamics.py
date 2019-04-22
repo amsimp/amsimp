@@ -24,7 +24,7 @@ class Dynamics(Backend):
 		Zonal wind as mentioned previously is the derivative of zonal velocity. This
 		method generates a numpy array of zonal wind.
 
-		Equation: vector{u} = du/dt 
+		Equation: vector{u} = du/dy 
 		"""
         zonal_wind = []
 
@@ -33,7 +33,9 @@ class Dynamics(Backend):
         )
 
         for geopotential in derivative_geopotential:
-            vector_u = geopotential / (self.coriolis_force() ** 2)
+            vector_u = (geopotential * np.cos(np.radians(self.latitude_lines()))) / (
+                (2 * self.Upomega) * (np.sin(np.radians(self.latitude_lines())) ** 2)
+            )
             vector_u = vector_u.tolist()
             zonal_wind.append(vector_u)
 
@@ -44,7 +46,7 @@ class Dynamics(Backend):
         """
 		Similar to zonal wind, this generates a numpy array of zonal wind.
 
-		Equation: vector{u} = du/dt 
+		Equation: vector{u} = dz/dx 
 		"""
         meridional_wind = []
 
@@ -53,7 +55,9 @@ class Dynamics(Backend):
         )
 
         for geopotential in derivative_geopotential:
-            vector_v = -geopotential / (self.coriolis_force() ** 2)
+            vector_v = (-geopotential * np.cos(np.radians(self.latitude_lines()))) / (
+                (2 * self.Upomega) * (np.sin(np.radians(self.latitude_lines())) ** 2)
+            )
             vector_v = vector_v.tolist()
             meridional_wind.append(vector_v)
 

@@ -250,23 +250,6 @@ class Backend:
 
     # -----------------------------------------------------------------------------------------#
 
-    def absolute_vorticity(self):
-        """
-		The vorticity is the curl of the velocity. It has components in x, y and z.
-		But at synoptic scales, the vertical component is by far the most important.
-
-		Absolute vorticity is the sum of the relative vorticity, ζ, and the planetary 
-		vorticity, f.
-		"""
-        absolute_vorticity = []
-
-        for force in self.coriolis_force():
-            force = -1 * force
-            absolute_vorticity.append(force)
-
-        absolute_vorticity = np.asarray(absolute_vorticity)
-        return absolute_vorticity
-
     def potential_temperature(self):
         """
 		The potential temperature of a parcel of fluid at pressure P is the temperature
