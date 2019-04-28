@@ -57,8 +57,8 @@ def benchmarking(samples):
     for i in range(samples):
         for num in range(5):
             start = time.time()
-            detail = amsimp.Dynamics(num + 1)
-            detail.simulate(True)
+            detail = amsimp.Dynamics(num + 1, True)
+            detail.simulate()
             plt.close("all")
             finish = time.time()
             t = finish - start

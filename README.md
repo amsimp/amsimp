@@ -61,4 +61,4 @@ detail = amsimp.Dynamics(4) #Defines the level of detail that will be used in th
 detail.simulate() #Simulates ...
 ```
 
-![Simulation](https://github.com/amsimp/papers/raw/master/SciFest/Images/globe.png)
+![Simulation](https://github.com/amsimp/papers/raw/master/SciFest_Regional/Project_Book/Images/globe.png)

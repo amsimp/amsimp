@@ -1,11 +1,17 @@
+"""
+AMSIMP Dynamics Class. For information about this class is described below.
+"""
+
 # -----------------------------------------------------------------------------------------#
 
 # Importing Dependencies
-import statistics as stats
-import numpy as np
-import matplotlib.pyplot as plt
 import cartopy
 import cartopy.crs as ccrs
+import matplotlib.cm as cm
+import matplotlib.colorbar as colorbar
+import matplotlib.pyplot as plt
+from matplotlib.colors import PowerNorm
+import numpy as np
 from amsimp.backend import Backend
 
 # -----------------------------------------------------------------------------------------#
@@ -14,130 +20,108 @@ from amsimp.backend import Backend
 class Dynamics(Backend):
     """
 	AMSIMP Dynamics Class - This class inherits the AMSIMP Backend Class.
-	Calculates the Zonal and Meridional Wind, which is defined as the derivative of zonal
-	and meridional velocity respectfully. It will also create the vectors needed for projection
+	Calculates the Zonal and Meridional Wind. It will also create the vectors needed for projection
 	onto the simulated globe.
 	"""
 
     def zonal_wind(self):
         """
-		Zonal wind as mentioned previously is the derivative of zonal velocity. This
-		method generates a numpy array of zonal wind.
+        Generates a numpy of the quasi-geostrophic approximation of geostrophic wind / velocity.
+        The Rossby number at synoptic scales is small, which implies that the
+        velocities are nearly geostrophic.
 
-		Equation: vector{u} = du/dy 
-		"""
+        Equation: u = u_bar + u' (u_bar = β / (k ^ 2 + l ^ 2)) (u′≈ − g_0/f * 1 / r * ∂/dphi(Φ))
+        """
         zonal_wind = []
+        latitude = np.radians(self.latitude_lines())
 
-        derivative_geopotential = (self.G * self.m) / (
-            (self.a + self.altitude_level()) ** 2
-        )
+        a = 6378137
+        b = 6356752.3142
+        epsilon = np.sqrt((a ** 2) - (b ** 2)) / a
+        N_lat = a / np.sqrt(1 - epsilon * np.sin(latitude) ** 2)
+        R = []
+        for z in self.altitude_level():
+            var = (N_lat + z) * np.cos(latitude)
+            var = var.tolist()
+            R.append(var)
+        R = np.asarray(R)
 
-        for geopotential in derivative_geopotential:
-            vector_u = (geopotential * np.cos(np.radians(self.latitude_lines()))) / (
-                (2 * self.Upomega) * (np.sin(np.radians(self.latitude_lines())) ** 2)
-            )
-            vector_u = vector_u.tolist()
-            zonal_wind.append(vector_u)
+        derivative_geopotential = []
+        count = 0
+        for var in R:
+            z = self.altitude_level()
+            z = z.tolist()
+            dev_g = (self.Upomega ** 2) * z[count] * var * np.sin(2 * latitude)
+            dev_g = dev_g.tolist()
+            derivative_geopotential.append(dev_g)
+            count += 1
+        derivative_geopotential = np.asarray(derivative_geopotential)
+
+        derivative_geopotential_height = derivative_geopotential / self.g
+
+        for geo in derivative_geopotential_height:
+            u = -(self.g / self.coriolis_force()) * (1 / self.a) * geo
+            u = u.tolist()
+            zonal_wind.append(u)
 
         zonal_wind = np.asarray(zonal_wind)
+
         return zonal_wind
 
     def meridional_wind(self):
         """
-		Similar to zonal wind, this generates a numpy array of zonal wind.
+        Similar to zonal velocity, this generates a numpy of the quasi-geostrophic
+        approximation of meridional wind / velocity.
 
-		Equation: vector{u} = dz/dx 
-		"""
-        meridional_wind = []
+        Equation: v = v' (v′ = 0)
+        """
+        meridional_wind = self.zonal_wind() * 0
 
-        derivative_geopotential = (self.G * self.m) / (
-            (self.a + self.altitude_level()) ** 2
-        )
-
-        for geopotential in derivative_geopotential:
-            vector_v = (-geopotential * np.cos(np.radians(self.latitude_lines()))) / (
-                (2 * self.Upomega) * (np.sin(np.radians(self.latitude_lines())) ** 2)
-            )
-            vector_v = vector_v.tolist()
-            meridional_wind.append(vector_v)
-
-        meridional_wind = np.asarray(meridional_wind)
         return meridional_wind
 
     # -----------------------------------------------------------------------------------------#
 
-    def simulate(self, benchmark=False):
+    def simulate(self):
         """
 		Plots the vector field, vector_creation() (of Zonal and Meridional Winds),
 		onto a globe.
 		"""
-        self.benchmark = benchmark
-
         longitude = self.longitude_lines()
         latitude = self.latitude_lines()
 
-        if self.detail_level == (5 ** (1 - 1)) or self.detail_level == (5 ** (2 - 1)):
+        u = self.zonal_wind()[-1]
+        v = self.meridional_wind()[-1]
+
+        if self.detail_level == (5 ** (1 - 1)):
+            skip = 1
+        elif self.detail_level == (5 ** (2 - 1)):
             skip = 1
         elif self.detail_level == (5 ** (3 - 1)):
-            skip = 2
-            latitude = latitude.tolist()
-            longitude = longitude.tolist()
-            la_median = stats.median(latitude)
-            lo_median = stats.median(longitude)
-            latitude.remove(la_median)
-            longitude.remove(lo_median)
-            latitude = np.asarray(latitude)
-            longitude = np.asarray(longitude)
+            skip = 1
         elif self.detail_level == (5 ** (4 - 1)):
-            skip = 8
+            skip = 3
         elif self.detail_level == (5 ** (5 - 1)):
-            skip = 34
+            skip = 12
 
         latitude = latitude[::skip]
         longitude = longitude[::skip]
 
-        points = ccrs.Orthographic().transform_points(
+        u = u[::skip]
+        v = v[::skip]
+
+        points = ccrs.NearsidePerspective().transform_points(
             ccrs.Geodetic(), longitude, latitude
         )
 
         x, y = np.meshgrid(points[:, 0], points[:, 1])
 
-        zonal_wind = self.zonal_wind()[0]
-        meridional_wind = self.meridional_wind()[0]
+        plt.figure()
 
-        if self.detail_level != (5 ** (3 - 1)):
-            u_split = np.split(zonal_wind, 2)
-            v_split = np.split(meridional_wind, 2)
-        else:
-            zonal_wind = zonal_wind.tolist()
-            meridional_wind = meridional_wind.tolist()
-            u_median = stats.median(zonal_wind)
-            v_median = stats.median(meridional_wind)
-            zonal_wind.remove(u_median)
-            meridional_wind.remove(v_median)
-            zonal_wind = np.asarray(zonal_wind)
-            meridional_wind = np.asarray(meridional_wind)
-            u_split = np.split(zonal_wind, 2)
-            v_split = np.split(meridional_wind, 2)
-
-        u_northern_hemisphere = u_split[0]
-        v_northern_hemisphere = v_split[0]
-        u_northern_hemisphere *= -1
-        v_northern_hemisphere *= -1
-
-        u_southern_hemisphere = u_split[1]
-        v_southern_hemisphere = v_split[1]
-
-        u = np.concatenate([u_northern_hemisphere, u_southern_hemisphere])
-        v = np.concatenate([v_northern_hemisphere, v_southern_hemisphere])
-
-        u = u[::skip]
-        v = v[::skip]
-
-        u_norm = u / np.sqrt(u ** 2.0 + v ** 2.0)
-        v_norm = v / np.sqrt(u ** 2.0 + v ** 2.0)
-
-        ax = plt.axes(projection=ccrs.Orthographic())
+        ax = plt.axes(
+            projection=ccrs.NearsidePerspective(
+                central_latitude=0, central_longitude=-0, satellite_height=10000000.0
+            )
+        )
 
         if self.benchmark:
             plt.ion()
@@ -147,8 +131,23 @@ class Dynamics(Backend):
 
         ax.set_global()
         ax.gridlines()
-        ax.stock_img()
+        ax.coastlines(resolution="110m")
 
-        ax.quiver(y, x, v_norm, u_norm, np.arctan2(v, u), color="r")
+        geostrophic_wind = np.sqrt((u ** 2) + (v ** 2))
+        norm = PowerNorm(vmin=2.5, vmax=geostrophic_wind.max(), gamma=10.0)
+        norm.autoscale(geostrophic_wind)
+        colormap = cm.gist_rainbow
+
+        ax.quiver(y, x, u, v, color=colormap(norm(geostrophic_wind)))
+
+        cax, _ = colorbar.make_axes(plt.gca())
+        colour_bar = colorbar.ColorbarBase(
+            cax,
+            cmap=cm.gist_rainbow,
+            norm=norm,
+            extend="min",
+            boundaries=np.linspace(2.5, geostrophic_wind.max(), 20),
+        )
+        colour_bar.set_label("Geostrophic Wind (m/s)")
 
         plt.show()
