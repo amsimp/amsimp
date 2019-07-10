@@ -34,9 +34,11 @@ class Backend:
     # Mass of the Earth.
     M = const.M_earth
     M = M.value
+    # Molar mass of the Earth's air.
+    m = 0.02896
     # The specific heat on a constant pressure surface for dry air.
     c_p = 29.086124178397213
-    # Mean little g at sea level
+    # Mean little g at sea level.
     g = 9.80665
 
     def __init__(self, detail_level=3, benchmark=False):
@@ -120,7 +122,7 @@ class Backend:
         altitude_level = [
             i
             for i in np.arange(
-                0, max_height + 1, (mim_height_detail / self.detail_level)
+                1, max_height + 1, (mim_height_detail / self.detail_level)
             )
             if i <= max_height
         ]
@@ -144,51 +146,54 @@ class Backend:
         coriolis_force = np.asarray(coriolis_force)
         return coriolis_force
 
-    def planetary_vorticity(self):
+    def gravitational_acceleration(self):
         """
-        The planetary vorticity gradient is defined as: df/dy (the partial derivative
-        of the Coriolis force with respect to latitude). This generates a numpy array
-        of this.
+        This class calculates the magintude of the effective gravitational acceleration
+        according to WGS84 at a distance z from the Globe.
         """
-        planetary_vorticity = (
-            2 * self.Upomega * np.cos(self.coriolis_force())
-        ) / self.a
+        latitude = np.radians(self.latitude_lines())
+        a = 6378137
+        b = 6356752.3142
+        g_e = 9.7803253359
+        g_p = 9.8321849378
 
-        return planetary_vorticity
+        """
+        Magnitude of the effective gravitational acceleration according to WGS84
+        at point P on the ellipsoid.
+        """
+        g_0 = (
+            (a * g_e * (np.cos(latitude) ** 2)) + (b * g_p * (np.sin(latitude) ** 2))
+        ) / np.sqrt(
+            ((a ** 2) * (np.cos(latitude) ** 2) + (b ** 2) * (np.sin(latitude) ** 2))
+        )
+
+        """
+        Magnitude of the effective gravitational acceleration according to WGS84 at
+        a distance z from the ellipsoid.
+        """
+        f = (a - b) / a
+        m = ((self.Upomega ** 2) * (a ** 2) * b) / (self.G * self.M)
+
+        g_z = []
+        for z in self.altitude_level():
+            var = g_0 * (
+                1
+                - (2 / a) * (1 + f + m - 2 * f * (np.sin(latitude) ** 2)) * z
+                + (3 / (a ** 2)) * (z ** 2)
+            )
+            var = var.tolist()
+            g_z.append(var)
+
+        g_z = np.asarray(g_z)
+        return g_z
 
     def geopotential(self):
         """
 		Geopotential is the potential of the Earth's gravity field.
 		"""
-        # Defining some of variables.
-        latitude = np.radians(self.latitude_lines())
-        a = 6378137
-        b = 6356752.3142
-        epsilon = np.sqrt((a ** 2) - (b ** 2)) / a
-        N_lat = a / np.sqrt(1 - epsilon * np.sin(latitude) ** 2)
-
-        # Distance of the point P measured from the earth axis.
-        R = []
-
-        for z in self.altitude_level():
-            var = (N_lat + z) * np.cos(latitude)
-            var = var.tolist()
-            R.append(var)
-
-        R = np.asarray(R)
-
-        # Magnitude of the Apparent Gravitational Acceleration
-        g_A = []
-        for var in R:
-            x = self.g - (var * (self.Upomega ** 2) * np.cos(latitude) ** 2)
-            x = x.tolist()
-            g_A.append(x)
-        g_A = np.asarray(g_A)
-
-        # Calculation of geopotential
         geopotential = []
         count = 0
-        for g in g_A:
+        for g in self.gravitational_acceleration():
             z = self.altitude_level()
             z = z.tolist()
             potential = z[count] * g
@@ -210,6 +215,37 @@ class Backend:
 
         return geopotential_height
 
+    def temperature(self):
+        """
+		These calculations are based on the International Standard Atmosphere. The
+        International Standard Atmosphere is a static atmospheric model of how the pressure,
+		temperature, density, and viscosity of the Earth's atmosphere change over a wide range
+		of altitudes.
+		"""
+        temperature = []
+
+        for altitude in self.altitude_level():
+            if altitude < 11000:
+                temp = -0.0065 * altitude + 288.185
+                temperature.append(temp)
+            elif altitude < 20000:
+                temp = 216.65
+                temperature.append(temp)
+            elif altitude < 32000:
+                temp = 0.001 * altitude + 196.65
+                temperature.append(temp)
+            elif altitude < 47000:
+                temp = 0.0028 * altitude + 139.05
+                temperature.append(temp)
+            else:
+                temp = 270.65
+                temperature.append(temp)
+
+        temperature = np.asarray(temperature)
+        return temperature
+
+    # -----------------------------------------------------------------------------------------#
+
     def pressure(self):
         """
 		Generates a numpy of atmospheric pressure by utilizing the Barometric Formula
@@ -218,87 +254,68 @@ class Backend:
 		"""
         pressure = []
 
-        for altitude in self.altitude_level():
-            altitude /= 1000
-            altitude = -832.6777 + (101323.6 + 832.6777) / (
-                1 + (altitude / 6.527821) ** 2.313703
-            )
-            pressure.append(altitude)
+        p_0 = 101325
+        g = self.gravitational_acceleration()
+        z = self.altitude_level()
+        T = self.temperature()
+
+        i = 0
+        while i < len(self.altitude_level()):
+            var = p_0 * np.exp(-((self.m * g[i]) / (self.R * T[i])) * z[i])
+            var = var.tolist()
+
+            pressure.append(var)
+
+            i += 1
 
         pressure = np.asarray(pressure)
         return pressure
 
     # -----------------------------------------------------------------------------------------#
 
-    def vertical_velocity(self):
+    def density(self):
         """
-		Generates a numpy of vertical velocity (omega) by utilizing the derivative of
-		the pressure equation (pressure() function).
-
-		Since pressure decreases upward, a negative omega means rising motion, while
-		a positive omega means subsiding motion.
-		"""
-        vertical_velocity = []
-
-        for pressure in self.pressure():
-            pressure = -832.6777 + 102156.2777 / (
-                1.49196723444642e-9 * pressure ** 2.313703 + 1
-            )
-            vertical_velocity.append(pressure)
-
-        vertical_velocity = np.asarray(vertical_velocity)
-        return vertical_velocity
-
-    def temperature(self):
+        Generates a numpy of atmospheric density by utilizing temperature, pressure,
+        and the gas constant. As such, it was generated from the class methods of
+        temperature, and pressure.
         """
-		These calculations are based on the International Standard Atmosphere, as such,
-		the temperatures in this model only vary by height, and not by any other variable.
-		I plan, however, of doing this in the future. It would require an extraordinary
-		amount of coding.
+        density = []
 
-		The International Standard Atmosphere is a static atmospheric model of how the pressure,
-		temperature, density, and viscosity of the Earth's atmosphere change over a wide range
-		of altitudes.
-		"""
-        temperature = []
+        R = 287.05
+        pressure = self.pressure()
+        temperature = self.temperature()
 
-        T_b = 288.15
+        i = 0
+        while i < len(temperature):
+            var = pressure[i] / (R * temperature[i])
 
-        for altitude in self.altitude_level():
-            # Troposphere
-            if altitude <= 11000:
-                altitude = T_b - (altitude * 0.0065)
-                temperature.append(altitude)
-            # Tropopause
-            elif altitude <= 20000:
-                altitude = 216.65
-                temperature.append(altitude)
-            # Stratosphere
-            elif altitude <= 32000:
-                altitude = 216.65 + ((altitude - 20000) * 0.001)
-                temperature.append(altitude)
-            elif altitude <= 47000:
-                altitude = 228.65 + ((altitude - 32000) * 0.0028)
-                temperature.append(altitude)
-            # Stratopause
-            else:
-                altitude = 270.65
-                temperature.append(altitude)
+            density.append(var)
 
-        temperature = np.asarray(temperature)
-        return temperature
+            i += 1
 
-    # -----------------------------------------------------------------------------------------#
+        density = np.asarray(density)
+        return density
 
     def potential_temperature(self):
         """
-		The potential temperature of a parcel of fluid at pressure P is the temperature
-		that the parcel would attain if adiabatically brought to a standard reference
-		pressure
-		"""
-        potential_temperature = self.temperature() * (
-            (self.pressure() / self.pressure()[0]) ** (-self.R / self.c_p)
-        )
+        The potential temperature of a parcel of fluid at pressure P is the temperature
+        that the parcel would attain if adiabatically brought to a standard reference
+        pressure
+        """
+        potential_temperature = []
+
+        pressure = self.pressure()
+        temperature = self.temperature()
+
+        i = 0
+        while i < len(temperature):
+            var = temperature[i] * (
+                (pressure[i] / self.pressure()[0]) ** (-self.R / self.c_p)
+            )
+
+            potential_temperature.append(var)
+
+            i += 1
 
         potential_temperature = np.asarray(potential_temperature)
         return potential_temperature
@@ -310,13 +327,3 @@ class Backend:
         exner_function = self.temperature() / self.potential_temperature()
 
         return exner_function
-
-    def sigma(self):
-        """
-		A vertical coordinate for atmospheric models defined as the difference in pressure.
-		"""
-        sigma = (self.pressure() - self.pressure()[0]) / (
-            self.pressure()[0] - self.pressure()[-1]
-        )
-
-        return sigma

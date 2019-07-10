@@ -1,5 +1,5 @@
 """
-AMSIMP Dynamics Class. For information about this class is described below.
+AMSIMP Wind Class. For information about this class is described below.
 """
 
 # -----------------------------------------------------------------------------------------#
@@ -13,71 +13,79 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import PowerNorm
 import numpy as np
 from amsimp.backend import Backend
+from amsimp.derivatives import dev_geopotentialheight, verticalvelocity_component
 
 # -----------------------------------------------------------------------------------------#
 
 
-class Dynamics(Backend):
+class Wind(Backend):
     """
-	AMSIMP Dynamics Class - This class inherits the AMSIMP Backend Class.
+	AMSIMP Wind Class - This class inherits the AMSIMP Backend Class.
 	Calculates the Zonal and Meridional Wind. It will also create the vectors needed for projection
 	onto the simulated globe.
 	"""
 
-    def zonal_wind(self):
+    def zonal_velocity(self):
         """
         Generates a numpy of the quasi-geostrophic approximation of geostrophic wind / velocity.
         The Rossby number at synoptic scales is small, which implies that the
         velocities are nearly geostrophic.
 
-        Equation: u = u_bar + u' (u_bar = β / (k ^ 2 + l ^ 2)) (u′≈ − g_0/f * 1 / r * ∂/dphi(Φ))
+        -(self.g / self.coriolis_force()) * (1 / self.a) * dev_geo
         """
-        zonal_wind = []
         latitude = np.radians(self.latitude_lines())
+        altitude = self.altitude_level()
 
-        a = 6378137
-        b = 6356752.3142
-        epsilon = np.sqrt((a ** 2) - (b ** 2)) / a
-        N_lat = a / np.sqrt(1 - epsilon * np.sin(latitude) ** 2)
-        R = []
-        for z in self.altitude_level():
-            var = (N_lat + z) * np.cos(latitude)
-            var = var.tolist()
-            R.append(var)
-        R = np.asarray(R)
+        zonal_velocity = []
+        for z in altitude:
+            u_altitude = []
+            for phi in latitude:
+                dev_geo = dev_geopotentialheight(phi, z)
 
-        derivative_geopotential = []
-        count = 0
-        for var in R:
-            z = self.altitude_level()
-            z = z.tolist()
-            dev_g = (self.Upomega ** 2) * z[count] * var * np.sin(2 * latitude)
-            dev_g = dev_g.tolist()
-            derivative_geopotential.append(dev_g)
-            count += 1
-        derivative_geopotential = np.asarray(derivative_geopotential)
+                u_altitude.append(dev_geo)
 
-        derivative_geopotential_height = derivative_geopotential / self.g
+            zonal_velocity.append(u_altitude)
 
-        for geo in derivative_geopotential_height:
-            u = -(self.g / self.coriolis_force()) * (1 / self.a) * geo
-            u = u.tolist()
-            zonal_wind.append(u)
+        zonal_velocity = np.asarray(zonal_velocity)
+        return zonal_velocity
 
-        zonal_wind = np.asarray(zonal_wind)
-
-        return zonal_wind
-
-    def meridional_wind(self):
+    def meridional_velocity(self):
         """
         Similar to zonal velocity, this generates a numpy of the quasi-geostrophic
         approximation of meridional wind / velocity.
 
         Equation: v = v' (v′ = 0)
         """
-        meridional_wind = self.zonal_wind() * 0
+        meridional_velocity = self.zonal_velocity() * 0
 
-        return meridional_wind
+        return meridional_velocity
+
+    def vertical_velocity(self):
+        """
+		Generates a numpy of vertical velocity (omega), under the  f-plane approximation, by utilizing the derivative of
+		the pressure equation (pressure() function).
+
+		Since pressure decreases upward, a negative omega means rising motion, while
+		a positive omega means subsiding motion. 
+		"""
+        vertical_velocity = []
+
+        latitude = np.radians(self.latitude_lines())
+        altitude = self.altitude_level()
+
+        for z in altitude:
+            omega_list = []
+            for phi in latitude:
+                omega = verticalvelocity_component(phi, z)
+                omega_list.append(omega)
+            vertical_velocity.append(omega_list)
+        vertical_velocity = np.asarray(vertical_velocity)
+
+        w = (
+            -(1 / self.density()) * vertical_velocity
+        ) - self.gravitational_acceleration()
+
+        return vertical_velocity
 
     # -----------------------------------------------------------------------------------------#
 
@@ -89,8 +97,8 @@ class Dynamics(Backend):
         longitude = self.longitude_lines()
         latitude = self.latitude_lines()
 
-        u = self.zonal_wind()[-1]
-        v = self.meridional_wind()[-1]
+        u = self.zonal_velocity()[-1]
+        v = self.meridional_velocity()[-1]
 
         if self.detail_level == (5 ** (1 - 1)):
             skip = 1
@@ -132,13 +140,17 @@ class Dynamics(Backend):
         ax.set_global()
         ax.gridlines()
         ax.coastlines(resolution="110m")
+        ax.stock_img()
+
+        u_norm = u / np.sqrt(u ** 2.0 + v ** 2.0)
+        v_norm = v / np.sqrt(u ** 2.0 + v ** 2.0)
 
         geostrophic_wind = np.sqrt((u ** 2) + (v ** 2))
-        norm = PowerNorm(vmin=2.5, vmax=geostrophic_wind.max(), gamma=10.0)
+        norm = PowerNorm(gamma=0.5)
         norm.autoscale(geostrophic_wind)
         colormap = cm.gist_rainbow
 
-        ax.quiver(y, x, u, v, color=colormap(norm(geostrophic_wind)))
+        ax.quiver(y, x, u_norm, v_norm, color=colormap(norm(geostrophic_wind)))
 
         cax, _ = colorbar.make_axes(plt.gca())
         colour_bar = colorbar.ColorbarBase(
@@ -146,7 +158,7 @@ class Dynamics(Backend):
             cmap=cm.gist_rainbow,
             norm=norm,
             extend="min",
-            boundaries=np.linspace(2.5, geostrophic_wind.max(), 20),
+            boundaries=np.linspace(geostrophic_wind.min(), 0.178, 1000),
         )
         colour_bar.set_label("Geostrophic Wind (m/s)")
 
