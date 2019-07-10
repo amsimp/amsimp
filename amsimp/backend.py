@@ -222,26 +222,19 @@ class Backend:
 		temperature, density, and viscosity of the Earth's atmosphere change over a wide range
 		of altitudes.
 		"""
-        temperature = []
+        k = 1.0 * 10 ** 200
+        altitude = self.altitude_level()
 
-        for altitude in self.altitude_level():
-            if altitude < 11000:
-                temp = -0.0065 * altitude + 288.185
-                temperature.append(temp)
-            elif altitude < 20000:
-                temp = 216.65
-                temperature.append(temp)
-            elif altitude < 32000:
-                temp = 0.001 * altitude + 196.65
-                temperature.append(temp)
-            elif altitude < 47000:
-                temp = 0.0028 * altitude + 139.05
-                temperature.append(temp)
-            else:
-                temp = 270.65
-                temperature.append(temp)
+        term1 = ((-0.0065 * altitude) + 288.15) / (1 + np.exp(-2 * k * altitude))
+        term2 = ((0.0065 * altitude) - 71.5) / (1 + np.exp(-2 * k * (altitude - 11000)))
+        term3 = ((0.001 * altitude) - 20) / (1 + np.exp(-2 * k * (altitude - 20000)))
+        term4 = ((0.0018 * altitude) - 57.6) / (1 + np.exp(-2 * k * (altitude - 32000)))
+        term5 = ((-0.0028 * altitude) + 131.6) / (1 + np.exp(-2 * k * (altitude - 47000)))
+        term6 = ((-0.0028 * altitude) + 142.8) / (1 + np.exp(-2 * k * (altitude - 51000)))
+        term7 = ((-0.0028 * altitude) + 413.45) / (1 + np.exp(-2 * k * (altitude - 71000)))
 
-        temperature = np.asarray(temperature)
+        temperature = term1 + term2 + term3 + term4 + term5 + term6 - term7
+
         return temperature
 
     # -----------------------------------------------------------------------------------------#

@@ -62,8 +62,8 @@ class Wind(Backend):
 
     def vertical_velocity(self):
         """
-		Generates a numpy of vertical velocity (omega), under the  f-plane approximation, by utilizing the derivative of
-		the pressure equation (pressure() function).
+		Generates a numpy of vertical velocity (omega), under the  f-plane approximation,
+        by utilizing the derivative of the pressure equation (pressure() function).
 
 		Since pressure decreases upward, a negative omega means rising motion, while
 		a positive omega means subsiding motion. 
