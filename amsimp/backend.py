@@ -5,11 +5,12 @@ AMSIMP Backend Class. For information about this class is described below.
 # -----------------------------------------------------------------------------------------#
 
 # Importing Dependencies
-import math
-
 import numpy as np
 from astropy import constants as const
 from scipy.constants import gas_constant
+import pandas as pd
+from datetime import datetime
+from scipy.optimize import curve_fit
 
 # -----------------------------------------------------------------------------------------#
 
@@ -20,6 +21,10 @@ class Backend:
 	Primitive Equations.
 	"""
 
+    # Current month.
+    date = datetime.now()
+    month = date.strftime('%B').lower()
+
     # Predefined Constants.
     # Angular rotation rate of Earth.
     Upomega = 7.2921e-05
@@ -28,7 +33,7 @@ class Backend:
     # Mean radius of the Earth.
     a = const.R_earth
     a = a.value
-    # Big G.
+    # Universal Gravitational Constant.
     G = const.G
     G = G.value
     # Mass of the Earth.
@@ -36,10 +41,11 @@ class Backend:
     M = M.value
     # Molar mass of the Earth's air.
     m = 0.02896
-    # The specific heat on a constant pressure surface for dry air.
-    c_p = 29.086124178397213
-    # Mean little g at sea level.
-    g = 9.80665
+    # The ratio between the Ideal Gas Constant, and the specific heat capacity
+    # on a constant pressure surface for dry air.
+    R_cp = 2 / 7
+    # Gravitational acceleration at the Earth's surface.
+    g = (self.G * self.M) / (self.a ** 2)
 
     def __init__(self, detail_level=3, benchmark=False):
         """
@@ -75,7 +81,7 @@ class Backend:
 
     def latitude_lines(self):
         """
-        Generates a numpy of latitude lines.
+        Generates a numpy array of latitude lines.
         """
         latitude_lines = [
             i
@@ -94,7 +100,7 @@ class Backend:
 
     def longitude_lines(self):
         """
-        Generates a numpy of longitude lines.
+        Generates a numpy array of longitude lines.
         """
         longitude_lines = [
             i
@@ -122,7 +128,7 @@ class Backend:
         altitude_level = [
             i
             for i in np.arange(
-                1, max_height + 1, (mim_height_detail / self.detail_level)
+                0, max_height + 1, (mim_height_detail / self.detail_level)
             )
             if i <= max_height
         ]
@@ -134,16 +140,11 @@ class Backend:
 
     def coriolis_force(self):
         """
-		Generates a numpy of the Coriolis parameter at various latitudes on the. Earth's
+		Generates a numpy arrray of the Coriolis parameter at various latitudes of the Earth's
 		surface. As such, it also utilizes the constant, angular rotation of the Earth.
 		"""
-        coriolis_force = []
+        coriolis_force = 2 * self.Upomega * np.sin(np.radians(self.latitude_lines()))
 
-        for latitude in self.latitude_lines():
-            latitude = 2 * self.Upomega * math.sin(math.radians(latitude))
-            coriolis_force.append(latitude)
-
-        coriolis_force = np.asarray(coriolis_force)
         return coriolis_force
 
     def gravitational_acceleration(self):
@@ -187,106 +188,161 @@ class Backend:
         g_z = np.asarray(g_z)
         return g_z
 
-    def geopotential(self):
-        """
-		Geopotential is the potential of the Earth's gravity field.
-		"""
-        geopotential = []
-        count = 0
-        for g in self.gravitational_acceleration():
-            z = self.altitude_level()
-            z = z.tolist()
-            potential = z[count] * g
-            potential = potential.tolist()
-            geopotential.append(potential)
-            count += 1
-
-        geopotential = np.asarray(geopotential)
-        return geopotential
-
     def geopotential_height(self):
         """
-        Geopotential height or geopotential altitude is a vertical coordinate
-        referenced to Earth's mean sea level, an adjustment to geometric height
-        (altitude above mean sea level) using the variation of gravity with latitude
-        and vertical position. Thus, it can be considered a "gravity-adjusted height".
+        Explain code here.
         """
-        geopotential_height = self.geopotential() / self.g
+        file_folder = 'amsimp/data/geopotential_height/'
+        file = file_folder + self.month + '.csv'
 
-        return geopotential_height
+        data = pd.read_csv(file)
+        column_values = np.asarray([i for i in np.arange(-80, 81, 5)])
+
+        return data
 
     def temperature(self):
         """
-		These calculations are based on the International Standard Atmosphere. The
-        International Standard Atmosphere is a static atmospheric model of how the pressure,
-		temperature, density, and viscosity of the Earth's atmosphere change over a wide range
-		of altitudes.
+		Explain code here.
 		"""
-        k = 1.0 * 10 ** 200
-        altitude = self.altitude_level()
+        file_folder = 'amsimp/data/temperature/'
+        file = file_folder + self.month + '.csv'
+        
+        data = pd.read_csv(file)
+        column_values = np.asarray([i for i in np.arange(-80, 81, 10)])
+        
+        temp = []
+        for i in column_values:
+            i = str(i)
+            alt_data = data[i].values
+            
+            temp_alt = []
+            n = 0
+            while n < (len(alt_data) - 1):
+                y2 = alt_data[n + 1]
+                y1 = alt_data[n]
+                x2 = data['Alt / Lat'].values[n + 1]
+                x1 = data['Alt / Lat'].values[n]
 
-        term1 = ((-0.0065 * altitude) + 288.15) / (1 + np.exp(-2 * k * altitude))
-        term2 = ((0.0065 * altitude) - 71.5) / (1 + np.exp(-2 * k * (altitude - 11000)))
-        term3 = ((0.001 * altitude) - 20) / (1 + np.exp(-2 * k * (altitude - 20000)))
-        term4 = ((0.0018 * altitude) - 57.6) / (1 + np.exp(-2 * k * (altitude - 32000)))
-        term5 = ((-0.0028 * altitude) + 131.6) / (1 + np.exp(-2 * k * (altitude - 47000)))
-        term6 = ((-0.0028 * altitude) + 142.8) / (1 + np.exp(-2 * k * (altitude - 51000)))
-        term7 = ((-0.0028 * altitude) + 413.45) / (1 + np.exp(-2 * k * (altitude - 71000)))
+                m = (y2 - y1) / (x2 - x1)
+                c = y1 - (m * x1)
 
-        temperature = term1 + term2 + term3 + term4 + term5 + term6 - term7
+                for z in self.altitude_level():
+                    if z >= x1 and z < x2:
+                        y = (m * z) + c
+                        temp_alt.append(y)
+                    elif z == x2 and x2 == 50000:
+                        y = (m * z) + c
+                        temp_alt.append(y)
 
+                n += 1
+
+            temp.append(temp_alt)
+        temp = np.transpose(np.asarray(temp))
+        
+        temperature = []
+        n = 0
+        for t in temp:
+            temp_lat = []
+            k = 0
+            while k < (len(t) - 1):
+                y2 = t[k + 1]
+                y1 = t[k]
+                x2 = column_values[k + 1]
+                x1 = column_values[k]
+
+                m = (y2 - y1) / (x2 - x1)
+                c = y1 - (m * x1)
+
+                for phi in self.latitude_lines():
+                    if phi >= x1 and phi < x2:
+                        y = (m * phi) + c
+                        temp_lat.append(y)
+                    elif phi < x1 and x1 == -80:
+                        y = (m * phi) + c
+                        temp_lat.append(y)
+                    elif phi > x2 and x2 == 80:
+                        y = (m * phi) + c
+                        temp_lat.append(y)
+                
+                k += 1
+
+            temperature.append(temp_lat)
+
+        temperature = np.asarray(temperature)
         return temperature
 
     # -----------------------------------------------------------------------------------------#
 
     def pressure(self):
         """
-		Generates a numpy of atmospheric pressure by utilizing the Barometric Formula
-		for Pressure. As such, it was generated from an altitude above sea level numpy.
-		Such a numpy was created in the function, altitude_level().
+		Explain code here.
 		"""
+        file_folder = 'amsimp/data/pressure/'
+        file = file_folder + self.month + '.csv'
+        
+        data = pd.read_csv(file)
+        column_values = np.asarray([i for i in np.arange(-80, 81, 10)])
+
+        p = []
+        for i in column_values:
+            i = str(i)
+            x = data['Alt / Lat'].values
+            y = data[i].values
+
+            def fit_method(x, a, b, c):
+                return a - (b / c) * (1 - np.exp(-c * x))
+            guess = [1013.256, 0.1685119, 0.00016627]
+            c, cov = curve_fit(fit_method, x, y, guess)
+
+            p_alt = fit_method(self.altitude_level(), c[0], c[1], c[2])
+            p.append(p_alt)
+        p = np.transpose(np.asarray(p))
+
         pressure = []
+        n = 0
+        for _p in p:
+            p_lat = []
+            k = 0
+            while k < (len(_p) - 1):
+                y2 = _p[k + 1]
+                y1 = _p[k]
+                x2 = column_values[k + 1]
+                x1 = column_values[k]
 
-        p_0 = 101325
-        g = self.gravitational_acceleration()
-        z = self.altitude_level()
-        T = self.temperature()
+                m = (y2 - y1) / (x2 - x1)
+                c = y1 - (m * x1)
 
-        i = 0
-        while i < len(self.altitude_level()):
-            var = p_0 * np.exp(-((self.m * g[i]) / (self.R * T[i])) * z[i])
-            var = var.tolist()
+                for phi in self.latitude_lines():
+                    if phi >= x1 and phi < x2:
+                        y = (m * phi) + c
+                        p_lat.append(y)
+                    elif phi < x1 and x1 == -80:
+                        y = (m * phi) + c
+                        p_lat.append(y)
+                    elif phi > x2 and x2 == 80:
+                        y = (m * phi) + c
+                        p_lat.append(y)
+                
+                k += 1
 
-            pressure.append(var)
-
-            i += 1
+            pressure.append(p_lat)
 
         pressure = np.asarray(pressure)
+        pressure *= 100
+        
         return pressure
 
     # -----------------------------------------------------------------------------------------#
 
     def density(self):
         """
-        Generates a numpy of atmospheric density by utilizing temperature, pressure,
-        and the gas constant. As such, it was generated from the class methods of
-        temperature, and pressure.
+        Generates a numpy array of atmospheric density by utilizing the Ideal Gas Law. As such, 
+        it was generated by utilising the class methods of temperature, and pressure.
         """
-        density = []
-
         R = 287.05
-        pressure = self.pressure()
-        temperature = self.temperature()
+        
+        density = self.pressure() / (R * self.temperature())
 
-        i = 0
-        while i < len(temperature):
-            var = pressure[i] / (R * temperature[i])
-
-            density.append(var)
-
-            i += 1
-
-        density = np.asarray(density)
         return density
 
     def potential_temperature(self):
@@ -303,7 +359,7 @@ class Backend:
         i = 0
         while i < len(temperature):
             var = temperature[i] * (
-                (pressure[i] / self.pressure()[0]) ** (-self.R / self.c_p)
+                (pressure[i] / self.pressure()[0]) ** (self.R_cp)
             )
 
             potential_temperature.append(var)

@@ -12,6 +12,7 @@ import matplotlib.colorbar as colorbar
 import matplotlib.pyplot as plt
 from matplotlib.colors import PowerNorm
 import numpy as np
+import pandas as pd
 from amsimp.backend import Backend
 from amsimp.derivatives import dev_geopotentialheight, verticalvelocity_component
 
@@ -27,26 +28,10 @@ class Wind(Backend):
 
     def zonal_velocity(self):
         """
-        Generates a numpy of the quasi-geostrophic approximation of geostrophic wind / velocity.
-        The Rossby number at synoptic scales is small, which implies that the
-        velocities are nearly geostrophic.
-
-        -(self.g / self.coriolis_force()) * (1 / self.a) * dev_geo
+        Explain code here.
         """
-        latitude = np.radians(self.latitude_lines())
-        altitude = self.altitude_level()
-
         zonal_velocity = []
-        for z in altitude:
-            u_altitude = []
-            for phi in latitude:
-                dev_geo = dev_geopotentialheight(phi, z)
-
-                u_altitude.append(dev_geo)
-
-            zonal_velocity.append(u_altitude)
-
-        zonal_velocity = np.asarray(zonal_velocity)
+        
         return zonal_velocity
 
     def meridional_velocity(self):
@@ -68,22 +53,7 @@ class Wind(Backend):
 		Since pressure decreases upward, a negative omega means rising motion, while
 		a positive omega means subsiding motion. 
 		"""
-        vertical_velocity = []
-
-        latitude = np.radians(self.latitude_lines())
-        altitude = self.altitude_level()
-
-        for z in altitude:
-            omega_list = []
-            for phi in latitude:
-                omega = verticalvelocity_component(phi, z)
-                omega_list.append(omega)
-            vertical_velocity.append(omega_list)
-        vertical_velocity = np.asarray(vertical_velocity)
-
-        w = (
-            -(1 / self.density()) * vertical_velocity
-        ) - self.gravitational_acceleration()
+        vertical_velocity = -self.density() * self.gravitational_acceleration()
 
         return vertical_velocity
 
@@ -97,8 +67,8 @@ class Wind(Backend):
         longitude = self.longitude_lines()
         latitude = self.latitude_lines()
 
-        u = self.zonal_velocity()[-1]
-        v = self.meridional_velocity()[-1]
+        u = self.zonal_velocity()[0]
+        v = self.meridional_velocity()[0]
 
         if self.detail_level == (5 ** (1 - 1)):
             skip = 1
@@ -127,7 +97,7 @@ class Wind(Backend):
 
         ax = plt.axes(
             projection=ccrs.NearsidePerspective(
-                central_latitude=0, central_longitude=-0, satellite_height=10000000.0
+                central_latitude=45, central_longitude=-0, satellite_height=10000000.0
             )
         )
 
@@ -158,7 +128,7 @@ class Wind(Backend):
             cmap=cm.gist_rainbow,
             norm=norm,
             extend="min",
-            boundaries=np.linspace(geostrophic_wind.min(), 0.178, 1000),
+            boundaries=np.linspace(geostrophic_wind.min(), geostrophic_wind.max(), 1000),
         )
         colour_bar.set_label("Geostrophic Wind (m/s)")
 

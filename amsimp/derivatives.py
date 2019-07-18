@@ -16,10 +16,7 @@ from amsimp.backend import Backend
 
 # -----------------------------------------------------------------------------------------#
 
-# Calculations for Vertical Velocity (Differentiation of Pressure).
-def pressure(latitude, altitude):
-    p_0 = 101325
-
+def gravitational_acceleration(latitude, altitude):
     # Gravitational Acceleration
     latitude = np.radians(latitude)
     a = 6378137
@@ -42,6 +39,12 @@ def pressure(latitude, altitude):
         + (3 / (a ** 2)) * (altitude ** 2)
     )
 
+    return g_z
+
+# Calculations for Vertical Velocity (Differentiation of Pressure).
+def pressure(latitude, altitude):
+    p_0 = 101325
+
     if altitude < 11000:
         temperature = -0.0065*altitude + 288.185
     elif altitude < 20000:
@@ -52,6 +55,8 @@ def pressure(latitude, altitude):
         temperature = 0.0028*altitude + 139.05
     else:
         temperature = 270.65
+
+    g_z = gravitational_acceleration(latitude, altitude)
 
     # Fin
     y = p_0 * np.exp(-((Backend.m * g_z) / (Backend.R * temperature)) * altitude)
