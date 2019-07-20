@@ -7,14 +7,12 @@ AMSIMP Wind Class. For information about this class is described below.
 # Importing Dependencies
 import cartopy
 import cartopy.crs as ccrs
-import matplotlib.cm as cm
-import matplotlib.colorbar as colorbar
 import matplotlib.pyplot as plt
-from matplotlib.colors import PowerNorm
+import matplotlib.colors as colors
+from matplotlib import ticker
 import numpy as np
 import pandas as pd
 from amsimp.backend import Backend
-from amsimp.derivatives import dev_geopotentialheight, verticalvelocity_component
 
 # -----------------------------------------------------------------------------------------#
 
@@ -26,110 +24,70 @@ class Wind(Backend):
 	onto the simulated globe.
 	"""
 
-    def zonal_velocity(self):
+    def geostrophic_wind(self):
         """
         Explain code here.
         """
-        zonal_velocity = []
+        if self.detail_level < (5 ** (3 - 1)):
+            raise Exception('detail_level must be greater than 3 in order to utilise this method.')
         
-        return zonal_velocity
+        # Distance of one degree of latitude (e.g. 0N - 1]\N/1S), measured in metres.
+        lat_d = (2 * np.pi * self.a) / 360
+        # Distance between latitude lines in the class method, Backend.latitude_lines().
+        delta_y = (self.latitude_lines()[-1] - self.latitude_lines()[-2]) * lat_d
 
-    def meridional_velocity(self):
-        """
-        Similar to zonal velocity, this generates a numpy of the quasi-geostrophic
-        approximation of meridional wind / velocity.
+        gradient_geopotentialheight = []
+        for Z in self.geopotential_height():
+            southpole, northpole = np.split(Z, 2)
 
-        Equation: v = v' (v′ = 0)
-        """
-        meridional_velocity = self.zonal_velocity() * 0
+            southpole = np.flip(southpole)
+            southpole = np.gradient(southpole)
+            southpole = np.flip(southpole)
 
-        return meridional_velocity
+            northpole = np.gradient(northpole)
 
-    def vertical_velocity(self):
-        """
-		Generates a numpy of vertical velocity (omega), under the  f-plane approximation,
-        by utilizing the derivative of the pressure equation (pressure() function).
+            delta_geoheight = np.concatenate((southpole, northpole))
 
-		Since pressure decreases upward, a negative omega means rising motion, while
-		a positive omega means subsiding motion. 
-		"""
-        vertical_velocity = -self.density() * self.gravitational_acceleration()
+            grad_geoheight = delta_geoheight / delta_y
+            grad_geoheight = list(grad_geoheight)
+            gradient_geopotentialheight.append(grad_geoheight)
+        gradient_geopotentialheight = np.asarray(gradient_geopotentialheight)
 
-        return vertical_velocity
+        geostrophic_wind = (
+            -(self.gravitational_acceleration() / self.coriolis_force())
+            * gradient_geopotentialheight
+        )
+
+        return geostrophic_wind
 
     # -----------------------------------------------------------------------------------------#
 
-    def simulate(self):
+    def contourf(self):
         """
-		Plots the vector field, vector_creation() (of Zonal and Meridional Winds),
-		onto a globe.
+		Explain code here.
 		"""
-        longitude = self.longitude_lines()
-        latitude = self.latitude_lines()
+        latitude, altitude = np.meshgrid(self.latitude_lines(), self.altitude_level())
+        geostrophic_wind = self.geostrophic_wind()
 
-        u = self.zonal_velocity()[0]
-        v = self.meridional_velocity()[0]
+        minimum = geostrophic_wind.min()
+        maximum = geostrophic_wind.max()
+        if minimum > -100 and maximum < 100:
+            levels = np.linspace(minimum, maximum, 21)
+        else:
+            levels = np.linspace(-120, 120, 21)
 
-        if self.detail_level == (5 ** (1 - 1)):
-            skip = 1
-        elif self.detail_level == (5 ** (2 - 1)):
-            skip = 1
-        elif self.detail_level == (5 ** (3 - 1)):
-            skip = 1
-        elif self.detail_level == (5 ** (4 - 1)):
-            skip = 3
-        elif self.detail_level == (5 ** (5 - 1)):
-            skip = 12
+        plt.contourf(latitude, altitude, geostrophic_wind, levels=levels)
 
-        latitude = latitude[::skip]
-        longitude = longitude[::skip]
+        plt.set_cmap("jet")
 
-        u = u[::skip]
-        v = v[::skip]
+        plt.xlabel("Latitude ($\phi$)")
+        plt.ylabel("Altitude (m)")
+        plt.title("Geostrophic Wind in the Month of " + self.month.title())
+        
+        plt.figtext(0.99, 0.01, 'Note: Geostrophic balance does not hold near the equator.', horizontalalignment='right')
+        plt.subplots_adjust(bottom = 0.135)
 
-        points = ccrs.NearsidePerspective().transform_points(
-            ccrs.Geodetic(), longitude, latitude
-        )
-
-        x, y = np.meshgrid(points[:, 0], points[:, 1])
-
-        plt.figure()
-
-        ax = plt.axes(
-            projection=ccrs.NearsidePerspective(
-                central_latitude=45, central_longitude=-0, satellite_height=10000000.0
-            )
-        )
-
-        if self.benchmark:
-            plt.ion()
-
-        ax.add_feature(cartopy.feature.OCEAN, zorder=0)
-        ax.add_feature(cartopy.feature.LAND, zorder=0, edgecolor="black")
-
-        ax.set_global()
-        ax.gridlines()
-        ax.coastlines(resolution="110m")
-        ax.stock_img()
-
-        u_norm = u / np.sqrt(u ** 2.0 + v ** 2.0)
-        v_norm = v / np.sqrt(u ** 2.0 + v ** 2.0)
-
-        geostrophic_wind = np.sqrt((u ** 2) + (v ** 2))
-        norm = PowerNorm(gamma=0.5)
-        norm.autoscale(geostrophic_wind)
-        colormap = cm.gist_rainbow
-
-        ax.quiver(y, x, u_norm, v_norm, color=colormap(norm(geostrophic_wind)))
-
-        cax, _ = colorbar.make_axes(plt.gca())
-        colour_bar = colorbar.ColorbarBase(
-            cax,
-            cmap=cm.gist_rainbow,
-            norm=norm,
-            extend="min",
-            boundaries=np.linspace(geostrophic_wind.min(), geostrophic_wind.max(), 1000),
-        )
-        colour_bar.set_label("Geostrophic Wind (m/s)")
+        colorbar = plt.colorbar()
+        colorbar.set_label("Velocity ($\\frac{m}{s}$)")
 
         plt.show()

@@ -16,7 +16,7 @@ from amsimp.wind import Wind
 class Water(Backend):
     """
     This class is concerned with calculating how water (specially precipitable water) moves
-    from point to point within the troposphere and the stratosphere. 
+    from point to point within the troposphere and the stratosphere.
     """
 
     def vapor_pressure(self):

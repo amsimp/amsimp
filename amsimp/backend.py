@@ -10,6 +10,7 @@ from astropy import constants as const
 from scipy.constants import gas_constant
 import pandas as pd
 from datetime import datetime
+import dateutil.relativedelta as future
 from scipy.optimize import curve_fit
 
 # -----------------------------------------------------------------------------------------#
@@ -23,7 +24,10 @@ class Backend:
 
     # Current month.
     date = datetime.now()
-    month = date.strftime('%B').lower()
+    month = date.strftime("%B").lower()
+    # Next month.
+    future_date = date + future.relativedelta(months = +1)
+    next_month = future_date.strftime("%B").lower()
 
     # Predefined Constants.
     # Angular rotation rate of Earth.
@@ -41,11 +45,10 @@ class Backend:
     M = M.value
     # Molar mass of the Earth's air.
     m = 0.02896
-    # The ratio between the Ideal Gas Constant, and the specific heat capacity
-    # on a constant pressure surface for dry air.
-    R_cp = 2 / 7
+    # The specific heat capacity on a constant pressure surface for dry air.
+    c_p = 29.100609300000002
     # Gravitational acceleration at the Earth's surface.
-    g = (self.G * self.M) / (self.a ** 2)
+    g = (G * M) / (a ** 2)
 
     def __init__(self, detail_level=3, benchmark=False):
         """
@@ -97,25 +100,6 @@ class Backend:
 
         latitude_lines = np.asarray(latitude_lines)
         return latitude_lines
-
-    def longitude_lines(self):
-        """
-        Generates a numpy array of longitude lines.
-        """
-        longitude_lines = [
-            i
-            for i in np.arange(-180, 181, (360 / self.detail_level))
-            if -180 <= i <= 180 and i != 0
-        ]
-
-        if self.detail_level != (5 ** (1 - 1)) and self.detail_level != (5 ** (3 - 1)):
-            del longitude_lines[0]
-            del longitude_lines[-1]
-        elif self.detail_level == (5 ** (3 - 1)):
-            del longitude_lines[0]
-
-        longitude_lines = np.asarray(longitude_lines)
-        return longitude_lines
 
     def altitude_level(self):
         """
@@ -192,36 +176,101 @@ class Backend:
         """
         Explain code here.
         """
-        file_folder = 'amsimp/data/geopotential_height/'
-        file = file_folder + self.month + '.csv'
+        file_folder = "amsimp/data/geopotential_height/"
+        file = file_folder + self.month + ".csv"
 
         data = pd.read_csv(file)
         column_values = np.asarray([i for i in np.arange(-80, 81, 5)])
 
-        return data
+        scale_height = data["Scale Height"].values
+        pressure_surface = data["Pressure (hPa)"].values
+        geometric_height = (
+            np.log(pressure_surface[0] / pressure_surface) * scale_height
+        ) * 1000
+
+        potential_height = []
+        for i in column_values:
+            i = str(i)
+            alt_data = data[i].values
+
+            geo_alt = []
+            n = 0
+            while n < (len(alt_data) - 1):
+                y2 = alt_data[n + 1]
+                y1 = alt_data[n]
+                x2 = geometric_height[n + 1]
+                x1 = geometric_height[n]
+
+                m = (y2 - y1) / (x2 - x1)
+                c = y1 - (m * x1)
+
+                for z in self.altitude_level():
+                    if z >= x1 and z < x2:
+                        y = (m * z) + c
+                        geo_alt.append(y)
+                    elif z > x2 and x2 > 47000:
+                        y = (m * z) + c
+                        geo_alt.append(y)
+
+                n += 1
+
+            potential_height.append(geo_alt)
+        potential_height = np.transpose(np.asarray(potential_height))
+
+        geopotential_height = []
+        n = 0
+        for geo in potential_height:
+            geo_lat = []
+            k = 0
+            while k < (len(geo) - 1):
+                y2 = geo[k + 1]
+                y1 = geo[k]
+                x2 = column_values[k + 1]
+                x1 = column_values[k]
+
+                m = (y2 - y1) / (x2 - x1)
+                c = y1 - (m * x1)
+
+                for phi in self.latitude_lines():
+                    if phi >= x1 and phi < x2:
+                        y = (m * phi) + c
+                        geo_lat.append(y)
+                    elif phi < x1 and x1 == -80:
+                        y = (m * phi) + c
+                        geo_lat.append(y)
+                    elif phi > x2 and x2 == 80:
+                        y = (m * phi) + c
+                        geo_lat.append(y)
+
+                k += 1
+
+            geopotential_height.append(geo_lat)
+
+        geopotential_height = np.asarray(geopotential_height)
+        return geopotential_height
 
     def temperature(self):
         """
 		Explain code here.
 		"""
-        file_folder = 'amsimp/data/temperature/'
-        file = file_folder + self.month + '.csv'
-        
+        file_folder = "amsimp/data/temperature/"
+        file = file_folder + self.month + ".csv"
+
         data = pd.read_csv(file)
         column_values = np.asarray([i for i in np.arange(-80, 81, 10)])
-        
+
         temp = []
         for i in column_values:
             i = str(i)
             alt_data = data[i].values
-            
+
             temp_alt = []
             n = 0
             while n < (len(alt_data) - 1):
                 y2 = alt_data[n + 1]
                 y1 = alt_data[n]
-                x2 = data['Alt / Lat'].values[n + 1]
-                x1 = data['Alt / Lat'].values[n]
+                x2 = data["Alt / Lat"].values[n + 1]
+                x1 = data["Alt / Lat"].values[n]
 
                 m = (y2 - y1) / (x2 - x1)
                 c = y1 - (m * x1)
@@ -238,7 +287,7 @@ class Backend:
 
             temp.append(temp_alt)
         temp = np.transpose(np.asarray(temp))
-        
+
         temperature = []
         n = 0
         for t in temp:
@@ -263,7 +312,7 @@ class Backend:
                     elif phi > x2 and x2 == 80:
                         y = (m * phi) + c
                         temp_lat.append(y)
-                
+
                 k += 1
 
             temperature.append(temp_lat)
@@ -277,20 +326,21 @@ class Backend:
         """
 		Explain code here.
 		"""
-        file_folder = 'amsimp/data/pressure/'
-        file = file_folder + self.month + '.csv'
-        
+        file_folder = "amsimp/data/pressure/"
+        file = file_folder + self.month + ".csv"
+
         data = pd.read_csv(file)
         column_values = np.asarray([i for i in np.arange(-80, 81, 10)])
 
         p = []
         for i in column_values:
             i = str(i)
-            x = data['Alt / Lat'].values
+            x = data["Alt / Lat"].values
             y = data[i].values
 
             def fit_method(x, a, b, c):
                 return a - (b / c) * (1 - np.exp(-c * x))
+
             guess = [1013.256, 0.1685119, 0.00016627]
             c, cov = curve_fit(fit_method, x, y, guess)
 
@@ -299,7 +349,6 @@ class Backend:
         p = np.transpose(np.asarray(p))
 
         pressure = []
-        n = 0
         for _p in p:
             p_lat = []
             k = 0
@@ -322,25 +371,25 @@ class Backend:
                     elif phi > x2 and x2 == 80:
                         y = (m * phi) + c
                         p_lat.append(y)
-                
+
                 k += 1
 
             pressure.append(p_lat)
 
         pressure = np.asarray(pressure)
         pressure *= 100
-        
+
         return pressure
 
     # -----------------------------------------------------------------------------------------#
 
     def density(self):
         """
-        Generates a numpy array of atmospheric density by utilizing the Ideal Gas Law. As such, 
+        Generates a numpy array of atmospheric density by utilizing the Ideal Gas Law. As such,
         it was generated by utilising the class methods of temperature, and pressure.
         """
         R = 287.05
-        
+
         density = self.pressure() / (R * self.temperature())
 
         return density
@@ -359,7 +408,7 @@ class Backend:
         i = 0
         while i < len(temperature):
             var = temperature[i] * (
-                (pressure[i] / self.pressure()[0]) ** (self.R_cp)
+                (pressure[i] / self.pressure()[0]) ** (self.R / self.c_p)
             )
 
             potential_temperature.append(var)
