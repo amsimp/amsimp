@@ -74,7 +74,7 @@ class Wind(Backend):
         if minimum > -100 and maximum < 100:
             levels = np.linspace(minimum, maximum, 21)
         else:
-            levels = np.linspace(-120, 120, 21)
+            levels = np.linspace(-120, 70, 21)
 
         plt.contourf(latitude, altitude, geostrophic_wind, levels=levels)
 
@@ -88,6 +88,9 @@ class Wind(Backend):
         plt.subplots_adjust(bottom = 0.135)
 
         colorbar = plt.colorbar()
+        tick_locator = ticker.MaxNLocator(nbins=15)
+        colorbar.locator = tick_locator
+        colorbar.update_ticks()
         colorbar.set_label("Velocity ($\\frac{m}{s}$)")
 
         plt.show()
