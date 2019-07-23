@@ -50,13 +50,14 @@ class Backend:
     # Gravitational acceleration at the Earth's surface.
     g = (G * M) / (a ** 2)
 
-    def __init__(self, detail_level=3, benchmark=False):
+    def __init__(self, detail_level=3, benchmark=False, future=False):
         """
 		Numerical value for the level of computational detail that will be used in the mathematical
 		calculations. This value is between 1 and 5.
 		"""
         self.detail_level = detail_level
         self.benchmark = benchmark
+        self.future = future
 
         if not isinstance(self.detail_level, int):
             raise Exception(
@@ -78,6 +79,13 @@ class Backend:
         if not isinstance(self.benchmark, bool):
             raise Exception(
                 "benchmark must be a boolean value. The value of benchmark was: {}".format(
+                    self.benchmark
+                )
+            )
+        
+        if not isinstance(self.future, bool):
+            raise Exception(
+                "future must be a boolean value. The value of benchmark was: {}".format(
                     self.benchmark
                 )
             )
@@ -177,7 +185,11 @@ class Backend:
         Explain code here.
         """
         file_folder = "amsimp/data/geopotential_height/"
-        file = file_folder + self.month + ".csv"
+        
+        if self.future == False:
+            file = file_folder + self.month + ".csv"
+        elif self.future == True:
+            file = file_folder + self.next_month + ".csv"
 
         data = pd.read_csv(file)
         column_values = np.asarray([i for i in np.arange(-80, 81, 5)])
@@ -254,7 +266,11 @@ class Backend:
 		Explain code here.
 		"""
         file_folder = "amsimp/data/temperature/"
-        file = file_folder + self.month + ".csv"
+        
+        if self.future == False:
+            file = file_folder + self.month + ".csv"
+        elif self.future == True:
+            file = file_folder + self.next_month + ".csv"
 
         data = pd.read_csv(file)
         column_values = np.asarray([i for i in np.arange(-80, 81, 10)])
@@ -327,7 +343,11 @@ class Backend:
 		Explain code here.
 		"""
         file_folder = "amsimp/data/pressure/"
-        file = file_folder + self.month + ".csv"
+        
+        if self.future == False:
+            file = file_folder + self.month + ".csv"
+        elif self.future == True:
+            file = file_folder + self.next_month + ".csv"
 
         data = pd.read_csv(file)
         column_values = np.asarray([i for i in np.arange(-80, 81, 10)])
@@ -346,6 +366,7 @@ class Backend:
 
             p_alt = fit_method(self.altitude_level(), c[0], c[1], c[2])
             p.append(p_alt)
+
         p = np.transpose(np.asarray(p))
 
         pressure = []
@@ -380,6 +401,52 @@ class Backend:
         pressure *= 100
 
         return pressure
+
+    def pressure_thickness(self):
+        """
+		Explain code here.
+		"""
+        file_folder = "amsimp/data/geopotential_height/"
+        
+        if self.future == False:
+            file = file_folder + self.month + ".csv"
+        elif self.future == True:
+            file = file_folder + self.next_month + ".csv"
+
+        data = pd.read_csv(file)
+        column_values = np.asarray([i for i in np.arange(-80, 81, 5)])
+
+        mb_1000 = data.iloc[0].values[2:]
+        mb_500 = data.iloc[3].values[2:]
+
+        p_thickness = mb_500 - mb_1000
+
+        pressure_thickness = []
+        n = 0
+        while n < (len(column_values) - 1):
+            y2 = p_thickness[n + 1]
+            y1 = p_thickness[n]
+            x2 = column_values[n + 1]
+            x1 = column_values[n]
+
+            m = (y2 - y1) / (x2 - x1)
+            c = y1 - (m * x1)
+
+            for phi in self.latitude_lines():
+                if phi >= x1 and phi < x2:
+                    y = (m * phi) + c
+                    pressure_thickness.append(y)
+                elif phi < x1 and x1 == -80:
+                    y = (m * phi) + c
+                    pressure_thickness.append(y)
+                elif phi > x2 and x2 == 80:
+                    y = (m * phi) + c
+                    pressure_thickness.append(y)
+
+            n += 1
+
+        pressure_thickness = np.asarray(pressure_thickness)
+        return pressure_thickness, p_thickness
 
     # -----------------------------------------------------------------------------------------#
 

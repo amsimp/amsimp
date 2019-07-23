@@ -8,10 +8,8 @@ AMSIMP Wind Class. For information about this class is described below.
 import cartopy
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
-import matplotlib.colors as colors
 from matplotlib import ticker
 import numpy as np
-import pandas as pd
 from amsimp.backend import Backend
 
 # -----------------------------------------------------------------------------------------#

@@ -5,13 +5,11 @@ AMSIMP Precipitable Water Class. For information about this class is described b
 # -----------------------------------------------------------------------------------------#
 
 # Importing Dependencies
-import math
 import numpy as np
 from amsimp.backend import Backend
 from scipy.integrate import quad
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
-import matplotlib.colors as colors
 from matplotlib import ticker
 
 # -----------------------------------------------------------------------------------------#
@@ -58,6 +56,7 @@ class Water(Backend):
         pressure = np.transpose(self.pressure())
         vapor_pressure = np.transpose(self.vapor_pressure())
         g = -self.g
+        rho_w = 0.997
         
         def integration_eq(pressure, vapor_pressure):
             y = (0.622 * vapor_pressure) / (pressure - vapor_pressure)
@@ -88,7 +87,7 @@ class Water(Backend):
 
         precipitable_water = np.asarray(np.transpose(precipitable_water))
 
-        precipitable_water *= 1 / (g)
+        precipitable_water *= 1 / (rho_w * g)
         return precipitable_water
 
     def contourf(self):
