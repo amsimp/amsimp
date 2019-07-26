@@ -27,8 +27,10 @@ class Wind(Backend):
         Explain code here.
         """
         if self.detail_level < (5 ** (3 - 1)):
-            raise Exception('detail_level must be greater than 3 in order to utilise this method.')
-        
+            raise Exception(
+                "detail_level must be greater than 3 in order to utilise this method."
+            )
+
         # Distance of one degree of latitude (e.g. 0N - 1]\N/1S), measured in metres.
         lat_d = (2 * np.pi * self.a) / 360
         # Distance between latitude lines in the class method, Backend.latitude_lines().
@@ -81,9 +83,14 @@ class Wind(Backend):
         plt.xlabel("Latitude ($\phi$)")
         plt.ylabel("Altitude (m)")
         plt.title("Geostrophic Wind in the Month of " + self.month.title())
-        
-        plt.figtext(0.99, 0.01, 'Note: Geostrophic balance does not hold near the equator.', horizontalalignment='right')
-        plt.subplots_adjust(bottom = 0.135)
+
+        plt.figtext(
+            0.99,
+            0.01,
+            "Note: Geostrophic balance does not hold near the equator.",
+            horizontalalignment="right",
+        )
+        plt.subplots_adjust(bottom=0.135)
 
         colorbar = plt.colorbar()
         tick_locator = ticker.MaxNLocator(nbins=15)

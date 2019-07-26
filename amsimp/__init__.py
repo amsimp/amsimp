@@ -10,3 +10,6 @@ from amsimp.wind import Wind
 
 # Precipitable Water Module.
 from amsimp.water import Water
+
+# Weather Module.
+from amsimp.weather import Weather

@@ -18,16 +18,17 @@ from scipy.optimize import curve_fit
 
 class Backend:
     """
-	AMSIMP Backend Class - Contains / calculates all the variables needed to utilize the
-	Primitive Equations.
+	AMSIMP Backend Class - Explain code here.
 	"""
 
-    # Current month.
+    # Current month. the number of days in it.
     date = datetime.now()
     month = date.strftime("%B").lower()
     # Next month.
-    future_date = date + future.relativedelta(months = +1)
+    future_date = date + future.relativedelta(months=+1)
     next_month = future_date.strftime("%B").lower()
+    # The number of days in the current month.
+    number_of_days = (future_date - date).days
 
     # Predefined Constants.
     # Angular rotation rate of Earth.
@@ -50,13 +51,12 @@ class Backend:
     # Gravitational acceleration at the Earth's surface.
     g = (G * M) / (a ** 2)
 
-    def __init__(self, detail_level=3, benchmark=False, future=False):
+    def __init__(self, detail_level=3, future=False):
         """
 		Numerical value for the level of computational detail that will be used in the mathematical
 		calculations. This value is between 1 and 5.
 		"""
         self.detail_level = detail_level
-        self.benchmark = benchmark
         self.future = future
 
         if not isinstance(self.detail_level, int):
@@ -76,13 +76,6 @@ class Backend:
         self.detail_level -= 1
         self.detail_level = 5 ** self.detail_level
 
-        if not isinstance(self.benchmark, bool):
-            raise Exception(
-                "benchmark must be a boolean value. The value of benchmark was: {}".format(
-                    self.benchmark
-                )
-            )
-        
         if not isinstance(self.future, bool):
             raise Exception(
                 "future must be a boolean value. The value of benchmark was: {}".format(
@@ -185,7 +178,7 @@ class Backend:
         Explain code here.
         """
         file_folder = "amsimp/data/geopotential_height/"
-        
+
         if self.future == False:
             file = file_folder + self.month + ".csv"
         elif self.future == True:
@@ -266,7 +259,7 @@ class Backend:
 		Explain code here.
 		"""
         file_folder = "amsimp/data/temperature/"
-        
+
         if self.future == False:
             file = file_folder + self.month + ".csv"
         elif self.future == True:
@@ -343,7 +336,7 @@ class Backend:
 		Explain code here.
 		"""
         file_folder = "amsimp/data/pressure/"
-        
+
         if self.future == False:
             file = file_folder + self.month + ".csv"
         elif self.future == True:
@@ -407,7 +400,7 @@ class Backend:
 		Explain code here.
 		"""
         file_folder = "amsimp/data/geopotential_height/"
-        
+
         if self.future == False:
             file = file_folder + self.month + ".csv"
         elif self.future == True:
@@ -475,7 +468,7 @@ class Backend:
         i = 0
         while i < len(temperature):
             var = temperature[i] * (
-                (pressure[i] / self.pressure()[0]) ** (self.R / self.c_p)
+                (pressure[i] / self.pressure()[0]) ** (-self.R / self.c_p)
             )
 
             potential_temperature.append(var)
