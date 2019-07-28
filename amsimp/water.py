@@ -56,9 +56,8 @@ class Water(Backend):
         """
         Precipitable water is the total atmospheric water vapor
         contained in a vertical column of unit cross-sectional area extending
-        between any two specified levels. Mathematically, if the vapor pressure 
-        is the mixing ratio, then the precipitable water vapor, W, contained in
-        a layer bounded is by pressures p1 and p2.
+        between any two specified levels. For a contourf plot of this data,
+        please use the amsimp.Water.contourf() method.
         """
         precipitable_water = []
 
@@ -105,7 +104,9 @@ class Water(Backend):
 
     def contourf(self):
         """
-		Explain code here.
+		Plots precipitable water on a contourf plot, with the axes being latitude and
+        longitude. This plot is then layed on top of a EckertIII global projection.
+        For the raw data, please use the amsimp.Water.precipitable_water() method.
 		"""
         long = self.latitude_lines() * 2
         latitude, longitude = np.meshgrid(self.latitude_lines(), long)
@@ -124,8 +125,16 @@ class Water(Backend):
         ax.coastlines()
         ax.gridlines()
 
+        minimum = self.precipitable_water().min()
+        maximum = self.precipitable_water().max()
+        levels = np.linspace(minimum, maximum, 21)
+
         plt.contourf(
-            longitude, latitude, precipitable_water, transform=ccrs.PlateCarree()
+            longitude,
+            latitude,
+            precipitable_water,
+            transform=ccrs.PlateCarree(),
+            levels=levels,
         )
 
         plt.xlabel("Latitude ($\phi$)")

@@ -32,7 +32,8 @@ class Backend:
 
     # Predefined Constants.
     # Angular rotation rate of Earth.
-    Upomega = 7.2921e-05
+    sidereal_day = (23 + (56 / 60)) * 3600
+    Upomega = (2 * np.pi) / sidereal_day
     # Ideal Gas Constant
     R = gas_constant
     # Mean radius of the Earth.
@@ -439,7 +440,7 @@ class Backend:
             n += 1
 
         pressure_thickness = np.asarray(pressure_thickness)
-        return pressure_thickness, p_thickness
+        return pressure_thickness
 
     # -----------------------------------------------------------------------------------------#
 
