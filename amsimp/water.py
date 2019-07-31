@@ -6,33 +6,52 @@ AMSIMP Precipitable Water Class. For information about this class is described b
 
 # Importing Dependencies
 import numpy as np
-from amsimp.backend import Backend
 from scipy.integrate import quad
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 from matplotlib import ticker
+from amsimp.backend import Backend
 
 # -----------------------------------------------------------------------------------------#
 
 
 class Water(Backend):
     """
-    AMSIMP Water Class - This class is concerned with calculating how much precipitable
-    water vapor is in the air at a given latitude. Considering stratospheric air can be
-    approximated as dry, to a reasonable degree of accuracy, this class will only
-    consider tropospheric air.
+    AMSIMP Water Class - This class is concerned with calculating how much
+    precipitable water vapor is in the air at a given latitude. Considering
+    stratospheric air can be approximated as dry, to a reasonable degree of
+    accuracy, this class will only consider tropospheric air.
+
+    vapor_pressure ~ generates a NumPy array of saturated vapor pressure.
+    precipitable_water ~ generates a NumPy array of saturated precipitable water
+    vapor.
+    water_contourf ~ generates a precipitable water vapor contour plot, and
+    overlays that said plot onto a EckertIII projection of the Earth.
     """
 
     def vapor_pressure(self):
         """
-        Saturated vapor pressure.
+        Generates a NumPy array of saturated vapor pressure. Vapor pressure, in
+        meteorology, is the partial pressure of water vapor. The partial
+        pressure of water vapor is the pressure that water vapor contributes
+        to the total atmospheric pressure.
         """
+        # Ensures that the detail_level must be higher than 2 in order to utilise this method.
+        if self.detail_level < (5 ** (3 - 1)):
+            raise Exception(
+                "detail_level must be greater than 2 in order to utilise this method."
+            )
+
         vapor_pressure = []
 
+        # Convert temperature in Kelvin to degrees centigrade.
         temperature = self.temperature() - 273.15
-        delta_z = self.altitude_level()[1]
-        index_of_maxz = int(10000 / delta_z)
 
+        # Troposphere boundary line.
+        delta_z = self.altitude_level()[1]
+        index_of_maxz = int(np.floor(self.troposphere_boundaryline()[0] / delta_z))
+
+        # Calculations.
         n = 0
         while n <= index_of_maxz:
             e = []
@@ -49,33 +68,42 @@ class Water(Backend):
             n += 1
         vapor_pressure = np.asarray(vapor_pressure)
 
+        # Convert from kPa to hPa.
         vapor_pressure *= 1000
+
         return vapor_pressure
 
     def precipitable_water(self):
         """
-        Precipitable water is the total atmospheric water vapor
-        contained in a vertical column of unit cross-sectional area extending
-        between any two specified levels. For a contourf plot of this data,
-        please use the amsimp.Water.contourf() method.
+        Generates a NumPy array of saturated precipitable water vapor.
+        Precipitable water is the total atmospheric water vapor contained in a
+        vertical column of unit cross-sectional area extending between any two
+        specified levels. For a contour plot of this data, please use the
+        amsimp.Water.contourf() method.
         """
         precipitable_water = []
 
+        # Define variables.
         pressure = np.transpose(self.pressure())
         vapor_pressure = np.transpose(self.vapor_pressure())
         g = -self.g
         rho_w = 0.997
 
+        # Equation to integrate.
         def integration_eq(pressure, vapor_pressure):
             y = (0.622 * vapor_pressure) / (pressure - vapor_pressure)
             return y
 
+        # Integrate the mixing ratio with respect to pressure between the
+        # pressure boundaries of p1, and p2.
         n = 0
         while n < len(pressure):
             intergration = []
 
             delta_z = self.altitude_level()[1]
-            index_of_maxz = int(10000 / delta_z)
+            index_of_maxz = index_of_maxz = int(
+                np.floor(self.troposphere_boundaryline()[0] / delta_z)
+            )
 
             k = 0
             while k <= index_of_maxz:
@@ -99,18 +127,22 @@ class Water(Backend):
 
         precipitable_water = np.asarray(np.transpose(precipitable_water))
 
+        # Multiplication term by integration.
         precipitable_water *= 1 / (rho_w * g)
         return precipitable_water
 
-    def contourf(self):
+    def water_contourf(self):
         """
-		Plots precipitable water on a contourf plot, with the axes being latitude and
-        longitude. This plot is then layed on top of a EckertIII global projection.
-        For the raw data, please use the amsimp.Water.precipitable_water() method.
+        Plots precipitable water on a contour plot, with the axes being
+        latitude and longitude. This plot is then layed on top of a EckertIII
+        global projection. For the raw data, please use the
+        amsimp.Water.precipitable_water() method.
 		"""
+        # Defines the axes.
         long = self.latitude_lines() * 2
         latitude, longitude = np.meshgrid(self.latitude_lines(), long)
 
+        # Define the data.
         precipitable_water = []
         n = 0
         while n < len(longitude):
@@ -119,16 +151,16 @@ class Water(Backend):
             n += 1
         precipitable_water = np.asarray(precipitable_water)
 
+        # EckertIII projection details.
         ax = plt.axes(projection=ccrs.EckertIII())
-
         ax.set_global()
         ax.coastlines()
         ax.gridlines()
 
+        # Contourf plotting.
         minimum = self.precipitable_water().min()
         maximum = self.precipitable_water().max()
         levels = np.linspace(minimum, maximum, 21)
-
         plt.contourf(
             longitude,
             latitude,
@@ -137,10 +169,17 @@ class Water(Backend):
             levels=levels,
         )
 
+        # Adds SALT to the graph.
+        if self.future:
+            month = self.next_month.title()
+        else:
+            month = self.month.title()
+
         plt.xlabel("Latitude ($\phi$)")
         plt.ylabel("Longitude ($\lambda$)")
-        plt.title("Precipitable Water in the Month of " + self.month.title())
+        plt.title("Precipitable Water in the Month of " + month)
 
+        # Colorbar creation.
         colorbar = plt.colorbar()
         tick_locator = ticker.MaxNLocator(nbins=15)
         colorbar.locator = tick_locator

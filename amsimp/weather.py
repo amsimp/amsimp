@@ -5,35 +5,59 @@ AMSIMP Weather Class. For information about this class is described below.
 # -----------------------------------------------------------------------------------------#
 
 # Importing Dependencies
-from amsimp.wind import Wind
-from amsimp.water import Water
 import matplotlib.pyplot as plt
 from matplotlib import style
 import matplotlib.gridspec as gridspec
 from matplotlib import ticker
 import numpy as np
 import cartopy.crs as ccrs
+from amsimp.wind import Wind
+from amsimp.water import Water
 
 # -----------------------------------------------------------------------------------------#
 
 
 class Weather(Wind, Water):
     """
-	AMSIMP Weather Class - Also, known as Tempestas Praenuntientur @ AMSIMP.
+    AMSIMP Weather Class - Also, known as Tempestas Praenuntientur @ AMSIMP.
+    This class generates a rudimentary weather forecast based on the three other
+    AMSIMP classes. The four elements that this class predicts over time are
+    temperature, pressure thickness, geostrophic wind, and precipitable water
+    vapor. Predictions are made by calculating the derivative of each element,
+    between this month and next month, using finite-difference. The initial
+    conditions are defined as beginning at the start of the month.
+
+    Below is a list of the methods included within this class, with a short
+    description of their intended purpose. Please see the relevant class methods
+    for more information.
+
+    predict_temperature ~ this method outputs the derivative and the initial
+    conditions of temperature.
+    predict_pressurethickness ~ this method outputs the derivative and the
+    initial conditions of pressure thickness.
+    predict_geostrophicwind ~ this method outputs the derivative and the initial
+    conditions of geostrophic wind.
+    predict_precipitablewater ~ this method outputs the derivative and the
+    initial conditions of precipitable water vapor.
+
+    simulate ~ this method outputs a visualisation of how temperature, pressure
+    thickness, geostrophic wind, and precipitable water vapor will evolve.
 	"""
 
     def __init__(self, detail_level):
         """
-        Explain code here.
+        Please refer to amsimp.Backend.__init__() for a description of this
+        method.
         """
-
         super().__init__(detail_level)
 
         self.future = True
 
     def predict_temperature(self):
         """
-        Explain code here.
+        This method outputs the derivative and the initial conditions of
+        temperature. Please refer to the class description to understand how
+        these outputs are calculated / defined.
         """
         future_temperature = self.temperature()
         self.future = False
@@ -46,24 +70,12 @@ class Weather(Wind, Water):
 
         return gradient, init_temperature
 
-    def predict_pressure(self):
-        """
-        Explain code here.
-        """
-        future_pressure = self.pressure()
-        self.future = False
-        init_pressure = self.pressure()
-        self.future = True
-
-        n = self.number_of_days - 1
-
-        gradient = (future_pressure - init_pressure) / n
-
-        return gradient, init_pressure
-
     def predict_pressurethickness(self):
         """
-        Explain code here.
+        This is the pressure thickness variation of the method,
+        predict_temperature. Please refer to
+        amsimp.Backend.predict_temperature() for a general description of this
+        method.
         """
         future_pressurethickness = self.pressure_thickness()
         self.future = False
@@ -78,7 +90,10 @@ class Weather(Wind, Water):
 
     def predict_geostrophicwind(self):
         """
-        Explain code here.
+        This is the geostrophic wind variation of the method,
+        predict_temperature. Please refer to
+        amsimp.Backend.predict_temperature() for a general description of this
+        method.
         """
         future_geostrophicwind = self.geostrophic_wind()
         self.future = False
@@ -93,7 +108,10 @@ class Weather(Wind, Water):
 
     def predict_precipitablewater(self):
         """
-        Explain code here.
+        This is the precipitable water vapor variation of the method,
+        predict_temperature. Please refer to
+        amsimp.Backend.predict_temperature() for a general description of this
+        method.
         """
         future_precipitablewater = self.precipitable_water()
         self.future = False
@@ -108,7 +126,14 @@ class Weather(Wind, Water):
 
     def simulate(self):
         """
-        Explain code here.
+        This method outputs a visualisation of how temperature, pressure
+        thickness, geostrophic wind, and precipitable water vapor will evolve.
+        The geostrophic wind and temperature elements of this visualisation
+        operate similarly to the method, amsimp.Wind.wind_contourf(), so, please
+        refer to this method for a detailed description of the aforementioned
+        elements. Likewise, please refer to amsimp.Water.water_contourf() for
+        more information on the visualisation element of precipitable water
+        vapor.
         """
         # Time (Unit: day).
         time = np.linspace(0, (self.number_of_days - 1), (self.number_of_days * 2))
@@ -154,9 +179,9 @@ class Weather(Wind, Water):
             min1 = self.predict_geostrophicwind()[1].min()
             max1 = self.predict_geostrophicwind()[1].max()
             if min1 > -100 and max1 < 100:
-                level1 = np.linspace(min1, 60, 21)
+                level1 = np.linspace(-60, max1, 21)
             else:
-                level1 = np.linspace(-120, 70, 21)
+                level1 = np.linspace(-70, 120, 21)
             v_g = ax1.contourf(
                 latitude, altitude, geostrophic_wind, cmap=cmap1, levels=level1
             )

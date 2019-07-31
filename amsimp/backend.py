@@ -5,20 +5,54 @@ AMSIMP Backend Class. For information about this class is described below.
 # -----------------------------------------------------------------------------------------#
 
 # Importing Dependencies
+from datetime import datetime
+import dateutil.relativedelta as future
 import numpy as np
 from astropy import constants as const
 from scipy.constants import gas_constant
-import pandas as pd
-from datetime import datetime
-import dateutil.relativedelta as future
 from scipy.optimize import curve_fit
+import pandas as pd
 
 # -----------------------------------------------------------------------------------------#
 
 
 class Backend:
     """
-	AMSIMP Backend Class - Explain code here.
+    AMSIMP Backend Class - This is the base class for AMSIMP, as such, all
+    other classes within AMSIMP inherit this class, either directly or
+    indirectly.
+
+    For methods to be included in this class they must meet one of the following
+    criteria:
+    (1) they are considered essential components of the software.
+    (2) the output of these methods are generated from the methods classified
+    as (1).
+    (3) these methods import data from a comma-separated values file.
+    (4) they don't classify nicely into any other class.
+
+    Below is a list of the methods included within this class, with a short
+    description of their intended purpose and a bracketed number signifying
+    which of the above criteria they meet. Please see the relevant class methods
+    for more information.
+
+    latitude_lines ~ generates a NumPy array of latitude lines (1).
+    altitude_level ~ generates a NumPy array of altitude levels (1).
+
+    coriolis_parameter ~ generates a NumPy arrray of the Coriolis parameter (2).
+    gravitational_acceleration ~ generates a NumPy arrray of the gravitational
+    acceleration (2).
+
+    geopotential_height ~ outputs a NumPy arrray of geopotential height (3).
+    temperature ~ outputs a NumPy array of temperature (3).
+    pressure ~ outputs a NumPy array of atmospheric pressure (3).
+    pressure_thickness ~ outputs a NumPy array of atmospheric pressure
+    thickness (3).
+
+    density ~ outputs a NumPy array of atmospheric density (4).
+    potential_temperature ~ outputs a NumPy array of potential temperature (4).
+    exner_function ~ outputs a NumPy array of the Exner function (4).
+    troposphere_boundaryline ~ generates a NumPy array of the mean
+    troposphere - stratosphere boundary line.
 	"""
 
     # Current month. the number of days in it.
@@ -54,12 +88,19 @@ class Backend:
 
     def __init__(self, detail_level=3, future=False):
         """
-		Numerical value for the level of computational detail that will be used in the mathematical
-		calculations. This value is between 1 and 5.
+        The parameter, detail_level, is the numerical value for the level of
+        computational detail that will be used in the mathematical calculations.
+        This value is between 1 and 5.
+
+        If the parameter, future, has a boolean truth value, all class methods
+        will output information related to the following month (e.g. it will
+        output information related to August if the current month is July).
 		"""
+        # Make these parameters available globally.
         self.detail_level = detail_level
         self.future = future
 
+        # Ensure self.detail_level is an integer.
         if not isinstance(self.detail_level, int):
             raise Exception(
                 "detail_level must be an integer. The value of detail_level was: {}".format(
@@ -67,6 +108,7 @@ class Backend:
                 )
             )
 
+        # Ensure self.detail_level is between 1 and 5.
         if self.detail_level > 5 or self.detail_level <= 0:
             raise Exception(
                 "detail_level must be a positive integer between 1 and 5. The value of detail_level was: {}".format(
@@ -77,16 +119,17 @@ class Backend:
         self.detail_level -= 1
         self.detail_level = 5 ** self.detail_level
 
+        # Ensure self.future is a boolean value.
         if not isinstance(self.future, bool):
             raise Exception(
                 "future must be a boolean value. The value of benchmark was: {}".format(
-                    self.benchmark
+                    self.future
                 )
             )
 
     def latitude_lines(self):
         """
-        Generates a numpy array of latitude lines.
+        Generates a NumPy array of latitude lines.
         """
         latitude_lines = [
             i
@@ -105,8 +148,7 @@ class Backend:
 
     def altitude_level(self):
         """
-        Generates a numpy which will be used in calculations relating to the altitude above
-        sea level (array in metres).
+        Generates a NumPy array of altitude levels.
         """
         max_height = 50000
         mim_height_detail = max_height / 5
@@ -124,18 +166,22 @@ class Backend:
 
     # -----------------------------------------------------------------------------------------#
 
-    def coriolis_force(self):
+    def coriolis_parameter(self):
         """
-		Generates a numpy arrray of the Coriolis parameter at various latitudes of the Earth's
-		surface. As such, it also utilizes the constant, angular rotation of the Earth.
+        Generates a NumPy arrray of the Coriolis parameter at various latitudes
+        of the Earth's surface. The Coriolis parameter is defined as two times
+        the angular rotation of the Earth by the sin of the latitude you are
+        interested in.
 		"""
-        coriolis_force = 2 * self.Upomega * np.sin(np.radians(self.latitude_lines()))
+        coriolis_parameter = (
+            2 * self.Upomega * np.sin(np.radians(self.latitude_lines()))
+        )
 
-        return coriolis_force
+        return coriolis_parameter
 
     def gravitational_acceleration(self):
         """
-        This class calculates the magintude of the effective gravitational acceleration
+        Generates a NumPy arrray of the effective gravitational acceleration
         according to WGS84 at a distance z from the Globe.
         """
         latitude = np.radians(self.latitude_lines())
@@ -144,56 +190,69 @@ class Backend:
         g_e = 9.7803253359
         g_p = 9.8321849378
 
-        """
-        Magnitude of the effective gravitational acceleration according to WGS84
-        at point P on the ellipsoid.
-        """
+        # Magnitude of the effective gravitational acceleration according to WGS84
+        # at point P on the ellipsoid.
         g_0 = (
             (a * g_e * (np.cos(latitude) ** 2)) + (b * g_p * (np.sin(latitude) ** 2))
         ) / np.sqrt(
             ((a ** 2) * (np.cos(latitude) ** 2) + (b ** 2) * (np.sin(latitude) ** 2))
         )
 
-        """
-        Magnitude of the effective gravitational acceleration according to WGS84 at
-        a distance z from the ellipsoid.
-        """
+        # Magnitude of the effective gravitational acceleration according to WGS84 at
+        # a distance z from the ellipsoid.
         f = (a - b) / a
         m = ((self.Upomega ** 2) * (a ** 2) * b) / (self.G * self.M)
 
-        g_z = []
+        gravitational_acceleration = []
         for z in self.altitude_level():
-            var = g_0 * (
+            g_z = g_0 * (
                 1
                 - (2 / a) * (1 + f + m - 2 * f * (np.sin(latitude) ** 2)) * z
                 + (3 / (a ** 2)) * (z ** 2)
             )
-            var = var.tolist()
-            g_z.append(var)
+            g_z = g_z.tolist()
+            gravitational_acceleration.append(g_z)
 
-        g_z = np.asarray(g_z)
-        return g_z
+        gravitational_acceleration = np.asarray(gravitational_acceleration)
+        return gravitational_acceleration
+
+    # -----------------------------------------------------------------------------------------#
 
     def geopotential_height(self):
         """
-        Explain code here.
+        This method imports geopotential height data from a comma-separated
+        values file, which is located within a folder labelled
+        'amsimp/data/geopotential_height'. Following which, it outputs a NumPy
+        array in the shape of (len(altitude_level), len(latitude_lines)).
+
+        To define geopotential height it is better to look at an example.
+        If the geopotential height of a pressure surface of '500 hPa' is
+        '6000 m' at a given latitude and longitude, it says that at that given
+        point the pressure at 6000 m is 500 hPa.
         """
+        # Location of file.
         file_folder = "amsimp/data/geopotential_height/"
 
-        if self.future == False:
+        # Determine which month of data to import.
+        if not self.future:
             file = file_folder + self.month + ".csv"
-        elif self.future == True:
+        else:
             file = file_folder + self.next_month + ".csv"
 
+        # Import the data as a dataframe.
         data = pd.read_csv(file)
+
+        # Generates a NumPy array of latitude values that match the given dataset.
         column_values = np.asarray([i for i in np.arange(-80, 81, 5)])
 
+        # Hypsometric equation.
         scale_height = data["Scale Height"].values
         pressure_surface = data["Pressure (hPa)"].values
         geometric_height = (
             np.log(pressure_surface[0] / pressure_surface) * scale_height
         ) * 1000
 
+        # Generate a NumPy array that matches the shape of latitude_lines.
         potential_height = []
         for i in column_values:
             i = str(i)
@@ -211,7 +270,7 @@ class Backend:
                 c = y1 - (m * x1)
 
                 for z in self.altitude_level():
-                    if z >= x1 and z < x2:
+                    if x1 <= z < x2:
                         y = (m * z) + c
                         geo_alt.append(y)
                     elif z > x2 and x2 > 47000:
@@ -223,6 +282,7 @@ class Backend:
             potential_height.append(geo_alt)
         potential_height = np.transpose(np.asarray(potential_height))
 
+        # Generate the final output from the above NumPy array, potential_height.
         geopotential_height = []
         n = 0
         for geo in potential_height:
@@ -238,7 +298,7 @@ class Backend:
                 c = y1 - (m * x1)
 
                 for phi in self.latitude_lines():
-                    if phi >= x1 and phi < x2:
+                    if x1 <= phi < x2:
                         y = (m * phi) + c
                         geo_lat.append(y)
                     elif phi < x1 and x1 == -80:
@@ -257,18 +317,30 @@ class Backend:
 
     def temperature(self):
         """
-		Explain code here.
+        This method imports temperature data from a comma-separated values file,
+        which is located within a folder labelled 'amsimp/data/temperature'.
+        Following which, it outputs a NumPy array in the shape of
+        (len(altitude_level), len(latitude_lines)).
+
+        Temperature is defined as the mean kinetic energy density of molecular
+        motion.
 		"""
+        # Location of file.
         file_folder = "amsimp/data/temperature/"
 
-        if self.future == False:
+        # Determine which month of data to import.
+        if not self.future:
             file = file_folder + self.month + ".csv"
-        elif self.future == True:
+        else:
             file = file_folder + self.next_month + ".csv"
 
+        # Import the data as a dataframe.
         data = pd.read_csv(file)
+
+        # Generates a NumPy array of latitude values that match the given dataset.
         column_values = np.asarray([i for i in np.arange(-80, 81, 10)])
 
+        # Generate a NumPy array that matches the shape of latitude_lines.
         temp = []
         for i in column_values:
             i = str(i)
@@ -286,7 +358,7 @@ class Backend:
                 c = y1 - (m * x1)
 
                 for z in self.altitude_level():
-                    if z >= x1 and z < x2:
+                    if x1 <= z < x2:
                         y = (m * z) + c
                         temp_alt.append(y)
                     elif z == x2 and x2 == 50000:
@@ -298,6 +370,7 @@ class Backend:
             temp.append(temp_alt)
         temp = np.transpose(np.asarray(temp))
 
+        # Generate the final output from the above NumPy array, temp.
         temperature = []
         n = 0
         for t in temp:
@@ -313,7 +386,7 @@ class Backend:
                 c = y1 - (m * x1)
 
                 for phi in self.latitude_lines():
-                    if phi >= x1 and phi < x2:
+                    if x1 <= phi < x2:
                         y = (m * phi) + c
                         temp_lat.append(y)
                     elif phi < x1 and x1 == -80:
@@ -330,22 +403,32 @@ class Backend:
         temperature = np.asarray(temperature)
         return temperature
 
-    # -----------------------------------------------------------------------------------------#
-
     def pressure(self):
         """
-		Explain code here.
+        This method imports pressure data from a comma-separated values file,
+        which is located within a folder labelled 'amsimp/data/pressure'.
+        Following which, it outputs a NumPy array in the shape of
+        (len(altitude_level), len(latitude_lines)).
+
+        Pressure is defined as the flux of momentum component normal to a given
+        surface.
 		"""
+        # Location of file.
         file_folder = "amsimp/data/pressure/"
 
-        if self.future == False:
+        # Determine which month of data to import.
+        if not self.future:
             file = file_folder + self.month + ".csv"
-        elif self.future == True:
+        else:
             file = file_folder + self.next_month + ".csv"
 
+        # Import the data as a dataframe.
         data = pd.read_csv(file)
+
+        # Generates a NumPy array of latitude values that match the given dataset.
         column_values = np.asarray([i for i in np.arange(-80, 81, 10)])
 
+        # Generate a NumPy array that matches the shape of latitude_lines.
         p = []
         for i in column_values:
             i = str(i)
@@ -360,9 +443,9 @@ class Backend:
 
             p_alt = fit_method(self.altitude_level(), c[0], c[1], c[2])
             p.append(p_alt)
-
         p = np.transpose(np.asarray(p))
 
+        # Generate the final output from the above NumPy array, p.
         pressure = []
         for _p in p:
             p_lat = []
@@ -377,7 +460,7 @@ class Backend:
                 c = y1 - (m * x1)
 
                 for phi in self.latitude_lines():
-                    if phi >= x1 and phi < x2:
+                    if x1 <= phi < x2:
                         y = (m * phi) + c
                         p_lat.append(y)
                     elif phi < x1 and x1 == -80:
@@ -398,23 +481,37 @@ class Backend:
 
     def pressure_thickness(self):
         """
-		Explain code here.
+        This method imports geopotential height data from a comma-separated
+        values file, which is located within a folder labelled
+        'amsimp/data/geopotential_height'. Following which, it outputs a NumPy
+        array, with pressure thickness values (1000 hPa - 500 hPa), in the shape
+        of latitude_lines.
+
+        Pressure thickness is the distance between two pressure surfaces.
 		"""
+        # Location of file.
         file_folder = "amsimp/data/geopotential_height/"
 
-        if self.future == False:
+        # Determine which month of data to import.
+        if not self.future:
             file = file_folder + self.month + ".csv"
-        elif self.future == True:
+        else:
             file = file_folder + self.next_month + ".csv"
 
+        # Import the data as a dataframe.
         data = pd.read_csv(file)
+
+        # Generates a NumPy array of latitude values that match the given dataset.
         column_values = np.asarray([i for i in np.arange(-80, 81, 5)])
 
+        # Pressure surfaces.
         mb_1000 = data.iloc[0].values[2:]
         mb_500 = data.iloc[3].values[2:]
 
+        # Pressure thickness between 1000 hPa and 500 hPa.
         p_thickness = mb_500 - mb_1000
 
+        # Generate a NumPy array that matches the shape of latitude_lines.
         pressure_thickness = []
         n = 0
         while n < (len(column_values) - 1):
@@ -427,7 +524,7 @@ class Backend:
             c = y1 - (m * x1)
 
             for phi in self.latitude_lines():
-                if phi >= x1 and phi < x2:
+                if x1 <= phi < x2:
                     y = (m * phi) + c
                     pressure_thickness.append(y)
                 elif phi < x1 and x1 == -80:
@@ -446,8 +543,8 @@ class Backend:
 
     def density(self):
         """
-        Generates a numpy array of atmospheric density by utilizing the Ideal Gas Law. As such,
-        it was generated by utilising the class methods of temperature, and pressure.
+        Generates a NumPy array of atmospheric density by utilizing the Ideal
+        Gas Law.
         """
         R = 287.05
 
@@ -457,32 +554,52 @@ class Backend:
 
     def potential_temperature(self):
         """
-        The potential temperature of a parcel of fluid at pressure P is the temperature
-        that the parcel would attain if adiabatically brought to a standard reference
+        Generates a NumPy array of potential temperature. The potential
+        temperature of a parcel of fluid at pressure P is the temperature that
+        the parcel would attain if adiabatically brought to a standard reference
         pressure
         """
-        potential_temperature = []
+        potential_temperature = self.temperature() * (
+            (self.pressure() / self.pressure()[0]) ** (-self.R / self.c_p)
+        )
 
-        pressure = self.pressure()
-        temperature = self.temperature()
-
-        i = 0
-        while i < len(temperature):
-            var = temperature[i] * (
-                (pressure[i] / self.pressure()[0]) ** (-self.R / self.c_p)
-            )
-
-            potential_temperature.append(var)
-
-            i += 1
-
-        potential_temperature = np.asarray(potential_temperature)
         return potential_temperature
 
     def exner_function(self):
         """
-		The Exner function can be viewed as non-dimensionalized pressure.
+        Generates a NumPy array of the exner function. The Exner function can be
+        viewed as non-dimensionalized pressure.
 		"""
         exner_function = self.temperature() / self.potential_temperature()
 
         return exner_function
+
+    def troposphere_boundaryline(self):
+        """
+        Generates a NumPy array of the mean troposphere - stratosphere
+        boundary line in the shape of the output of latitude_lines. This is
+        calculated by looking at the vertical temperature profile in the method,
+        temperature.
+        """
+        temperature = np.transpose(self.temperature())
+
+        trop_strat_line = []
+        for temp in temperature:
+            n = 0
+            while n < (len(temp)):
+                y1 = temp[n]
+                y2 = temp[n + 1]
+
+                if (y2 - y1) > 0 and self.altitude_level()[n] >= 10000:
+                    alt = self.altitude_level()[n]
+                    trop_strat_line.append(alt)
+                    n = len(temp)
+
+                n += 1
+        trop_strat_line = np.asarray(trop_strat_line)
+
+        troposphere_boundaryline = np.mean(trop_strat_line) + np.zeros(
+            len(trop_strat_line)
+        )
+
+        return troposphere_boundaryline
