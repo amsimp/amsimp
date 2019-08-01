@@ -1,5 +1,7 @@
 # AMSIMP - Simulator of Atmospheric Dynamics
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5fee8c76bfee49258437682c81e1924a)](https://app.codacy.com/app/conorcaseyc/amsimp?utm_source=github.com&utm_medium=referral&utm_content=amsimp/amsimp&utm_campaign=Badge_Grade_Dashboard)
+
 ![Travis (.org)](https://img.shields.io/travis/amsimp/amsimp.svg?style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/amsimp/amsimp.svg?style=for-the-badge)
 ![GitHub stars](https://img.shields.io/github/stars/amsimp/amsimp.svg?style=for-the-badge)
