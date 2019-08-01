@@ -1,6 +1,6 @@
-cython
 scipy
 astropy
 matplotlib
 numpy
-Cartopy
+cartopy
+pandas
