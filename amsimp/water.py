@@ -144,9 +144,10 @@ class Water(Backend):
 
         # Define the data.
         precipitable_water = []
+        P_wv = self.precipitable_water()
         n = 0
         while n < len(longitude):
-            precipitable_water.append(list(self.precipitable_water()))
+            precipitable_water.append(list(P_wv))
 
             n += 1
         precipitable_water = np.asarray(precipitable_water)

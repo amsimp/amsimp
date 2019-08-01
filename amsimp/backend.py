@@ -12,6 +12,8 @@ from astropy import constants as const
 from scipy.constants import gas_constant
 from scipy.optimize import curve_fit
 import pandas as pd
+import io
+import requests
 
 # -----------------------------------------------------------------------------------------#
 
@@ -231,7 +233,8 @@ class Backend:
         point the pressure at 6000 m is 500 hPa.
         """
         # Location of file.
-        file_folder = "amsimp/data/geopotential_height/"
+        url = "https://raw.githubusercontent.com/amsimp/amsimp/master/"
+        file_folder = url + "amsimp/data/geopotential_height/"
 
         # Determine which month of data to import.
         if not self.future:
@@ -240,7 +243,8 @@ class Backend:
             file = file_folder + self.next_month + ".csv"
 
         # Import the data as a dataframe.
-        data = pd.read_csv(file)
+        s = requests.get(file).content
+        data = pd.read_csv(io.StringIO(s.decode('utf-8')))
 
         # Generates a NumPy array of latitude values that match the given dataset.
         column_values = np.asarray([i for i in np.arange(-80, 81, 5)])
@@ -326,7 +330,8 @@ class Backend:
         motion.
         """
         # Location of file.
-        file_folder = "amsimp/data/temperature/"
+        url = "https://raw.githubusercontent.com/amsimp/amsimp/master/"
+        file_folder = url + "amsimp/data/temperature/"
 
         # Determine which month of data to import.
         if not self.future:
@@ -335,7 +340,8 @@ class Backend:
             file = file_folder + self.next_month + ".csv"
 
         # Import the data as a dataframe.
-        data = pd.read_csv(file)
+        s = requests.get(file).content
+        data = pd.read_csv(io.StringIO(s.decode('utf-8')))
 
         # Generates a NumPy array of latitude values that match the given dataset.
         column_values = np.asarray([i for i in np.arange(-80, 81, 10)])
@@ -414,7 +420,8 @@ class Backend:
         surface.
         """
         # Location of file.
-        file_folder = "amsimp/data/pressure/"
+        url = "https://raw.githubusercontent.com/amsimp/amsimp/master/"
+        file_folder = url + "amsimp/data/pressure/"
 
         # Determine which month of data to import.
         if not self.future:
@@ -423,7 +430,8 @@ class Backend:
             file = file_folder + self.next_month + ".csv"
 
         # Import the data as a dataframe.
-        data = pd.read_csv(file)
+        s = requests.get(file).content
+        data = pd.read_csv(io.StringIO(s.decode('utf-8')))
 
         # Generates a NumPy array of latitude values that match the given dataset.
         column_values = np.asarray([i for i in np.arange(-80, 81, 10)])
@@ -490,7 +498,8 @@ class Backend:
         Pressure thickness is the distance between two pressure surfaces.
         """
         # Location of file.
-        file_folder = "amsimp/data/geopotential_height/"
+        url = "https://raw.githubusercontent.com/amsimp/amsimp/master/"
+        file_folder = url + "amsimp/data/geopotential_height/"
 
         # Determine which month of data to import.
         if not self.future:
@@ -499,7 +508,8 @@ class Backend:
             file = file_folder + self.next_month + ".csv"
 
         # Import the data as a dataframe.
-        data = pd.read_csv(file)
+        s = requests.get(file).content
+        data = pd.read_csv(io.StringIO(s.decode('utf-8')))
 
         # Generates a NumPy array of latitude values that match the given dataset.
         column_values = np.asarray([i for i in np.arange(-80, 81, 5)])
