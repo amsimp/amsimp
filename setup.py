@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="amsimp",
-    version="0.1.0",
+    version="0.1.1",
     author="Conor Casey",
     author_email="conorcaseyc@icloud.com",
     description="Simulator for Atmospheric Dynamics",
