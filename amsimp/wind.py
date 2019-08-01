@@ -29,7 +29,7 @@ class Wind(Backend):
     wind_contourf ~ generates a geostrophic wind contour plot.
     globe ~ generates a geostrophic wind contour plot, adds wind vectors to
     that said plot, and overlays both on a Nearside Projection of the Earth.
-	"""
+    """
 
     def geostrophic_wind(self):
         """
@@ -75,7 +75,7 @@ class Wind(Backend):
         Generates a geostrophic wind contour plot, with the axes being
         latitude, and longitude. For the raw data, please use the
         amsimp.Wind.geostrophic_wind() method.
-		"""
+        """
         # Defines the axes, and the data.
         latitude, altitude = np.meshgrid(self.latitude_lines(), self.altitude_level())
         geostrophic_wind = self.geostrophic_wind()

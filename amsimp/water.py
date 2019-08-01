@@ -137,7 +137,7 @@ class Water(Backend):
         latitude and longitude. This plot is then layed on top of a EckertIII
         global projection. For the raw data, please use the
         amsimp.Water.precipitable_water() method.
-		"""
+        """
         # Defines the axes.
         long = self.latitude_lines() * 2
         latitude, longitude = np.meshgrid(self.latitude_lines(), long)

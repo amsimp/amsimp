@@ -42,7 +42,7 @@ class Weather(Wind, Water):
 
     simulate ~ this method outputs a visualisation of how temperature, pressure
     thickness, geostrophic wind, and precipitable water vapor will evolve.
-	"""
+    """
 
     def __init__(self, detail_level):
         """

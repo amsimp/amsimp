@@ -53,7 +53,7 @@ class Backend:
     exner_function ~ outputs a NumPy array of the Exner function (4).
     troposphere_boundaryline ~ generates a NumPy array of the mean
     troposphere - stratosphere boundary line.
-	"""
+    """
 
     # Current month. the number of days in it.
     date = datetime.now()
@@ -95,7 +95,7 @@ class Backend:
         If the parameter, future, has a boolean truth value, all class methods
         will output information related to the following month (e.g. it will
         output information related to August if the current month is July).
-		"""
+        """
         # Make these parameters available globally.
         self.detail_level = detail_level
         self.future = future
@@ -172,7 +172,7 @@ class Backend:
         of the Earth's surface. The Coriolis parameter is defined as two times
         the angular rotation of the Earth by the sin of the latitude you are
         interested in.
-		"""
+        """
         coriolis_parameter = (
             2 * self.Upomega * np.sin(np.radians(self.latitude_lines()))
         )
@@ -324,7 +324,7 @@ class Backend:
 
         Temperature is defined as the mean kinetic energy density of molecular
         motion.
-		"""
+        """
         # Location of file.
         file_folder = "amsimp/data/temperature/"
 
@@ -412,7 +412,7 @@ class Backend:
 
         Pressure is defined as the flux of momentum component normal to a given
         surface.
-		"""
+        """
         # Location of file.
         file_folder = "amsimp/data/pressure/"
 
@@ -488,7 +488,7 @@ class Backend:
         of latitude_lines.
 
         Pressure thickness is the distance between two pressure surfaces.
-		"""
+        """
         # Location of file.
         file_folder = "amsimp/data/geopotential_height/"
 
@@ -569,7 +569,7 @@ class Backend:
         """
         Generates a NumPy array of the exner function. The Exner function can be
         viewed as non-dimensionalized pressure.
-		"""
+        """
         exner_function = self.temperature() / self.potential_temperature()
 
         return exner_function
