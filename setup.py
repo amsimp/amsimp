@@ -15,7 +15,7 @@ setuptools.setup(
     download_url="https://github.com/amsimp/amsimp.git",
     packages=setuptools.find_packages(),
     classifiers=[
-        "Development Status :: 2 - Beta",
+        "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
