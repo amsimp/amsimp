@@ -88,7 +88,7 @@ class Water(Backend):
         index_of_maxz = int(
             np.floor(self.troposphere_boundaryline()[0] / delta_z)
         )
-        
+
         pressure = np.transpose(self.pressure()[0:index_of_maxz])
         vapor_pressure = np.transpose(self.vapor_pressure())
         g = -self.g
