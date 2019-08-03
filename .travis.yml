@@ -18,7 +18,7 @@ install:
   - conda install -c amsimp amsimp
 
 script:
-  - travis_test.py
+  - python travis_test.py
 
 notifications:
   email:
