@@ -85,9 +85,7 @@ class Water(Backend):
 
         # Define variables.
         delta_z = self.altitude_level()[1]
-        index_of_maxz = int(
-            np.floor(self.troposphere_boundaryline()[0] / delta_z)
-        )
+        index_of_maxz = int(np.floor(self.troposphere_boundaryline()[0] / delta_z))
 
         pressure = np.transpose(self.pressure()[0:index_of_maxz])
         vapor_pressure = np.transpose(self.vapor_pressure())

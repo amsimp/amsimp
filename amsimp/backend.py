@@ -244,7 +244,7 @@ class Backend:
 
         # Import the data as a dataframe.
         s = requests.get(file).content
-        data = pd.read_csv(io.StringIO(s.decode('utf-8')))
+        data = pd.read_csv(io.StringIO(s.decode("utf-8")))
 
         # Generates a NumPy array of latitude values that match the given dataset.
         column_values = np.asarray([i for i in np.arange(-80, 81, 5)])
@@ -341,7 +341,7 @@ class Backend:
 
         # Import the data as a dataframe.
         s = requests.get(file).content
-        data = pd.read_csv(io.StringIO(s.decode('utf-8')))
+        data = pd.read_csv(io.StringIO(s.decode("utf-8")))
 
         # Generates a NumPy array of latitude values that match the given dataset.
         column_values = np.asarray([i for i in np.arange(-80, 81, 10)])
@@ -431,7 +431,7 @@ class Backend:
 
         # Import the data as a dataframe.
         s = requests.get(file).content
-        data = pd.read_csv(io.StringIO(s.decode('utf-8')))
+        data = pd.read_csv(io.StringIO(s.decode("utf-8")))
 
         # Generates a NumPy array of latitude values that match the given dataset.
         column_values = np.asarray([i for i in np.arange(-80, 81, 10)])
@@ -509,7 +509,7 @@ class Backend:
 
         # Import the data as a dataframe.
         s = requests.get(file).content
-        data = pd.read_csv(io.StringIO(s.decode('utf-8')))
+        data = pd.read_csv(io.StringIO(s.decode("utf-8")))
 
         # Generates a NumPy array of latitude values that match the given dataset.
         column_values = np.asarray([i for i in np.arange(-80, 81, 5)])
