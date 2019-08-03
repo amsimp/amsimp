@@ -1,16 +1,24 @@
-language: generic
-os: osx
+os: linux
+python:
+  - "3.7"
 
 git:
   depth: false
 
 install:
-  - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  - pip3 install setuptools --upgrade
-  - pip3 install cython
-  - pip3 install git+https://github.com/SciTools/cartopy@master
-  - pip3 install -r requirements.txt
-  - pip3 install -e .
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - conda create -q -n test-env python=$TRAVIS_PYTHON_VERSION
+  - source activate test-env
+  - conda install -c amsimp amsimp
+
+script:
+  - travis_test.py
 
 notifications:
   email:
