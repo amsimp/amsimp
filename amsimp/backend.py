@@ -133,7 +133,9 @@ class Backend:
         # Check for an internet connection.
         def is_connected():
             try:
-                socket.create_connection(("www.github.com/amsimp", 80))
+                host = socket.gethostbyname("www.github.com")
+                s = socket.create_connection((host, 80), 2)
+                s.close()
                 return True
             except OSError:
                 pass
