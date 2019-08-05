@@ -6,13 +6,14 @@ AMSIMP Backend Class. For information about this class is described below.
 
 # Importing Dependencies
 from datetime import datetime
-import dateutil.relativedelta as future
+import io
+import socket
+import dateutil.relativedelta as future_month
 import numpy as np
 from astropy import constants as const
 from scipy.constants import gas_constant
 from scipy.optimize import curve_fit
 import pandas as pd
-import io
 import requests
 
 # -----------------------------------------------------------------------------------------#
@@ -61,7 +62,7 @@ class Backend:
     date = datetime.now()
     month = date.strftime("%B").lower()
     # Next month.
-    future_date = date + future.relativedelta(months=+1)
+    future_date = date + future_month.relativedelta(months=+1)
     next_month = future_date.strftime("%B").lower()
     # The number of days in the current month.
     number_of_days = (future_date - date).days
@@ -127,6 +128,22 @@ class Backend:
                 "future must be a boolean value. The value of benchmark was: {}".format(
                     self.future
                 )
+            )
+
+        # Check for an internet connection.
+        def is_connected():
+            try:
+                socket.create_connection(("https://amsimp.github.io", 80))
+                return True
+            except OSError:
+                pass
+            return False
+
+        if not is_connected():
+            raise Exception(
+                "You must connect to the internet to utilise AMSIMP."
+                + " Apologises for  "
+                + " any inconvenience caused"
             )
 
     def latitude_lines(self):
@@ -447,7 +464,8 @@ class Backend:
                 return a - (b / c) * (1 - np.exp(-c * x))
 
             guess = [1013.256, 0.1685119, 0.00016627]
-            c, cov = curve_fit(fit_method, x, y, guess)
+            c = curve_fit(fit_method, x, y, guess)
+            c = c[0]
 
             p_alt = fit_method(self.altitude_level(), c[0], c[1], c[2])
             p.append(p_alt)
