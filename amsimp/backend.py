@@ -133,7 +133,7 @@ class Backend:
         # Check for an internet connection.
         def is_connected():
             try:
-                socket.create_connection(("https://amsimp.github.io", 80))
+                socket.create_connection(("www.github.com/amsimp", 80))
                 return True
             except OSError:
                 pass
@@ -142,8 +142,7 @@ class Backend:
         if not is_connected():
             raise Exception(
                 "You must connect to the internet to utilise AMSIMP."
-                + " Apologises for  "
-                + " any inconvenience caused"
+                + " Apologises for any inconvenience caused."
             )
 
     def latitude_lines(self):
