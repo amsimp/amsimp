@@ -18,16 +18,16 @@ vm = pd.read_csv('google_benchmark.csv')
 vm = vm.sort_values(['detail_level', 'time'], ascending=[True, True])
 vm = np.split(vm, 5)
 
-#linux = pd.read_csv('linux_benchmark.csv')
-#linux = linux.sort_values(['detail_level', 'time'], ascending = [True, True])
-#linux = np.split(linux, 5)
+linux = pd.read_csv('linux_benchmark.csv')
+linux = linux.sort_values(['detail_level', 'time'], ascending = [True, True])
+linux = np.split(linux, 5)
 
 sd = []
 avg = []
 
 x = 0
 while x < 5:
-    data = (mac[x]["time"] + vm[x]['time']) / 2 # + windows[x]['time'] + linux[x]['time']
+    data = (mac[x]["time"] + vm[x]['time'] + linux[x]['time']) / 3 # + windows[x]['time']
     std = stdev(data)
     mean_x = data.mean()
     sd.append(std)

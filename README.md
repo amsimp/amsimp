@@ -3,7 +3,7 @@
 ![Travis (.org)](https://img.shields.io/travis/amsimp/amsimp?style=flat-square)
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/version.svg)
 ![GitHub](https://img.shields.io/github/license/amsimp/amsimp.svg?style=flat-square)
-![GitHub stars](https://img.shields.io/github/stars/amsimp/amsimp.svg?style=flat-square)
+![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/downloads.svg)(https://anaconda.org/amsimp/amsimp)
 ![GitHub last commit](https://img.shields.io/github/last-commit/amsimp/amsimp.svg?style=flat-square)
 ![Codacy Badge](https://img.shields.io/codacy/grade/598dc190d1564ea28b77ea6a1a88c14b?style=flat-square)
 
