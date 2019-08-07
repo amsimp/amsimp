@@ -84,7 +84,10 @@ class Water(Backend):
         precipitable_water = []
 
         # Define variables.
-        pressure = np.transpose(self.pressure())
+        delta_z = self.altitude_level()[1]
+        index_of_maxz = int(np.floor(self.troposphere_boundaryline()[0] / delta_z))
+
+        pressure = np.transpose(self.pressure()[0:index_of_maxz])
         vapor_pressure = np.transpose(self.vapor_pressure())
         g = -self.g
         rho_w = 0.997
@@ -100,20 +103,11 @@ class Water(Backend):
         while n < len(pressure):
             intergration = []
 
-            delta_z = self.altitude_level()[1]
-            index_of_maxz = index_of_maxz = int(
-                np.floor(self.troposphere_boundaryline()[0] / delta_z)
-            )
-
             k = 0
-            while k <= index_of_maxz:
+            while k < (len(pressure[0]) - 1):
                 p1 = pressure[n][k]
                 p2 = pressure[n][k + 1]
-
-                if k < index_of_maxz:
-                    e = (vapor_pressure[n][k] + vapor_pressure[n][k + 1]) / 2
-                else:
-                    e = vapor_pressure[n][k]
+                e = (vapor_pressure[n][k] + vapor_pressure[n][k + 1]) / 2
 
                 integration_term = quad(integration_eq, p1, p2, args=(e,))
                 intergration.append(integration_term)
@@ -129,6 +123,7 @@ class Water(Backend):
 
         # Multiplication term by integration.
         precipitable_water *= 1 / (rho_w * g)
+
         return precipitable_water
 
     def water_contourf(self):
@@ -144,9 +139,10 @@ class Water(Backend):
 
         # Define the data.
         precipitable_water = []
+        P_wv = self.precipitable_water()
         n = 0
         while n < len(longitude):
-            precipitable_water.append(list(self.precipitable_water()))
+            precipitable_water.append(list(P_wv))
 
             n += 1
         precipitable_water = np.asarray(precipitable_water)

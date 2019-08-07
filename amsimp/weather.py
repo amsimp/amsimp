@@ -143,8 +143,7 @@ class Weather(Wind, Water):
 
         # Define layout.
         gs = gridspec.GridSpec(2, 2)
-        fig = plt.figure()
-        fig.set_size_inches(18.5, 10.5)
+        fig = plt.figure(figsize=(18.5, 7.5))
         fig.subplots_adjust(hspace=0.340, bottom=0.105, top=0.905)
         plt.ion()
 

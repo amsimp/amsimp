@@ -1,9 +1,11 @@
 # AMSIMP - Simulator of Atmospheric Dynamics
 
-![Travis (.org)](https://img.shields.io/travis/amsimp/amsimp.svg?style=for-the-badge)
-![GitHub](https://img.shields.io/github/license/amsimp/amsimp.svg?style=for-the-badge)
-![GitHub stars](https://img.shields.io/github/stars/amsimp/amsimp.svg?style=for-the-badge)
-![GitHub last commit](https://img.shields.io/github/last-commit/amsimp/amsimp.svg?style=for-the-badge)
+![Travis (.org)](https://img.shields.io/travis/amsimp/amsimp?style=flat-square)
+![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/version.svg)
+![GitHub](https://img.shields.io/github/license/amsimp/amsimp.svg?style=flat-square)
+![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/downloads.svg)
+![GitHub last commit](https://img.shields.io/github/last-commit/amsimp/amsimp.svg?style=flat-square)
+![Codacy Badge](https://img.shields.io/codacy/grade/598dc190d1564ea28b77ea6a1a88c14b?style=flat-square)
 
 An open-source implementation to simulating atmospheric dynamics in the troposphere and the stratosphere.
 
@@ -15,10 +17,10 @@ An open-source implementation to simulating atmospheric dynamics in the troposph
 
 ## Installation
 
-This package is available on Anaconda Cloud, and can be installed using conda:
+This package is available on [Anaconda Cloud](https://anaconda.org/amsimp/amsimp), and can be installed using conda:
 
 ```bash
-$ pip install amsimp
+$ conda install -c amsimp amsimp 
 ```
 
 Documentation for AMSIMP is currently unavailable, however, it is planned for public release in the near future. Please check back soon, and check an eye on [the website](https://amsimp.github.io)
