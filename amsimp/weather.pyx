@@ -1,3 +1,4 @@
+#cython: language_level=3
 """
 AMSIMP Weather Class. For information about this class is described below.
 """
@@ -11,13 +12,15 @@ import matplotlib.gridspec as gridspec
 from matplotlib import ticker
 import numpy as np
 import cartopy.crs as ccrs
+from amsimp.wind cimport Wind
 from amsimp.wind import Wind
+from amsimp.water cimport Water
 from amsimp.water import Water
 
 # -----------------------------------------------------------------------------------------#
 
 
-class Weather(Wind, Water):
+cdef class Weather(Water):
     """
     AMSIMP Weather Class - Also, known as Tempestas Praenuntientur @ AMSIMP.
     This class generates a rudimentary weather forecast based on the three other
@@ -44,9 +47,9 @@ class Weather(Wind, Water):
     thickness, geostrophic wind, and precipitable water vapor will evolve.
     """
 
-    def __init__(self, detail_level):
+    def __cinit__(self, detail_level):
         """
-        Please refer to amsimp.Backend.__init__() for a description of this
+        Please refer to amsimp.Backend.__cinit__() for a description of this
         method.
         """
         super().__init__(detail_level)
@@ -149,12 +152,16 @@ class Weather(Wind, Water):
 
         # Geostrophic Wind
         ax1 = plt.subplot(gs[0, 0])
+        predict_u = self.predict_geostrophicwind()
         # Temperature
         ax2 = plt.subplot(gs[1, 0])
+        predict_t = self.predict_temperature()
         # Precipitable Water
         ax3 = plt.subplot(gs[0, 1], projection=ccrs.EckertIII())
+        predict_Pwv = np.asarray(self.predict_precipitablewater())
         # Pressure Thickness
         ax4 = plt.subplot(gs[1, 1])
+        predict_pthickness = self.predict_pressurethickness()
 
         t = 0
         while t < len(time):
@@ -170,13 +177,13 @@ class Weather(Wind, Water):
             # Geostrophic wind contourf.
             # Geostrophic wind data.
             geostrophic_wind = (
-                self.predict_geostrophicwind()[0] * time[t]
-            ) + self.predict_geostrophicwind()[1]
+                predict_u[0] * time[t]
+            ) + predict_u[1]
 
             # Contouf plotting.
             cmap1 = plt.get_cmap("jet")
-            min1 = self.predict_geostrophicwind()[1].min()
-            max1 = self.predict_geostrophicwind()[1].max()
+            min1 = predict_u[1].min()
+            max1 = predict_u[1].max()
             if min1 > -100 and max1 < 100:
                 level1 = np.linspace(-60, max1, 21)
             else:
@@ -186,14 +193,13 @@ class Weather(Wind, Water):
             )
 
             # Checks for a colorbar.
-            try:
-                cb1
-            except NameError:
+            if t == 0:
                 cb1 = fig.colorbar(v_g, ax=ax1)
                 tick_locator = ticker.MaxNLocator(nbins=10)
                 cb1.locator = tick_locator
                 cb1.update_ticks()
                 cb1.set_label("Velocity ($\\frac{m}{s}$)")
+                cb1
 
             # Add SALT to the graph.
             ax1.set_xlabel("Latitude ($\phi$)")
@@ -203,8 +209,8 @@ class Weather(Wind, Water):
             # Temperature contouf.
             # Temperature data.
             temperature = (
-                self.predict_temperature()[0] * time[t]
-            ) + self.predict_temperature()[1]
+                predict_t[0] * time[t]
+            ) + predict_t[1]
 
             # Contouf plotting.
             cmap2 = plt.get_cmap("hot")
@@ -216,9 +222,7 @@ class Weather(Wind, Water):
             )
 
             # Checks for a colorbar.
-            try:
-                cb2
-            except NameError:
+            if t == 0:
                 cb2 = fig.colorbar(temp, ax=ax2)
                 tick_locator = ticker.MaxNLocator(nbins=10)
                 cb2.locator = tick_locator
@@ -233,8 +237,8 @@ class Weather(Wind, Water):
             # Precipitable water contourf.
             # Precipitable water data.
             P_w = (
-                self.predict_precipitablewater()[0] * time[t]
-            ) + self.predict_precipitablewater()[1]
+                predict_Pwv[0] * time[t]
+            ) + predict_Pwv[1]
             precipitable_water = []
             n = 0
             while n < len(longitude):
@@ -250,7 +254,7 @@ class Weather(Wind, Water):
 
             # Contourf plotting.
             cmap3 = plt.get_cmap("seismic")
-            min3 = self.predict_precipitablewater()[1].min()
+            min3 = predict_Pwv[1].min()
             level3 = np.linspace(min3, 100, 21)
             precipitable_watervapour = ax3.contourf(
                 longitude,
@@ -262,9 +266,7 @@ class Weather(Wind, Water):
             )
 
             # Checks for a colorbar.
-            try:
-                cb3
-            except NameError:
+            if t == 0:
                 cb3 = fig.colorbar(precipitable_watervapour, ax=ax3)
                 tick_locator = ticker.MaxNLocator(nbins=10)
                 cb3.locator = tick_locator
@@ -279,8 +281,8 @@ class Weather(Wind, Water):
             # Pressure thickness scatter plot.
             # Pressure thickness data.
             pressure_thickness = (
-                self.predict_pressurethickness()[0] * time[t]
-            ) + self.predict_pressurethickness()[1]
+                predict_pthickness[0] * time[t]
+            ) + predict_pthickness[1]
 
             # Define snow line, and plot.
             snow_line = np.zeros(len(pressure_thickness))

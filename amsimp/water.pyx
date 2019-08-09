@@ -1,3 +1,4 @@
+#cython: language_level=3
 """
 AMSIMP Precipitable Water Class. For information about this class is described below.
 """
@@ -10,12 +11,14 @@ from scipy.integrate import quad
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 from matplotlib import ticker
-from amsimp.backend import Backend
+from amsimp.wind cimport Wind
+from amsimp.wind import Wind
+cimport numpy as np
 
 # -----------------------------------------------------------------------------------------#
 
 
-class Water(Backend):
+cdef class Water(Wind):
     """
     AMSIMP Water Class - This class is concerned with calculating how much
     precipitable water vapor is in the air at a given latitude. Considering
@@ -29,7 +32,7 @@ class Water(Backend):
     overlays that said plot onto a EckertIII projection of the Earth.
     """
 
-    def vapor_pressure(self):
+    cpdef np.ndarray vapor_pressure(self):
         """
         Generates a NumPy array of saturated vapor pressure. Vapor pressure, in
         meteorology, is the partial pressure of water vapor. The partial
@@ -42,16 +45,20 @@ class Water(Backend):
                 "detail_level must be greater than 2 in order to utilise this method."
             )
 
-        vapor_pressure = []
+        cdef list list_vaporpressure = []
 
         # Convert temperature in Kelvin to degrees centigrade.
-        temperature = self.temperature() - 273.15
+        cdef np.ndarray temperature = self.temperature() - 273.15
 
         # Troposphere boundary line.
-        delta_z = self.altitude_level()[1]
-        index_of_maxz = int(np.floor(self.troposphere_boundaryline()[0] / delta_z))
+        cdef float delta_z = self.altitude_level()[1]
+        cdef float index_of_maxz = int(np.floor(self.troposphere_boundaryline()[0] / delta_z))
 
         # Calculations.
+        cdef np.ndarray temp
+        cdef list e
+        cdef float t
+        cdef int n
         n = 0
         while n <= index_of_maxz:
             e = []
@@ -63,17 +70,24 @@ class Water(Backend):
                 elif t < 0:
                     ans = 0.61115 * np.exp((23.036 - (t / 333.7)) * (t / (279.82 + t)))
                 e.append(ans)
-            vapor_pressure.append(e)
+            list_vaporpressure.append(e)
 
             n += 1
-        vapor_pressure = np.asarray(vapor_pressure)
+        vapor_pressure = np.asarray(list_vaporpressure)
 
         # Convert from kPa to hPa.
         vapor_pressure *= 1000
 
         return vapor_pressure
 
-    def precipitable_water(self):
+    def integration_eq(self, pressure, vapor_pressure):
+        """
+        Explain code here.
+        """
+        y = (0.622 * vapor_pressure) / (pressure - vapor_pressure)
+        return y
+
+    cpdef np.ndarray precipitable_water(self):
         """
         Generates a NumPy array of saturated precipitable water vapor.
         Precipitable water is the total atmospheric water vapor contained in a
@@ -81,24 +95,23 @@ class Water(Backend):
         specified levels. For a contour plot of this data, please use the
         amsimp.Water.contourf() method.
         """
-        precipitable_water = []
+        cdef list list_precipitablewater = []
 
         # Define variables.
-        delta_z = self.altitude_level()[1]
-        index_of_maxz = int(np.floor(self.troposphere_boundaryline()[0] / delta_z))
+        cdef float delta_z = self.altitude_level()[1]
+        cdef float index_of_maxz = int(np.floor(self.troposphere_boundaryline()[0] / delta_z))
 
-        pressure = np.transpose(self.pressure()[0:index_of_maxz])
-        vapor_pressure = np.transpose(self.vapor_pressure())
-        g = -self.g
-        rho_w = 0.997
-
-        # Equation to integrate.
-        def integration_eq(pressure, vapor_pressure):
-            y = (0.622 * vapor_pressure) / (pressure - vapor_pressure)
-            return y
+        cdef np.ndarray pressure = np.transpose(self.pressure()[0:index_of_maxz])
+        cdef np.ndarray vapor_pressure = np.transpose(self.vapor_pressure())
+        cdef float g = -self.g
+        cdef float rho_w = 0.997
 
         # Integrate the mixing ratio with respect to pressure between the
         # pressure boundaries of p1, and p2.
+        cdef list intergration
+        cdef tuple integration_term
+        cdef float p1, p2, e, P_wv, Pwv_intergrationterm
+        cdef int n, k
         n = 0
         while n < len(pressure):
             intergration = []
@@ -109,17 +122,18 @@ class Water(Backend):
                 p2 = pressure[n][k + 1]
                 e = (vapor_pressure[n][k] + vapor_pressure[n][k + 1]) / 2
 
-                integration_term = quad(integration_eq, p1, p2, args=(e,))
+                integration_term = quad(self.integration_eq, p1, p2, args=(e,))
+                Pwv_intergrationterm = integration_term[0]
                 intergration.append(integration_term)
 
                 k += 1
 
             P_wv = np.sum(intergration)
-            precipitable_water.append(P_wv)
+            list_precipitablewater.append(P_wv)
 
             n += 1
 
-        precipitable_water = np.asarray(np.transpose(precipitable_water))
+        precipitable_water = np.asarray(np.transpose(list_precipitablewater))
 
         # Multiplication term by integration.
         precipitable_water *= 1 / (rho_w * g)
