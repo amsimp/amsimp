@@ -1,3 +1,4 @@
+#cython: language_level=3
 """
 AMSIMP Precipitable Water Class. For information about this class is described below.
 """

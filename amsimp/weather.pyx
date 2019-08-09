@@ -1,3 +1,4 @@
+#cython: language_level=3
 """
 AMSIMP Weather Class. For information about this class is described below.
 """

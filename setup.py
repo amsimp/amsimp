@@ -1,21 +1,39 @@
-from setuptools import setup, Extension, Command, find_packages
-from Cython.Distutils import build_ext
+from setuptools import find_packages, Extension, setup
 import numpy
+import sys
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-ext_modules = [
-    Extension("amsimp.backend", ["amsimp/backend.pyx"]),
-    Extension("amsimp.wind", ["amsimp/wind.pyx"]),
-    Extension("amsimp.water", ["amsimp/water.pyx"]),
-    Extension("amsimp.weather", ["amsimp/weather.pyx"]),
-]
+if '--use-cython' in sys.argv:
+    USE_CYTHON = True
+    sys.argv.remove('--use-cython')
+else:
+    USE_CYTHON = False
+
+ext = '.pyx' if USE_CYTHON else '.c'
+
+extensions = [
+    Extension("amsimp.backend", ["amsimp/backend"+ext], language='c',
+    include_dirs=['amsimp/']),
+    Extension("amsimp.wind", ["amsimp/wind"+ext], language='c',
+    include_dirs=['amsimp/']),
+    Extension("amsimp.water", ["amsimp/water"+ext], language='c',
+    include_dirs=['amsimp/']),
+    Extension("amsimp.weather", ["amsimp/weather"+ext], language='c',
+    include_dirs=['amsimp/']),
+    ]
+
+if USE_CYTHON:
+    from Cython.Build import cythonize
+    extensions = cythonize(extensions)
 
 setup(
     name="amsimp",
-    cmdclass={'build_ext': build_ext},
-    ext_modules=ext_modules,
+    setup_requires=[
+        'cython>=0.x',
+    ],
+    ext_modules=extensions,
     include_dirs=[numpy.get_include()],
     version="0.2.0",
     author="Conor Casey",
@@ -25,12 +43,31 @@ setup(
     long_description_content_type="text/markdown",
     url="https://amsimp.github.io",
     download_url="https://github.com/amsimp/amsimp.git",
+    include_package_data=True,
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
+        "Operating System :: MacOS :: MacOS X",
+        "Operating System :: Microsoft :: Windows :: Windows 10",
+        "Operating System :: POSIX :: Linux",
+        "Programming Language :: Cython",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Topic :: Scientific/Engineering",
+        "Topic :: Scientific/Engineering :: Atmospheric Science",
+        "Topic :: Scientific/Engineering :: Visualization",
+        "Topic :: Scientific/Engineering :: Physics",
     ],
-    install_requires=["scipy", "astropy", "matplotlib", "numpy", "cartopy", "pandas"],
+    install_requires=[
+        "cython",
+        "scipy",
+        "astropy",
+        "matplotlib",
+        "numpy",
+        "cartopy",
+        "pandas",
+    ],
+    zip_safe=False,
 )
