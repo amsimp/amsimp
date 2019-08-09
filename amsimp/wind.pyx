@@ -1,3 +1,4 @@
+#cython: language_level=3
 """
 AMSIMP Wind Class. For information about this class is described below.
 """
@@ -9,12 +10,14 @@ import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 from matplotlib import ticker
 import numpy as np
+from amsimp.backend cimport Backend
 from amsimp.backend import Backend
+cimport numpy as np
 
 # -----------------------------------------------------------------------------------------#
 
 
-class Wind(Backend):
+cdef class Wind(Backend):
     """
     AMSIMP Wind Class - This class is concerned with calculating numerical
     values for wind, specifically geostrophic wind, in the troposphere and the
@@ -31,7 +34,7 @@ class Wind(Backend):
     that said plot, and overlays both on a Nearside Projection of the Earth.
     """
 
-    def geostrophic_wind(self):
+    cpdef np.ndarray geostrophic_wind(self):
         """
         This method outputs geostrophic wind values. Geostrophic wind is a
         theoretical wind that is a result of a perfect balance between the
@@ -46,19 +49,24 @@ class Wind(Backend):
             )
 
         # Distance of one degree of latitude (e.g. 0N - 1N/1S), measured in metres.
-        lat_d = (2 * np.pi * self.a) / 360
+        cdef float lat_d = (2 * np.pi * self.a) / 360
         # Distance between latitude lines in the class method, Backend.latitude_lines().
-        delta_y = (self.latitude_lines()[-1] - self.latitude_lines()[-2]) * lat_d
+        cdef float delta_y = (self.latitude_lines()[-1] - self.latitude_lines()[-2]) * lat_d
 
         # Gradient of geopotential height over latitudinal distance.
-        gradient_geopotentialheight = []
+        cdef list list_gradientgeopotentialheight = []
+        cdef np.ndarray Z, delta_geoheight, grad_geoheight
+        cdef list list_gradgeoheight
         for Z in self.geopotential_height():
             delta_geoheight = np.gradient(Z)
 
             grad_geoheight = delta_geoheight / delta_y
-            grad_geoheight = list(grad_geoheight)
-            gradient_geopotentialheight.append(grad_geoheight)
-        gradient_geopotentialheight = np.asarray(gradient_geopotentialheight)
+            list_gradgeoheight = list(grad_geoheight)
+            list_gradientgeopotentialheight.append(list_gradgeoheight)
+        
+        cdef np.ndarray gradient_geopotentialheight = (
+            np.asarray(list_gradientgeopotentialheight)
+        )
 
         # Geostrophic wind calculation.
         geostrophic_wind = (
