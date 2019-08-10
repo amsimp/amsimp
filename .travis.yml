@@ -1,4 +1,4 @@
-os: macos
+os: osx
 language: python
 python:
   - "3.7"
