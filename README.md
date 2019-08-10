@@ -1,6 +1,6 @@
 # AMSIMP - Simulator of Atmospheric Dynamics
 
-![Azure DevOps builds](https://img.shields.io/azure-devops/build/16ccasey/6eae5fe2-db16-4459-93b7-703296ecf307/1?style=flat-square)
+![Azure DevOps builds](https://dev.azure.com/16ccasey/AMSIMP/_apis/build/status/amsimp.amsimp?branchName=master)
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/version.svg)
 ![GitHub](https://img.shields.io/github/license/amsimp/amsimp.svg?style=flat-square)
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/downloads.svg)
