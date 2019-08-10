@@ -1,0 +1,31 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'macOS-10.13'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.7.4'
+- bash: echo "##vso[task.prependpath]$CONDA/bin"
+  displayName: Add conda to PATH
+- bash: sudo chown -R $USER $CONDA
+  displayName: Take ownership of conda installation
+- bash: conda create --yes --quiet --name myEnvironment
+  displayName: Create Anaconda environment
+- bash: |
+    conda install --yes -c amsimp amsimp
+  displayName: Install Anaconda packages
+- task: PythonScript@0
+  inputs:
+    scriptSource: 'inline'
+    script: |
+      import amsimp
+
+      detail = amsimp.Weather(3)
+
+      detail.predict_temperature()
+      detail.predict_pressurethickness()
+      detail.predict_geostrophicwind()
+      detail.predict_precipitablewater()

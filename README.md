@@ -1,6 +1,6 @@
 # AMSIMP - Simulator of Atmospheric Dynamics
 
-![Travis (.org)](https://img.shields.io/travis/amsimp/amsimp?style=flat-square)
+![Azure DevOps builds](https://img.shields.io/azure-devops/build/16ccasey/6eae5fe2-db16-4459-93b7-703296ecf307/1?style=flat-square)
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/version.svg)
 ![GitHub](https://img.shields.io/github/license/amsimp/amsimp.svg?style=flat-square)
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/downloads.svg)
@@ -19,7 +19,7 @@ An open-source implementation to simulating atmospheric dynamics in the troposph
 This package is available on [Anaconda Cloud](https://anaconda.org/amsimp/amsimp), and can be installed using conda:
 
 ```bash
-$ conda install -c amsimp amsimp 
+$ conda install -c amsimp amsimp  
 ```
 
 Documentation for AMSIMP is currently unavailable, however, it is planned for public release in the near future. Please check back soon, and check an eye on [the website](https://amsimp.github.io)
