@@ -18,6 +18,8 @@ import pandas as pd
 import requests
 cimport numpy as np
 from cpython cimport bool
+import matplotlib.pyplot as plt
+from matplotlib import ticker
 
 # -----------------------------------------------------------------------------------------#
 
@@ -58,7 +60,8 @@ cdef class Backend:
     potential_temperature ~ outputs a NumPy array of potential temperature (4).
     exner_function ~ outputs a NumPy array of the Exner function (4).
     troposphere_boundaryline ~ generates a NumPy array of the mean
-    troposphere - stratosphere boundary line.
+    troposphere - stratosphere boundary line (4).
+    temperature_contourf ~ generates a temperature contour plot (4).
     """
 
     # Current month. the number of days in it.
@@ -175,7 +178,7 @@ cdef class Backend:
         altitude_level = np.asarray(altitude_level)
         return altitude_level
 
-    # -----------------------------------------------------------------------------------------#
+# -----------------------------------------------------------------------------------------#
 
     cpdef np.ndarray coriolis_parameter(self):
         """
@@ -229,7 +232,7 @@ cdef class Backend:
         gravitational_acceleration = np.asarray(gravitational_acceleration)
         return gravitational_acceleration
 
-    # -----------------------------------------------------------------------------------------#
+# -----------------------------------------------------------------------------------------#
 
     cpdef np.ndarray geopotential_height(self):
         """
@@ -444,7 +447,9 @@ cdef class Backend:
     
     cpdef fit_method(self, x, a, b, c):
         """
-        Explain code here.
+        This method is solely utilised for non-linear regression in the
+        amsimp.Backend.pressure() method. Please do not interact with
+        the method directly.
         """
         return a - (b / c) * (1 - np.exp(-c * x))
 
@@ -600,7 +605,7 @@ cdef class Backend:
         pressure_thickness = np.asarray(list_pressurethickness)
         return pressure_thickness
 
-    # -----------------------------------------------------------------------------------------#
+# -----------------------------------------------------------------------------------------#
 
     cpdef np.ndarray density(self):
         """
@@ -678,3 +683,58 @@ cdef class Backend:
         )
 
         return troposphere_boundaryline
+
+    def temperature_contourf(self):
+        """
+        Generates a temperature contour plot, with the axes being latitude,
+        and longitude. For the raw data, please use the
+        amsimp.Backend.temperature() method.
+        """
+        # Defines the axes, and the data.
+        latitude, altitude = np.meshgrid(self.latitude_lines(), self.altitude_level())
+        temperature = self.temperature()
+
+        # Contourf plotting.
+        cmap = plt.get_cmap("hot")
+        minimum = temperature.min()
+        maximum = temperature.max()
+        levels = np.linspace(minimum, maximum, 21)
+        plt.contourf(
+            latitude,
+            altitude,
+            temperature,
+            cmap=cmap,
+            levels=levels,
+        )
+
+        # Adds SALT to the graph.
+        if self.future:
+            month = self.next_month.title()
+        else:
+            month = self.month.title()
+
+        plt.xlabel("Latitude ($\phi$)")
+        plt.ylabel("Altitude (m)")
+        plt.title("Temperature in the Month of " + month)
+
+        # Colorbar creation.
+        colorbar = plt.colorbar()
+        tick_locator = ticker.MaxNLocator(nbins=15)
+        colorbar.locator = tick_locator
+        colorbar.update_ticks()
+        colorbar.set_label("Temperature (K)")
+
+        # Average boundary line between the troposphere and the stratosphere.
+        avg_tropstratline = self.troposphere_boundaryline()
+
+        # Plot average boundary line on the contour plot.
+        plt.plot(
+            latitude[1],
+            avg_tropstratline,
+            color="black",
+            linestyle="dashed",
+            label="Troposphere - Stratosphere Boundary Line",
+        )
+        plt.legend(loc=0)
+
+        plt.show()

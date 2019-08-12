@@ -30,12 +30,9 @@ if USE_CYTHON:
 
 setup(
     name="amsimp",
-    setup_requires=[
-        'cython>=0.x',
-    ],
     ext_modules=extensions,
     include_dirs=[numpy.get_include()],
-    version="0.2.0",
+    version="0.2.2",
     author="Conor Casey",
     author_email="conorcaseyc@icloud.com",
     description="Simulator for Atmospheric Dynamics",

@@ -82,7 +82,9 @@ cdef class Water(Wind):
 
     def integration_eq(self, pressure, vapor_pressure):
         """
-        Explain code here.
+        This method is solely utilised for integration in the
+        amsimp.Water.precipitable_water() method. Please do not interact with
+        the method directly.
         """
         y = (0.622 * vapor_pressure) / (pressure - vapor_pressure)
         return y
