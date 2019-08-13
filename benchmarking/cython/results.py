@@ -10,9 +10,9 @@ mac = pd.read_csv("macbook_benchmark.csv")
 mac = mac.sort_values(["detail_level", "time"], ascending=[True, True])
 mac = np.split(mac, 5)
 
-windows = pd.read_csv('windows_benchmark.csv')
-windows = windows.sort_values(['detail_level', 'time'], ascending = [True, True])
-windows = np.split(windows, 5)
+#windows = pd.read_csv('windows_benchmark.csv')
+#windows = windows.sort_values(['detail_level', 'time'], ascending = [True, True])
+#windows = np.split(windows, 5)
 
 vm = pd.read_csv('google_benchmark.csv')
 vm = vm.sort_values(['detail_level', 'time'], ascending=[True, True])
@@ -27,7 +27,7 @@ avg = []
 
 x = 0
 while x < 5:
-    data = (mac[x]["time"] + vm[x]['time'] + linux[x]['time'] + windows[x]['time']) / 4
+    data = (mac[x]["time"] + vm[x]['time'] + linux[x]['time']) / 3 # + windows[x]['time']) / 4
     std = stdev(data)
     mean_x = data.mean()
     sd.append(std)
