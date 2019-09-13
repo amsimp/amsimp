@@ -29,5 +29,5 @@ jobs:
       run: |
         conda install twine
         conda install numpy
-        python setup.py build_ext --inplace
-        python setup.py sdist
+        python3 setup.py build_ext --inplace
+        python3 setup.py sdist
