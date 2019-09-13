@@ -1,0 +1,33 @@
+name: Upload to PyPi.
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.7.3
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7.3
+    - name: Install dependencies
+      run: |
+        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+        bash miniconda.sh -b -p $HOME/miniconda
+        source "$HOME/miniconda/etc/profile.d/conda.sh"
+        hash -r
+        conda config --set always_yes yes --set changeps1 no
+        conda update -q conda
+        conda info -a
+        sudo apt install gcc
+    - name: Build PyPi Package.
+      run: |
+        conda install twine
+        python setup.py build_ext --inplace
+        python setup.py sdist
