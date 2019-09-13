@@ -12,10 +12,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Set up Python 3.7.3
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.7.4
     - name: Install dependencies
       run: |
         wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
@@ -31,5 +27,6 @@ jobs:
     - name: Build PyPi Package.
       run: |
         conda install twine
+        conda install numpy
         python setup.py build_ext --inplace
         python setup.py sdist
