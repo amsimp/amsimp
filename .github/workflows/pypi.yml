@@ -26,6 +26,7 @@ jobs:
         conda update -q conda
         conda info -a
         sudo apt install gcc
+        conda install -c amsimp amsimp
     - name: Build PyPi Package.
       run: |
         conda install twine
