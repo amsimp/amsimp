@@ -3,7 +3,6 @@ from datetime import datetime
 import amsimp
 import pyowm
 import numpy as np
-import matplotlib.pyplot as plt
 
 # Time information for AMSIMP.
 date = datetime.now()
@@ -21,7 +20,9 @@ amsimp_temp = (detail.predict_temperature()[0] * day) + detail.predict_temperatu
 amsimp_temp = amsimp_temp[0]
 
 # AMSIMP wind prediction.
-amsimp_vg = (detail.predict_geostrophicwind()[0] * day) + detail.predict_geostrophicwind()[1]
+amsimp_vg = (
+    detail.predict_geostrophicwind()[0] * day
+) + detail.predict_geostrophicwind()[1]
 amsimp_vg = amsimp_vg[0]
 
 # AMSIMP pressure prediction.
@@ -42,7 +43,7 @@ amsimp_pressure = np.asarray(amsimp_pressure)
 amsimp_wind = np.abs(np.asarray(amsimp_wind))
 
 # Real time weather.
-api_key = 'd8e21a680191eb7613420d2cc20e6d0a'
+api_key = "d8e21a680191eb7613420d2cc20e6d0a"
 owm = pyowm.OWM(api_key)
 
 n = 0
@@ -58,27 +59,37 @@ while n < len(latitude):
     k = 0
     while k < len(longitude):
         long = float(longitude[k])
-        
+
+        while True:
+            try:
+                owm.weather_at_coords(lat, long)
+            except:
+                sleep(1)
+            else:
+                break
+
         obs = owm.weather_at_coords(lat, long)
         w = obs.get_weather()
-        
+
         actual_temp = w.get_temperature()
-        actual_temp = actual_temp['temp']
+        actual_temp = actual_temp["temp"]
 
         actual_p = w.get_pressure()
-        actual_p = actual_p['press']
+        actual_p = actual_p["press"]
         actual_p *= 100
 
         actual_vg = w.get_wind()
-        actual_vg = actual_vg['speed']
+        actual_vg = actual_vg["speed"]
+
+        sleep(1)
 
         actualtemp_long.append(actual_temp)
         actualp_long.append(actual_p)
         actualvg_long.append(actual_vg)
 
         k += 1
-    
-    print('Round: ' + str(n + 1) + ' complete.')
+
+    print("Round: " + str(n + 1) + " complete.")
 
     actual_temperature.append(actualtemp_long)
     actual_pressure.append(actualp_long)
@@ -90,26 +101,66 @@ actual_temperature = np.asarray(actual_temperature)
 actual_pressure = np.asarray(actual_pressure)
 actual_wind = np.asarray(actual_wind)
 
-# The temperature mean absolute percentage error.
-temp_error = (amsimp_temperature - actual_temperature) / actual_temperature
+# The temperature mean, and median absolute percentage errors.
+temp_error = (actual_temperature - amsimp_temperature) / actual_temperature
 temp_error *= 100
 temp_error = np.abs(temp_error)
-temp_error = np.mean(temp_error)
+meantemp_error = np.mean(temp_error)
+mediantemp_error = np.median(temp_error)
 
-# The pressure mean absolute percentage error
-pressure_error = (amsimp_pressure - actual_pressure) / actual_pressure
+# The pressure mean, and median absolute percentage errors.
+pressure_error = (actual_pressure - amsimp_pressure) / actual_pressure
 pressure_error *= 100
 pressure_error = np.abs(pressure_error)
-pressure_error = np.mean(pressure_error)
+meanpressure_error = np.mean(pressure_error)
+medianpressure_error = np.median(pressure_error)
 
-# The wind mean absolute percentage error
-wind_error = (amsimp_wind - actual_wind) / actual_wind
+# The wind mean, and median absolute percentage errors.
+wind_error = (actual_wind - amsimp_wind) / actual_wind
 wind_error *= 100
 wind_error = np.abs(wind_error)
-wind_error = np.mean(wind_error)
+meanwind_error = np.mean(wind_error)
+medianwind_error = np.median(wind_error)
 
-print('The temperature mean absolute percentage error is: ' + str(temp_error) + '%')
-print('The pressure mean absolute percentage error is: ' + str(pressure_error) + '%')
-print('The wind mean absolute percentage error is: ' + str(wind_error) + '%')
+# Print mean absolute percentage error to console.
+print(
+    "The temperature mean absolute percentage error is: +-"
+    + str(meantemp_error / 2)
+    + "%"
+)
+print(
+    "The pressure mean absolute percentage error is: +-"
+    + str(meanpressure_error / 2)
+    + "%"
+)
+print(
+    "The geostrophic wind mean absolute percentage error is: +-"
+    + str(meanwind_error / 2)
+    + "%"
+)
 
-print(actual_wind)
+# Print median absolute percentage error.
+print(
+    "The temperature median absolute percentage error is: +-"
+    + str(mediantemp_error / 2)
+    + "%"
+)
+print(
+    "The pressure median absolute percentage error is: +-"
+    + str(medianpressure_error / 2)
+    + "%"
+)
+print(
+    "The geostrophic wind median absolute percentage error is: +-"
+    + str(medianwind_error / 2)
+    + "%"
+)
+
+mean_error = (meantemp_error + meanpressure_error + meanwind_error) / 3
+median_error = (mediantemp_error + medianpressure_error + medianwind_error) / 3
+
+mean_error /= 2
+median_error /= 2
+
+print("AMSIMP's MAPE: +-" + str(mean_error) + "%")
+print("AMSIMP's MdAPE: +-" + str(median_error) + "%")

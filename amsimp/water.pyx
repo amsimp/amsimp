@@ -76,7 +76,10 @@ cdef class Water(Wind):
         vapor_pressure = np.asarray(list_vaporpressure)
 
         # Convert from kPa to hPa.
-        vapor_pressure *= 1000
+        vapor_pressure *= 10
+        
+        # Convert from hPa to Pa.
+        vapor_pressure *= 100
 
         return vapor_pressure
 
@@ -103,10 +106,10 @@ cdef class Water(Wind):
         cdef float delta_z = self.altitude_level()[1]
         cdef float index_of_maxz = int(np.floor(self.troposphere_boundaryline()[0] / delta_z))
 
-        cdef np.ndarray pressure = np.transpose(self.pressure()[0:index_of_maxz])
-        cdef np.ndarray vapor_pressure = np.transpose(self.vapor_pressure())
+        cdef np.ndarray pressure = np.transpose(self.pressure()[0:index_of_maxz] / 100)
+        cdef np.ndarray vapor_pressure = np.transpose(self.vapor_pressure() / 100)
         cdef float g = -self.g
-        cdef float rho_w = 0.997
+        cdef float rho_w = 997
 
         # Integrate the mixing ratio with respect to pressure between the
         # pressure boundaries of p1, and p2.
