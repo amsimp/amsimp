@@ -22,14 +22,14 @@ jobs:
         conda update -q conda
         conda info -a
         sudo apt install gcc
+        export PATH="$HOME/miniconda/bin:$PATH"
+        which python
+    - name: Build PyPi Package.
+      run: |
         conda install numpy
         conda install pandas
         pip install setuptools
         conda install -c conda-forge cartopy
         conda install twine
-        export PATH="$HOME/miniconda/bin:$PATH"
-        which python
-    - name: Build PyPi Package.
-      run: |
         python setup.py build_ext --inplace
         python setup.py sdist
