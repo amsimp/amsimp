@@ -26,6 +26,7 @@ jobs:
         which python
     - name: Build PyPi Package.
       run: |
+        which python
         conda install numpy
         conda install pandas
         pip install setuptools
