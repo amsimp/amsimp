@@ -1,4 +1,4 @@
-name: Upload to PyPi.
+name: Upload to PyPI
 
 on:
   push:
@@ -29,9 +29,14 @@ jobs:
         pip install setuptools
         conda install -c conda-forge cartopy
         conda install twine
-    - name: Build PyPi Package.
+    - name: Build package for PyPI
       run: |
         export PATH="$HOME/miniconda/bin:$PATH"
         which python
         python setup.py build_ext --inplace
         python setup.py sdist
+    - name: Publish package to PyPI
+      uses: pypa/gh-action-pypi-publish@master
+      with:
+        user: __token__
+        password: ${{ secrets.pypi_password }}
