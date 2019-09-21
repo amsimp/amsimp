@@ -20,7 +20,7 @@ extensions = [
     include_dirs=['amsimp/']),
     Extension("amsimp.water", ["amsimp/water"+ext], language='c',
     include_dirs=['amsimp/']),
-    Extension("amsimp.weather", ["amsimp/weather"+ext], language='c',
+    Extension("amsimp.dynamics", ["amsimp/dynamics"+ext], language='c',
     include_dirs=['amsimp/']),
     ]
 

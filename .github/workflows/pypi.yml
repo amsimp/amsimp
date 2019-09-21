@@ -1,4 +1,4 @@
-name: Upload to PyPi.
+name: Upload to PyPI
 
 on:
   push:
@@ -29,27 +29,13 @@ jobs:
         pip install setuptools
         conda install -c conda-forge cartopy
         conda install twine
-    - name: Build PyPi Package.
+    - name: Build package for PyPI
       run: |
         export PATH="$HOME/miniconda/bin:$PATH"
         which python
         python setup.py build_ext --inplace
         python setup.py sdist
-    - name: Build package for Anaconda Cloud
-      run: |
-        export PATH="$HOME/miniconda/bin:$PATH"
-        which python
-        conda install anaconda-client
-        conda install conda-build
-        rm -rf ./amsimp
-        conda skeleton pypi amsimp
-        anaconda login --username $INPUT_ANACONDAUSERNAME --password $INPUT_ANACONDAPASSWORD
-        anaconda logout
-        conda build amsimp
-      with:
-        AnacondaUsername: conorcaseyc
-        AnacondaPassword: ${{ secrets.anaconda_password }}
-    - name: Publish a Python distribution to PyPI
+    - name: Publish package to PyPI
       uses: pypa/gh-action-pypi-publish@master
       with:
         user: __token__
