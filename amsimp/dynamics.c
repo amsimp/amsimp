@@ -4,12 +4,12 @@
 {
     "distutils": {
         "depends": [],
-        "name": "amsimp.weather",
+        "name": "amsimp.dynamics",
         "sources": [
-            "amsimp/weather.pyx"
+            "amsimp/dynamics.pyx"
         ]
     },
-    "module_name": "amsimp.weather"
+    "module_name": "amsimp.dynamics"
 }
 END: Cython Metadata */
 
@@ -603,8 +603,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__amsimp__weather
-#define __PYX_HAVE_API__amsimp__weather
+#define __PYX_HAVE__amsimp__dynamics
+#define __PYX_HAVE_API__amsimp__dynamics
 /* Early includes */
 #include <string.h>
 #include <stdio.h>
@@ -841,7 +841,7 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "amsimp/weather.pyx",
+  "amsimp/dynamics.pyx",
   "stringsource",
   "__init__.pxd",
   "type.pxd",
@@ -1068,7 +1068,7 @@ static CYTHON_INLINE __pyx_t_double_complex __pyx_t_double_complex_from_parts(do
 struct __pyx_obj_6amsimp_7backend_Backend;
 struct __pyx_obj_6amsimp_4wind_Wind;
 struct __pyx_obj_6amsimp_5water_Water;
-struct __pyx_obj_6amsimp_7weather_Dynamics;
+struct __pyx_obj_6amsimp_8dynamics_Dynamics;
 
 /* "../../../../../../../anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":815
  * ctypedef npy_longdouble longdouble_t
@@ -1144,13 +1144,13 @@ struct __pyx_obj_6amsimp_5water_Water {
 };
 
 
-/* "amsimp/weather.pxd":5
+/* "amsimp/dynamics.pxd":5
  * from amsimp.water cimport Water
  * 
  * cdef class Dynamics(Water):             # <<<<<<<<<<<<<<
  *     pass
  */
-struct __pyx_obj_6amsimp_7weather_Dynamics {
+struct __pyx_obj_6amsimp_8dynamics_Dynamics {
   struct __pyx_obj_6amsimp_5water_Water __pyx_base;
 };
 
@@ -1212,7 +1212,7 @@ struct __pyx_vtabstruct_6amsimp_5water_Water {
 static struct __pyx_vtabstruct_6amsimp_5water_Water *__pyx_vtabptr_6amsimp_5water_Water;
 
 
-/* "amsimp/weather.pyx":23
+/* "amsimp/dynamics.pyx":23
  * 
  * 
  * cdef class Dynamics(Water):             # <<<<<<<<<<<<<<
@@ -1220,10 +1220,10 @@ static struct __pyx_vtabstruct_6amsimp_5water_Water *__pyx_vtabptr_6amsimp_5wate
  *     AMSIMP Dynamics Class - Also, known as Motus Aeris @ AMSIMP. This class
  */
 
-struct __pyx_vtabstruct_6amsimp_7weather_Dynamics {
+struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics {
   struct __pyx_vtabstruct_6amsimp_5water_Water __pyx_base;
 };
-static struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *__pyx_vtabptr_6amsimp_7weather_Dynamics;
+static struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *__pyx_vtabptr_6amsimp_8dynamics_Dynamics;
 
 /* --- Runtime support code (head) --- */
 /* Refnanny.proto */
@@ -1906,13 +1906,13 @@ static PyTypeObject *__pyx_ptype_6amsimp_4wind_Wind = 0;
 /* Module declarations from 'amsimp.water' */
 static PyTypeObject *__pyx_ptype_6amsimp_5water_Water = 0;
 
-/* Module declarations from 'amsimp.weather' */
-static PyTypeObject *__pyx_ptype_6amsimp_7weather_Dynamics = 0;
-#define __Pyx_MODULE_NAME "amsimp.weather"
-extern int __pyx_module_is_main_amsimp__weather;
-int __pyx_module_is_main_amsimp__weather = 0;
+/* Module declarations from 'amsimp.dynamics' */
+static PyTypeObject *__pyx_ptype_6amsimp_8dynamics_Dynamics = 0;
+#define __Pyx_MODULE_NAME "amsimp.dynamics"
+extern int __pyx_module_is_main_amsimp__dynamics;
+int __pyx_module_is_main_amsimp__dynamics = 0;
 
-/* Implementation of 'amsimp.weather' */
+/* Implementation of 'amsimp.dynamics' */
 static PyObject *__pyx_builtin_super;
 static PyObject *__pyx_builtin_TypeError;
 static PyObject *__pyx_builtin_ValueError;
@@ -2196,17 +2196,17 @@ static PyObject *__pyx_n_s_update_ticks;
 static PyObject *__pyx_n_s_use;
 static PyObject *__pyx_n_s_year;
 static PyObject *__pyx_n_s_zeros;
-static int __pyx_pf_6amsimp_7weather_8Dynamics___cinit__(struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self, PyObject *__pyx_v_detail_level); /* proto */
-static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_2predict_temperature(struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_4predict_pressurethickness(struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_6predict_geostrophicwind(struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_8predict_precipitablewater(struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_12__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_14__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static int __pyx_pf_6amsimp_8dynamics_8Dynamics___cinit__(struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self, PyObject *__pyx_v_detail_level); /* proto */
+static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_2predict_temperature(struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_4predict_pressurethickness(struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_6predict_geostrophicwind(struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_8predict_precipitablewater(struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_10simulate(struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_12__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_14__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
-static PyObject *__pyx_tp_new_6amsimp_7weather_Dynamics(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static PyObject *__pyx_tp_new_6amsimp_8dynamics_Dynamics(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_float_7_5;
 static PyObject *__pyx_float_0_01;
 static PyObject *__pyx_float_0_99;
@@ -2248,7 +2248,7 @@ static PyObject *__pyx_tuple__19;
 static PyObject *__pyx_tuple__20;
 /* Late includes */
 
-/* "amsimp/weather.pyx":49
+/* "amsimp/dynamics.pyx":49
  *     """
  * 
  *     def __cinit__(self, detail_level):             # <<<<<<<<<<<<<<
@@ -2257,8 +2257,8 @@ static PyObject *__pyx_tuple__20;
  */
 
 /* Python wrapper */
-static int __pyx_pw_6amsimp_7weather_8Dynamics_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_pw_6amsimp_7weather_8Dynamics_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static int __pyx_pw_6amsimp_8dynamics_8Dynamics_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_pw_6amsimp_8dynamics_8Dynamics_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_detail_level = 0;
   int __pyx_r;
   __Pyx_RefNannyDeclarations
@@ -2295,18 +2295,18 @@ static int __pyx_pw_6amsimp_7weather_8Dynamics_1__cinit__(PyObject *__pyx_v_self
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 49, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("amsimp.weather.Dynamics.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("amsimp.dynamics.Dynamics.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_6amsimp_7weather_8Dynamics___cinit__(((struct __pyx_obj_6amsimp_7weather_Dynamics *)__pyx_v_self), __pyx_v_detail_level);
+  __pyx_r = __pyx_pf_6amsimp_8dynamics_8Dynamics___cinit__(((struct __pyx_obj_6amsimp_8dynamics_Dynamics *)__pyx_v_self), __pyx_v_detail_level);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static int __pyx_pf_6amsimp_7weather_8Dynamics___cinit__(struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self, PyObject *__pyx_v_detail_level) {
+static int __pyx_pf_6amsimp_8dynamics_8Dynamics___cinit__(struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self, PyObject *__pyx_v_detail_level) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -2314,7 +2314,7 @@ static int __pyx_pf_6amsimp_7weather_8Dynamics___cinit__(struct __pyx_obj_6amsim
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "amsimp/weather.pyx":54
+  /* "amsimp/dynamics.pyx":54
  *         method.
  *         """
  *         super().__init__(detail_level)             # <<<<<<<<<<<<<<
@@ -2323,9 +2323,9 @@ static int __pyx_pf_6amsimp_7weather_8Dynamics___cinit__(struct __pyx_obj_6amsim
  */
   __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_INCREF(((PyObject *)__pyx_ptype_6amsimp_7weather_Dynamics));
-  __Pyx_GIVEREF(((PyObject *)__pyx_ptype_6amsimp_7weather_Dynamics));
-  PyTuple_SET_ITEM(__pyx_t_2, 0, ((PyObject *)__pyx_ptype_6amsimp_7weather_Dynamics));
+  __Pyx_INCREF(((PyObject *)__pyx_ptype_6amsimp_8dynamics_Dynamics));
+  __Pyx_GIVEREF(((PyObject *)__pyx_ptype_6amsimp_8dynamics_Dynamics));
+  PyTuple_SET_ITEM(__pyx_t_2, 0, ((PyObject *)__pyx_ptype_6amsimp_8dynamics_Dynamics));
   __Pyx_INCREF(((PyObject *)__pyx_v_self));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self));
   PyTuple_SET_ITEM(__pyx_t_2, 1, ((PyObject *)__pyx_v_self));
@@ -2352,7 +2352,7 @@ static int __pyx_pf_6amsimp_7weather_8Dynamics___cinit__(struct __pyx_obj_6amsim
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":56
+  /* "amsimp/dynamics.pyx":56
  *         super().__init__(detail_level)
  * 
  *         self.future = True             # <<<<<<<<<<<<<<
@@ -2365,7 +2365,7 @@ static int __pyx_pf_6amsimp_7weather_8Dynamics___cinit__(struct __pyx_obj_6amsim
   __Pyx_DECREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future));
   __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future = ((PyBoolObject *)Py_True);
 
-  /* "amsimp/weather.pyx":49
+  /* "amsimp/dynamics.pyx":49
  *     """
  * 
  *     def __cinit__(self, detail_level):             # <<<<<<<<<<<<<<
@@ -2380,14 +2380,14 @@ static int __pyx_pf_6amsimp_7weather_8Dynamics___cinit__(struct __pyx_obj_6amsim
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_AddTraceback("amsimp.weather.Dynamics.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("amsimp.dynamics.Dynamics.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "amsimp/weather.pyx":58
+/* "amsimp/dynamics.pyx":58
  *         self.future = True
  * 
  *     def predict_temperature(self):             # <<<<<<<<<<<<<<
@@ -2396,20 +2396,20 @@ static int __pyx_pf_6amsimp_7weather_8Dynamics___cinit__(struct __pyx_obj_6amsim
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6amsimp_7weather_8Dynamics_3predict_temperature(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_6amsimp_7weather_8Dynamics_2predict_temperature[] = "\n        This method outputs the derivative and the initial conditions of\n        temperature. Please refer to the class description to understand how\n        these outputs are calculated / defined.\n        ";
-static PyObject *__pyx_pw_6amsimp_7weather_8Dynamics_3predict_temperature(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_6amsimp_8dynamics_8Dynamics_3predict_temperature(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_6amsimp_8dynamics_8Dynamics_2predict_temperature[] = "\n        This method outputs the derivative and the initial conditions of\n        temperature. Please refer to the class description to understand how\n        these outputs are calculated / defined.\n        ";
+static PyObject *__pyx_pw_6amsimp_8dynamics_8Dynamics_3predict_temperature(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("predict_temperature (wrapper)", 0);
-  __pyx_r = __pyx_pf_6amsimp_7weather_8Dynamics_2predict_temperature(((struct __pyx_obj_6amsimp_7weather_Dynamics *)__pyx_v_self));
+  __pyx_r = __pyx_pf_6amsimp_8dynamics_8Dynamics_2predict_temperature(((struct __pyx_obj_6amsimp_8dynamics_Dynamics *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_2predict_temperature(struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self) {
+static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_2predict_temperature(struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self) {
   PyArrayObject *__pyx_v_future_temperature = NULL;
   PyArrayObject *__pyx_v_init_temperature = NULL;
   PyObject *__pyx_v_n = NULL;
@@ -2420,19 +2420,19 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_2predict_temperature(struct
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("predict_temperature", 0);
 
-  /* "amsimp/weather.pyx":64
+  /* "amsimp/dynamics.pyx":64
  *         these outputs are calculated / defined.
  *         """
  *         future_temperature = self.temperature()             # <<<<<<<<<<<<<<
  *         self.future = False
  *         init_temperature = self.temperature()
  */
-  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.temperature(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 64, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.temperature(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_future_temperature = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":65
+  /* "amsimp/dynamics.pyx":65
  *         """
  *         future_temperature = self.temperature()
  *         self.future = False             # <<<<<<<<<<<<<<
@@ -2445,19 +2445,19 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_2predict_temperature(struct
   __Pyx_DECREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future));
   __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future = ((PyBoolObject *)Py_False);
 
-  /* "amsimp/weather.pyx":66
+  /* "amsimp/dynamics.pyx":66
  *         future_temperature = self.temperature()
  *         self.future = False
  *         init_temperature = self.temperature()             # <<<<<<<<<<<<<<
  *         self.future = True
  * 
  */
-  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.temperature(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.temperature(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_init_temperature = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":67
+  /* "amsimp/dynamics.pyx":67
  *         self.future = False
  *         init_temperature = self.temperature()
  *         self.future = True             # <<<<<<<<<<<<<<
@@ -2470,7 +2470,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_2predict_temperature(struct
   __Pyx_DECREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future));
   __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future = ((PyBoolObject *)Py_True);
 
-  /* "amsimp/weather.pyx":69
+  /* "amsimp/dynamics.pyx":69
  *         self.future = True
  * 
  *         n = self.number_of_days - 1             # <<<<<<<<<<<<<<
@@ -2485,7 +2485,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_2predict_temperature(struct
   __pyx_v_n = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "amsimp/weather.pyx":71
+  /* "amsimp/dynamics.pyx":71
  *         n = self.number_of_days - 1
  * 
  *         gradient = (future_temperature - init_temperature) / n             # <<<<<<<<<<<<<<
@@ -2500,7 +2500,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_2predict_temperature(struct
   __pyx_v_gradient = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":73
+  /* "amsimp/dynamics.pyx":73
  *         gradient = (future_temperature - init_temperature) / n
  * 
  *         return gradient, init_temperature             # <<<<<<<<<<<<<<
@@ -2520,7 +2520,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_2predict_temperature(struct
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "amsimp/weather.pyx":58
+  /* "amsimp/dynamics.pyx":58
  *         self.future = True
  * 
  *     def predict_temperature(self):             # <<<<<<<<<<<<<<
@@ -2532,7 +2532,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_2predict_temperature(struct
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("amsimp.weather.Dynamics.predict_temperature", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("amsimp.dynamics.Dynamics.predict_temperature", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF((PyObject *)__pyx_v_future_temperature);
@@ -2544,7 +2544,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_2predict_temperature(struct
   return __pyx_r;
 }
 
-/* "amsimp/weather.pyx":75
+/* "amsimp/dynamics.pyx":75
  *         return gradient, init_temperature
  * 
  *     def predict_pressurethickness(self):             # <<<<<<<<<<<<<<
@@ -2553,20 +2553,20 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_2predict_temperature(struct
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6amsimp_7weather_8Dynamics_5predict_pressurethickness(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_6amsimp_7weather_8Dynamics_4predict_pressurethickness[] = "\n        This is the pressure thickness variation of the method,\n        predict_temperature. Please refer to\n        amsimp.Backend.predict_temperature() for a general description of this\n        method.\n        ";
-static PyObject *__pyx_pw_6amsimp_7weather_8Dynamics_5predict_pressurethickness(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_6amsimp_8dynamics_8Dynamics_5predict_pressurethickness(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_6amsimp_8dynamics_8Dynamics_4predict_pressurethickness[] = "\n        This is the pressure thickness variation of the method,\n        predict_temperature. Please refer to\n        amsimp.Backend.predict_temperature() for a general description of this\n        method.\n        ";
+static PyObject *__pyx_pw_6amsimp_8dynamics_8Dynamics_5predict_pressurethickness(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("predict_pressurethickness (wrapper)", 0);
-  __pyx_r = __pyx_pf_6amsimp_7weather_8Dynamics_4predict_pressurethickness(((struct __pyx_obj_6amsimp_7weather_Dynamics *)__pyx_v_self));
+  __pyx_r = __pyx_pf_6amsimp_8dynamics_8Dynamics_4predict_pressurethickness(((struct __pyx_obj_6amsimp_8dynamics_Dynamics *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_4predict_pressurethickness(struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self) {
+static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_4predict_pressurethickness(struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self) {
   PyArrayObject *__pyx_v_future_pressurethickness = NULL;
   PyArrayObject *__pyx_v_init_pressurethickness = NULL;
   PyObject *__pyx_v_n = NULL;
@@ -2577,19 +2577,19 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_4predict_pressurethickness(
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("predict_pressurethickness", 0);
 
-  /* "amsimp/weather.pyx":82
+  /* "amsimp/dynamics.pyx":82
  *         method.
  *         """
  *         future_pressurethickness = self.pressure_thickness()             # <<<<<<<<<<<<<<
  *         self.future = False
  *         init_pressurethickness = self.pressure_thickness()
  */
-  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.pressure_thickness(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 82, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.pressure_thickness(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 82, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_future_pressurethickness = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":83
+  /* "amsimp/dynamics.pyx":83
  *         """
  *         future_pressurethickness = self.pressure_thickness()
  *         self.future = False             # <<<<<<<<<<<<<<
@@ -2602,19 +2602,19 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_4predict_pressurethickness(
   __Pyx_DECREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future));
   __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future = ((PyBoolObject *)Py_False);
 
-  /* "amsimp/weather.pyx":84
+  /* "amsimp/dynamics.pyx":84
  *         future_pressurethickness = self.pressure_thickness()
  *         self.future = False
  *         init_pressurethickness = self.pressure_thickness()             # <<<<<<<<<<<<<<
  *         self.future = True
  * 
  */
-  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.pressure_thickness(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.pressure_thickness(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_init_pressurethickness = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":85
+  /* "amsimp/dynamics.pyx":85
  *         self.future = False
  *         init_pressurethickness = self.pressure_thickness()
  *         self.future = True             # <<<<<<<<<<<<<<
@@ -2627,7 +2627,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_4predict_pressurethickness(
   __Pyx_DECREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future));
   __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future = ((PyBoolObject *)Py_True);
 
-  /* "amsimp/weather.pyx":87
+  /* "amsimp/dynamics.pyx":87
  *         self.future = True
  * 
  *         n = self.number_of_days - 1             # <<<<<<<<<<<<<<
@@ -2642,7 +2642,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_4predict_pressurethickness(
   __pyx_v_n = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "amsimp/weather.pyx":89
+  /* "amsimp/dynamics.pyx":89
  *         n = self.number_of_days - 1
  * 
  *         gradient = (future_pressurethickness - init_pressurethickness) / n             # <<<<<<<<<<<<<<
@@ -2657,7 +2657,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_4predict_pressurethickness(
   __pyx_v_gradient = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":91
+  /* "amsimp/dynamics.pyx":91
  *         gradient = (future_pressurethickness - init_pressurethickness) / n
  * 
  *         return gradient, init_pressurethickness             # <<<<<<<<<<<<<<
@@ -2677,7 +2677,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_4predict_pressurethickness(
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "amsimp/weather.pyx":75
+  /* "amsimp/dynamics.pyx":75
  *         return gradient, init_temperature
  * 
  *     def predict_pressurethickness(self):             # <<<<<<<<<<<<<<
@@ -2689,7 +2689,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_4predict_pressurethickness(
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("amsimp.weather.Dynamics.predict_pressurethickness", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("amsimp.dynamics.Dynamics.predict_pressurethickness", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF((PyObject *)__pyx_v_future_pressurethickness);
@@ -2701,7 +2701,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_4predict_pressurethickness(
   return __pyx_r;
 }
 
-/* "amsimp/weather.pyx":93
+/* "amsimp/dynamics.pyx":93
  *         return gradient, init_pressurethickness
  * 
  *     def predict_geostrophicwind(self):             # <<<<<<<<<<<<<<
@@ -2710,20 +2710,20 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_4predict_pressurethickness(
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6amsimp_7weather_8Dynamics_7predict_geostrophicwind(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_6amsimp_7weather_8Dynamics_6predict_geostrophicwind[] = "\n        This is the geostrophic wind variation of the method,\n        predict_temperature. Please refer to\n        amsimp.Backend.predict_temperature() for a general description of this\n        method.\n        ";
-static PyObject *__pyx_pw_6amsimp_7weather_8Dynamics_7predict_geostrophicwind(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_6amsimp_8dynamics_8Dynamics_7predict_geostrophicwind(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_6amsimp_8dynamics_8Dynamics_6predict_geostrophicwind[] = "\n        This is the geostrophic wind variation of the method,\n        predict_temperature. Please refer to\n        amsimp.Backend.predict_temperature() for a general description of this\n        method.\n        ";
+static PyObject *__pyx_pw_6amsimp_8dynamics_8Dynamics_7predict_geostrophicwind(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("predict_geostrophicwind (wrapper)", 0);
-  __pyx_r = __pyx_pf_6amsimp_7weather_8Dynamics_6predict_geostrophicwind(((struct __pyx_obj_6amsimp_7weather_Dynamics *)__pyx_v_self));
+  __pyx_r = __pyx_pf_6amsimp_8dynamics_8Dynamics_6predict_geostrophicwind(((struct __pyx_obj_6amsimp_8dynamics_Dynamics *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_6predict_geostrophicwind(struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self) {
+static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_6predict_geostrophicwind(struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self) {
   PyArrayObject *__pyx_v_future_geostrophicwind = NULL;
   PyArrayObject *__pyx_v_init_geostrophicwind = NULL;
   PyObject *__pyx_v_n = NULL;
@@ -2734,19 +2734,19 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_6predict_geostrophicwind(st
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("predict_geostrophicwind", 0);
 
-  /* "amsimp/weather.pyx":100
+  /* "amsimp/dynamics.pyx":100
  *         method.
  *         """
  *         future_geostrophicwind = self.geostrophic_wind()             # <<<<<<<<<<<<<<
  *         self.future = False
  *         init_geostrophicwind = self.geostrophic_wind()
  */
-  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.geostrophic_wind(((struct __pyx_obj_6amsimp_4wind_Wind *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.geostrophic_wind(((struct __pyx_obj_6amsimp_4wind_Wind *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_future_geostrophicwind = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":101
+  /* "amsimp/dynamics.pyx":101
  *         """
  *         future_geostrophicwind = self.geostrophic_wind()
  *         self.future = False             # <<<<<<<<<<<<<<
@@ -2759,19 +2759,19 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_6predict_geostrophicwind(st
   __Pyx_DECREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future));
   __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future = ((PyBoolObject *)Py_False);
 
-  /* "amsimp/weather.pyx":102
+  /* "amsimp/dynamics.pyx":102
  *         future_geostrophicwind = self.geostrophic_wind()
  *         self.future = False
  *         init_geostrophicwind = self.geostrophic_wind()             # <<<<<<<<<<<<<<
  *         self.future = True
  * 
  */
-  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.geostrophic_wind(((struct __pyx_obj_6amsimp_4wind_Wind *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 102, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.geostrophic_wind(((struct __pyx_obj_6amsimp_4wind_Wind *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 102, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_init_geostrophicwind = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":103
+  /* "amsimp/dynamics.pyx":103
  *         self.future = False
  *         init_geostrophicwind = self.geostrophic_wind()
  *         self.future = True             # <<<<<<<<<<<<<<
@@ -2784,7 +2784,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_6predict_geostrophicwind(st
   __Pyx_DECREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future));
   __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future = ((PyBoolObject *)Py_True);
 
-  /* "amsimp/weather.pyx":105
+  /* "amsimp/dynamics.pyx":105
  *         self.future = True
  * 
  *         n = self.number_of_days - 1             # <<<<<<<<<<<<<<
@@ -2799,7 +2799,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_6predict_geostrophicwind(st
   __pyx_v_n = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "amsimp/weather.pyx":107
+  /* "amsimp/dynamics.pyx":107
  *         n = self.number_of_days - 1
  * 
  *         gradient = (future_geostrophicwind - init_geostrophicwind) / n             # <<<<<<<<<<<<<<
@@ -2814,7 +2814,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_6predict_geostrophicwind(st
   __pyx_v_gradient = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":109
+  /* "amsimp/dynamics.pyx":109
  *         gradient = (future_geostrophicwind - init_geostrophicwind) / n
  * 
  *         return gradient, init_geostrophicwind             # <<<<<<<<<<<<<<
@@ -2834,7 +2834,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_6predict_geostrophicwind(st
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "amsimp/weather.pyx":93
+  /* "amsimp/dynamics.pyx":93
  *         return gradient, init_pressurethickness
  * 
  *     def predict_geostrophicwind(self):             # <<<<<<<<<<<<<<
@@ -2846,7 +2846,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_6predict_geostrophicwind(st
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("amsimp.weather.Dynamics.predict_geostrophicwind", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("amsimp.dynamics.Dynamics.predict_geostrophicwind", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF((PyObject *)__pyx_v_future_geostrophicwind);
@@ -2858,7 +2858,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_6predict_geostrophicwind(st
   return __pyx_r;
 }
 
-/* "amsimp/weather.pyx":111
+/* "amsimp/dynamics.pyx":111
  *         return gradient, init_geostrophicwind
  * 
  *     def predict_precipitablewater(self):             # <<<<<<<<<<<<<<
@@ -2867,20 +2867,20 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_6predict_geostrophicwind(st
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6amsimp_7weather_8Dynamics_9predict_precipitablewater(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_6amsimp_7weather_8Dynamics_8predict_precipitablewater[] = "\n        This is the precipitable water vapor variation of the method,\n        predict_temperature. Please refer to\n        amsimp.Backend.predict_temperature() for a general description of this\n        method.\n        ";
-static PyObject *__pyx_pw_6amsimp_7weather_8Dynamics_9predict_precipitablewater(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_6amsimp_8dynamics_8Dynamics_9predict_precipitablewater(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_6amsimp_8dynamics_8Dynamics_8predict_precipitablewater[] = "\n        This is the precipitable water vapor variation of the method,\n        predict_temperature. Please refer to\n        amsimp.Backend.predict_temperature() for a general description of this\n        method.\n        ";
+static PyObject *__pyx_pw_6amsimp_8dynamics_8Dynamics_9predict_precipitablewater(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("predict_precipitablewater (wrapper)", 0);
-  __pyx_r = __pyx_pf_6amsimp_7weather_8Dynamics_8predict_precipitablewater(((struct __pyx_obj_6amsimp_7weather_Dynamics *)__pyx_v_self));
+  __pyx_r = __pyx_pf_6amsimp_8dynamics_8Dynamics_8predict_precipitablewater(((struct __pyx_obj_6amsimp_8dynamics_Dynamics *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_8predict_precipitablewater(struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self) {
+static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_8predict_precipitablewater(struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self) {
   PyArrayObject *__pyx_v_future_precipitablewater = NULL;
   PyArrayObject *__pyx_v_init_precipitablewater = NULL;
   PyObject *__pyx_v_n = NULL;
@@ -2891,19 +2891,19 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_8predict_precipitablewater(
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("predict_precipitablewater", 0);
 
-  /* "amsimp/weather.pyx":118
+  /* "amsimp/dynamics.pyx":118
  *         method.
  *         """
  *         future_precipitablewater = self.precipitable_water()             # <<<<<<<<<<<<<<
  *         self.future = False
  *         init_precipitablewater = self.precipitable_water()
  */
-  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.precipitable_water(((struct __pyx_obj_6amsimp_5water_Water *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 118, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.precipitable_water(((struct __pyx_obj_6amsimp_5water_Water *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 118, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_future_precipitablewater = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":119
+  /* "amsimp/dynamics.pyx":119
  *         """
  *         future_precipitablewater = self.precipitable_water()
  *         self.future = False             # <<<<<<<<<<<<<<
@@ -2916,19 +2916,19 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_8predict_precipitablewater(
   __Pyx_DECREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future));
   __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future = ((PyBoolObject *)Py_False);
 
-  /* "amsimp/weather.pyx":120
+  /* "amsimp/dynamics.pyx":120
  *         future_precipitablewater = self.precipitable_water()
  *         self.future = False
  *         init_precipitablewater = self.precipitable_water()             # <<<<<<<<<<<<<<
  *         self.future = True
  * 
  */
-  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.precipitable_water(((struct __pyx_obj_6amsimp_5water_Water *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 120, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.precipitable_water(((struct __pyx_obj_6amsimp_5water_Water *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 120, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_init_precipitablewater = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":121
+  /* "amsimp/dynamics.pyx":121
  *         self.future = False
  *         init_precipitablewater = self.precipitable_water()
  *         self.future = True             # <<<<<<<<<<<<<<
@@ -2941,7 +2941,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_8predict_precipitablewater(
   __Pyx_DECREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future));
   __pyx_v_self->__pyx_base.__pyx_base.__pyx_base.future = ((PyBoolObject *)Py_True);
 
-  /* "amsimp/weather.pyx":123
+  /* "amsimp/dynamics.pyx":123
  *         self.future = True
  * 
  *         n = self.number_of_days - 1             # <<<<<<<<<<<<<<
@@ -2956,7 +2956,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_8predict_precipitablewater(
   __pyx_v_n = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "amsimp/weather.pyx":125
+  /* "amsimp/dynamics.pyx":125
  *         n = self.number_of_days - 1
  * 
  *         gradient = (future_precipitablewater - init_precipitablewater) / n             # <<<<<<<<<<<<<<
@@ -2971,7 +2971,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_8predict_precipitablewater(
   __pyx_v_gradient = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":127
+  /* "amsimp/dynamics.pyx":127
  *         gradient = (future_precipitablewater - init_precipitablewater) / n
  * 
  *         return gradient, init_precipitablewater             # <<<<<<<<<<<<<<
@@ -2991,7 +2991,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_8predict_precipitablewater(
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "amsimp/weather.pyx":111
+  /* "amsimp/dynamics.pyx":111
  *         return gradient, init_geostrophicwind
  * 
  *     def predict_precipitablewater(self):             # <<<<<<<<<<<<<<
@@ -3003,7 +3003,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_8predict_precipitablewater(
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("amsimp.weather.Dynamics.predict_precipitablewater", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("amsimp.dynamics.Dynamics.predict_precipitablewater", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF((PyObject *)__pyx_v_future_precipitablewater);
@@ -3015,7 +3015,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_8predict_precipitablewater(
   return __pyx_r;
 }
 
-/* "amsimp/weather.pyx":129
+/* "amsimp/dynamics.pyx":129
  *         return gradient, init_precipitablewater
  * 
  *     def simulate(self):             # <<<<<<<<<<<<<<
@@ -3024,20 +3024,20 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_8predict_precipitablewater(
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6amsimp_7weather_8Dynamics_11simulate(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_6amsimp_7weather_8Dynamics_10simulate[] = "\n        This method outputs a visualisation of how temperature, pressure\n        thickness, geostrophic wind, and precipitable water vapor will evolve.\n        The geostrophic wind and temperature elements of this visualisation\n        operate similarly to the method, amsimp.Wind.wind_contourf(), so, please\n        refer to this method for a detailed description of the aforementioned\n        elements. Likewise, please refer to amsimp.Water.water_contourf() for\n        more information on the visualisation element of precipitable water\n        vapor.\n        ";
-static PyObject *__pyx_pw_6amsimp_7weather_8Dynamics_11simulate(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_6amsimp_8dynamics_8Dynamics_11simulate(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_6amsimp_8dynamics_8Dynamics_10simulate[] = "\n        This method outputs a visualisation of how temperature, pressure\n        thickness, geostrophic wind, and precipitable water vapor will evolve.\n        The geostrophic wind and temperature elements of this visualisation\n        operate similarly to the method, amsimp.Wind.wind_contourf(), so, please\n        refer to this method for a detailed description of the aforementioned\n        elements. Likewise, please refer to amsimp.Water.water_contourf() for\n        more information on the visualisation element of precipitable water\n        vapor.\n        ";
+static PyObject *__pyx_pw_6amsimp_8dynamics_8Dynamics_11simulate(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("simulate (wrapper)", 0);
-  __pyx_r = __pyx_pf_6amsimp_7weather_8Dynamics_10simulate(((struct __pyx_obj_6amsimp_7weather_Dynamics *)__pyx_v_self));
+  __pyx_r = __pyx_pf_6amsimp_8dynamics_8Dynamics_10simulate(((struct __pyx_obj_6amsimp_8dynamics_Dynamics *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self) {
+static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_10simulate(struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self) {
   PyObject *__pyx_v_time = NULL;
   PyObject *__pyx_v_gs = NULL;
   PyObject *__pyx_v_fig = NULL;
@@ -3104,7 +3104,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   Py_ssize_t __pyx_t_14;
   __Pyx_RefNannySetupContext("simulate", 0);
 
-  /* "amsimp/weather.pyx":141
+  /* "amsimp/dynamics.pyx":141
  *         """
  *         # Time (Unit: day).
  *         time = np.linspace(0, (self.number_of_days - 1), (self.number_of_days * 2))             # <<<<<<<<<<<<<<
@@ -3181,7 +3181,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __pyx_v_time = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":144
+  /* "amsimp/dynamics.pyx":144
  * 
  *         # Style of graph.
  *         style.use("fivethirtyeight")             # <<<<<<<<<<<<<<
@@ -3210,7 +3210,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":147
+  /* "amsimp/dynamics.pyx":147
  * 
  *         # Define layout.
  *         gs = gridspec.GridSpec(2, 2)             # <<<<<<<<<<<<<<
@@ -3228,7 +3228,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __pyx_v_gs = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":148
+  /* "amsimp/dynamics.pyx":148
  *         # Define layout.
  *         gs = gridspec.GridSpec(2, 2)
  *         fig = plt.figure(figsize=(18.5, 7.5))             # <<<<<<<<<<<<<<
@@ -3250,7 +3250,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __pyx_v_fig = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/weather.pyx":149
+  /* "amsimp/dynamics.pyx":149
  *         gs = gridspec.GridSpec(2, 2)
  *         fig = plt.figure(figsize=(18.5, 7.5))
  *         fig.subplots_adjust(hspace=0.340, bottom=0.105, top=0.905)             # <<<<<<<<<<<<<<
@@ -3270,7 +3270,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "amsimp/weather.pyx":150
+  /* "amsimp/dynamics.pyx":150
  *         fig = plt.figure(figsize=(18.5, 7.5))
  *         fig.subplots_adjust(hspace=0.340, bottom=0.105, top=0.905)
  *         plt.ion()             # <<<<<<<<<<<<<<
@@ -3299,7 +3299,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "amsimp/weather.pyx":153
+  /* "amsimp/dynamics.pyx":153
  * 
  *         # Geostrophic Wind
  *         ax1 = plt.subplot(gs[0, 0])             # <<<<<<<<<<<<<<
@@ -3332,7 +3332,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __pyx_v_ax1 = __pyx_t_7;
   __pyx_t_7 = 0;
 
-  /* "amsimp/weather.pyx":154
+  /* "amsimp/dynamics.pyx":154
  *         # Geostrophic Wind
  *         ax1 = plt.subplot(gs[0, 0])
  *         predict_u = self.predict_geostrophicwind()             # <<<<<<<<<<<<<<
@@ -3359,7 +3359,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __pyx_v_predict_u = __pyx_t_7;
   __pyx_t_7 = 0;
 
-  /* "amsimp/weather.pyx":156
+  /* "amsimp/dynamics.pyx":156
  *         predict_u = self.predict_geostrophicwind()
  *         # Temperature
  *         ax2 = plt.subplot(gs[1, 0])             # <<<<<<<<<<<<<<
@@ -3392,7 +3392,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __pyx_v_ax2 = __pyx_t_7;
   __pyx_t_7 = 0;
 
-  /* "amsimp/weather.pyx":157
+  /* "amsimp/dynamics.pyx":157
  *         # Temperature
  *         ax2 = plt.subplot(gs[1, 0])
  *         predict_t = self.predict_temperature()             # <<<<<<<<<<<<<<
@@ -3419,7 +3419,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __pyx_v_predict_t = __pyx_t_7;
   __pyx_t_7 = 0;
 
-  /* "amsimp/weather.pyx":159
+  /* "amsimp/dynamics.pyx":159
  *         predict_t = self.predict_temperature()
  *         # Precipitable Water
  *         ax3 = plt.subplot(gs[0, 1], projection=ccrs.EckertIII())             # <<<<<<<<<<<<<<
@@ -3470,7 +3470,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __pyx_v_ax3 = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "amsimp/weather.pyx":160
+  /* "amsimp/dynamics.pyx":160
  *         # Precipitable Water
  *         ax3 = plt.subplot(gs[0, 1], projection=ccrs.EckertIII())
  *         predict_Pwv = np.asarray(self.predict_precipitablewater())             # <<<<<<<<<<<<<<
@@ -3518,7 +3518,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __pyx_v_predict_Pwv = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "amsimp/weather.pyx":162
+  /* "amsimp/dynamics.pyx":162
  *         predict_Pwv = np.asarray(self.predict_precipitablewater())
  *         # Pressure Thickness
  *         ax4 = plt.subplot(gs[1, 1])             # <<<<<<<<<<<<<<
@@ -3551,7 +3551,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __pyx_v_ax4 = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "amsimp/weather.pyx":163
+  /* "amsimp/dynamics.pyx":163
  *         # Pressure Thickness
  *         ax4 = plt.subplot(gs[1, 1])
  *         predict_pthickness = self.predict_pressurethickness()             # <<<<<<<<<<<<<<
@@ -3578,7 +3578,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __pyx_v_predict_pthickness = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "amsimp/weather.pyx":165
+  /* "amsimp/dynamics.pyx":165
  *         predict_pthickness = self.predict_pressurethickness()
  * 
  *         t = 0             # <<<<<<<<<<<<<<
@@ -3588,7 +3588,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __Pyx_INCREF(__pyx_int_0);
   __pyx_v_t = __pyx_int_0;
 
-  /* "amsimp/weather.pyx":166
+  /* "amsimp/dynamics.pyx":166
  * 
  *         t = 0
  *         while t < len(time):             # <<<<<<<<<<<<<<
@@ -3605,7 +3605,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     if (!__pyx_t_9) break;
 
-    /* "amsimp/weather.pyx":169
+    /* "amsimp/dynamics.pyx":169
  *             # Defines the axes.
  *             # For temperature, geostrophic wind, and pressure thickness plots.
  *             latitude, altitude = np.meshgrid(             # <<<<<<<<<<<<<<
@@ -3618,16 +3618,16 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":170
+    /* "amsimp/dynamics.pyx":170
  *             # For temperature, geostrophic wind, and pressure thickness plots.
  *             latitude, altitude = np.meshgrid(
  *                 self.latitude_lines(), self.altitude_level()             # <<<<<<<<<<<<<<
  *             )
  *             # For recipitable water plot
  */
-    __pyx_t_5 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 170, __pyx_L1_error)
+    __pyx_t_5 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 170, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.altitude_level(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 170, __pyx_L1_error)
+    __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.altitude_level(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 170, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_2 = NULL;
     __pyx_t_6 = 0;
@@ -3725,7 +3725,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __pyx_L6_unpacking_done:;
     }
 
-    /* "amsimp/weather.pyx":169
+    /* "amsimp/dynamics.pyx":169
  *             # Defines the axes.
  *             # For temperature, geostrophic wind, and pressure thickness plots.
  *             latitude, altitude = np.meshgrid(             # <<<<<<<<<<<<<<
@@ -3737,14 +3737,14 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_altitude, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":173
+    /* "amsimp/dynamics.pyx":173
  *             )
  *             # For recipitable water plot
  *             long = self.latitude_lines() * 2             # <<<<<<<<<<<<<<
  *             lat_pw, longitude = np.meshgrid(self.latitude_lines(), long)
  * 
  */
-    __pyx_t_7 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 173, __pyx_L1_error)
+    __pyx_t_7 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 173, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_4 = PyNumber_Multiply(__pyx_t_7, __pyx_int_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 173, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
@@ -3752,7 +3752,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_long, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":174
+    /* "amsimp/dynamics.pyx":174
  *             # For recipitable water plot
  *             long = self.latitude_lines() * 2
  *             lat_pw, longitude = np.meshgrid(self.latitude_lines(), long)             # <<<<<<<<<<<<<<
@@ -3764,7 +3764,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_meshgrid); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 174, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 174, __pyx_L1_error)
+    __pyx_t_7 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 174, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_3 = NULL;
     __pyx_t_6 = 0;
@@ -3864,7 +3864,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_longitude, __pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":179
+    /* "amsimp/dynamics.pyx":179
  *             # Geostrophic wind data.
  *             geostrophic_wind = (
  *                 predict_u[0] * time[t]             # <<<<<<<<<<<<<<
@@ -3880,7 +3880,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":180
+    /* "amsimp/dynamics.pyx":180
  *             geostrophic_wind = (
  *                 predict_u[0] * time[t]
  *             ) + predict_u[1]             # <<<<<<<<<<<<<<
@@ -3896,7 +3896,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_geostrophic_wind, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":183
+    /* "amsimp/dynamics.pyx":183
  * 
  *             # Contouf plotting.
  *             cmap1 = plt.get_cmap("jet")             # <<<<<<<<<<<<<<
@@ -3926,7 +3926,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_cmap1, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":184
+    /* "amsimp/dynamics.pyx":184
  *             # Contouf plotting.
  *             cmap1 = plt.get_cmap("jet")
  *             min1 = predict_u[1].min()             # <<<<<<<<<<<<<<
@@ -3956,7 +3956,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_min1, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":185
+    /* "amsimp/dynamics.pyx":185
  *             cmap1 = plt.get_cmap("jet")
  *             min1 = predict_u[1].min()
  *             max1 = predict_u[1].max()             # <<<<<<<<<<<<<<
@@ -3986,7 +3986,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_max1, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":186
+    /* "amsimp/dynamics.pyx":186
  *             min1 = predict_u[1].min()
  *             max1 = predict_u[1].max()
  *             if min1 > -100 and max1 < 100:             # <<<<<<<<<<<<<<
@@ -4008,7 +4008,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __pyx_L10_bool_binop_done:;
     if (__pyx_t_9) {
 
-      /* "amsimp/weather.pyx":187
+      /* "amsimp/dynamics.pyx":187
  *             max1 = predict_u[1].max()
  *             if min1 > -100 and max1 < 100:
  *                 level1 = np.linspace(-60, max1, 21)             # <<<<<<<<<<<<<<
@@ -4071,7 +4071,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_XDECREF_SET(__pyx_v_level1, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "amsimp/weather.pyx":186
+      /* "amsimp/dynamics.pyx":186
  *             min1 = predict_u[1].min()
  *             max1 = predict_u[1].max()
  *             if min1 > -100 and max1 < 100:             # <<<<<<<<<<<<<<
@@ -4081,7 +4081,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       goto __pyx_L9;
     }
 
-    /* "amsimp/weather.pyx":189
+    /* "amsimp/dynamics.pyx":189
  *                 level1 = np.linspace(-60, max1, 21)
  *             else:
  *                 level1 = np.linspace(-70, 120, 21)             # <<<<<<<<<<<<<<
@@ -4102,7 +4102,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     }
     __pyx_L9:;
 
-    /* "amsimp/weather.pyx":190
+    /* "amsimp/dynamics.pyx":190
  *             else:
  *                 level1 = np.linspace(-70, 120, 21)
  *             v_g = ax1.contourf(             # <<<<<<<<<<<<<<
@@ -4112,7 +4112,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_ax1, __pyx_n_s_contourf); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 190, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
 
-    /* "amsimp/weather.pyx":191
+    /* "amsimp/dynamics.pyx":191
  *                 level1 = np.linspace(-70, 120, 21)
  *             v_g = ax1.contourf(
  *                 latitude, altitude, geostrophic_wind, cmap=cmap1, levels=level1             # <<<<<<<<<<<<<<
@@ -4135,7 +4135,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_cmap, __pyx_v_cmap1) < 0) __PYX_ERR(0, 191, __pyx_L1_error)
     if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_levels, __pyx_v_level1) < 0) __PYX_ERR(0, 191, __pyx_L1_error)
 
-    /* "amsimp/weather.pyx":190
+    /* "amsimp/dynamics.pyx":190
  *             else:
  *                 level1 = np.linspace(-70, 120, 21)
  *             v_g = ax1.contourf(             # <<<<<<<<<<<<<<
@@ -4150,7 +4150,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_v_g, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "amsimp/weather.pyx":195
+    /* "amsimp/dynamics.pyx":195
  * 
  *             # Checks for a colorbar.
  *             if t == 0:             # <<<<<<<<<<<<<<
@@ -4163,7 +4163,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_9) {
 
-      /* "amsimp/weather.pyx":196
+      /* "amsimp/dynamics.pyx":196
  *             # Checks for a colorbar.
  *             if t == 0:
  *                 cb1 = fig.colorbar(v_g, ax=ax1)             # <<<<<<<<<<<<<<
@@ -4188,7 +4188,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_XDECREF_SET(__pyx_v_cb1, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "amsimp/weather.pyx":197
+      /* "amsimp/dynamics.pyx":197
  *             if t == 0:
  *                 cb1 = fig.colorbar(v_g, ax=ax1)
  *                 tick_locator = ticker.MaxNLocator(nbins=10)             # <<<<<<<<<<<<<<
@@ -4210,7 +4210,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_XDECREF_SET(__pyx_v_tick_locator, __pyx_t_7);
       __pyx_t_7 = 0;
 
-      /* "amsimp/weather.pyx":198
+      /* "amsimp/dynamics.pyx":198
  *                 cb1 = fig.colorbar(v_g, ax=ax1)
  *                 tick_locator = ticker.MaxNLocator(nbins=10)
  *                 cb1.locator = tick_locator             # <<<<<<<<<<<<<<
@@ -4219,7 +4219,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
  */
       if (__Pyx_PyObject_SetAttrStr(__pyx_v_cb1, __pyx_n_s_locator, __pyx_v_tick_locator) < 0) __PYX_ERR(0, 198, __pyx_L1_error)
 
-      /* "amsimp/weather.pyx":199
+      /* "amsimp/dynamics.pyx":199
  *                 tick_locator = ticker.MaxNLocator(nbins=10)
  *                 cb1.locator = tick_locator
  *                 cb1.update_ticks()             # <<<<<<<<<<<<<<
@@ -4245,7 +4245,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "amsimp/weather.pyx":200
+      /* "amsimp/dynamics.pyx":200
  *                 cb1.locator = tick_locator
  *                 cb1.update_ticks()
  *                 cb1.set_label("Velocity ($\\frac{m}{s}$)")             # <<<<<<<<<<<<<<
@@ -4271,7 +4271,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "amsimp/weather.pyx":195
+      /* "amsimp/dynamics.pyx":195
  * 
  *             # Checks for a colorbar.
  *             if t == 0:             # <<<<<<<<<<<<<<
@@ -4280,7 +4280,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
  */
     }
 
-    /* "amsimp/weather.pyx":204
+    /* "amsimp/dynamics.pyx":204
  * 
  *             # Add SALT to the graph.
  *             ax1.set_xlabel("Latitude ($\phi$)")             # <<<<<<<<<<<<<<
@@ -4306,7 +4306,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":205
+    /* "amsimp/dynamics.pyx":205
  *             # Add SALT to the graph.
  *             ax1.set_xlabel("Latitude ($\phi$)")
  *             ax1.set_ylabel("Altitude (m)")             # <<<<<<<<<<<<<<
@@ -4332,7 +4332,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":206
+    /* "amsimp/dynamics.pyx":206
  *             ax1.set_xlabel("Latitude ($\phi$)")
  *             ax1.set_ylabel("Altitude (m)")
  *             ax1.set_title("Geostrophic Wind")             # <<<<<<<<<<<<<<
@@ -4358,7 +4358,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":211
+    /* "amsimp/dynamics.pyx":211
  *             # Temperature data.
  *             temperature = (
  *                 predict_t[0] * time[t]             # <<<<<<<<<<<<<<
@@ -4374,7 +4374,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":212
+    /* "amsimp/dynamics.pyx":212
  *             temperature = (
  *                 predict_t[0] * time[t]
  *             ) + predict_t[1]             # <<<<<<<<<<<<<<
@@ -4390,7 +4390,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_temperature, __pyx_t_7);
     __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":215
+    /* "amsimp/dynamics.pyx":215
  * 
  *             # Contouf plotting.
  *             cmap2 = plt.get_cmap("hot")             # <<<<<<<<<<<<<<
@@ -4420,7 +4420,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_cmap2, __pyx_t_7);
     __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":216
+    /* "amsimp/dynamics.pyx":216
  *             # Contouf plotting.
  *             cmap2 = plt.get_cmap("hot")
  *             min2 = temperature.min()             # <<<<<<<<<<<<<<
@@ -4447,7 +4447,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_min2, __pyx_t_7);
     __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":217
+    /* "amsimp/dynamics.pyx":217
  *             cmap2 = plt.get_cmap("hot")
  *             min2 = temperature.min()
  *             max2 = temperature.max()             # <<<<<<<<<<<<<<
@@ -4474,7 +4474,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_max2, __pyx_t_7);
     __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":218
+    /* "amsimp/dynamics.pyx":218
  *             min2 = temperature.min()
  *             max2 = temperature.max()
  *             level2 = np.linspace(min2, max2, 21)             # <<<<<<<<<<<<<<
@@ -4537,7 +4537,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_level2, __pyx_t_7);
     __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":219
+    /* "amsimp/dynamics.pyx":219
  *             max2 = temperature.max()
  *             level2 = np.linspace(min2, max2, 21)
  *             temp = ax2.contourf(             # <<<<<<<<<<<<<<
@@ -4547,7 +4547,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_ax2, __pyx_n_s_contourf); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 219, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
 
-    /* "amsimp/weather.pyx":220
+    /* "amsimp/dynamics.pyx":220
  *             level2 = np.linspace(min2, max2, 21)
  *             temp = ax2.contourf(
  *                 latitude, altitude, temperature, cmap=cmap2, levels=level2             # <<<<<<<<<<<<<<
@@ -4570,7 +4570,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_cmap, __pyx_v_cmap2) < 0) __PYX_ERR(0, 220, __pyx_L1_error)
     if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_levels, __pyx_v_level2) < 0) __PYX_ERR(0, 220, __pyx_L1_error)
 
-    /* "amsimp/weather.pyx":219
+    /* "amsimp/dynamics.pyx":219
  *             max2 = temperature.max()
  *             level2 = np.linspace(min2, max2, 21)
  *             temp = ax2.contourf(             # <<<<<<<<<<<<<<
@@ -4585,7 +4585,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_temp, __pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":224
+    /* "amsimp/dynamics.pyx":224
  * 
  *             # Checks for a colorbar.
  *             if t == 0:             # <<<<<<<<<<<<<<
@@ -4598,7 +4598,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     if (__pyx_t_9) {
 
-      /* "amsimp/weather.pyx":225
+      /* "amsimp/dynamics.pyx":225
  *             # Checks for a colorbar.
  *             if t == 0:
  *                 cb2 = fig.colorbar(temp, ax=ax2)             # <<<<<<<<<<<<<<
@@ -4623,7 +4623,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_XDECREF_SET(__pyx_v_cb2, __pyx_t_7);
       __pyx_t_7 = 0;
 
-      /* "amsimp/weather.pyx":226
+      /* "amsimp/dynamics.pyx":226
  *             if t == 0:
  *                 cb2 = fig.colorbar(temp, ax=ax2)
  *                 tick_locator = ticker.MaxNLocator(nbins=10)             # <<<<<<<<<<<<<<
@@ -4645,7 +4645,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_XDECREF_SET(__pyx_v_tick_locator, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "amsimp/weather.pyx":227
+      /* "amsimp/dynamics.pyx":227
  *                 cb2 = fig.colorbar(temp, ax=ax2)
  *                 tick_locator = ticker.MaxNLocator(nbins=10)
  *                 cb2.locator = tick_locator             # <<<<<<<<<<<<<<
@@ -4654,7 +4654,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
  */
       if (__Pyx_PyObject_SetAttrStr(__pyx_v_cb2, __pyx_n_s_locator, __pyx_v_tick_locator) < 0) __PYX_ERR(0, 227, __pyx_L1_error)
 
-      /* "amsimp/weather.pyx":228
+      /* "amsimp/dynamics.pyx":228
  *                 tick_locator = ticker.MaxNLocator(nbins=10)
  *                 cb2.locator = tick_locator
  *                 cb2.update_ticks()             # <<<<<<<<<<<<<<
@@ -4680,7 +4680,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "amsimp/weather.pyx":229
+      /* "amsimp/dynamics.pyx":229
  *                 cb2.locator = tick_locator
  *                 cb2.update_ticks()
  *                 cb2.set_label("Temperature (K)")             # <<<<<<<<<<<<<<
@@ -4706,7 +4706,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "amsimp/weather.pyx":224
+      /* "amsimp/dynamics.pyx":224
  * 
  *             # Checks for a colorbar.
  *             if t == 0:             # <<<<<<<<<<<<<<
@@ -4715,7 +4715,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
  */
     }
 
-    /* "amsimp/weather.pyx":232
+    /* "amsimp/dynamics.pyx":232
  * 
  *             # Add SALT to the graph.
  *             ax2.set_xlabel("Latitude ($\phi$)")             # <<<<<<<<<<<<<<
@@ -4741,7 +4741,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "amsimp/weather.pyx":233
+    /* "amsimp/dynamics.pyx":233
  *             # Add SALT to the graph.
  *             ax2.set_xlabel("Latitude ($\phi$)")
  *             ax2.set_ylabel("Altitude (m)")             # <<<<<<<<<<<<<<
@@ -4767,7 +4767,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "amsimp/weather.pyx":234
+    /* "amsimp/dynamics.pyx":234
  *             ax2.set_xlabel("Latitude ($\phi$)")
  *             ax2.set_ylabel("Altitude (m)")
  *             ax2.set_title("Temperature")             # <<<<<<<<<<<<<<
@@ -4793,7 +4793,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "amsimp/weather.pyx":239
+    /* "amsimp/dynamics.pyx":239
  *             # Precipitable water data.
  *             P_w = (
  *                 predict_Pwv[0] * time[t]             # <<<<<<<<<<<<<<
@@ -4809,7 +4809,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":240
+    /* "amsimp/dynamics.pyx":240
  *             P_w = (
  *                 predict_Pwv[0] * time[t]
  *             ) + predict_Pwv[1]             # <<<<<<<<<<<<<<
@@ -4825,7 +4825,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_P_w, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "amsimp/weather.pyx":241
+    /* "amsimp/dynamics.pyx":241
  *                 predict_Pwv[0] * time[t]
  *             ) + predict_Pwv[1]
  *             precipitable_water = []             # <<<<<<<<<<<<<<
@@ -4837,7 +4837,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_precipitable_water, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "amsimp/weather.pyx":242
+    /* "amsimp/dynamics.pyx":242
  *             ) + predict_Pwv[1]
  *             precipitable_water = []
  *             n = 0             # <<<<<<<<<<<<<<
@@ -4847,7 +4847,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_INCREF(__pyx_int_0);
     __Pyx_XDECREF_SET(__pyx_v_n, __pyx_int_0);
 
-    /* "amsimp/weather.pyx":243
+    /* "amsimp/dynamics.pyx":243
  *             precipitable_water = []
  *             n = 0
  *             while n < len(longitude):             # <<<<<<<<<<<<<<
@@ -4864,7 +4864,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       if (!__pyx_t_9) break;
 
-      /* "amsimp/weather.pyx":244
+      /* "amsimp/dynamics.pyx":244
  *             n = 0
  *             while n < len(longitude):
  *                 precipitable_water.append(list(P_w))             # <<<<<<<<<<<<<<
@@ -4876,7 +4876,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __pyx_t_12 = __Pyx_PyObject_Append(__pyx_v_precipitable_water, __pyx_t_7); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 244, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "amsimp/weather.pyx":246
+      /* "amsimp/dynamics.pyx":246
  *                 precipitable_water.append(list(P_w))
  * 
  *                 n += 1             # <<<<<<<<<<<<<<
@@ -4889,7 +4889,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __pyx_t_7 = 0;
     }
 
-    /* "amsimp/weather.pyx":247
+    /* "amsimp/dynamics.pyx":247
  * 
  *                 n += 1
  *             precipitable_water = np.asarray(precipitable_water)             # <<<<<<<<<<<<<<
@@ -4919,7 +4919,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF_SET(__pyx_v_precipitable_water, __pyx_t_7);
     __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":250
+    /* "amsimp/dynamics.pyx":250
  * 
  *             # EckertIII projection details.
  *             ax3.set_global()             # <<<<<<<<<<<<<<
@@ -4945,7 +4945,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":251
+    /* "amsimp/dynamics.pyx":251
  *             # EckertIII projection details.
  *             ax3.set_global()
  *             ax3.coastlines()             # <<<<<<<<<<<<<<
@@ -4971,7 +4971,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":252
+    /* "amsimp/dynamics.pyx":252
  *             ax3.set_global()
  *             ax3.coastlines()
  *             ax3.gridlines()             # <<<<<<<<<<<<<<
@@ -4997,7 +4997,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":255
+    /* "amsimp/dynamics.pyx":255
  * 
  *             # Contourf plotting.
  *             cmap3 = plt.get_cmap("seismic")             # <<<<<<<<<<<<<<
@@ -5027,7 +5027,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_cmap3, __pyx_t_7);
     __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":256
+    /* "amsimp/dynamics.pyx":256
  *             # Contourf plotting.
  *             cmap3 = plt.get_cmap("seismic")
  *             min3 = predict_Pwv[1].min()             # <<<<<<<<<<<<<<
@@ -5057,7 +5057,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_min3, __pyx_t_7);
     __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":257
+    /* "amsimp/dynamics.pyx":257
  *             cmap3 = plt.get_cmap("seismic")
  *             min3 = predict_Pwv[1].min()
  *             level3 = np.linspace(min3, 100, 21)             # <<<<<<<<<<<<<<
@@ -5120,7 +5120,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_level3, __pyx_t_7);
     __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":258
+    /* "amsimp/dynamics.pyx":258
  *             min3 = predict_Pwv[1].min()
  *             level3 = np.linspace(min3, 100, 21)
  *             precipitable_watervapour = ax3.contourf(             # <<<<<<<<<<<<<<
@@ -5130,7 +5130,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_ax3, __pyx_n_s_contourf); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 258, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
 
-    /* "amsimp/weather.pyx":261
+    /* "amsimp/dynamics.pyx":261
  *                 longitude,
  *                 lat_pw,
  *                 precipitable_water,             # <<<<<<<<<<<<<<
@@ -5149,7 +5149,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_GIVEREF(__pyx_v_precipitable_water);
     PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_v_precipitable_water);
 
-    /* "amsimp/weather.pyx":262
+    /* "amsimp/dynamics.pyx":262
  *                 lat_pw,
  *                 precipitable_water,
  *                 cmap=cmap3,             # <<<<<<<<<<<<<<
@@ -5160,7 +5160,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_GOTREF(__pyx_t_5);
     if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_cmap, __pyx_v_cmap3) < 0) __PYX_ERR(0, 262, __pyx_L1_error)
 
-    /* "amsimp/weather.pyx":263
+    /* "amsimp/dynamics.pyx":263
  *                 precipitable_water,
  *                 cmap=cmap3,
  *                 levels=level3,             # <<<<<<<<<<<<<<
@@ -5169,7 +5169,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
  */
     if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_levels, __pyx_v_level3) < 0) __PYX_ERR(0, 262, __pyx_L1_error)
 
-    /* "amsimp/weather.pyx":264
+    /* "amsimp/dynamics.pyx":264
  *                 cmap=cmap3,
  *                 levels=level3,
  *                 transform=ccrs.PlateCarree(),             # <<<<<<<<<<<<<<
@@ -5199,7 +5199,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_transform, __pyx_t_4) < 0) __PYX_ERR(0, 262, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":258
+    /* "amsimp/dynamics.pyx":258
  *             min3 = predict_Pwv[1].min()
  *             level3 = np.linspace(min3, 100, 21)
  *             precipitable_watervapour = ax3.contourf(             # <<<<<<<<<<<<<<
@@ -5214,7 +5214,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_precipitable_watervapour, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":268
+    /* "amsimp/dynamics.pyx":268
  * 
  *             # Checks for a colorbar.
  *             if t == 0:             # <<<<<<<<<<<<<<
@@ -5227,7 +5227,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     if (__pyx_t_9) {
 
-      /* "amsimp/weather.pyx":269
+      /* "amsimp/dynamics.pyx":269
  *             # Checks for a colorbar.
  *             if t == 0:
  *                 cb3 = fig.colorbar(precipitable_watervapour, ax=ax3)             # <<<<<<<<<<<<<<
@@ -5252,7 +5252,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_XDECREF_SET(__pyx_v_cb3, __pyx_t_7);
       __pyx_t_7 = 0;
 
-      /* "amsimp/weather.pyx":270
+      /* "amsimp/dynamics.pyx":270
  *             if t == 0:
  *                 cb3 = fig.colorbar(precipitable_watervapour, ax=ax3)
  *                 tick_locator = ticker.MaxNLocator(nbins=10)             # <<<<<<<<<<<<<<
@@ -5274,7 +5274,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_XDECREF_SET(__pyx_v_tick_locator, __pyx_t_5);
       __pyx_t_5 = 0;
 
-      /* "amsimp/weather.pyx":271
+      /* "amsimp/dynamics.pyx":271
  *                 cb3 = fig.colorbar(precipitable_watervapour, ax=ax3)
  *                 tick_locator = ticker.MaxNLocator(nbins=10)
  *                 cb3.locator = tick_locator             # <<<<<<<<<<<<<<
@@ -5283,7 +5283,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
  */
       if (__Pyx_PyObject_SetAttrStr(__pyx_v_cb3, __pyx_n_s_locator, __pyx_v_tick_locator) < 0) __PYX_ERR(0, 271, __pyx_L1_error)
 
-      /* "amsimp/weather.pyx":272
+      /* "amsimp/dynamics.pyx":272
  *                 tick_locator = ticker.MaxNLocator(nbins=10)
  *                 cb3.locator = tick_locator
  *                 cb3.update_ticks()             # <<<<<<<<<<<<<<
@@ -5309,7 +5309,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-      /* "amsimp/weather.pyx":273
+      /* "amsimp/dynamics.pyx":273
  *                 cb3.locator = tick_locator
  *                 cb3.update_ticks()
  *                 cb3.set_label("Precipitable Water (mm)")             # <<<<<<<<<<<<<<
@@ -5335,7 +5335,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-      /* "amsimp/weather.pyx":268
+      /* "amsimp/dynamics.pyx":268
  * 
  *             # Checks for a colorbar.
  *             if t == 0:             # <<<<<<<<<<<<<<
@@ -5344,7 +5344,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
  */
     }
 
-    /* "amsimp/weather.pyx":276
+    /* "amsimp/dynamics.pyx":276
  * 
  *             # Add SALT to the graph.
  *             ax3.set_xlabel("Longitude ($\lambda$)")             # <<<<<<<<<<<<<<
@@ -5370,7 +5370,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":277
+    /* "amsimp/dynamics.pyx":277
  *             # Add SALT to the graph.
  *             ax3.set_xlabel("Longitude ($\lambda$)")
  *             ax3.set_ylabel("Latitude ($\phi$)")             # <<<<<<<<<<<<<<
@@ -5396,7 +5396,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":278
+    /* "amsimp/dynamics.pyx":278
  *             ax3.set_xlabel("Longitude ($\lambda$)")
  *             ax3.set_ylabel("Latitude ($\phi$)")
  *             ax3.set_title("Precipitable Water")             # <<<<<<<<<<<<<<
@@ -5422,7 +5422,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":283
+    /* "amsimp/dynamics.pyx":283
  *             # Pressure thickness data.
  *             pressure_thickness = (
  *                 predict_pthickness[0] * time[t]             # <<<<<<<<<<<<<<
@@ -5438,7 +5438,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":284
+    /* "amsimp/dynamics.pyx":284
  *             pressure_thickness = (
  *                 predict_pthickness[0] * time[t]
  *             ) + predict_pthickness[1]             # <<<<<<<<<<<<<<
@@ -5454,7 +5454,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_pressure_thickness, __pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":287
+    /* "amsimp/dynamics.pyx":287
  * 
  *             # Define snow line, and plot.
  *             snow_line = np.zeros(len(pressure_thickness))             # <<<<<<<<<<<<<<
@@ -5488,7 +5488,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_snow_line, __pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":288
+    /* "amsimp/dynamics.pyx":288
  *             # Define snow line, and plot.
  *             snow_line = np.zeros(len(pressure_thickness))
  *             snow_line += 5400             # <<<<<<<<<<<<<<
@@ -5500,7 +5500,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF_SET(__pyx_v_snow_line, __pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":289
+    /* "amsimp/dynamics.pyx":289
  *             snow_line = np.zeros(len(pressure_thickness))
  *             snow_line += 5400
  *             ax4.plot(snow_line, self.latitude_lines(), "m--", label="Snow Line")             # <<<<<<<<<<<<<<
@@ -5509,7 +5509,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
  */
     __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_ax4, __pyx_n_s_plot); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 289, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 289, __pyx_L1_error)
+    __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 289, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_7 = PyTuple_New(3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 289, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
@@ -5532,7 +5532,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":292
+    /* "amsimp/dynamics.pyx":292
  * 
  *             # Scatter plotting.
  *             ax4.scatter(pressure_thickness, self.latitude_lines(), color="b")             # <<<<<<<<<<<<<<
@@ -5541,7 +5541,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
  */
     __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_ax4, __pyx_n_s_scatter); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 292, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 292, __pyx_L1_error)
+    __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 292, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_7 = PyTuple_New(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 292, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
@@ -5561,7 +5561,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":295
+    /* "amsimp/dynamics.pyx":295
  * 
  *             # Add SALT to the graph.
  *             ax4.set_xlabel("Pressure Thickness (m)")             # <<<<<<<<<<<<<<
@@ -5587,7 +5587,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":296
+    /* "amsimp/dynamics.pyx":296
  *             # Add SALT to the graph.
  *             ax4.set_xlabel("Pressure Thickness (m)")
  *             ax4.set_ylabel("Latitude ($\phi$)")             # <<<<<<<<<<<<<<
@@ -5613,7 +5613,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":297
+    /* "amsimp/dynamics.pyx":297
  *             ax4.set_xlabel("Pressure Thickness (m)")
  *             ax4.set_ylabel("Latitude ($\phi$)")
  *             ax4.set_title("Pressure Thickness (1000hPa - 500hPa)")             # <<<<<<<<<<<<<<
@@ -5639,7 +5639,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":298
+    /* "amsimp/dynamics.pyx":298
  *             ax4.set_ylabel("Latitude ($\phi$)")
  *             ax4.set_title("Pressure Thickness (1000hPa - 500hPa)")
  *             ax4.set_xlim(5100, 6300)             # <<<<<<<<<<<<<<
@@ -5653,7 +5653,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "amsimp/weather.pyx":299
+    /* "amsimp/dynamics.pyx":299
  *             ax4.set_title("Pressure Thickness (1000hPa - 500hPa)")
  *             ax4.set_xlim(5100, 6300)
  *             ax4.legend(loc=0)             # <<<<<<<<<<<<<<
@@ -5671,7 +5671,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":303
+    /* "amsimp/dynamics.pyx":303
  *             # Troposphere - Stratosphere Boundary Line
  *             # Determines the true boundary line.
  *             trop_strat_line = []             # <<<<<<<<<<<<<<
@@ -5683,7 +5683,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_trop_strat_line, __pyx_t_7);
     __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":304
+    /* "amsimp/dynamics.pyx":304
  *             # Determines the true boundary line.
  *             trop_strat_line = []
  *             for temp_ in np.transpose(temperature):             # <<<<<<<<<<<<<<
@@ -5753,7 +5753,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_XDECREF_SET(__pyx_v_temp_, __pyx_t_7);
       __pyx_t_7 = 0;
 
-      /* "amsimp/weather.pyx":305
+      /* "amsimp/dynamics.pyx":305
  *             trop_strat_line = []
  *             for temp_ in np.transpose(temperature):
  *                 n = 0             # <<<<<<<<<<<<<<
@@ -5763,7 +5763,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_INCREF(__pyx_int_0);
       __Pyx_DECREF_SET(__pyx_v_n, __pyx_int_0);
 
-      /* "amsimp/weather.pyx":306
+      /* "amsimp/dynamics.pyx":306
  *             for temp_ in np.transpose(temperature):
  *                 n = 0
  *                 while n < len(temp_):             # <<<<<<<<<<<<<<
@@ -5780,7 +5780,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         if (!__pyx_t_9) break;
 
-        /* "amsimp/weather.pyx":307
+        /* "amsimp/dynamics.pyx":307
  *                 n = 0
  *                 while n < len(temp_):
  *                     y1 = temp_[n]             # <<<<<<<<<<<<<<
@@ -5792,7 +5792,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
         __Pyx_XDECREF_SET(__pyx_v_y1, __pyx_t_5);
         __pyx_t_5 = 0;
 
-        /* "amsimp/weather.pyx":308
+        /* "amsimp/dynamics.pyx":308
  *                 while n < len(temp_):
  *                     y1 = temp_[n]
  *                     y2 = temp_[n + 1]             # <<<<<<<<<<<<<<
@@ -5807,7 +5807,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
         __Pyx_XDECREF_SET(__pyx_v_y2, __pyx_t_7);
         __pyx_t_7 = 0;
 
-        /* "amsimp/weather.pyx":310
+        /* "amsimp/dynamics.pyx":310
  *                     y2 = temp_[n + 1]
  * 
  *                     if (y2 - y1) > 0 and self.altitude_level()[n] >= 10000:             # <<<<<<<<<<<<<<
@@ -5825,7 +5825,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
           __pyx_t_9 = __pyx_t_11;
           goto __pyx_L22_bool_binop_done;
         }
-        __pyx_t_5 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.altitude_level(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 310, __pyx_L1_error)
+        __pyx_t_5 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.altitude_level(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 310, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_t_5, __pyx_v_n); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 310, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
@@ -5838,14 +5838,14 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
         __pyx_L22_bool_binop_done:;
         if (__pyx_t_9) {
 
-          /* "amsimp/weather.pyx":311
+          /* "amsimp/dynamics.pyx":311
  * 
  *                     if (y2 - y1) > 0 and self.altitude_level()[n] >= 10000:
  *                         alt = self.altitude_level()[n]             # <<<<<<<<<<<<<<
  *                         trop_strat_line.append(alt)
  *                         n = len(temp_)
  */
-          __pyx_t_5 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_7weather_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.altitude_level(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 311, __pyx_L1_error)
+          __pyx_t_5 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.altitude_level(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 311, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_5);
           __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_t_5, __pyx_v_n); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 311, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
@@ -5853,7 +5853,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
           __Pyx_XDECREF_SET(__pyx_v_alt, __pyx_t_7);
           __pyx_t_7 = 0;
 
-          /* "amsimp/weather.pyx":312
+          /* "amsimp/dynamics.pyx":312
  *                     if (y2 - y1) > 0 and self.altitude_level()[n] >= 10000:
  *                         alt = self.altitude_level()[n]
  *                         trop_strat_line.append(alt)             # <<<<<<<<<<<<<<
@@ -5862,7 +5862,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
  */
           __pyx_t_12 = __Pyx_PyObject_Append(__pyx_v_trop_strat_line, __pyx_v_alt); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 312, __pyx_L1_error)
 
-          /* "amsimp/weather.pyx":313
+          /* "amsimp/dynamics.pyx":313
  *                         alt = self.altitude_level()[n]
  *                         trop_strat_line.append(alt)
  *                         n = len(temp_)             # <<<<<<<<<<<<<<
@@ -5875,7 +5875,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
           __Pyx_DECREF_SET(__pyx_v_n, __pyx_t_7);
           __pyx_t_7 = 0;
 
-          /* "amsimp/weather.pyx":310
+          /* "amsimp/dynamics.pyx":310
  *                     y2 = temp_[n + 1]
  * 
  *                     if (y2 - y1) > 0 and self.altitude_level()[n] >= 10000:             # <<<<<<<<<<<<<<
@@ -5884,7 +5884,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
  */
         }
 
-        /* "amsimp/weather.pyx":315
+        /* "amsimp/dynamics.pyx":315
  *                         n = len(temp_)
  * 
  *                     n += 1             # <<<<<<<<<<<<<<
@@ -5897,7 +5897,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
         __pyx_t_7 = 0;
       }
 
-      /* "amsimp/weather.pyx":304
+      /* "amsimp/dynamics.pyx":304
  *             # Determines the true boundary line.
  *             trop_strat_line = []
  *             for temp_ in np.transpose(temperature):             # <<<<<<<<<<<<<<
@@ -5907,7 +5907,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "amsimp/weather.pyx":318
+    /* "amsimp/dynamics.pyx":318
  * 
  *             # Generates the average boundary line as a numpy array.
  *             trop_strat_line = np.asarray(trop_strat_line)             # <<<<<<<<<<<<<<
@@ -5937,7 +5937,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF_SET(__pyx_v_trop_strat_line, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "amsimp/weather.pyx":319
+    /* "amsimp/dynamics.pyx":319
  *             # Generates the average boundary line as a numpy array.
  *             trop_strat_line = np.asarray(trop_strat_line)
  *             trop_strat_line = np.mean(trop_strat_line) + np.zeros(len(trop_strat_line))             # <<<<<<<<<<<<<<
@@ -5995,7 +5995,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF_SET(__pyx_v_trop_strat_line, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":323
+    /* "amsimp/dynamics.pyx":323
  *             # Plots the average boundary line on two contourfs.
  *             # Geostrophic wind contourf.
  *             ax1.plot(             # <<<<<<<<<<<<<<
@@ -6005,7 +6005,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_ax1, __pyx_n_s_plot); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 323, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
 
-    /* "amsimp/weather.pyx":324
+    /* "amsimp/dynamics.pyx":324
  *             # Geostrophic wind contourf.
  *             ax1.plot(
  *                 latitude[1],             # <<<<<<<<<<<<<<
@@ -6015,7 +6015,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_latitude, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 324, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
 
-    /* "amsimp/weather.pyx":323
+    /* "amsimp/dynamics.pyx":323
  *             # Plots the average boundary line on two contourfs.
  *             # Geostrophic wind contourf.
  *             ax1.plot(             # <<<<<<<<<<<<<<
@@ -6031,7 +6031,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_v_trop_strat_line);
     __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":326
+    /* "amsimp/dynamics.pyx":326
  *                 latitude[1],
  *                 trop_strat_line,
  *                 color="black",             # <<<<<<<<<<<<<<
@@ -6044,7 +6044,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_linestyle, __pyx_n_u_dashed) < 0) __PYX_ERR(0, 326, __pyx_L1_error)
     if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_label, __pyx_kp_u_Troposphere_Stratosphere_Boundar) < 0) __PYX_ERR(0, 326, __pyx_L1_error)
 
-    /* "amsimp/weather.pyx":323
+    /* "amsimp/dynamics.pyx":323
  *             # Plots the average boundary line on two contourfs.
  *             # Geostrophic wind contourf.
  *             ax1.plot(             # <<<<<<<<<<<<<<
@@ -6058,7 +6058,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":332
+    /* "amsimp/dynamics.pyx":332
  * 
  *             # Temperature contourf.
  *             ax2.plot(             # <<<<<<<<<<<<<<
@@ -6068,7 +6068,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_ax2, __pyx_n_s_plot); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 332, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
 
-    /* "amsimp/weather.pyx":333
+    /* "amsimp/dynamics.pyx":333
  *             # Temperature contourf.
  *             ax2.plot(
  *                 latitude[1],             # <<<<<<<<<<<<<<
@@ -6078,7 +6078,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_latitude, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 333, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
 
-    /* "amsimp/weather.pyx":332
+    /* "amsimp/dynamics.pyx":332
  * 
  *             # Temperature contourf.
  *             ax2.plot(             # <<<<<<<<<<<<<<
@@ -6094,7 +6094,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_v_trop_strat_line);
     __pyx_t_7 = 0;
 
-    /* "amsimp/weather.pyx":335
+    /* "amsimp/dynamics.pyx":335
  *                 latitude[1],
  *                 trop_strat_line,
  *                 color="black",             # <<<<<<<<<<<<<<
@@ -6107,7 +6107,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_linestyle, __pyx_n_u_dashed) < 0) __PYX_ERR(0, 335, __pyx_L1_error)
     if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_label, __pyx_kp_u_Troposphere_Stratosphere_Boundar) < 0) __PYX_ERR(0, 335, __pyx_L1_error)
 
-    /* "amsimp/weather.pyx":332
+    /* "amsimp/dynamics.pyx":332
  * 
  *             # Temperature contourf.
  *             ax2.plot(             # <<<<<<<<<<<<<<
@@ -6121,7 +6121,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":341
+    /* "amsimp/dynamics.pyx":341
  * 
  *             # Title of Simulation.
  *             day = int(np.floor((time[t] + 1)))             # <<<<<<<<<<<<<<
@@ -6160,7 +6160,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_day, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "amsimp/weather.pyx":342
+    /* "amsimp/dynamics.pyx":342
  *             # Title of Simulation.
  *             day = int(np.floor((time[t] + 1)))
  *             if day < 10:             # <<<<<<<<<<<<<<
@@ -6172,7 +6172,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_9) {
 
-      /* "amsimp/weather.pyx":343
+      /* "amsimp/dynamics.pyx":343
  *             day = int(np.floor((time[t] + 1)))
  *             if day < 10:
  *                 day = "0" + str(day)             # <<<<<<<<<<<<<<
@@ -6187,7 +6187,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_DECREF_SET(__pyx_v_day, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "amsimp/weather.pyx":342
+      /* "amsimp/dynamics.pyx":342
  *             # Title of Simulation.
  *             day = int(np.floor((time[t] + 1)))
  *             if day < 10:             # <<<<<<<<<<<<<<
@@ -6197,7 +6197,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       goto __pyx_L24;
     }
 
-    /* "amsimp/weather.pyx":345
+    /* "amsimp/dynamics.pyx":345
  *                 day = "0" + str(day)
  *             else:
  *                 day = str(day)             # <<<<<<<<<<<<<<
@@ -6212,7 +6212,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     }
     __pyx_L24:;
 
-    /* "amsimp/weather.pyx":347
+    /* "amsimp/dynamics.pyx":347
  *                 day = str(day)
  * 
  *             fig.suptitle(             # <<<<<<<<<<<<<<
@@ -6222,7 +6222,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_fig, __pyx_n_s_suptitle); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 347, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
 
-    /* "amsimp/weather.pyx":349
+    /* "amsimp/dynamics.pyx":349
  *             fig.suptitle(
  *                 "Motus Aeris @ AMSIMP ("
  *                 + day             # <<<<<<<<<<<<<<
@@ -6232,7 +6232,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __pyx_t_5 = PyNumber_Add(__pyx_kp_u_Motus_Aeris_AMSIMP, __pyx_v_day); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 349, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
 
-    /* "amsimp/weather.pyx":350
+    /* "amsimp/dynamics.pyx":350
  *                 "Motus Aeris @ AMSIMP ("
  *                 + day
  *                 + " of "             # <<<<<<<<<<<<<<
@@ -6243,7 +6243,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":351
+    /* "amsimp/dynamics.pyx":351
  *                 + day
  *                 + " of "
  *                 + self.month.title()             # <<<<<<<<<<<<<<
@@ -6275,7 +6275,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "amsimp/weather.pyx":352
+    /* "amsimp/dynamics.pyx":352
  *                 + " of "
  *                 + self.month.title()
  *                 + ", "             # <<<<<<<<<<<<<<
@@ -6286,7 +6286,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "amsimp/weather.pyx":353
+    /* "amsimp/dynamics.pyx":353
  *                 + self.month.title()
  *                 + ", "
  *                 + str(self.date.year)             # <<<<<<<<<<<<<<
@@ -6306,7 +6306,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "amsimp/weather.pyx":354
+    /* "amsimp/dynamics.pyx":354
  *                 + ", "
  *                 + str(self.date.year)
  *                 + ")"             # <<<<<<<<<<<<<<
@@ -6334,7 +6334,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":358
+    /* "amsimp/dynamics.pyx":358
  * 
  *             # Displaying simualtion.
  *             plt.show()             # <<<<<<<<<<<<<<
@@ -6363,7 +6363,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":359
+    /* "amsimp/dynamics.pyx":359
  *             # Displaying simualtion.
  *             plt.show()
  *             plt.pause(0.01)             # <<<<<<<<<<<<<<
@@ -6392,7 +6392,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":360
+    /* "amsimp/dynamics.pyx":360
  *             plt.show()
  *             plt.pause(0.01)
  *             if t < (len(time) - 1):             # <<<<<<<<<<<<<<
@@ -6408,7 +6408,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_9) {
 
-      /* "amsimp/weather.pyx":361
+      /* "amsimp/dynamics.pyx":361
  *             plt.pause(0.01)
  *             if t < (len(time) - 1):
  *                 ax1.clear()             # <<<<<<<<<<<<<<
@@ -6434,7 +6434,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "amsimp/weather.pyx":362
+      /* "amsimp/dynamics.pyx":362
  *             if t < (len(time) - 1):
  *                 ax1.clear()
  *                 ax2.clear()             # <<<<<<<<<<<<<<
@@ -6460,7 +6460,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "amsimp/weather.pyx":363
+      /* "amsimp/dynamics.pyx":363
  *                 ax1.clear()
  *                 ax2.clear()
  *                 ax3.clear()             # <<<<<<<<<<<<<<
@@ -6486,7 +6486,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "amsimp/weather.pyx":364
+      /* "amsimp/dynamics.pyx":364
  *                 ax2.clear()
  *                 ax3.clear()
  *                 ax4.clear()             # <<<<<<<<<<<<<<
@@ -6512,7 +6512,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "amsimp/weather.pyx":360
+      /* "amsimp/dynamics.pyx":360
  *             plt.show()
  *             plt.pause(0.01)
  *             if t < (len(time) - 1):             # <<<<<<<<<<<<<<
@@ -6522,7 +6522,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
       goto __pyx_L25;
     }
 
-    /* "amsimp/weather.pyx":366
+    /* "amsimp/dynamics.pyx":366
  *                 ax4.clear()
  *             else:
  *                 plt.pause(10)             # <<<<<<<<<<<<<<
@@ -6554,7 +6554,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     }
     __pyx_L25:;
 
-    /* "amsimp/weather.pyx":369
+    /* "amsimp/dynamics.pyx":369
  * 
  *             # Footnote
  *             plt.figtext(             # <<<<<<<<<<<<<<
@@ -6567,7 +6567,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "amsimp/weather.pyx":373
+    /* "amsimp/dynamics.pyx":373
  *                 0.01,
  *                 "Note: Geostrophic balance does not hold near the equator.",
  *                 horizontalalignment="right",             # <<<<<<<<<<<<<<
@@ -6578,7 +6578,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_GOTREF(__pyx_t_1);
     if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_horizontalalignment, __pyx_n_u_right) < 0) __PYX_ERR(0, 373, __pyx_L1_error)
 
-    /* "amsimp/weather.pyx":369
+    /* "amsimp/dynamics.pyx":369
  * 
  *             # Footnote
  *             plt.figtext(             # <<<<<<<<<<<<<<
@@ -6591,7 +6591,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "amsimp/weather.pyx":376
+    /* "amsimp/dynamics.pyx":376
  *             )
  * 
  *             t += 1             # <<<<<<<<<<<<<<
@@ -6602,7 +6602,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
     __pyx_t_4 = 0;
   }
 
-  /* "amsimp/weather.pyx":129
+  /* "amsimp/dynamics.pyx":129
  *         return gradient, init_precipitablewater
  * 
  *     def simulate(self):             # <<<<<<<<<<<<<<
@@ -6620,7 +6620,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_AddTraceback("amsimp.weather.Dynamics.simulate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("amsimp.dynamics.Dynamics.simulate", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_time);
@@ -6683,19 +6683,19 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_10simulate(struct __pyx_obj
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6amsimp_7weather_8Dynamics_13__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_6amsimp_7weather_8Dynamics_13__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_6amsimp_8dynamics_8Dynamics_13__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_6amsimp_8dynamics_8Dynamics_13__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_6amsimp_7weather_8Dynamics_12__reduce_cython__(((struct __pyx_obj_6amsimp_7weather_Dynamics *)__pyx_v_self));
+  __pyx_r = __pyx_pf_6amsimp_8dynamics_8Dynamics_12__reduce_cython__(((struct __pyx_obj_6amsimp_8dynamics_Dynamics *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_12__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self) {
+static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_12__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -6722,7 +6722,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_12__reduce_cython__(CYTHON_
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("amsimp.weather.Dynamics.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("amsimp.dynamics.Dynamics.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -6737,19 +6737,19 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_12__reduce_cython__(CYTHON_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6amsimp_7weather_8Dynamics_15__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_6amsimp_7weather_8Dynamics_15__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_6amsimp_8dynamics_8Dynamics_15__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_6amsimp_8dynamics_8Dynamics_15__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_6amsimp_7weather_8Dynamics_14__setstate_cython__(((struct __pyx_obj_6amsimp_7weather_Dynamics *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_6amsimp_8dynamics_8Dynamics_14__setstate_cython__(((struct __pyx_obj_6amsimp_8dynamics_Dynamics *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_14__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_6amsimp_7weather_Dynamics *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_14__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_6amsimp_8dynamics_Dynamics *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -6776,7 +6776,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_8Dynamics_14__setstate_cython__(CYTHO
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("amsimp.weather.Dynamics.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("amsimp.dynamics.Dynamics.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -9200,22 +9200,22 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
-static struct __pyx_vtabstruct_6amsimp_7weather_Dynamics __pyx_vtable_6amsimp_7weather_Dynamics;
+static struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics __pyx_vtable_6amsimp_8dynamics_Dynamics;
 
-static PyObject *__pyx_tp_new_6amsimp_7weather_Dynamics(PyTypeObject *t, PyObject *a, PyObject *k) {
-  struct __pyx_obj_6amsimp_7weather_Dynamics *p;
+static PyObject *__pyx_tp_new_6amsimp_8dynamics_Dynamics(PyTypeObject *t, PyObject *a, PyObject *k) {
+  struct __pyx_obj_6amsimp_8dynamics_Dynamics *p;
   PyObject *o = __pyx_ptype_6amsimp_5water_Water->tp_new(t, a, k);
   if (unlikely(!o)) return 0;
-  p = ((struct __pyx_obj_6amsimp_7weather_Dynamics *)o);
-  p->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab = (struct __pyx_vtabstruct_6amsimp_7backend_Backend*)__pyx_vtabptr_6amsimp_7weather_Dynamics;
-  if (unlikely(__pyx_pw_6amsimp_7weather_8Dynamics_1__cinit__(o, a, k) < 0)) goto bad;
+  p = ((struct __pyx_obj_6amsimp_8dynamics_Dynamics *)o);
+  p->__pyx_base.__pyx_base.__pyx_base.__pyx_vtab = (struct __pyx_vtabstruct_6amsimp_7backend_Backend*)__pyx_vtabptr_6amsimp_8dynamics_Dynamics;
+  if (unlikely(__pyx_pw_6amsimp_8dynamics_8Dynamics_1__cinit__(o, a, k) < 0)) goto bad;
   return o;
   bad:
   Py_DECREF(o); o = 0;
   return NULL;
 }
 
-static void __pyx_tp_dealloc_6amsimp_7weather_Dynamics(PyObject *o) {
+static void __pyx_tp_dealloc_6amsimp_8dynamics_Dynamics(PyObject *o) {
   #if CYTHON_USE_TP_FINALIZE
   if (unlikely(PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE) && Py_TYPE(o)->tp_finalize) && !_PyGC_FINALIZED(o)) {
     if (PyObject_CallFinalizerFromDealloc(o)) return;
@@ -9223,37 +9223,37 @@ static void __pyx_tp_dealloc_6amsimp_7weather_Dynamics(PyObject *o) {
   #endif
   PyObject_GC_UnTrack(o);
   PyObject_GC_Track(o);
-  if (likely(__pyx_ptype_6amsimp_5water_Water)) __pyx_ptype_6amsimp_5water_Water->tp_dealloc(o); else __Pyx_call_next_tp_dealloc(o, __pyx_tp_dealloc_6amsimp_7weather_Dynamics);
+  if (likely(__pyx_ptype_6amsimp_5water_Water)) __pyx_ptype_6amsimp_5water_Water->tp_dealloc(o); else __Pyx_call_next_tp_dealloc(o, __pyx_tp_dealloc_6amsimp_8dynamics_Dynamics);
 }
 
-static int __pyx_tp_traverse_6amsimp_7weather_Dynamics(PyObject *o, visitproc v, void *a) {
+static int __pyx_tp_traverse_6amsimp_8dynamics_Dynamics(PyObject *o, visitproc v, void *a) {
   int e;
-  e = ((likely(__pyx_ptype_6amsimp_5water_Water)) ? ((__pyx_ptype_6amsimp_5water_Water->tp_traverse) ? __pyx_ptype_6amsimp_5water_Water->tp_traverse(o, v, a) : 0) : __Pyx_call_next_tp_traverse(o, v, a, __pyx_tp_traverse_6amsimp_7weather_Dynamics)); if (e) return e;
+  e = ((likely(__pyx_ptype_6amsimp_5water_Water)) ? ((__pyx_ptype_6amsimp_5water_Water->tp_traverse) ? __pyx_ptype_6amsimp_5water_Water->tp_traverse(o, v, a) : 0) : __Pyx_call_next_tp_traverse(o, v, a, __pyx_tp_traverse_6amsimp_8dynamics_Dynamics)); if (e) return e;
   return 0;
 }
 
-static int __pyx_tp_clear_6amsimp_7weather_Dynamics(PyObject *o) {
-  if (likely(__pyx_ptype_6amsimp_5water_Water)) { if (__pyx_ptype_6amsimp_5water_Water->tp_clear) __pyx_ptype_6amsimp_5water_Water->tp_clear(o); } else __Pyx_call_next_tp_clear(o, __pyx_tp_clear_6amsimp_7weather_Dynamics);
+static int __pyx_tp_clear_6amsimp_8dynamics_Dynamics(PyObject *o) {
+  if (likely(__pyx_ptype_6amsimp_5water_Water)) { if (__pyx_ptype_6amsimp_5water_Water->tp_clear) __pyx_ptype_6amsimp_5water_Water->tp_clear(o); } else __Pyx_call_next_tp_clear(o, __pyx_tp_clear_6amsimp_8dynamics_Dynamics);
   return 0;
 }
 
-static PyMethodDef __pyx_methods_6amsimp_7weather_Dynamics[] = {
-  {"predict_temperature", (PyCFunction)__pyx_pw_6amsimp_7weather_8Dynamics_3predict_temperature, METH_NOARGS, __pyx_doc_6amsimp_7weather_8Dynamics_2predict_temperature},
-  {"predict_pressurethickness", (PyCFunction)__pyx_pw_6amsimp_7weather_8Dynamics_5predict_pressurethickness, METH_NOARGS, __pyx_doc_6amsimp_7weather_8Dynamics_4predict_pressurethickness},
-  {"predict_geostrophicwind", (PyCFunction)__pyx_pw_6amsimp_7weather_8Dynamics_7predict_geostrophicwind, METH_NOARGS, __pyx_doc_6amsimp_7weather_8Dynamics_6predict_geostrophicwind},
-  {"predict_precipitablewater", (PyCFunction)__pyx_pw_6amsimp_7weather_8Dynamics_9predict_precipitablewater, METH_NOARGS, __pyx_doc_6amsimp_7weather_8Dynamics_8predict_precipitablewater},
-  {"simulate", (PyCFunction)__pyx_pw_6amsimp_7weather_8Dynamics_11simulate, METH_NOARGS, __pyx_doc_6amsimp_7weather_8Dynamics_10simulate},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_6amsimp_7weather_8Dynamics_13__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_6amsimp_7weather_8Dynamics_15__setstate_cython__, METH_O, 0},
+static PyMethodDef __pyx_methods_6amsimp_8dynamics_Dynamics[] = {
+  {"predict_temperature", (PyCFunction)__pyx_pw_6amsimp_8dynamics_8Dynamics_3predict_temperature, METH_NOARGS, __pyx_doc_6amsimp_8dynamics_8Dynamics_2predict_temperature},
+  {"predict_pressurethickness", (PyCFunction)__pyx_pw_6amsimp_8dynamics_8Dynamics_5predict_pressurethickness, METH_NOARGS, __pyx_doc_6amsimp_8dynamics_8Dynamics_4predict_pressurethickness},
+  {"predict_geostrophicwind", (PyCFunction)__pyx_pw_6amsimp_8dynamics_8Dynamics_7predict_geostrophicwind, METH_NOARGS, __pyx_doc_6amsimp_8dynamics_8Dynamics_6predict_geostrophicwind},
+  {"predict_precipitablewater", (PyCFunction)__pyx_pw_6amsimp_8dynamics_8Dynamics_9predict_precipitablewater, METH_NOARGS, __pyx_doc_6amsimp_8dynamics_8Dynamics_8predict_precipitablewater},
+  {"simulate", (PyCFunction)__pyx_pw_6amsimp_8dynamics_8Dynamics_11simulate, METH_NOARGS, __pyx_doc_6amsimp_8dynamics_8Dynamics_10simulate},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_6amsimp_8dynamics_8Dynamics_13__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_6amsimp_8dynamics_8Dynamics_15__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
-static PyTypeObject __pyx_type_6amsimp_7weather_Dynamics = {
+static PyTypeObject __pyx_type_6amsimp_8dynamics_Dynamics = {
   PyVarObject_HEAD_INIT(0, 0)
-  "amsimp.weather.Dynamics", /*tp_name*/
-  sizeof(struct __pyx_obj_6amsimp_7weather_Dynamics), /*tp_basicsize*/
+  "amsimp.dynamics.Dynamics", /*tp_name*/
+  sizeof(struct __pyx_obj_6amsimp_8dynamics_Dynamics), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_6amsimp_7weather_Dynamics, /*tp_dealloc*/
+  __pyx_tp_dealloc_6amsimp_8dynamics_Dynamics, /*tp_dealloc*/
   0, /*tp_print*/
   0, /*tp_getattr*/
   0, /*tp_setattr*/
@@ -9275,13 +9275,13 @@ static PyTypeObject __pyx_type_6amsimp_7weather_Dynamics = {
   0, /*tp_as_buffer*/
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC, /*tp_flags*/
   "\n    AMSIMP Dynamics Class - Also, known as Motus Aeris @ AMSIMP. This class\n    generates rudimentary simulation of tropospheric and stratsopheric\n    dynamics on a synoptic scale. Predictions are made by calculating the\n    derivative of each element, between this month and next month,\n    using finite-difference. The initial conditions are defined as beginning\n    at the start of the month.\n\n    Below is a list of the methods included within this class, with a short\n    description of their intended purpose. Please see the relevant class methods\n    for more information.\n\n    predict_temperature ~ this method outputs the derivative and the initial\n    conditions of temperature.\n    predict_pressurethickness ~ this method outputs the derivative and the\n    initial conditions of pressure thickness.\n    predict_geostrophicwind ~ this method outputs the derivative and the initial\n    conditions of geostrophic wind.\n    predict_precipitablewater ~ this method outputs the derivative and the\n    initial conditions of precipitable water vapor.\n\n    simulate ~ this method outputs a visualisation of how temperature, pressure\n    thickness, geostrophic wind, and precipitable water vapor will evolve.\n    ", /*tp_doc*/
-  __pyx_tp_traverse_6amsimp_7weather_Dynamics, /*tp_traverse*/
-  __pyx_tp_clear_6amsimp_7weather_Dynamics, /*tp_clear*/
+  __pyx_tp_traverse_6amsimp_8dynamics_Dynamics, /*tp_traverse*/
+  __pyx_tp_clear_6amsimp_8dynamics_Dynamics, /*tp_clear*/
   0, /*tp_richcompare*/
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
   0, /*tp_iternext*/
-  __pyx_methods_6amsimp_7weather_Dynamics, /*tp_methods*/
+  __pyx_methods_6amsimp_8dynamics_Dynamics, /*tp_methods*/
   0, /*tp_members*/
   0, /*tp_getset*/
   0, /*tp_base*/
@@ -9291,7 +9291,7 @@ static PyTypeObject __pyx_type_6amsimp_7weather_Dynamics = {
   0, /*tp_dictoffset*/
   0, /*tp_init*/
   0, /*tp_alloc*/
-  __pyx_tp_new_6amsimp_7weather_Dynamics, /*tp_new*/
+  __pyx_tp_new_6amsimp_8dynamics_Dynamics, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -9316,17 +9316,17 @@ static PyMethodDef __pyx_methods[] = {
 #if PY_MAJOR_VERSION >= 3
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 static PyObject* __pyx_pymod_create(PyObject *spec, PyModuleDef *def); /*proto*/
-static int __pyx_pymod_exec_weather(PyObject* module); /*proto*/
+static int __pyx_pymod_exec_dynamics(PyObject* module); /*proto*/
 static PyModuleDef_Slot __pyx_moduledef_slots[] = {
   {Py_mod_create, (void*)__pyx_pymod_create},
-  {Py_mod_exec, (void*)__pyx_pymod_exec_weather},
+  {Py_mod_exec, (void*)__pyx_pymod_exec_dynamics},
   {0, NULL}
 };
 #endif
 
 static struct PyModuleDef __pyx_moduledef = {
     PyModuleDef_HEAD_INIT,
-    "weather",
+    "dynamics",
     __pyx_k_AMSIMP_Dynamics_Class_For_infor, /* m_doc */
   #if CYTHON_PEP489_MULTI_PHASE_INIT
     0, /* m_size */
@@ -9511,7 +9511,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "amsimp/weather.pyx":147
+  /* "amsimp/dynamics.pyx":147
  * 
  *         # Define layout.
  *         gs = gridspec.GridSpec(2, 2)             # <<<<<<<<<<<<<<
@@ -9522,7 +9522,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "amsimp/weather.pyx":148
+  /* "amsimp/dynamics.pyx":148
  *         # Define layout.
  *         gs = gridspec.GridSpec(2, 2)
  *         fig = plt.figure(figsize=(18.5, 7.5))             # <<<<<<<<<<<<<<
@@ -9533,7 +9533,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "amsimp/weather.pyx":153
+  /* "amsimp/dynamics.pyx":153
  * 
  *         # Geostrophic Wind
  *         ax1 = plt.subplot(gs[0, 0])             # <<<<<<<<<<<<<<
@@ -9544,7 +9544,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
-  /* "amsimp/weather.pyx":156
+  /* "amsimp/dynamics.pyx":156
  *         predict_u = self.predict_geostrophicwind()
  *         # Temperature
  *         ax2 = plt.subplot(gs[1, 0])             # <<<<<<<<<<<<<<
@@ -9555,7 +9555,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
 
-  /* "amsimp/weather.pyx":159
+  /* "amsimp/dynamics.pyx":159
  *         predict_t = self.predict_temperature()
  *         # Precipitable Water
  *         ax3 = plt.subplot(gs[0, 1], projection=ccrs.EckertIII())             # <<<<<<<<<<<<<<
@@ -9566,7 +9566,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
 
-  /* "amsimp/weather.pyx":162
+  /* "amsimp/dynamics.pyx":162
  *         predict_Pwv = np.asarray(self.predict_precipitablewater())
  *         # Pressure Thickness
  *         ax4 = plt.subplot(gs[1, 1])             # <<<<<<<<<<<<<<
@@ -9577,7 +9577,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
 
-  /* "amsimp/weather.pyx":189
+  /* "amsimp/dynamics.pyx":189
  *                 level1 = np.linspace(-60, max1, 21)
  *             else:
  *                 level1 = np.linspace(-70, 120, 21)             # <<<<<<<<<<<<<<
@@ -9588,7 +9588,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
 
-  /* "amsimp/weather.pyx":298
+  /* "amsimp/dynamics.pyx":298
  *             ax4.set_ylabel("Latitude ($\phi$)")
  *             ax4.set_title("Pressure Thickness (1000hPa - 500hPa)")
  *             ax4.set_xlim(5100, 6300)             # <<<<<<<<<<<<<<
@@ -9599,7 +9599,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "amsimp/weather.pyx":369
+  /* "amsimp/dynamics.pyx":369
  * 
  *             # Footnote
  *             plt.figtext(             # <<<<<<<<<<<<<<
@@ -9782,20 +9782,20 @@ static int __Pyx_modinit_type_init_code(void) {
   __pyx_ptype_6amsimp_5water_Water = __Pyx_ImportType(__pyx_t_1, "amsimp.water", "Water", sizeof(struct __pyx_obj_6amsimp_5water_Water), __Pyx_ImportType_CheckSize_Warn);
    if (!__pyx_ptype_6amsimp_5water_Water) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_vtabptr_6amsimp_5water_Water = (struct __pyx_vtabstruct_6amsimp_5water_Water*)__Pyx_GetVtable(__pyx_ptype_6amsimp_5water_Water->tp_dict); if (unlikely(!__pyx_vtabptr_6amsimp_5water_Water)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_vtabptr_6amsimp_7weather_Dynamics = &__pyx_vtable_6amsimp_7weather_Dynamics;
-  __pyx_vtable_6amsimp_7weather_Dynamics.__pyx_base = *__pyx_vtabptr_6amsimp_5water_Water;
-  __pyx_type_6amsimp_7weather_Dynamics.tp_base = __pyx_ptype_6amsimp_5water_Water;
-  if (PyType_Ready(&__pyx_type_6amsimp_7weather_Dynamics) < 0) __PYX_ERR(0, 23, __pyx_L1_error)
+  __pyx_vtabptr_6amsimp_8dynamics_Dynamics = &__pyx_vtable_6amsimp_8dynamics_Dynamics;
+  __pyx_vtable_6amsimp_8dynamics_Dynamics.__pyx_base = *__pyx_vtabptr_6amsimp_5water_Water;
+  __pyx_type_6amsimp_8dynamics_Dynamics.tp_base = __pyx_ptype_6amsimp_5water_Water;
+  if (PyType_Ready(&__pyx_type_6amsimp_8dynamics_Dynamics) < 0) __PYX_ERR(0, 23, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
-  __pyx_type_6amsimp_7weather_Dynamics.tp_print = 0;
+  __pyx_type_6amsimp_8dynamics_Dynamics.tp_print = 0;
   #endif
-  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_6amsimp_7weather_Dynamics.tp_dictoffset && __pyx_type_6amsimp_7weather_Dynamics.tp_getattro == PyObject_GenericGetAttr)) {
-    __pyx_type_6amsimp_7weather_Dynamics.tp_getattro = __Pyx_PyObject_GenericGetAttr;
+  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_6amsimp_8dynamics_Dynamics.tp_dictoffset && __pyx_type_6amsimp_8dynamics_Dynamics.tp_getattro == PyObject_GenericGetAttr)) {
+    __pyx_type_6amsimp_8dynamics_Dynamics.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_6amsimp_7weather_Dynamics.tp_dict, __pyx_vtabptr_6amsimp_7weather_Dynamics) < 0) __PYX_ERR(0, 23, __pyx_L1_error)
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_Dynamics, (PyObject *)&__pyx_type_6amsimp_7weather_Dynamics) < 0) __PYX_ERR(0, 23, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_6amsimp_7weather_Dynamics) < 0) __PYX_ERR(0, 23, __pyx_L1_error)
-  __pyx_ptype_6amsimp_7weather_Dynamics = &__pyx_type_6amsimp_7weather_Dynamics;
+  if (__Pyx_SetVtable(__pyx_type_6amsimp_8dynamics_Dynamics.tp_dict, __pyx_vtabptr_6amsimp_8dynamics_Dynamics) < 0) __PYX_ERR(0, 23, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_Dynamics, (PyObject *)&__pyx_type_6amsimp_8dynamics_Dynamics) < 0) __PYX_ERR(0, 23, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_6amsimp_8dynamics_Dynamics) < 0) __PYX_ERR(0, 23, __pyx_L1_error)
+  __pyx_ptype_6amsimp_8dynamics_Dynamics = &__pyx_type_6amsimp_8dynamics_Dynamics;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -9897,11 +9897,11 @@ static int __Pyx_modinit_function_import_code(void) {
 
 
 #if PY_MAJOR_VERSION < 3
-__Pyx_PyMODINIT_FUNC initweather(void) CYTHON_SMALL_CODE; /*proto*/
-__Pyx_PyMODINIT_FUNC initweather(void)
+__Pyx_PyMODINIT_FUNC initdynamics(void) CYTHON_SMALL_CODE; /*proto*/
+__Pyx_PyMODINIT_FUNC initdynamics(void)
 #else
-__Pyx_PyMODINIT_FUNC PyInit_weather(void) CYTHON_SMALL_CODE; /*proto*/
-__Pyx_PyMODINIT_FUNC PyInit_weather(void)
+__Pyx_PyMODINIT_FUNC PyInit_dynamics(void) CYTHON_SMALL_CODE; /*proto*/
+__Pyx_PyMODINIT_FUNC PyInit_dynamics(void)
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 {
   return PyModuleDef_Init(&__pyx_moduledef);
@@ -9968,7 +9968,7 @@ bad:
 }
 
 
-static CYTHON_SMALL_CODE int __pyx_pymod_exec_weather(PyObject *__pyx_pyinit_module)
+static CYTHON_SMALL_CODE int __pyx_pymod_exec_dynamics(PyObject *__pyx_pyinit_module)
 #endif
 #endif
 {
@@ -9978,7 +9978,7 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec_weather(PyObject *__pyx_pyinit_mod
   #if CYTHON_PEP489_MULTI_PHASE_INIT
   if (__pyx_m) {
     if (__pyx_m == __pyx_pyinit_module) return 0;
-    PyErr_SetString(PyExc_RuntimeError, "Module 'weather' has already been imported. Re-initialisation is not supported.");
+    PyErr_SetString(PyExc_RuntimeError, "Module 'dynamics' has already been imported. Re-initialisation is not supported.");
     return -1;
   }
   #elif PY_MAJOR_VERSION >= 3
@@ -9993,7 +9993,7 @@ if (!__Pyx_RefNanny) {
       Py_FatalError("failed to import 'refnanny' module");
 }
 #endif
-  __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_weather(void)", 0);
+  __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_dynamics(void)", 0);
   if (__Pyx_check_binary_version() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #ifdef __Pxy_PyFrame_Initialize_Offsets
   __Pxy_PyFrame_Initialize_Offsets();
@@ -10032,7 +10032,7 @@ if (!__Pyx_RefNanny) {
   Py_INCREF(__pyx_m);
   #else
   #if PY_MAJOR_VERSION < 3
-  __pyx_m = Py_InitModule4("weather", __pyx_methods, __pyx_k_AMSIMP_Dynamics_Class_For_infor, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
+  __pyx_m = Py_InitModule4("dynamics", __pyx_methods, __pyx_k_AMSIMP_Dynamics_Class_For_infor, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
   #else
   __pyx_m = PyModule_Create(&__pyx_moduledef);
   #endif
@@ -10050,14 +10050,14 @@ if (!__Pyx_RefNanny) {
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_amsimp__weather) {
+  if (__pyx_module_is_main_amsimp__dynamics) {
     if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name, __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "amsimp.weather")) {
-      if (unlikely(PyDict_SetItemString(modules, "amsimp.weather", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "amsimp.dynamics")) {
+      if (unlikely(PyDict_SetItemString(modules, "amsimp.dynamics", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -10078,7 +10078,7 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "amsimp/weather.pyx":9
+  /* "amsimp/dynamics.pyx":9
  * 
  * # Importing Dependencies
  * import matplotlib.pyplot as plt             # <<<<<<<<<<<<<<
@@ -10096,7 +10096,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_plt, __pyx_t_2) < 0) __PYX_ERR(0, 9, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "amsimp/weather.pyx":10
+  /* "amsimp/dynamics.pyx":10
  * # Importing Dependencies
  * import matplotlib.pyplot as plt
  * from matplotlib import style             # <<<<<<<<<<<<<<
@@ -10117,7 +10117,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":11
+  /* "amsimp/dynamics.pyx":11
  * import matplotlib.pyplot as plt
  * from matplotlib import style
  * import matplotlib.gridspec as gridspec             # <<<<<<<<<<<<<<
@@ -10135,7 +10135,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_gridspec, __pyx_t_2) < 0) __PYX_ERR(0, 11, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "amsimp/weather.pyx":12
+  /* "amsimp/dynamics.pyx":12
  * from matplotlib import style
  * import matplotlib.gridspec as gridspec
  * from matplotlib import ticker             # <<<<<<<<<<<<<<
@@ -10156,7 +10156,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":13
+  /* "amsimp/dynamics.pyx":13
  * import matplotlib.gridspec as gridspec
  * from matplotlib import ticker
  * import numpy as np             # <<<<<<<<<<<<<<
@@ -10168,7 +10168,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 13, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":14
+  /* "amsimp/dynamics.pyx":14
  * from matplotlib import ticker
  * import numpy as np
  * import cartopy.crs as ccrs             # <<<<<<<<<<<<<<
@@ -10186,7 +10186,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_ccrs, __pyx_t_2) < 0) __PYX_ERR(0, 14, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "amsimp/weather.pyx":16
+  /* "amsimp/dynamics.pyx":16
  * import cartopy.crs as ccrs
  * from amsimp.wind cimport Wind
  * from amsimp.wind import Wind             # <<<<<<<<<<<<<<
@@ -10203,7 +10203,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/weather.pyx":18
+  /* "amsimp/dynamics.pyx":18
  * from amsimp.wind import Wind
  * from amsimp.water cimport Water
  * from amsimp.water import Water             # <<<<<<<<<<<<<<
@@ -10220,7 +10220,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "amsimp/weather.pyx":1
+  /* "amsimp/dynamics.pyx":1
  * #cython: language_level=3             # <<<<<<<<<<<<<<
  * """
  * AMSIMP Dynamics Class. For information about this class is described below.
@@ -10246,11 +10246,11 @@ if (!__Pyx_RefNanny) {
   __Pyx_XDECREF(__pyx_t_2);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init amsimp.weather", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init amsimp.dynamics", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     Py_CLEAR(__pyx_m);
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init amsimp.weather");
+    PyErr_SetString(PyExc_ImportError, "init amsimp.dynamics");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();

@@ -7,11 +7,11 @@ ext_modules = [
     Extension("amsimp.backend", ["amsimp/backend.pxd"]),
     Extension("amsimp.wind", ["amsimp/wind.pxd"]),
     Extension("amsimp.water", ["amsimp/water.pxd"]),
-    Extension("amsimp.weather", ["amsimp/weather.pxd"]),
+    Extension("amsimp.dynamics", ["amsimp/dynamics.pxd"]),
     Extension("amsimp.backend", ["amsimp/backend.pyx"]),
     Extension("amsimp.wind", ["amsimp/wind.pyx"]),
     Extension("amsimp.water", ["amsimp/water.pyx"]),
-    Extension("amsimp.weather", ["amsimp/weather.pyx"]),
+    Extension("amsimp.dynamics", ["amsimp/dynamics.pyx"]),
 ]
 
 setup(
