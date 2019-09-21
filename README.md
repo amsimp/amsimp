@@ -10,7 +10,7 @@ An open-source implementation to simulating atmospheric dynamics in the troposph
 
 **Features:**
 
-* Provides a visualisation of a rudimentary numerical weather prediction scheme for geostrophic wind, temperature, saturated precipitable water, and pressure thickness (Tempestas Praenuntientur @ AMSIMP).
+* Provides a visualisation of a rudimentary simulation of tropospheric and stratsopheric dynamics on a synoptic scale (Motus Aeris @ AMSIMP).
 * Provides example visualisations of different atmospheric processes, an example being a contour plot of geostrophic wind, overlayed by wind vectors, with axes being transformed onto a [Nearside Projection](https://scitools.org.uk/cartopy/docs/v0.15/crs/projections.html) (a perspective view looking directly down at a point on the globe).
 * Provides a mathematical representation of the [COSPAR International Reference Atmosphere (CIRA-86)](https://ccmc.gsfc.nasa.gov/modelweb/atmos/cospar1.html), with values provided being temperature, geopotential height (through the Hypsometric Equation), atmospheric pressure, atmospheric density (through the Ideal Gas Law), and geostrophic wind.
 

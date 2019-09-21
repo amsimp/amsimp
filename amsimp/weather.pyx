@@ -1,6 +1,6 @@
 #cython: language_level=3
 """
-AMSIMP Weather Class. For information about this class is described below.
+AMSIMP Dynamics Class. For information about this class is described below.
 """
 
 # -----------------------------------------------------------------------------------------#
@@ -20,15 +20,14 @@ from amsimp.water import Water
 # -----------------------------------------------------------------------------------------#
 
 
-cdef class Weather(Water):
+cdef class Dynamics(Water):
     """
-    AMSIMP Weather Class - Also, known as Tempestas Praenuntientur @ AMSIMP.
-    This class generates a rudimentary weather forecast based on the three other
-    AMSIMP classes. The four elements that this class predicts over time are
-    temperature, pressure thickness, geostrophic wind, and precipitable water
-    vapor. Predictions are made by calculating the derivative of each element,
-    between this month and next month, using finite-difference. The initial
-    conditions are defined as beginning at the start of the month.
+    AMSIMP Dynamics Class - Also, known as Motus Aeris @ AMSIMP. This class
+    generates rudimentary simulation of tropospheric and stratsopheric
+    dynamics on a synoptic scale. Predictions are made by calculating the
+    derivative of each element, between this month and next month,
+    using finite-difference. The initial conditions are defined as beginning
+    at the start of the month.
 
     Below is a list of the methods included within this class, with a short
     description of their intended purpose. Please see the relevant class methods
@@ -338,7 +337,7 @@ cdef class Weather(Water):
                 label="Troposphere - Stratosphere Boundary Line",
             )
 
-            # Title of Weather Forecast.
+            # Title of Simulation.
             day = int(np.floor((time[t] + 1)))
             if day < 10:
                 day = "0" + str(day)
@@ -346,7 +345,7 @@ cdef class Weather(Water):
                 day = str(day)
 
             fig.suptitle(
-                "Tempestas Praenuntientur @ AMSIMP ("
+                "Motus Aeris @ AMSIMP ("
                 + day
                 + " of "
                 + self.month.title()
@@ -355,7 +354,7 @@ cdef class Weather(Water):
                 + ")"
             )
 
-            # Displaying weather forecast.
+            # Displaying simualtion.
             plt.show()
             plt.pause(0.01)
             if t < (len(time) - 1):

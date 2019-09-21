@@ -12,4 +12,4 @@ from amsimp.wind import Wind
 from amsimp.water import Water
 
 # Weather Module.
-from amsimp.weather import Weather
+from amsimp.weather import Dynamics
