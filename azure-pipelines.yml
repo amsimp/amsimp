@@ -23,7 +23,7 @@ steps:
     script: |
       import amsimp
 
-      detail = amsimp.Weather(3)
+      detail = amsimp.Dynamics(3)
 
       detail.predict_temperature()
       detail.predict_pressurethickness()

@@ -9,7 +9,7 @@ date = datetime.now()
 day = date.day - 1
 
 # AMSIMP level of detail.
-detail = amsimp.Weather(3)
+detail = amsimp.Dynamics(3)
 
 # Geodetic coordinates.
 latitude = detail.latitude_lines()

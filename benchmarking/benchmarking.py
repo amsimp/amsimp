@@ -69,7 +69,7 @@ def benchmarking(samples):
         # Loop by each level of detail.
         for num in range(5):
             # Set level of detail.
-            detail = amsimp.Weather(num + 1)
+            detail = amsimp.Dynamics(num + 1)
 
             # Start timer.
             start = time.time()
