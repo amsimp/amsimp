@@ -43,7 +43,12 @@ jobs:
         conda install conda-build
         rm -rf ./amsimp
         conda skeleton pypi amsimp
+        anaconda login --username $INPUT_ANACONDAUSERNAME --password $INPUT_ANACONDAPASSWORD
+        anaconda logout
         conda build amsimp
+      with:
+        AnacondaUsername: conorcaseyc
+        AnacondaPassword: ${{ secrets.anaconda_password }}
     - name: Publish a Python distribution to PyPI
       uses: pypa/gh-action-pypi-publish@master
       with:
