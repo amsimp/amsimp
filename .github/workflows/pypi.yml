@@ -41,6 +41,7 @@ jobs:
         which python
         conda install anaconda-client
         conda install conda-build
+        rm -rf ./amsimp
         conda skeleton pypi amsimp
         conda build amsimp
     - name: Publish a Python distribution to PyPI
