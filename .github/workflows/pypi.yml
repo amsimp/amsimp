@@ -35,6 +35,13 @@ jobs:
         which python
         python setup.py build_ext --inplace
         python setup.py sdist
+    - name: Build package for Anaconda Cloud
+      run: |
+        export PATH="$HOME/miniconda/bin:$PATH"
+        which python
+        conda install anaconda-client
+        conda skeleton pypi amsimp
+        conda build amsimp
     - name: Publish a Python distribution to PyPI
       uses: pypa/gh-action-pypi-publish@master
       with:
