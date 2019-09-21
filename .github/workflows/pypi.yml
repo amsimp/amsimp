@@ -35,3 +35,8 @@ jobs:
         which python
         python setup.py build_ext --inplace
         python setup.py sdist
+    - name: Publish a Python distribution to PyPI
+      uses: pypa/gh-action-pypi-publish@master
+      with:
+        user: __token__
+        password: ${{ secrets.test }}
