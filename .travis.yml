@@ -1,10 +1,6 @@
 git:
   depth: false
 
-script:
-  - pip install sphinx
-  - pip install guzzle_sphinx_theme
-
 deploy:
   edge:
     branch: v1.8.47
