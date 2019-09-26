@@ -6,6 +6,8 @@ git:
 
 script:
   - cd docs
+  - pip install sphinx
+  - pip install guzzle_sphinx_theme
   - make html
 
 deploy:
