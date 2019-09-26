@@ -41,4 +41,9 @@ you can use the code below:
     # Visualisation of a rudimentary
     # simulation of tropospheric and stratsopheric
     # dynamics on a synoptic scale.
-    detail = amsimp.Dynamics(3)
+    detail = amsimp.simulate()
+
+.. image:: https://github.com/amsimp/amsimp/raw/master/images/september/dynamics.png
+  :width: 90%
+  :align: center
+  :alt: Visualisation of a rudimentary simulation of tropospheric and stratsopheric dynamics on a synoptic scale.

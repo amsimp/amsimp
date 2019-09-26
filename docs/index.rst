@@ -23,10 +23,3 @@ Table of Contents
    install
    quickstart
 
-
-Indices and tables
-------------------
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

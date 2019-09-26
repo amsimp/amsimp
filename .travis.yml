@@ -1,0 +1,18 @@
+language: generic
+os: osx
+
+git:
+  depth: false
+
+script:
+  - cd docs
+  - make html
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN 
+  keep-history: true
+  local-dir: ./docs/build/html
+  on:
+    branch: master
