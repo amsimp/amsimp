@@ -1,3 +1,6 @@
+language: generic
+os: osx
+
 git:
   depth: false
 
