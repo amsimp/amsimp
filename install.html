@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Installation &#8212; AMSIMP 0.2.7 documentation</title>
+    <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Started" href="quickstart.html" />
+    <link rel="prev" title="AMSIMP" href="index.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="quickstart.html" title="Getting Started"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="AMSIMP"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">AMSIMP 0.2.7 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#installing-from-anaconda-cloud">Installing from Anaconda Cloud</a></li>
+<li><a class="reference internal" href="#installing-from-pypi">Installing from PyPI</a></li>
+<li><a class="reference internal" href="#installing-from-source">Installing from Source</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">AMSIMP</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="quickstart.html"
+                        title="next chapter">Getting Started</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/install.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="index.html">Docs</a></li>
+              
+              <li>Installation</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>To install AMSIMP, you will need to utilise Python 3.7, or later.
+Preferably, you will also want to have an installation of either
+Anaconda, or Miniconda on your machine. For installation instructions,
+please visit <a class="reference external" href="https://docs.anaconda.com/anaconda/install/">Anaconda’s documentation page</a>. I strongly discourage
+the use of either PyPI or building from source as some of the packages
+needed for the installation of AMSIMP are extremely difficult to install
+without the use of Anaconda Cloud.</p>
+</div>
+<div class="section" id="installing-from-anaconda-cloud">
+<h2>Installing from Anaconda Cloud<a class="headerlink" href="#installing-from-anaconda-cloud" title="Permalink to this headline">¶</a></h2>
+<p>AMSIMP is distributed on <a class="reference external" href="https://anaconda.org/amsimp/amsimp">Anaconda Cloud</a> and can be installed using conda:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ conda install -c amsimp amsimp
+</pre></div>
+</div>
+<p>If you run into any issues, you can either create an issue on
+<a class="reference external" href="https://github.com/amsimp/amsimp/issues">GitHub</a> or
+contact me by <a class="reference external" href="mailto:support&#37;&#52;&#48;amsimp&#46;com">email</a>.</p>
+</div>
+<div class="section" id="installing-from-pypi">
+<h2>Installing from PyPI<a class="headerlink" href="#installing-from-pypi" title="Permalink to this headline">¶</a></h2>
+<p>AMSIMP is also available on <a class="reference external" href="https://pypi.org/project/amsimp/">PyPI</a> and can be installed using pip,
+however, as mentioned previously this approach is strongly discouraged:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ pip install amsimp
+</pre></div>
+</div>
+<p>Please note: you will also need to have a C compiler installed
+on your machine. On macOS or Linux, you could use GCC and on
+Windows, you could use MiniGW.</p>
+</div>
+<div class="section" id="installing-from-source">
+<h2>Installing from Source<a class="headerlink" href="#installing-from-source" title="Permalink to this headline">¶</a></h2>
+<p>Finally, you can also install AMSIMP from the source code. Again, I
+strongly discourage this approach. First, clone
+the repository off of GitHub:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/amsimp/amsimp.git <span class="o">&amp;&amp;</span> <span class="nb">cd</span> amsimp
+</pre></div>
+</div>
+<p>You will then need to install the software requirements, you can
+do this via:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ pip install -r requirements.txt
+</pre></div>
+</div>
+<p>Please note, you may have some difficulty installing some of the
+software requirements, specifically Cartopy and Proj.</p>
+<p>Finally you can install:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ python setup.py install
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="index.html" title="previous chapter (use the left arrow)">AMSIMP</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="quickstart.html" title="next chapter (use the right arrow)">Getting Started</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="quickstart.html" title="Getting Started"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="AMSIMP"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">AMSIMP 0.2.7 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Conor Casey. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>
