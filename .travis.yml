@@ -10,6 +10,7 @@ script:
   - cd docs
   - make html
   - cd _build/html
+  - touch .nojekyll
 
 deploy:
   provider: pages
