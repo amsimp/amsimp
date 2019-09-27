@@ -9,6 +9,7 @@ script:
   - python3 -m pip install guzzle_sphinx_theme
   - cd docs
   - make html
+  - cd _build/html
 
 deploy:
   provider: pages
