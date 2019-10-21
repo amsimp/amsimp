@@ -11,6 +11,8 @@ script:
   - make html
   - cd _build/html
   - touch .nojekyll
+  - touch CNAME
+  - echo "docs.amsimp.com" > CNAME
 
 deploy:
   provider: pages
