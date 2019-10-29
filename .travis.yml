@@ -1,0 +1,25 @@
+language: generic
+os: osx
+
+git:
+  depth: false
+
+script:
+  - python3 -m pip install sphinx
+  - python3 -m pip install guzzle_sphinx_theme
+  - cd docs
+  - make html
+  - cd _build/html
+  - touch .nojekyll
+  - touch CNAME
+  - echo "docs.amsimp.com" > CNAME
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep_history: true
+  local_dir: ./docs/_build/html
+  on:
+    branch: master
+  
