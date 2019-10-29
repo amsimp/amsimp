@@ -85,8 +85,7 @@ while n < len(longitude):
         actual_vg = actual_vg["speed"]
 
         pwv_temp = actual_temp - 273.15
-        Rh = w.get_humidity()
-        actual_pwv = pwv(pwv_temp, Rh)
+        actual_pwv = pwv(pwv_temp, 100)
 
         sleep(1)
 

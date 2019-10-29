@@ -224,12 +224,7 @@ cdef class Wind(Backend):
 
         plt.set_cmap("jet")
 
-        # Adds SALT to the graph.
-        if self.future:
-            month = self.next_month.title()
-        else:
-            month = self.month.title()
-
+        # Add SALT.
         plt.xlabel("Latitude ($\phi$)")
         plt.ylabel("Altitude (m)")
         plt.title(wind_type + " Wind Contour Plot ("
@@ -353,14 +348,10 @@ cdef class Wind(Backend):
             levels=levels,
         )
 
+        # Add geostrophic wind vectors.
         plt.quiver(longitude, latitude, u_norm, v_norm, transform=ccrs.PlateCarree())
 
-        # Add SALT to the graph.
-        if self.future:
-            month = self.next_month.title()
-        else:
-            month = self.month.title()
-
+        # Add SALT.
         plt.xlabel("Latitude ($\phi$)")
         plt.ylabel("Longitude ($\lambda$)")
         plt.title("Geostrophic Wind ("

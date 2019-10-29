@@ -23,6 +23,7 @@ cimport numpy as np
 from cpython cimport bool
 import matplotlib.pyplot as plt
 from matplotlib import ticker
+import cartopy.crs as ccrs
 
 # -----------------------------------------------------------------------------------------#
 
@@ -40,6 +41,8 @@ cdef class Backend:
     as (1).
     (3) these methods import data from NRLMSISE-00.
     (4) they don't classify nicely into any other class.
+    (5) they offer a visualisation of any of the atmospheric processes found
+    in this class.
 
     Below is a list of the methods included within this class, with a short
     description of their intended purpose and a bracketed number signifying
@@ -63,7 +66,9 @@ cdef class Backend:
     exner_function ~ outputs a NumPy array of the Exner function (4).
     troposphere_boundaryline ~ generates a NumPy array of the mean
     troposphere - stratosphere boundary line (4).
+    
     temperature_contourf ~ generates a temperature contour plot (4).
+    pressure_contourf ~ generates a pressure contour plot (4).
     """
 
     # Define units of measurement for AMSIMP.
@@ -488,6 +493,8 @@ cdef class Backend:
         troposphere_boundaryline = np.asarray(trop_strat_line) * units.m
         return troposphere_boundaryline
 
+# -----------------------------------------------------------------------------------------#
+
     def temperature_contourf(self, central_long=-7.6921):
         """
         Generates a temperature contour plot, with the axes being latitude,
@@ -523,12 +530,7 @@ cdef class Backend:
             levels=levels,
         )
 
-        # Adds SALT to the graph.
-        if self.future:
-            month = self.next_month.title()
-        else:
-            month = self.month.title()
-
+        # Add SALT.
         plt.xlabel("Latitude ($\phi$)")
         plt.ylabel("Altitude (m)")
         plt.title("Temperature Contour Plot ("
@@ -558,5 +560,64 @@ cdef class Backend:
             label="Troposphere - Stratosphere Boundary Line",
         )
         plt.legend(loc=0)
+
+        plt.show()
+
+    def pressure_contourf(self, alt=0):
+        """
+        Plots pressure on a contour plot, with the axes being
+        latitude and longitude. This plot is then layed on top of a EckertIII
+        global projection. For the raw data, please use the
+        amsimp.Backend.pressure() method.
+        """
+        # Ensure alt is between 0 and 50000 metres above sea level.
+        if alt < 0 or alt > 50000:
+            raise Exception(
+                "alt must be a real number between 0 and 50,000. The value of alt was: {}".format(
+                    alt
+                )
+            )
+
+        # Index of the nearest alt in amsimp.Backend.altitude_level()
+        indx_alt = (np.abs(self.altitude_level().value - alt)).argmin()
+        
+        # Defines the axes, and the data.
+        latitude, longitude = np.meshgrid(self.latitude_lines(),
+         self.longitude_lines()
+        )
+        cdef np.ndarray pressure = self.pressure()[:, :, indx_alt]
+
+        # EckertIII projection details.
+        ax = plt.axes(projection=ccrs.EckertIII())
+        ax.set_global()
+        ax.coastlines()
+        ax.gridlines()
+
+        # Contourf plotting.
+        minimum = pressure.min()
+        maximum = pressure.max()
+        levels = np.linspace(minimum, maximum, 21)
+        contour = plt.contourf(
+            longitude,
+            latitude,
+            pressure,
+            transform=ccrs.PlateCarree(),
+            levels=levels,
+        )
+
+        # Add SALT.
+        plt.xlabel("Latitude ($\phi$)")
+        plt.ylabel("Longitude ($\lambda$)")
+        plt.title("Pressure ("
+         + self.date.strftime("%d-%m-%Y") + ", Altitude = "
+         + str(self.altitude_level()[indx_alt]) +")"
+        )
+
+        # Colorbar creation.
+        colorbar = plt.colorbar()
+        tick_locator = ticker.MaxNLocator(nbins=15)
+        colorbar.locator = tick_locator
+        colorbar.update_ticks()
+        colorbar.set_label("Pressure (hPa)")
 
         plt.show()

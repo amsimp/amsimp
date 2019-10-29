@@ -58,32 +58,17 @@ cdef class Water(Wind):
         )
         temperature = temperature[:, :, 0:idx_troposphereboundaryline].value
 
-        # Arden Buck equations.
-        cdef np.ndarray temp, t
-        cdef list list_vaporpressure = []
-        cdef list e_lat, e_alt
-        cdef float c, e
-        for temp in temperature:
-            e_lat = []
-            for t in temp:
-                e_alt = []
-                for c in t:
-                    if c >= 0:
-                        e = 0.61121 * np.exp((18.678 - (c / 234.5)) * (c / (257.14 + c)))
-                    elif c < 0:
-                        e = 0.61115 * np.exp((23.036 - (c / 333.7)) * (c / (279.82 + c)))
-                    e_alt.append(e)
-                e_lat.append(e_alt)
-            list_vaporpressure.append(e_lat)
-        vapor_pressure = np.asarray(list_vaporpressure)
+        # Saturated water vapor pressure
+        vapor_pressure = 6.112 * np.exp(
+            (17.67 * temperature) / (temperature + 243.15)
+        )
 
-        # Convert from kPa to hPa.
-        vapor_pressure *= 10
+        # Add units of measurement.
         vapor_pressure *= self.units.hPa
 
         return vapor_pressure
 
-    def integration_eq(self, pressure, vapor_pressure):
+    def mixing_ratio(self, pressure, vapor_pressure):
         """
         This method is solely utilised for integration in the
         amsimp.Water.precipitable_water() method. Please do not interact with
@@ -139,7 +124,7 @@ cdef class Water(Wind):
                     p2 = pressure[i][n][k + 1]
                     e = (vapor_pressure[i][n][k] + vapor_pressure[i][n][k + 1]) / 2
 
-                    integration_term = quad(self.integration_eq, p1, p2, args=(e,))
+                    integration_term = quad(self.mixing_ratio, p1, p2, args=(e,))
                     Pwv_intergrationterm = integration_term[0]
                     pwv_alt.append(Pwv_intergrationterm)
 
@@ -206,12 +191,7 @@ cdef class Water(Wind):
             levels=levels,
         )
 
-        # Adds SALT to the graph.
-        if self.future:
-            month = self.next_month.title()
-        else:
-            month = self.month.title()
-
+        # Add SALT.
         plt.xlabel("Latitude ($\phi$)")
         plt.ylabel("Longitude ($\lambda$)")
         plt.title("Precipitable Water ("
