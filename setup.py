@@ -65,6 +65,7 @@ setup(
         "numpy",
         "cartopy",
         "pandas",
+        "wget",
     ],
     zip_safe=False,
 )
