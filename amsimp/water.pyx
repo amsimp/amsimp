@@ -14,6 +14,7 @@ from matplotlib import ticker
 from amsimp.wind cimport Wind
 from amsimp.wind import Wind
 cimport numpy as np
+from cpython cimport bool
 
 # -----------------------------------------------------------------------------------------#
 
@@ -77,14 +78,23 @@ cdef class Water(Wind):
         y = (0.622 * vapor_pressure) / (pressure - vapor_pressure)
         return y
 
-    cpdef np.ndarray precipitable_water(self):
+    cpdef np.ndarray precipitable_water(self, sum_altitude=True):
         """
         Generates a NumPy array of saturated precipitable water vapor.
         Precipitable water is the total atmospheric water vapor contained in a
         vertical column of unit cross-sectional area extending between any two
         specified levels. For a contour plot of this data, please use the
-        amsimp.Water.contourf() method.
+        amsimp.Water.contourf() method. If sum_altitude is equal to True, 
+        it will sum the altitude component making the output 2-dimensional.
         """
+        # Ensure sum_altitude is a boolean value.
+        if not isinstance(sum_altitude, bool):
+            raise Exception(
+                "sum_altitude must be a boolean value. The value of which was: {}.".format(
+                    sum_altitude
+                )
+            )
+
         # Average boundary line between the troposphere and the stratosphere.
         troposphere_boundaryline = self.troposphere_boundaryline()
         avg_tropstratline = np.mean(troposphere_boundaryline)
@@ -130,7 +140,11 @@ cdef class Water(Wind):
 
                     k += 1
 
-                pwv_lat.append(pwv_alt)
+                if sum_altitude == False:
+                    pwv_lat.append(pwv_alt)
+                else:
+                    P_wv = np.sum(pwv_alt)
+                    pwv_lat.append(P_wv)                   
 
                 n += 1
             
@@ -157,21 +171,9 @@ cdef class Water(Wind):
         latitude, longitude = np.meshgrid(self.latitude_lines(),
          self.longitude_lines()
         )
-        
-        cdef np.ndarray precipitable_water = self.precipitable_water()
-        precipitable_water = precipitable_water.value
-        cdef np.ndarray p_water, pwv
-        cdef list list_precipitablewater = []
-        cdef list pwv_lat
-        cdef float p_wv
-        for p_water in precipitable_water:
-            pwv_lat = []
-            for pwv in p_water:
-                p_wv = np.sum(pwv)
-                pwv_lat.append(p_wv)
-            list_precipitablewater.append(pwv_lat)
-        precipitable_water = np.asarray(list_precipitablewater)
-        precipitable_water *= self.units.mm
+        cdef np.ndarray precipitable_water = self.precipitable_water(
+            sum_altitude=True
+        )
 
         # EckertIII projection details.
         ax = plt.axes(projection=ccrs.EckertIII())

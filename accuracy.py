@@ -34,14 +34,6 @@ amsimp_pressure = detail.pressure()[:, :, 0].value
 
 # AMSIMP precipitable water predicition.
 amsimp_precipitablewater = detail.precipitable_water().value
-list_precipitablewater = []
-for amsimp_pwv in amsimp_precipitablewater:
-    pwv_lat = []
-    for amsimp_p in amsimp_pwv:
-        ans = np.sum(amsimp_p)
-        pwv_lat.append(ans)
-    list_precipitablewater.append(pwv_lat)
-amsimp_precipitablewater = np.asarray(list_precipitablewater)
 
 # Real time weather.
 api_key = "d8e21a680191eb7613420d2cc20e6d0a"

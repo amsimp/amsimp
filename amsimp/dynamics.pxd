@@ -3,4 +3,4 @@ cimport numpy as np
 from amsimp.water cimport Water
 
 cdef class Dynamics(Water):
-    pass
+    cdef float forecast_days

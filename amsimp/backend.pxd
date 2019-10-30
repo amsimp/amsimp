@@ -4,7 +4,6 @@ cimport numpy as np
 
 cdef class Backend:
     cdef float detail_level
-    cdef bool future
 
     cpdef np.ndarray latitude_lines(self)
     cpdef np.ndarray longitude_lines(self)

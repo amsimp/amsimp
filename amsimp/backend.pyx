@@ -39,7 +39,9 @@ cdef class Backend:
     (1) they are considered essential components of the software.
     (2) the output of these methods are generated from the methods classified
     as (1).
-    (3) these methods import data from NRLMSISE-00.
+    (3) these methods import data from the NRLMSISE-00 atmospheric model.
+    This data is retrieved from the AMSIMP data repo, which is updated 
+    four times every day.
     (4) they don't classify nicely into any other class.
     (5) they offer a visualisation of any of the atmospheric processes found
     in this class.
@@ -67,21 +69,20 @@ cdef class Backend:
     troposphere_boundaryline ~ generates a NumPy array of the mean
     troposphere - stratosphere boundary line (4).
     
-    temperature_contourf ~ generates a temperature contour plot (4).
-    pressure_contourf ~ generates a pressure contour plot (4).
+    longitude_contourf ~ generates a contour plot for a desired atmospheric
+    process, with the axes being latitude, and longitude (5).
+    altitude_contourf ~ generates a contour plot for a desired atmospheric
+    process, with the axes being latitude, and altitude (5).
+    pressure_thickness ~ generates a contour plot for pressure thickness,
+    with the axes being latitude and longitude. This plot is then layed
+    on top of a EckertIII global projection (5).
     """
 
     # Define units of measurement for AMSIMP.
     units = units
 
-    # Current month. the number of days in it.
+    # Current date.
     date = datetime.now()
-    month = date.strftime("%B").lower()
-    # Next month.
-    future_date = date + future_month.relativedelta(months=+1)
-    next_month = future_date.strftime("%B").lower()
-    # The number of days in the current month.
-    number_of_days = (future_date - date).days
 
     # Predefined Constants.
     # Angular rotation rate of Earth.
@@ -105,20 +106,14 @@ cdef class Backend:
     # Gravitational acceleration at the Earth's surface.
     g = (G * M) / (a ** 2)
 
-    def __cinit__(self, int detail_level=3, bool future=False):
+    def __cinit__(self, int detail_level=3, int forecast_days=3):
         """
         The parameter, detail_level, is the numerical value for the level of
         computational detail that will be used in the mathematical calculations.
         This value is between 1 and 5.
-
-        If the parameter, future, has a boolean truth value, all class methods
-        will output information related to the following month (e.g. it will
-        output information related to August if the current month is July).
         """
-
-        # Make these parameters available globally.
+        # Make detail_level available else where in the class.
         self.detail_level = detail_level
-        self.future = future
 
         # Ensure self.detail_level is between 1 and 5.
         if self.detail_level > 5 or self.detail_level <= 0:
@@ -495,12 +490,132 @@ cdef class Backend:
 
 # -----------------------------------------------------------------------------------------#
 
-    def temperature_contourf(self, central_long=-7.6921):
+    def longitude_contourf(self, which=0, alt=0):
         """
-        Generates a temperature contour plot, with the axes being latitude,
-        and altitude. For the raw data, please use the
-        amsimp.Backend.temperature() method.
+        Plots a desired atmospheric process on a contour plot, with the axes being
+        latitude and longitude. This plot is then layed on top of a EckertIII
+        global projection. For the raw data, please see the other methods
+        found in this class.
+
+        For a temperature contour plot, the value of which is 0.
+        For a pressure contour plot, the value of which is 1.
+        For a density contour plot, the value of which is 2.
         """
+        info = " For a temperature contour plot, the value of which is 0. "
+        info += "For a pressure contour plot, the value of which is 1. For a "
+        info += "density contour plot, the value of which is 2."
+
+        # Ensure, which, is a number between 0 and 2.
+        if which < 0 or which > 2:
+            raise Exception(
+                "which must be a natural number between 0 and 2. The value of which was: {}.".format(
+                    which
+                ) + info
+            )
+        
+        # Ensure, which, is a integer.
+        if not isinstance(which, int):
+            raise Exception(
+                "which must be a natural number between 0 and 2. The value of which was: {}.".format(
+                    which
+                ) + info
+            )
+
+        # Ensure alt is between 0 and 50000 metres above sea level.
+        if alt < 0 or alt > 50000:
+            raise Exception(
+                "alt must be a real number between 0 and 50,000. The value of alt was: {}".format(
+                    alt
+                )
+            )
+
+        # Index of the nearest alt in amsimp.Backend.altitude_level()
+        indx_alt = (np.abs(self.altitude_level().value - alt)).argmin()
+        
+        # Defines the axes, and the data.
+        latitude, longitude = np.meshgrid(self.latitude_lines(),
+         self.longitude_lines()
+        )
+        if which == 0:
+            data = self.temperature()[:, :, indx_alt]
+            data_type = "Temperature"
+            unit = " (K)"
+        elif which == 1:
+            data = self.pressure()[:, :, indx_alt]
+            data_type = "Atmospheric Pressure"
+            unit = " (hPa)"
+        elif which == 2:
+            data = self.density()[:, :, indx_alt]
+            data_type = "Atmospheric Density"
+            unit = " ($\\frac{kg}{m^3}$)"
+
+        # EckertIII projection details.
+        ax = plt.axes(projection=ccrs.EckertIII())
+        ax.set_global()
+        ax.coastlines()
+        ax.gridlines()
+
+        # Contourf plotting.
+        minimum = data.min()
+        maximum = data.max()
+        levels = np.linspace(minimum, maximum, 21)
+        contour = plt.contourf(
+            longitude,
+            latitude,
+            data,
+            transform=ccrs.PlateCarree(),
+            levels=levels,
+        )
+
+        # Add SALT.
+        plt.xlabel("Latitude ($\phi$)")
+        plt.ylabel("Longitude ($\lambda$)")
+        plt.title(
+            data_type + " ("
+            + self.date.strftime("%d-%m-%Y") + ", Altitude = "
+            + str(self.altitude_level()[indx_alt]) +")"
+        )
+
+        # Colorbar creation.
+        colorbar = plt.colorbar()
+        tick_locator = ticker.MaxNLocator(nbins=15)
+        colorbar.locator = tick_locator
+        colorbar.update_ticks()
+        colorbar.set_label(
+            data_type + unit
+        )
+
+        plt.show()
+    
+    def altitude_contourf(self, which=0, central_long=-7.6921):
+        """
+        Plots a desired atmospheric process on a contour plot,
+        with the axes being latitude, and altitude. For the raw
+        data, please see the other methods found in this class.
+        If you would like a particular atmospheric process to
+        be added to this method, either create an issue on
+        GitHub or send an email to support@amsimp.com.
+
+        For a temperature contour plot, the value of which is 0.
+        """
+        info = " For a temperature contour plot, the value of which is 0. "
+
+        # Ensure, which, is equal to 0.
+        if which < 0 or which > 0:
+            raise Exception(
+                "which must be equal to zero. The value of which was: {}.".format(
+                    which
+                ) + info
+            )
+        
+        # Ensure, which, is a integer.
+        if not isinstance(which, int):
+            raise Exception(
+                "which must be equal to zero. The value of which was: {}.".format(
+                    which
+                ) + info
+            )
+        
         # Ensure central_long is between -180 and 180.
         if central_long < -180 or central_long > 180:
             raise Exception(
@@ -514,18 +629,22 @@ cdef class Backend:
 
         # Defines the axes, and the data.
         latitude, altitude = np.meshgrid(self.latitude_lines(), self.altitude_level())
-        temperature = self.temperature()[indx_long, :, :]
-        temperature = np.transpose(temperature)
+        
+        if which == 0:
+            data = self.temperature()[indx_long, :, :]
+            data = np.transpose(data)
+            data_type = "Temperature"
+            unit = " (K)"
 
         # Contourf plotting.
         cmap = plt.get_cmap("hot")
-        minimum = temperature.min()
-        maximum = temperature.max()
+        minimum = data.min()
+        maximum = data.max()
         levels = np.linspace(minimum, maximum, 21)
         plt.contourf(
             latitude,
             altitude,
-            temperature,
+            data,
             cmap=cmap,
             levels=levels,
         )
@@ -533,9 +652,10 @@ cdef class Backend:
         # Add SALT.
         plt.xlabel("Latitude ($\phi$)")
         plt.ylabel("Altitude (m)")
-        plt.title("Temperature Contour Plot ("
-         + self.date.strftime("%d-%m-%Y") + ", Longitude = "
-         + str(np.round(self.longitude_lines()[indx_long], 2)) + ")"
+        plt.title(
+            data_type + " ("
+            + self.date.strftime("%d-%m-%Y") + ", Longitude = "
+            + str(np.round(self.longitude_lines()[indx_long], 2)) + ")"
         )
 
         # Colorbar creation.
@@ -543,7 +663,9 @@ cdef class Backend:
         tick_locator = ticker.MaxNLocator(nbins=15)
         colorbar.locator = tick_locator
         colorbar.update_ticks()
-        colorbar.set_label("Temperature (K)")
+        colorbar.set_label(
+            data_type + unit
+        )
 
         # Average boundary line between the troposphere and the stratosphere.
         troposphere_boundaryline = self.troposphere_boundaryline()
@@ -562,30 +684,19 @@ cdef class Backend:
         plt.legend(loc=0)
 
         plt.show()
-
-    def pressure_contourf(self, alt=0):
+    
+    def pressurethickness_contourf(self):
         """
-        Plots pressure on a contour plot, with the axes being
+        Plots pressure thickness on a contour plot, with the axes being
         latitude and longitude. This plot is then layed on top of a EckertIII
         global projection. For the raw data, please use the
-        amsimp.Backend.pressure() method.
+        amsimp.Backend.pressure_thickness() method.
         """
-        # Ensure alt is between 0 and 50000 metres above sea level.
-        if alt < 0 or alt > 50000:
-            raise Exception(
-                "alt must be a real number between 0 and 50,000. The value of alt was: {}".format(
-                    alt
-                )
-            )
-
-        # Index of the nearest alt in amsimp.Backend.altitude_level()
-        indx_alt = (np.abs(self.altitude_level().value - alt)).argmin()
-        
         # Defines the axes, and the data.
         latitude, longitude = np.meshgrid(self.latitude_lines(),
          self.longitude_lines()
         )
-        cdef np.ndarray pressure = self.pressure()[:, :, indx_alt]
+        cdef np.ndarray pressure_thickness = self.pressure_thickness()
 
         # EckertIII projection details.
         ax = plt.axes(projection=ccrs.EckertIII())
@@ -594,23 +705,27 @@ cdef class Backend:
         ax.gridlines()
 
         # Contourf plotting.
-        minimum = pressure.min()
-        maximum = pressure.max()
+        minimum = pressure_thickness.min()
+        maximum = pressure_thickness.max()
         levels = np.linspace(minimum, maximum, 21)
         contour = plt.contourf(
             longitude,
             latitude,
-            pressure,
+            pressure_thickness,
             transform=ccrs.PlateCarree(),
             levels=levels,
         )
 
+        # Index of the rain / snow line
+        indx_snowline = (np.abs(levels.value - 5400)).argmin()
+        contour.collections[indx_snowline].set_color('black')
+        contour.collections[indx_snowline].set_linewidth(1) 
+
         # Add SALT.
         plt.xlabel("Latitude ($\phi$)")
         plt.ylabel("Longitude ($\lambda$)")
-        plt.title("Pressure ("
-         + self.date.strftime("%d-%m-%Y") + ", Altitude = "
-         + str(self.altitude_level()[indx_alt]) +")"
+        plt.title("Pressure Thickness ("
+         + self.date.strftime("%d-%m-%Y") + ")"
         )
 
         # Colorbar creation.
@@ -618,6 +733,14 @@ cdef class Backend:
         tick_locator = ticker.MaxNLocator(nbins=15)
         colorbar.locator = tick_locator
         colorbar.update_ticks()
-        colorbar.set_label("Pressure (hPa)")
+        colorbar.set_label("Pressure Thickness (1000 hPa - 500 hPa) (m)")
+
+        # Footnote
+        plt.figtext(
+            0.99,
+            0.01,
+            "Rain / Snow Line is marked by the black line (5,400 m).",
+            horizontalalignment="right",
+        )
 
         plt.show()

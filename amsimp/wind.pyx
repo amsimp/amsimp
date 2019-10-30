@@ -54,7 +54,8 @@ cdef class Wind(Backend):
 
         # Distance of one degree of latitude (e.g. 0N - 1N/1S), measured in metres.
         cdef lat_d = (2 * np.pi * self.a) / 360
-        # Distance between latitude lines in the class method, amsimp.Backend.latitude_lines().
+        # Distance between latitude lines in the class method, 
+        # amsimp.Backend.latitude_lines().
         cdef delta_y = (
             self.latitude_lines()[-1].value - self.latitude_lines()[-2].value
         ) * lat_d
@@ -174,7 +175,7 @@ cdef class Wind(Backend):
 
 # -----------------------------------------------------------------------------------------#
 
-    def wind_contourf(self, central_long=-7.6921, which_wind=0):
+    def wind_contourf(self, which_wind=0, central_long=-7.6921):
         """
         For zonal (geostrophic) wind, set which_wind to 0.
         For meridional (geostrophic) wind, set which_wind to 1.

@@ -37,8 +37,6 @@ cdef class Dynamics(Water):
     conditions of temperature.
     predict_pressurethickness ~ this method outputs the derivative and the
     initial conditions of pressure thickness.
-    predict_geostrophicwind ~ this method outputs the derivative and the initial
-    conditions of geostrophic wind.
     predict_precipitablewater ~ this method outputs the derivative and the
     initial conditions of precipitable water vapor.
 
@@ -46,31 +44,138 @@ cdef class Dynamics(Water):
     thickness, geostrophic wind, and precipitable water vapor will evolve.
     """
 
-    def __cinit__(self, detail_level):
+    def __cinit__(self, detail_level, int forecast_days=3):
         """
+        Defines the number of days that will be included within the simulation.
+        This value must be greater than 0, and less than 5 in order
+        to ensure that the simulation methods function correctly.
+
         Please refer to amsimp.Backend.__cinit__() for a description of this
         method.
         """
+        # Declare class variables.
         super().__init__(detail_level)
+        self.forecast_days = forecast_days
 
-        self.future = True
+        # Ensure self.forecast_days is between 0 and 10.
+        if self.forecast_days > 5 or self.forecast_days <= 0:
+            raise Exception(
+                "forecast_days must be a positive integer between 1 and 5. The value of forecast_days was: {}".format(
+                    self.forecast_days
+                )
+            )
 
-    def predict_temperature(self):
+    def delta_xyz(self):
         """
-        This method outputs the derivative and the initial conditions of
-        temperature. Please refer to the class description to understand how
-        these outputs are calculated / defined.
+        Defines delta_x (the distance in metres between lines
+        of latitude), delta_y (the distance in metres between
+        lines of longitude), and delta_z (the distance between
+        altitude levels). Please do not interact with
+        the method directly.
         """
-        future_temperature = self.temperature()
-        self.future = False
-        init_temperature = self.temperature()
-        self.future = True
+        # delta_x
+        # Distance between longitude lines at the equator.
+        cdef eq_longd = 111.19 * self.units.km
+        eq_longd = eq_longd.to(self.units.m)
+        # Distance of one degree of longitude (e.g. 0W - 1W/1E), measured in metres.
+        # The distance between two lines of longitude is not constant.
+        cdef np.ndarray long_d = np.cos(self.latitude_lines()) * eq_longd
+        # Distance between latitude lines in the class method,
+        # amsimp.Backend.latitude_lines().
+        cdef np.ndarray delta_x = (
+            self.longitude_lines()[-1].value - self.longitude_lines()[-2].value
+        ) * long_d
+        # Defining a 3D longitudinal distance NumPy array.
+        delta_x = delta_x.value
+        cdef list long_alt = []
+        cdef int len_altitude = len(self.altitude_level())
+        for x in delta_x:
+            x = x + np.zeros(len_altitude)
+            x = list(x)
+            long_alt.append(x)
+        cdef list list_deltax = []
+        cdef int len_longitudelines = len(self.longitude_lines())
+        cdef int n = 0
+        while n < len_longitudelines:
+            list_deltax.append(long_alt)
+            n += 1
+        delta_x = np.asarray(list_deltax)
+        delta_x *= self.units.m
 
-        n = self.number_of_days - 1
+        # delta_y
+        # Distance of one degree of latitude (e.g. 0N - 1N/1S), measured in metres.
+        cdef lat_d = (2 * np.pi * self.a) / 360
+        # Distance between latitude lines in the class method, 
+        # amsimp.Backend.latitude_lines().
+        cdef delta_y = (
+            self.latitude_lines()[-1].value - self.latitude_lines()[-2].value
+        ) * lat_d
 
-        gradient = (future_temperature - init_temperature) / n
+        # delta_z
+        cdef delta_z = self.altitude_level()[1]
 
-        return gradient, init_temperature
+        return delta_x, delta_y, delta_z
+
+    def forecast_temperature(self):
+        """
+        Description is placed here.
+        
+        Known bug(s):
+        For some unknown reason, it seems to generate a few 
+        temperature extremities, i.e. really low Kelvin values (143 K),
+        or really high Kelvin values (316 K). However, the majority of
+        values are in line with expectations.
+        """
+        forecast_days = int(self.forecast_days)
+        time = np.linspace(
+            0, forecast_days, (forecast_days * 6)
+        )
+
+        # Define the initial temperature condition.
+        temperature = self.temperature()
+
+        # Define delta_x, delta_y, and delta_y.
+        delta_xyz = self.delta_xyz()
+        delta_x = delta_xyz[0]
+        delta_y = delta_xyz[1]
+        delta_z = delta_xyz[2]
+
+        # Define the zonal, meridional, and vertical wind velocities.
+        u = self.zonal_wind()
+        v = self.meridional_wind()
+        w = 0 * (self.units.m / self.units.s)
+
+        # Calculate how temperature will evolve over time.
+        forecast_temperature = []
+        for t in time:
+            # Change time increment from days to seconds.
+            t = t * self.units.day
+            t = t.to(self.units.s)
+
+            # Define the temperature gradient.
+            temperature_gradient = np.gradient(temperature)
+
+            # Define the temperature gradient in the longitude, latitude, and
+            # altitude directions.
+            temperature_gradientx = temperature_gradient[0]
+            temperature_gradienty = temperature_gradient[1]
+            temperature_gradientz = temperature_gradient[2]
+
+            # Calculate how temperature will change over time.
+            delta_T_over_delta_t = (
+                (u * (temperature_gradientx / delta_x))
+                + (v * (temperature_gradienty / delta_y))
+                + (w * (temperature_gradientz / delta_z))
+            )
+
+            # Predict the temperature on a given day.
+            # y = mx + c
+            temp = temperature + (delta_T_over_delta_t * t)
+
+            # Store the predicted temperature into a list
+            forecast_temperature.append(temp)
+
+        return forecast_temperature
 
     def predict_pressurethickness(self):
         """
@@ -79,34 +184,7 @@ cdef class Dynamics(Water):
         amsimp.Backend.predict_temperature() for a general description of this
         method.
         """
-        future_pressurethickness = self.pressure_thickness()
-        self.future = False
-        init_pressurethickness = self.pressure_thickness()
-        self.future = True
-
-        n = self.number_of_days - 1
-
-        gradient = (future_pressurethickness - init_pressurethickness) / n
-
-        return gradient, init_pressurethickness
-
-    def predict_geostrophicwind(self):
-        """
-        This is the geostrophic wind variation of the method,
-        predict_temperature. Please refer to
-        amsimp.Backend.predict_temperature() for a general description of this
-        method.
-        """
-        future_geostrophicwind = self.geostrophic_wind()
-        self.future = False
-        init_geostrophicwind = self.geostrophic_wind()
-        self.future = True
-
-        n = self.number_of_days - 1
-
-        gradient = (future_geostrophicwind - init_geostrophicwind) / n
-
-        return gradient, init_geostrophicwind
+        
 
     def predict_precipitablewater(self):
         """
@@ -115,16 +193,7 @@ cdef class Dynamics(Water):
         amsimp.Backend.predict_temperature() for a general description of this
         method.
         """
-        future_precipitablewater = self.precipitable_water()
-        self.future = False
-        init_precipitablewater = self.precipitable_water()
-        self.future = True
-
-        n = self.number_of_days - 1
-
-        gradient = (future_precipitablewater - init_precipitablewater) / n
-
-        return gradient, init_precipitablewater
+        
 
     def simulate(self):
         """
@@ -151,7 +220,7 @@ cdef class Dynamics(Water):
 
         # Geostrophic Wind
         ax1 = plt.subplot(gs[0, 0])
-        predict_u = self.predict_geostrophicwind()
+        predict_u = self.zonal_wind()
         # Temperature
         ax2 = plt.subplot(gs[1, 0])
         predict_t = self.predict_temperature()
