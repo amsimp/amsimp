@@ -25,23 +25,27 @@ cdef class Dynamics(Water):
     AMSIMP Dynamics Class - Also, known as Motus Aeris @ AMSIMP. This class
     generates rudimentary simulation of tropospheric and stratsopheric
     dynamics on a synoptic scale. Predictions are made by calculating the
-    derivative of each element, between this month and next month,
-    using finite-difference. The initial conditions are defined as beginning
-    at the start of the month.
+    derivative of each element using finite-difference. The initial conditions
+    are defined in the class methods of Water, Wind, and Backend. For more
+    information on the initial conditions, please see those classes.
 
     Below is a list of the methods included within this class, with a short
     description of their intended purpose. Please see the relevant class methods
     for more information.
 
-    predict_temperature ~ this method outputs the derivative and the initial
-    conditions of temperature.
-    predict_pressurethickness ~ this method outputs the derivative and the
-    initial conditions of pressure thickness.
-    predict_precipitablewater ~ this method outputs the derivative and the
-    initial conditions of precipitable water vapor.
+    forecast_temperature ~ this method outputs the forecasted temperature
+    for the specified number of forecast days. Every single day is divided
+    into 6, meaning the length of the outputted list is six times the number
+    of forecast days specified.
+    predict_pressurethickness ~ 
+    forecast_precipitablewater ~ this method outputs the forecasted precipitable
+    water for the specified number of forecast days. Every single day is divided
+    into 6, meaning the length of the outputted list is six times the number
+    of forecast days specified.
 
     simulate ~ this method outputs a visualisation of how temperature, pressure
-    thickness, geostrophic wind, and precipitable water vapor will evolve.
+    thickness, geostrophic wind, and precipitable water vapor will evolve for
+    the specified number of forecast days.
     """
 
     def __cinit__(self, detail_level, int forecast_days=3):
@@ -50,7 +54,7 @@ cdef class Dynamics(Water):
         This value must be greater than 0, and less than 5 in order
         to ensure that the simulation methods function correctly.
 
-        Please refer to amsimp.Backend.__cinit__() for a description of this
+        For more information, please refer to amsimp.Backend.__cinit__()
         method.
         """
         # Declare class variables.
@@ -186,14 +190,79 @@ cdef class Dynamics(Water):
         """
         
 
-    def predict_precipitablewater(self):
+    def forecast_precipitablewater(self):
         """
-        This is the precipitable water vapor variation of the method,
-        predict_temperature. Please refer to
-        amsimp.Backend.predict_temperature() for a general description of this
-        method.
+        Description is placed here.
+
+        Known bug(s):
+        For some unknown reason, it seems to generate a few 
+        precipitable water extremities, i.e. really high amounts of
+        precipitable water (93 mm). However, the majority of
+        values are in line with expectations.
         """
-        
+        forecast_days = int(self.forecast_days)
+        time = np.linspace(
+            0, forecast_days, (forecast_days * 6)
+        )
+
+        # Define the initial precipitable water condition.
+        precipitable_water = self.precipitable_water(sum_altitude=False)
+
+        # Define delta_x, delta_y, and delta_y.
+        delta_xyz = self.delta_xyz()
+        delta_x = delta_xyz[0]
+        delta_x = delta_x[:, :, :40]
+        delta_y = delta_xyz[1]
+        delta_z = delta_xyz[2]
+
+
+        # Define the zonal, meridional, and vertical wind velocities.
+        u = self.zonal_wind()[:, :, :40]
+        v = self.meridional_wind()[:, :, :40]
+        w = 0 * (self.units.m / self.units.s)
+
+        # Calculate how precipitable water will evolve over time.
+        forecast_precipitablewater = []
+        for t in time:
+            # Change time increment from days to seconds.
+            t = t * self.units.day
+            t = t.to(self.units.s)
+
+            # Define the precipitable water gradient.
+            pwv_gradient = np.gradient(precipitable_water)
+
+            # Define the precipitable water gradient in the longitude,
+            # latitude, and altitude directions.
+            pwv_gradientx = pwv_gradient[0]
+            pwv_gradienty = pwv_gradient[1]
+            pwv_gradientz = pwv_gradient[2]
+
+            # Calculate how precipitable water will change over time.
+            delta_W_over_delta_t = (
+                (u * (pwv_gradientx / delta_x))
+                + (v * (pwv_gradienty / delta_y))
+                + (w * (pwv_gradientz / delta_z))
+            )
+
+            # Predict the amount of precipitable water on a given day.
+            # y = mx + c
+            pwv = precipitable_water + (delta_W_over_delta_t * t)
+
+            # Sum by the altitude component.
+            pwv = pwv.value
+            list_pwv = []
+            for pwv_long in pwv:
+                list_pwvlat = []
+                for pwv_lat in pwv_long:
+                    pwv_alt = np.sum(pwv_lat)
+                    list_pwvlat.append(pwv_alt)
+                list_pwv.append(list_pwvlat)
+            pwv = np.asarray(list_pwv) * self.units.mm
+
+            # Store the predicted amount of precipitable water into a list.
+            forecast_precipitablewater.append(pwv)
+
+        return forecast_precipitablewater
 
     def simulate(self):
         """

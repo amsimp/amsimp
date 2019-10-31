@@ -5,7 +5,7 @@ Cython.
 """
 import sys
 
-# Ensure tthe
+# Ensure Python 3 is being utilised.
 if sys.version_info < (3,):
     raise ImportError(
         """
@@ -40,5 +40,6 @@ def get_version():
     
     return get_distribution(__package__).version
 
+# Version of AMSIMP.
 __version__ = get_version()
 del  get_version
