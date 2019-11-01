@@ -1,3 +1,5 @@
+#cython: linetrace=True
+#distutils: define_macros=CYTHON_TRACE_NOGIL=1
 #cython: language_level=3
 """
 AMSIMP Precipitable Water Class. For information about this class is described below.
@@ -208,3 +210,4 @@ cdef class Water(Wind):
         colorbar.set_label("Precipitable Water (mm)")
 
         plt.show()
+        plt.close()

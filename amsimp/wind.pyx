@@ -1,3 +1,5 @@
+#cython: linetrace=True
+#distutils: define_macros=CYTHON_TRACE_NOGIL=1
 #cython: language_level=3
 """
 AMSIMP Wind Class. For information about this class is described below.
@@ -266,6 +268,7 @@ cdef class Wind(Backend):
         plt.legend(loc=0)
 
         plt.show()
+        plt.close()
 
     def globe(self, central_lat=53.1424, central_long=-7.6921, alt=0):
         """
@@ -376,3 +379,4 @@ cdef class Wind(Backend):
         )
 
         plt.show()
+        plt.close()

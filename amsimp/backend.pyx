@@ -1,3 +1,5 @@
+#cython: linetrace=True
+#distutils: define_macros=CYTHON_TRACE_NOGIL=1
 #cython: language_level=3
 """
 AMSIMP Backend Class. For information about this class is described below.
@@ -110,7 +112,7 @@ cdef class Backend:
         """
         The parameter, detail_level, is the numerical value for the level of
         computational detail that will be used in the mathematical calculations.
-        This value is between 1 and 5.
+        This value is between 1 and 5. Defaults to a value of 3.
         """
         # Make detail_level available else where in the class.
         self.detail_level = detail_level
@@ -201,6 +203,9 @@ cdef class Backend:
 
     cpdef np.ndarray coriolis_parameter(self):
         """
+        Equation:
+            f = 2 \* Upomega * sin(\phi)
+
         Generates a NumPy arrray of the Coriolis parameter at various latitudes
         of the Earth's surface. The Coriolis parameter is defined as two times
         the angular rotation of the Earth by the sin of the latitude you are
@@ -351,6 +356,9 @@ cdef class Backend:
         """
         Description is placed here.
 
+        Equation:
+            p = \rho \* R * T
+
         Pressure is defined as the flux of momentum component normal to a given
         surface.
         """
@@ -408,6 +416,40 @@ cdef class Backend:
         pressure_thickness = np.asarray(list_pressurethickness)
         pressure_thickness *= units.m
         return pressure_thickness
+
+    cpdef np.ndarray sigma_coordinates(self):
+        """
+        Description is placed here.
+        
+        Equation:
+        sigma = \frac{p - p_T}{p_S - p_T}
+        """
+        pressure = self.pressure().value
+
+        # Define the top and the ground surface values. 
+        p_S = pressure[:, :, 0]
+        p_T = pressure[:, :, -1]
+
+        # Define the sigma coordinates.
+        cdef list list_sigmacoordinates = []
+        cdef np.ndarray p, sigma
+        cdef list list_sigma
+        cdef int len_pressure = len(pressure[0][0])
+        cdef int n = 0
+        while n < len_pressure:
+            p = pressure[:, :, n]
+
+            sigma = (p - p_T) / (p_S - p_T) 
+            list_sigma = list(sigma)
+
+            list_sigmacoordinates.append(list_sigma)
+
+            n += 1
+
+        # Convert the list into a NumPy array.
+        sigma_coordinates = np.asarray(list_sigmacoordinates)
+        sigma_coordinates = np.transpose(sigma_coordinates, (1, 2, 0))
+        return sigma_coordinates
 
     cpdef np.ndarray potential_temperature(self):
         """
@@ -586,6 +628,7 @@ cdef class Backend:
         )
 
         plt.show()
+        plt.close()
     
     def altitude_contourf(self, which=0, central_long=-7.6921):
         """
@@ -684,6 +727,7 @@ cdef class Backend:
         plt.legend(loc=0)
 
         plt.show()
+        plt.close()
     
     def pressurethickness_contourf(self):
         """
@@ -744,3 +788,4 @@ cdef class Backend:
         )
 
         plt.show()
+        plt.close()

@@ -1,3 +1,5 @@
+#cython: linetrace=True
+#distutils: define_macros=CYTHON_TRACE_NOGIL=1
 #cython: language_level=3
 """
 AMSIMP Dynamics Class. For information about this class is described below.
@@ -48,11 +50,12 @@ cdef class Dynamics(Water):
     the specified number of forecast days.
     """
 
-    def __cinit__(self, detail_level, int forecast_days=3):
+    def __cinit__(self, int detail_level=3, int forecast_days=3):
         """
         Defines the number of days that will be included within the simulation.
         This value must be greater than 0, and less than 5 in order
-        to ensure that the simulation methods function correctly.
+        to ensure that the simulation methods function correctly. Defaults to
+        a value of 3.
 
         For more information, please refer to amsimp.Backend.__cinit__()
         method.
@@ -123,6 +126,11 @@ cdef class Dynamics(Water):
     def forecast_temperature(self):
         """
         Description is placed here.
+
+        Equation:
+        \frac{\partial T}{\partial t} = u \* \frac{\partial T}{\partial x} +
+                                        v \* \frac{\partial T}{\partial y} +
+                                        w \* \frac{\partial T}{\partial z}
         
         Known bug(s):
         For some unknown reason, it seems to generate a few 
@@ -181,18 +189,20 @@ cdef class Dynamics(Water):
 
         return forecast_temperature
 
-    def predict_pressurethickness(self):
+    def forecast_pressurethickness(self):
         """
-        This is the pressure thickness variation of the method,
-        predict_temperature. Please refer to
-        amsimp.Backend.predict_temperature() for a general description of this
-        method.
+        Description is place here.
         """
         
 
     def forecast_precipitablewater(self):
         """
         Description is placed here.
+
+        Equation:
+        \frac{\partial W}{\partial t} = u \* \frac{\partial W}{\partial x} +
+                                        v \* \frac{\partial W}{\partial y} +
+                                        w \* \frac{\partial W}{\partial z}
 
         Known bug(s):
         For some unknown reason, it seems to generate a few 
