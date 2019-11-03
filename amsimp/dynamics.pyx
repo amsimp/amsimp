@@ -601,6 +601,7 @@ cdef class Dynamics(Water):
                 linestyle="dashed",
                 label="Troposphere - Stratosphere Boundary Line",
             )
+            ax1.legend(loc=0)
 
             # Title of Simulation.
             now = self.date + timedelta(hours=+t)

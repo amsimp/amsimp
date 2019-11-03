@@ -16,7 +16,7 @@ import amsimp
 # ensure that the methods that require a level of detail of 3, or
 # greater raise an exception when called by a lower level of
 # detail.
-detail = amsimp.Dynamics(5)
+detail = amsimp.Dynamics(5, 2)
 detail_1 = amsimp.Dynamics(1)
 # Ensure detail_level and forecast_days raise an exception when
 # it is appropriate to do so.
@@ -66,7 +66,6 @@ for i in range(5):
     detail_i.density()
 # Ensure the methods, sigma_coordinates, potential_temperature
 # and exner_function, function correctly.
-detail.sigma_coordinates()
 detail.potential_temperature()
 detail.exner_function()
 # Ensure that each plot option in the longitude_contourf method functions
@@ -201,7 +200,4 @@ else:
 detail.water_contourf()
 
 # amsimp.dynamics.Dynamics
-# Ensure the forecast_temperature method functions correctly.
-detail.forecast_temperature()
-# Ensure the forecast_precipitablewater method functions correctly.
-detail.forecast_precipitablewater()
+detail.simulate()

@@ -4,9 +4,12 @@ os: osx
 git:
   depth: false
 
-script:
+install:
+  - pip install codecov
   - python3 -m pip install sphinx
   - python3 -m pip install guzzle_sphinx_theme
+
+script:
   - cd docs
   - make html
   - cd _build/html
@@ -22,4 +25,10 @@ deploy:
   local_dir: ./docs/_build/html
   on:
     branch: master
+
+after_success:
+  - cd ..
+  - cd ..
+  - coverage run tests.py
+  - codecov
   
