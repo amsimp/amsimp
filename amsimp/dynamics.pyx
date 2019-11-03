@@ -427,6 +427,9 @@ cdef class Dynamics(Water):
 
         # Troposphere - Stratosphere Boundary Line
         trop_strat_line = self.troposphere_boundaryline()
+        trop_strat_line = (
+            np.zeros(len(trop_strat_line.value)) + np.mean(trop_strat_line)
+        )
 
         t = 0
         while t < len(time):
@@ -476,8 +479,8 @@ cdef class Dynamics(Water):
 
             # Contouf plotting.
             cmap2 = plt.get_cmap("hot")
-            min2 = forecast_temp[0].value.min()
-            max2 = forecast_temp[0].value.max()
+            min2 = np.min(forecast_temp)
+            max2 = np.max(forecast_temp)
             level2 = np.linspace(min2, max2, 21)
             temp = ax2.contourf(
                 latitude, altitude, temperature, cmap=cmap2, levels=level2
@@ -512,8 +515,8 @@ cdef class Dynamics(Water):
 
             # Contourf plotting.
             cmap3 = plt.get_cmap("seismic")
-            min3 = forecast_Pwv[0].value.min()
-            max3 = np.percentile(forecast_Pwv[0], 99)
+            min3 = np.min(forecast_Pwv)
+            max3 = np.percentile(forecast_Pwv, 99)
             level3 = np.linspace(min3, max3, 21)
             precipitable_watervapour = ax3.contourf(
                 long,
@@ -547,8 +550,8 @@ cdef class Dynamics(Water):
             ax4.gridlines()
 
             # Contourf plotting.
-            min4 = forecast_pthickness[0].value.min()
-            max4 = forecast_pthickness[0].value.max()
+            min4 = np.min(forecast_pthickness)
+            max4 = np.max(forecast_pthickness)
             level4 = np.linspace(min4, max4, 21)
             pressure_h = ax4.contourf(
                 long,
