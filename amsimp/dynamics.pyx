@@ -139,7 +139,7 @@ cdef class Dynamics(Water):
         # Define the forecast period.
         forecast_days = int(self.forecast_days)
         cdef np.ndarray time = np.linspace(
-            0, forecast_days, (forecast_days * 4320)
+            0, forecast_days, (forecast_days * 1440)
         )
 
         # Define the initial temperature condition.
@@ -193,7 +193,7 @@ cdef class Dynamics(Water):
             # Store the data within a list.
             forecast_temperature.append(temp)
         
-        forecast_temperature = forecast_temperature[::180]
+        forecast_temperature = forecast_temperature[::60]
         
         # Remove extreme values from the forecast.
         one_percentile = np.percentile(forecast_temperature, 1)
@@ -295,7 +295,7 @@ cdef class Dynamics(Water):
         # Define the forecast period.
         forecast_days = int(self.forecast_days)
         cdef np.ndarray time = np.linspace(
-            0, forecast_days, (forecast_days * 8640)
+            0, forecast_days, (forecast_days * 1440)
         )
 
         # Define the initial precipitable water condition.
@@ -361,39 +361,43 @@ cdef class Dynamics(Water):
             # Store the predicted amount of precipitable water into a list.
             forecast_precipitablewater.append(pwv_output)
 
-        forecast_precipitablewater = forecast_precipitablewater[::180]
+        forecast_precipitablewater = forecast_precipitablewater[::60]
 
         # Remove extreme values from the forecast.
         one_percentile = np.percentile(forecast_precipitablewater, 1)
+        ninetynine_percentile = np.percentile(
+            forecast_precipitablewater, 99
+        )
         pwv = []
         for forecast_pwv in forecast_precipitablewater:
             forecast_pwv = forecast_pwv.value
             forecast_pwv[forecast_pwv < one_percentile] = one_percentile
+            forecast_pwv[
+                forecast_pwv > ninetynine_percentile
+            ] = ninetynine_percentile
             forecast_pwv *= self.units.mm
             pwv.append(forecast_pwv)
 
         forecast_precipitablewater = pwv
         return forecast_precipitablewater
 
-    def simulate(self, temp_long=-7.6921):
+    def simulate(self):
         """
         This method outputs a visualisation of how temperature, pressure
-        thickness, geostrophic wind, and precipitable water vapor will evolve.
-        The geostrophic wind and temperature elements of this visualisation
-        operate similarly to the method, amsimp.Wind.wind_contourf(), so, please
-        refer to this method for a detailed description of the aforementioned
-        elements. Likewise, please refer to amsimp.Water.water_contourf() for
-        more information on the visualisation element of precipitable water
-        vapor.
-        """
-        # Ensure temp_long is between -180 and 180.
-        if temp_long < -180 or temp_long > 180:
-            raise Exception(
-                "temp_long must be a real number between -180 and 180. The value of temp_long was: {}".format(
-                    temp_long
-                )
-            )
+        thickness, atmospheric pressure, and precipitable water vapor will evolve.
+        The atmospheric pressure and precipitable water elements of this 
+        visualisation operate similarly to the method, 
+        amsimp.Backend.longitude_contourf(), so, please refer to this method for a
+        detailed description of the aforementioned elements. Likewise, please refer
+        to amsimp.Water.water_contourf() for more information on the visualisation
+        element of precipitable water vapor, or to
+        amsimp.Backend.altitude_contourf() for more information on the visualisation
+        element of temperature.
 
+        For a visualisation of geostrophic wind (zonal and meridional components),
+        please refer to the amsimp.Wind.wind_contourf(), or amsimp.Wind.globe()
+        methods.
+        """
         # Define the forecast period.
         forecast_days = int(self.forecast_days)
         cdef np.ndarray time = np.linspace(
@@ -409,19 +413,17 @@ cdef class Dynamics(Water):
         fig.subplots_adjust(hspace=0.340, bottom=0.105, top=0.905)
         plt.ion()
 
-        # Geostrophic Wind
-        ax1 = plt.subplot(gs[0, 0])
-        #predict_u = np.sqrt(
-        #    (self.zonal_wind() ** 2) + (self.meridional_wind() ** 2)
-        #)
         # Temperature
-        indx_long = (np.abs(self.longitude_lines().value - temp_long)).argmin()
-        ax2 = plt.subplot(gs[1, 0])
+        indx_long = (np.abs(self.longitude_lines().value - 0)).argmin()
+        ax1 = plt.subplot(gs[0, 0])
         forecast_temp = self.forecast_temperature()
+        # Atmospheric Pressure
+        ax2 = plt.subplot(gs[1, 0], projection=ccrs.EckertIII())
+        forecast_pressure = self.forecast_pressure()
         # Precipitable Water
         ax3 = plt.subplot(gs[0, 1], projection=ccrs.EckertIII())
         forecast_Pwv = self.forecast_precipitablewater()
-        # Pressure Thickness
+        # Pressure Thickness (1000hPa - 500hPa).
         ax4 = plt.subplot(gs[1, 1], projection=ccrs.EckertIII())
         forecast_pthickness = self.forecast_pressurethickness()
 
@@ -434,77 +436,88 @@ cdef class Dynamics(Water):
         t = 0
         while t < len(time):
             # Defines the axes.
-            # For temperature, geostrophic wind, and pressure thickness plots.
+            # For the temperature contour plot.
             latitude, altitude = np.meshgrid(
                 self.latitude_lines(), self.altitude_level()
             )
-            """"
-            # Geostrophic wind contourf.
-            # Geostrophic wind data.
-            geostrophic_wind = (
-                predict_u[0] * time[t]
-            ) + predict_u[1]
-
-            # Contouf plotting.
-            cmap1 = plt.get_cmap("jet")
-            min1 = predict_u[1].min()
-            max1 = predict_u[1].max()
-            if min1 > -100 and max1 < 100:
-                level1 = np.linspace(-60, max1, 21)
-            else:
-                level1 = np.linspace(-70, 120, 21)
-            v_g = ax1.contourf(
-                latitude, altitude, geostrophic_wind, cmap=cmap1, levels=level1
+            # For the pressure, precipitable water, and pressure 
+            # thickness countour plot
+            lat, long = np.meshgrid(
+                self.latitude_lines(), self.longitude_lines()
             )
-
-            # Checks for a colorbar.
-            if t == 0:
-                cb1 = fig.colorbar(v_g, ax=ax1)
-                tick_locator = ticker.MaxNLocator(nbins=10)
-                cb1.locator = tick_locator
-                cb1.update_ticks()
-                cb1.set_label("Velocity ($\\frac{m}{s}$)")
-                cb1
-
-            # Add SALT to the graph.
-            ax1.set_xlabel("Latitude ($\phi$)")
-            ax1.set_ylabel("Altitude (m)")
-            ax1.set_title("Geostrophic Wind")"""
-
-            # Temperature contouf.
+            
+            # Temperature contour plot.
             # Temperature data.
             temperature = forecast_temp[t]
             temperature = temperature[indx_long, :, :]
             temperature = np.transpose(temperature)
 
-            # Contouf plotting.
-            cmap2 = plt.get_cmap("hot")
-            min2 = np.min(forecast_temp)
-            max2 = np.max(forecast_temp)
-            level2 = np.linspace(min2, max2, 21)
-            temp = ax2.contourf(
-                latitude, altitude, temperature, cmap=cmap2, levels=level2
+            # Contour plotting.
+            cmap1 = plt.get_cmap("hot")
+            min1 = np.min(forecast_temp)
+            max1 = np.max(forecast_temp)
+            level1 = np.linspace(min1, max1, 21)
+            temp = ax1.contourf(
+                latitude, altitude, temperature, cmap=cmap1, levels=level1
             )
 
             # Checks for a colorbar.
             if t == 0:
-                cb2 = fig.colorbar(temp, ax=ax2)
+                cb1 = fig.colorbar(temp, ax=ax1)
+                tick_locator = ticker.MaxNLocator(nbins=10)
+                cb1.locator = tick_locator
+                cb1.update_ticks()
+                cb1.set_label("Temperature (K)")
+
+            # Add SALT to the graph.
+            ax1.set_xlabel("Latitude ($\phi$)")
+            ax1.set_ylabel("Altitude (m)")
+            ax1.set_title("Temperature")
+
+            # Atmospheric pressure contour.
+            # Pressure data.
+            pressure = forecast_pressure[t]
+            pressure = pressure[:, :, 0]
+
+            # EckertIII projection details.
+            ax2.set_global()
+            ax2.coastlines()
+            ax2.gridlines()
+
+            # Contourf plotting.
+            pressure_sealevel = np.asarray(forecast_pressure)
+            pressure_sealevel = pressure_sealevel[:, :, :, 0]
+            cmap2 = plt.get_cmap("jet")
+            min2 = np.min(pressure_sealevel)
+            max2 = np.max(pressure_sealevel)
+            level2 = np.linspace(min2, max2, 21)
+            atmospheric_pressure = ax2.contourf(
+                long,
+                lat,
+                pressure,
+                cmap=cmap2,
+                levels=level2,
+                transform=ccrs.PlateCarree(),
+            )
+
+            # Checks for a colorbar.
+            if t == 0:
+                cb2 = fig.colorbar(atmospheric_pressure, ax=ax2)
                 tick_locator = ticker.MaxNLocator(nbins=10)
                 cb2.locator = tick_locator
                 cb2.update_ticks()
-                cb2.set_label("Temperature (K)")
+                cb2.set_label("Pressure (hPa)")
 
             # Add SALT to the graph.
-            ax2.set_xlabel("Latitude ($\phi$)")
-            ax2.set_ylabel("Altitude (m)")
-            ax2.set_title("Temperature")
-
-            # Precipitable water contourf.
-            # For recipitable water plot
-            lat, long = np.meshgrid(
-                self.latitude_lines(), self.longitude_lines()
+            ax2.set_xlabel("Longitude ($\lambda$)")
+            ax2.set_ylabel("Latitude ($\phi$)")
+            ax2.set_title(
+                "Atmospheric Pressure (Alt = " 
+                + str(self.altitude_level()[0])
+                + ")"
             )
 
+            # Precipitable water contour.
             # Precipitable water data.
             precipitable_water = forecast_Pwv[t]
 
@@ -516,7 +529,7 @@ cdef class Dynamics(Water):
             # Contourf plotting.
             cmap3 = plt.get_cmap("seismic")
             min3 = np.min(forecast_Pwv)
-            max3 = np.percentile(forecast_Pwv, 99)
+            max3 = np.max(forecast_Pwv)
             level3 = np.linspace(min3, max3, 21)
             precipitable_watervapour = ax3.contourf(
                 long,
@@ -569,7 +582,7 @@ cdef class Dynamics(Water):
             # Add SALT.
             ax4.set_xlabel("Latitude ($\phi$)")
             ax4.set_ylabel("Longitude ($\lambda$)")
-            ax4.set_title("Pressure Thickness")
+            ax4.set_title("Thickness (1000 hPa - 500 hPa)")
 
             # Checks for a colorbar.
             if t == 0:
@@ -577,20 +590,11 @@ cdef class Dynamics(Water):
                 tick_locator = ticker.MaxNLocator(nbins=10)
                 cb4.locator = tick_locator
                 cb4.update_ticks()
-                cb4.set_label("Pressure Thickness (1000 hPa - 500 hPa) (m)")
+                cb4.set_label("Pressure Thickness (m)")
 
             # Plots the average boundary line on two contourfs.
-            # Geostrophic wind contourf.
-            ax1.plot(
-                latitude[1],
-                trop_strat_line,
-                color="black",
-                linestyle="dashed",
-                label="Troposphere - Stratosphere Boundary Line",
-            )
-
             # Temperature contourf.
-            ax2.plot(
+            ax1.plot(
                 latitude[1],
                 trop_strat_line,
                 color="black",
@@ -620,12 +624,19 @@ cdef class Dynamics(Water):
             else:
                 plt.pause(10)
 
+            note = (
+                "Note: Geostrophic balance does not hold near the equator."
+                + " Rain / Snow Line is marked on the Pressure Thickness" 
+                + " contour plot by the black line (5,400 m)."
+            )
+
             # Footnote
             plt.figtext(
                 0.99,
                 0.01,
-                "Note: Geostrophic balance does not hold near the equator.",
+                note,
                 horizontalalignment="right",
+                fontsize=10,
             )
 
             t += 1
