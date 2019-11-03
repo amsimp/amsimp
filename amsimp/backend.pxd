@@ -18,7 +18,6 @@ cdef class Backend:
     cpdef np.ndarray pressure(self)
     cpdef fit_method(self, x, a, b, c)
     cpdef np.ndarray pressure_thickness(self)
-    cpdef np.ndarray sigma_coordinates(self)
     cpdef np.ndarray potential_temperature(self)
     cpdef np.ndarray exner_function(self)
     cpdef np.ndarray troposphere_boundaryline(self)

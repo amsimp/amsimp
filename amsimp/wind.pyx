@@ -317,11 +317,11 @@ cdef class Wind(Backend):
         np.seterr(all="ignore")
 
         # Define the axes, and the data.
-        latitude, longitude = np.meshgrid(self.latitude_lines(),
-         self.longitude_lines()
+        latitude, longitude = np.meshgrid(self.latitude_lines().value,
+         self.longitude_lines().value
         )
-        u = self.zonal_wind()[:, :, indx_alt]
-        v = self.meridional_wind()[:, :, indx_alt]
+        u = self.zonal_wind()[:, :, indx_alt].value
+        v = self.meridional_wind()[:, :, indx_alt].value
 
         u_norm = u / np.sqrt(u ** 2 + v ** 2)
         v_norm = v / np.sqrt(u ** 2 + v ** 2)
@@ -334,7 +334,8 @@ cdef class Wind(Backend):
             )
         )
 
-        # Add latitudinal and longitudinal grid lines, as well as, coastlines to the globe.
+        # Add latitudinal and longitudinal grid lines, as well as, 
+        # coastlines to the globe.
         ax.set_global()
         ax.coastlines()
         ax.gridlines()

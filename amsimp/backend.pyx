@@ -13,7 +13,6 @@ from datetime import datetime
 import io
 import socket
 import wget
-import dateutil.relativedelta as future_month
 import numpy as np
 from astropy import constants as const
 from astropy import units
@@ -417,40 +416,6 @@ cdef class Backend:
         pressure_thickness *= units.m
         return pressure_thickness
 
-    cpdef np.ndarray sigma_coordinates(self):
-        """
-        Description is placed here.
-        
-        Equation:
-        sigma = \frac{p - p_T}{p_S - p_T}
-        """
-        pressure = self.pressure().value
-
-        # Define the top and the ground surface values. 
-        p_S = pressure[:, :, 0]
-        p_T = pressure[:, :, -1]
-
-        # Define the sigma coordinates.
-        cdef list list_sigmacoordinates = []
-        cdef np.ndarray p, sigma
-        cdef list list_sigma
-        cdef int len_pressure = len(pressure[0][0])
-        cdef int n = 0
-        while n < len_pressure:
-            p = pressure[:, :, n]
-
-            sigma = (p - p_T) / (p_S - p_T) 
-            list_sigma = list(sigma)
-
-            list_sigmacoordinates.append(list_sigma)
-
-            n += 1
-
-        # Convert the list into a NumPy array.
-        sigma_coordinates = np.asarray(list_sigmacoordinates)
-        sigma_coordinates = np.transpose(sigma_coordinates, (1, 2, 0))
-        return sigma_coordinates
-
     cpdef np.ndarray potential_temperature(self):
         """
         Generates a NumPy array of potential temperature. The potential
@@ -678,9 +643,9 @@ cdef class Backend:
             data = np.transpose(data)
             data_type = "Temperature"
             unit = " (K)"
+            cmap = plt.get_cmap("hot")
 
         # Contourf plotting.
-        cmap = plt.get_cmap("hot")
         minimum = data.min()
         maximum = data.max()
         levels = np.linspace(minimum, maximum, 21)

@@ -8,11 +8,14 @@ AMSIMP Dynamics Class. For information about this class is described below.
 # -----------------------------------------------------------------------------------------#
 
 # Importing Dependencies
+from datetime import timedelta
 import matplotlib.pyplot as plt
 from matplotlib import style
 import matplotlib.gridspec as gridspec
 from matplotlib import ticker
 import numpy as np
+from pynverse import inversefunc
+from scipy.optimize import curve_fit
 import cartopy.crs as ccrs
 from amsimp.wind cimport Wind
 from amsimp.wind import Wind
@@ -39,7 +42,8 @@ cdef class Dynamics(Water):
     for the specified number of forecast days. Every single day is divided
     into 6, meaning the length of the outputted list is six times the number
     of forecast days specified.
-    predict_pressurethickness ~ 
+    forecast_pressure ~ 
+    forecast_pressurethickness ~ 
     forecast_precipitablewater ~ this method outputs the forecasted precipitable
     water for the specified number of forecast days. Every single day is divided
     into 6, meaning the length of the outputted list is six times the number
@@ -123,7 +127,7 @@ cdef class Dynamics(Water):
 
         return delta_x, delta_y, delta_z
 
-    def forecast_temperature(self):
+    cpdef list forecast_temperature(self):
         """
         Description is placed here.
 
@@ -131,39 +135,42 @@ cdef class Dynamics(Water):
         \frac{\partial T}{\partial t} = u \* \frac{\partial T}{\partial x} +
                                         v \* \frac{\partial T}{\partial y} +
                                         w \* \frac{\partial T}{\partial z}
-        
-        Known bug(s):
-        For some unknown reason, it seems to generate a few 
-        temperature extremities, i.e. really low Kelvin values (143 K),
-        or really high Kelvin values (316 K). However, the majority of
-        values are in line with expectations.
         """
+        # Define the forecast period.
         forecast_days = int(self.forecast_days)
-        time = np.linspace(
-            0, forecast_days, (forecast_days * 6)
+        cdef np.ndarray time = np.linspace(
+            0, forecast_days, (forecast_days * 4320)
         )
 
         # Define the initial temperature condition.
-        temperature = self.temperature()
+        cdef np.ndarray temperature = self.temperature()
 
         # Define delta_x, delta_y, and delta_y.
         delta_xyz = self.delta_xyz()
-        delta_x = delta_xyz[0]
-        delta_y = delta_xyz[1]
-        delta_z = delta_xyz[2]
+        cdef np.ndarray delta_x = delta_xyz[0]
+        cdef delta_y = delta_xyz[1]
+        cdef delta_z = delta_xyz[2]
+
+        # Define delta_t
+        delta_t = time[1] - time[0]
+        delta_xval = delta_x.value
+        delta_t = delta_t + np.zeros(
+            (len(delta_xval), len(delta_xval[0]), len(delta_xval[0][0]))
+        )
+        delta_t *= self.units.day
+        delta_t = delta_t.to(self.units.s)
 
         # Define the zonal, meridional, and vertical wind velocities.
-        u = self.zonal_wind()
-        v = self.meridional_wind()
+        cdef np.ndarray u = self.zonal_wind()
+        cdef np.ndarray v = self.meridional_wind()
         w = 0 * (self.units.m / self.units.s)
 
         # Calculate how temperature will evolve over time.
         forecast_temperature = []
+        cdef list temperature_gradient
+        cdef np.ndarray temperature_gradientx, temperature_gradienty
+        cdef np.ndarray temperature_gradientz
         for t in time:
-            # Change time increment from days to seconds.
-            t = t * self.units.day
-            t = t.to(self.units.s)
-
             # Define the temperature gradient.
             temperature_gradient = np.gradient(temperature)
 
@@ -173,29 +180,110 @@ cdef class Dynamics(Water):
             temperature_gradienty = temperature_gradient[1]
             temperature_gradientz = temperature_gradient[2]
 
-            # Calculate how temperature will change over time.
-            delta_T_over_delta_t = (
-                (u * (temperature_gradientx / delta_x))
-                + (v * (temperature_gradienty / delta_y))
-                + (w * (temperature_gradientz / delta_z))
+            # Calculate how temperature at a particular point in time.
+            temp = temperature + (
+                u * (delta_t / delta_x) * temperature_gradientx
+            ) + (
+                v * (delta_t / delta_y) * temperature_gradienty
+            ) + (
+                w * (delta_t / delta_z) * temperature_gradientz
             )
+            temperature = temp.copy()
 
-            # Predict the temperature on a given day.
-            # y = mx + c
-            temp = temperature + (delta_T_over_delta_t * t)
-
-            # Store the predicted temperature into a list
+            # Store the data within a list.
             forecast_temperature.append(temp)
+        
+        forecast_temperature = forecast_temperature[::180]
+        
+        # Remove extreme values from the forecast.
+        one_percentile = np.percentile(forecast_temperature, 1)
+        temp = []
+        for forecast_temp in forecast_temperature:
+            forecast_temp = forecast_temp.value
+            forecast_temp[forecast_temp < one_percentile] = one_percentile
+            forecast_temp *= self.units.K
+            temp.append(forecast_temp)
 
         return forecast_temperature
-
-    def forecast_pressurethickness(self):
+    
+    cpdef list forecast_pressure(self):
         """
         Description is place here.
         """
-        
+        # Store the forecasted temperature in a variable. Atmospheric
+        # density remains constant as described by the Conservation
+        # of Mass Equation (Primitive Equations).
+        cdef list forecast_temperature = self.forecast_temperature()
+        cdef np.ndarray density = self.density()
+        # Universal gas constant (J * kg^-1 * K^-1)
+        cdef R = 287 * (self.units.J / (self.units.kg * self.units.K))
 
-    def forecast_precipitablewater(self):
+        # Generate a forecast for pressure for the specified number of
+        # days.
+        cdef np.ndarray forecast_temp, forecast_p
+        forecast_pressure = []
+        for forecast_temp in forecast_temperature:
+            forecast_p = density * R * forecast_temp
+            forecast_p = forecast_p.to(self.units.hPa)
+
+            forecast_pressure.append(forecast_p)
+
+        return forecast_pressure
+
+    cpdef fit_method(self, x, a, b, c):
+        """
+        This method is solely utilised for non-linear regression in the
+        amsimp.Dynamics.forecast_pressurethickness() method. Please do not
+        interact with the method directly.
+        """
+        return a - (b / c) * (1 - np.exp(-c * x))
+
+    cpdef list forecast_pressurethickness(self):
+        """
+        Description is place here.
+        """
+        # Store the forecasted temperature in a variable.
+        cdef list forecast_pressure = self.forecast_pressure()
+        cdef np.ndarray altitude = self.altitude_level()[:20].value
+        
+        forecast_pressurethickness = []
+        cdef np.ndarray forecast_p, pressure_thickness
+        cdef np.ndarray p, p_lat, abc
+        cdef list list_pressurethickness = []
+        cdef list guess = [1000, 0.12, 0.00010]
+        cdef list pthickness_lat
+        cdef tuple c
+        cdef float hPa1000_height, hPa500_height, pthickness
+        for forecast_p in forecast_pressure:
+            forecast_p = forecast_p.value
+
+            list_pressurethickness = []
+            for p in forecast_p:
+                pthickness_lat = []
+                for p_lat in p:
+                    p_lat = p_lat[:20]
+
+                    c = curve_fit(self.fit_method, altitude, p_lat, guess)
+                    abc = c[0]
+
+                    inverse_fitmethod = inversefunc(self.fit_method,
+                        args=(abc[0], abc[1], abc[2])
+                    )
+
+                    hPa1000_height = inverse_fitmethod(1000)
+                    hPa500_height = inverse_fitmethod(500)
+                    pthickness = hPa500_height - hPa1000_height
+
+                    pthickness_lat.append(pthickness)
+                list_pressurethickness.append(pthickness_lat)
+            
+            pressure_thickness = np.asarray(list_pressurethickness)
+            pressure_thickness *= self.units.m
+            forecast_pressurethickness.append(pressure_thickness)
+
+        return forecast_pressurethickness
+
+    cpdef list forecast_precipitablewater(self):
         """
         Description is placed here.
 
@@ -203,41 +291,43 @@ cdef class Dynamics(Water):
         \frac{\partial W}{\partial t} = u \* \frac{\partial W}{\partial x} +
                                         v \* \frac{\partial W}{\partial y} +
                                         w \* \frac{\partial W}{\partial z}
-
-        Known bug(s):
-        For some unknown reason, it seems to generate a few 
-        precipitable water extremities, i.e. really high amounts of
-        precipitable water (93 mm). However, the majority of
-        values are in line with expectations.
         """
+        # Define the forecast period.
         forecast_days = int(self.forecast_days)
-        time = np.linspace(
-            0, forecast_days, (forecast_days * 6)
+        cdef np.ndarray time = np.linspace(
+            0, forecast_days, (forecast_days * 8640)
         )
 
         # Define the initial precipitable water condition.
-        precipitable_water = self.precipitable_water(sum_altitude=False)
+        cdef np.ndarray precipitable_water = self.precipitable_water(
+            sum_altitude=False
+        )
 
         # Define delta_x, delta_y, and delta_y.
         delta_xyz = self.delta_xyz()
-        delta_x = delta_xyz[0]
-        delta_x = delta_x[:, :, :40]
-        delta_y = delta_xyz[1]
-        delta_z = delta_xyz[2]
+        cdef np.ndarray delta_x = delta_xyz[0][:, :, :40]
+        cdef delta_y = delta_xyz[1]
+        cdef delta_z = delta_xyz[2]
 
+        # Define delta_t
+        delta_t = time[1] - time[0]
+        delta_xval = delta_x.value
+        delta_t = delta_t + np.zeros(
+            (len(delta_xval), len(delta_xval[0]), len(delta_xval[0][0]))
+        )
+        delta_t *= self.units.day
+        delta_t = delta_t.to(self.units.s)
 
         # Define the zonal, meridional, and vertical wind velocities.
-        u = self.zonal_wind()[:, :, :40]
-        v = self.meridional_wind()[:, :, :40]
+        cdef np.ndarray u = self.zonal_wind()[:, :, :40]
+        cdef np.ndarray v = self.meridional_wind()[:, :, :40]
         w = 0 * (self.units.m / self.units.s)
 
         # Calculate how precipitable water will evolve over time.
         forecast_precipitablewater = []
+        cdef list pwv_gradient
+        cdef np.ndarray pwv_gradientx, pwv_gradienty, pwv_gradientz
         for t in time:
-            # Change time increment from days to seconds.
-            t = t * self.units.day
-            t = t.to(self.units.s)
-
             # Define the precipitable water gradient.
             pwv_gradient = np.gradient(precipitable_water)
 
@@ -247,34 +337,45 @@ cdef class Dynamics(Water):
             pwv_gradienty = pwv_gradient[1]
             pwv_gradientz = pwv_gradient[2]
 
-            # Calculate how precipitable water will change over time.
-            delta_W_over_delta_t = (
-                (u * (pwv_gradientx / delta_x))
-                + (v * (pwv_gradienty / delta_y))
-                + (w * (pwv_gradientz / delta_z))
+            # Calculate how temperature at a particular point in time.
+            pwv = precipitable_water + (
+                u * (delta_t / delta_x) * pwv_gradientx
+            ) + (
+                v * (delta_t / delta_y) * pwv_gradienty
+            ) + (
+                w * (delta_t / delta_z) * pwv_gradientz
             )
-
-            # Predict the amount of precipitable water on a given day.
-            # y = mx + c
-            pwv = precipitable_water + (delta_W_over_delta_t * t)
+            precipitable_water = pwv.copy()
 
             # Sum by the altitude component.
-            pwv = pwv.value
+            pwv_output = pwv.value
             list_pwv = []
-            for pwv_long in pwv:
+            for pwv_long in pwv_output:
                 list_pwvlat = []
                 for pwv_lat in pwv_long:
                     pwv_alt = np.sum(pwv_lat)
                     list_pwvlat.append(pwv_alt)
                 list_pwv.append(list_pwvlat)
-            pwv = np.asarray(list_pwv) * self.units.mm
+            pwv_output = np.asarray(list_pwv) * self.units.mm
 
             # Store the predicted amount of precipitable water into a list.
-            forecast_precipitablewater.append(pwv)
+            forecast_precipitablewater.append(pwv_output)
 
+        forecast_precipitablewater = forecast_precipitablewater[::180]
+
+        # Remove extreme values from the forecast.
+        one_percentile = np.percentile(forecast_precipitablewater, 1)
+        pwv = []
+        for forecast_pwv in forecast_precipitablewater:
+            forecast_pwv = forecast_pwv.value
+            forecast_pwv[forecast_pwv < one_percentile] = one_percentile
+            forecast_pwv *= self.units.mm
+            pwv.append(forecast_pwv)
+
+        forecast_precipitablewater = pwv
         return forecast_precipitablewater
 
-    def simulate(self):
+    def simulate(self, temp_long=-7.6921):
         """
         This method outputs a visualisation of how temperature, pressure
         thickness, geostrophic wind, and precipitable water vapor will evolve.
@@ -285,8 +386,19 @@ cdef class Dynamics(Water):
         more information on the visualisation element of precipitable water
         vapor.
         """
-        # Time (Unit: day).
-        time = np.linspace(0, (self.number_of_days - 1), (self.number_of_days * 2))
+        # Ensure temp_long is between -180 and 180.
+        if temp_long < -180 or temp_long > 180:
+            raise Exception(
+                "temp_long must be a real number between -180 and 180. The value of temp_long was: {}".format(
+                    temp_long
+                )
+            )
+
+        # Define the forecast period.
+        forecast_days = int(self.forecast_days)
+        cdef np.ndarray time = np.linspace(
+            0, forecast_days, (forecast_days * 24)
+        )
 
         # Style of graph.
         style.use("fivethirtyeight")
@@ -299,16 +411,22 @@ cdef class Dynamics(Water):
 
         # Geostrophic Wind
         ax1 = plt.subplot(gs[0, 0])
-        predict_u = self.zonal_wind()
+        #predict_u = np.sqrt(
+        #    (self.zonal_wind() ** 2) + (self.meridional_wind() ** 2)
+        #)
         # Temperature
+        indx_long = (np.abs(self.longitude_lines().value - temp_long)).argmin()
         ax2 = plt.subplot(gs[1, 0])
-        predict_t = self.predict_temperature()
+        forecast_temp = self.forecast_temperature()
         # Precipitable Water
         ax3 = plt.subplot(gs[0, 1], projection=ccrs.EckertIII())
-        predict_Pwv = np.asarray(self.predict_precipitablewater())
+        forecast_Pwv = self.forecast_precipitablewater()
         # Pressure Thickness
-        ax4 = plt.subplot(gs[1, 1])
-        predict_pthickness = self.predict_pressurethickness()
+        ax4 = plt.subplot(gs[1, 1], projection=ccrs.EckertIII())
+        forecast_pthickness = self.forecast_pressurethickness()
+
+        # Troposphere - Stratosphere Boundary Line
+        trop_strat_line = self.troposphere_boundaryline()
 
         t = 0
         while t < len(time):
@@ -317,10 +435,7 @@ cdef class Dynamics(Water):
             latitude, altitude = np.meshgrid(
                 self.latitude_lines(), self.altitude_level()
             )
-            # For recipitable water plot
-            long = self.latitude_lines() * 2
-            lat_pw, longitude = np.meshgrid(self.latitude_lines(), long)
-
+            """"
             # Geostrophic wind contourf.
             # Geostrophic wind data.
             geostrophic_wind = (
@@ -351,18 +466,18 @@ cdef class Dynamics(Water):
             # Add SALT to the graph.
             ax1.set_xlabel("Latitude ($\phi$)")
             ax1.set_ylabel("Altitude (m)")
-            ax1.set_title("Geostrophic Wind")
+            ax1.set_title("Geostrophic Wind")"""
 
             # Temperature contouf.
             # Temperature data.
-            temperature = (
-                predict_t[0] * time[t]
-            ) + predict_t[1]
+            temperature = forecast_temp[t]
+            temperature = temperature[indx_long, :, :]
+            temperature = np.transpose(temperature)
 
             # Contouf plotting.
             cmap2 = plt.get_cmap("hot")
-            min2 = temperature.min()
-            max2 = temperature.max()
+            min2 = forecast_temp[0].value.min()
+            max2 = forecast_temp[0].value.max()
             level2 = np.linspace(min2, max2, 21)
             temp = ax2.contourf(
                 latitude, altitude, temperature, cmap=cmap2, levels=level2
@@ -382,17 +497,13 @@ cdef class Dynamics(Water):
             ax2.set_title("Temperature")
 
             # Precipitable water contourf.
-            # Precipitable water data.
-            P_w = (
-                predict_Pwv[0] * time[t]
-            ) + predict_Pwv[1]
-            precipitable_water = []
-            n = 0
-            while n < len(longitude):
-                precipitable_water.append(list(P_w))
+            # For recipitable water plot
+            lat, long = np.meshgrid(
+                self.latitude_lines(), self.longitude_lines()
+            )
 
-                n += 1
-            precipitable_water = np.asarray(precipitable_water)
+            # Precipitable water data.
+            precipitable_water = forecast_Pwv[t]
 
             # EckertIII projection details.
             ax3.set_global()
@@ -401,11 +512,12 @@ cdef class Dynamics(Water):
 
             # Contourf plotting.
             cmap3 = plt.get_cmap("seismic")
-            min3 = predict_Pwv[1].min()
-            level3 = np.linspace(min3, 100, 21)
+            min3 = forecast_Pwv[0].value.min()
+            max3 = np.percentile(forecast_Pwv[0], 99)
+            level3 = np.linspace(min3, max3, 21)
             precipitable_watervapour = ax3.contourf(
-                longitude,
-                lat_pw,
+                long,
+                lat,
                 precipitable_water,
                 cmap=cmap3,
                 levels=level3,
@@ -427,44 +539,42 @@ cdef class Dynamics(Water):
 
             # Pressure thickness scatter plot.
             # Pressure thickness data.
-            pressure_thickness = (
-                predict_pthickness[0] * time[t]
-            ) + predict_pthickness[1]
+            pressure_thickness = forecast_pthickness[t]
 
-            # Define snow line, and plot.
-            snow_line = np.zeros(len(pressure_thickness))
-            snow_line += 5400
-            ax4.plot(snow_line, self.latitude_lines(), "m--", label="Snow Line")
+            # EckertIII projection details.
+            ax4.set_global()
+            ax4.coastlines()
+            ax4.gridlines()
 
-            # Scatter plotting.
-            ax4.scatter(pressure_thickness, self.latitude_lines(), color="b")
+            # Contourf plotting.
+            min4 = forecast_pthickness[0].value.min()
+            max4 = forecast_pthickness[0].value.max()
+            level4 = np.linspace(min4, max4, 21)
+            pressure_h = ax4.contourf(
+                long,
+                lat,
+                pressure_thickness,
+                transform=ccrs.PlateCarree(),
+                levels=level4,
+            )
 
-            # Add SALT to the graph.
-            ax4.set_xlabel("Pressure Thickness (m)")
-            ax4.set_ylabel("Latitude ($\phi$)")
-            ax4.set_title("Pressure Thickness (1000hPa - 500hPa)")
-            ax4.set_xlim(5100, 6300)
-            ax4.legend(loc=0)
+            # Index of the rain / snow line
+            indx_snowline = (np.abs(level4 - 5400)).argmin()
+            pressure_h.collections[indx_snowline].set_color('black')
+            pressure_h.collections[indx_snowline].set_linewidth(1) 
 
-            # Troposphere - Stratosphere Boundary Line
-            # Determines the true boundary line.
-            trop_strat_line = []
-            for temp_ in np.transpose(temperature):
-                n = 0
-                while n < len(temp_):
-                    y1 = temp_[n]
-                    y2 = temp_[n + 1]
+            # Add SALT.
+            ax4.set_xlabel("Latitude ($\phi$)")
+            ax4.set_ylabel("Longitude ($\lambda$)")
+            ax4.set_title("Pressure Thickness")
 
-                    if (y2 - y1) > 0 and self.altitude_level()[n] >= 10000:
-                        alt = self.altitude_level()[n]
-                        trop_strat_line.append(alt)
-                        n = len(temp_)
-
-                    n += 1
-
-            # Generates the average boundary line as a numpy array.
-            trop_strat_line = np.asarray(trop_strat_line)
-            trop_strat_line = np.mean(trop_strat_line) + np.zeros(len(trop_strat_line))
+            # Checks for a colorbar.
+            if t == 0:
+                cb4 = fig.colorbar(pressure_h, ax=ax4)
+                tick_locator = ticker.MaxNLocator(nbins=10)
+                cb4.locator = tick_locator
+                cb4.update_ticks()
+                cb4.set_label("Pressure Thickness (1000 hPa - 500 hPa) (m)")
 
             # Plots the average boundary line on two contourfs.
             # Geostrophic wind contourf.
@@ -486,20 +596,14 @@ cdef class Dynamics(Water):
             )
 
             # Title of Simulation.
-            day = int(np.floor((time[t] + 1)))
-            if day < 10:
-                day = "0" + str(day)
-            else:
-                day = str(day)
+            now = self.date + timedelta(hours=+t)
+            hour = now.hour
+            minute = now.minute
 
             fig.suptitle(
-                "Motus Aeris @ AMSIMP ("
-                + day
-                + " of "
-                + self.month.title()
-                + ", "
-                + str(self.date.year)
-                + ")"
+                "Motus Aeris @ AMSIMP (" + str(hour)
+                + ":" + str(minute) + " "
+                + now.strftime("%d-%m-%Y") + ")"
             )
 
             # Displaying simualtion.
