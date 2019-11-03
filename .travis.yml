@@ -14,6 +14,8 @@ install:
   - conda update -q conda
   - conda install -c amsimp amsimp
   - conda uninstall amsimp
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - source $HOME/miniconda/bin/activate
   - pip install pynverse
   - pip install wget
   - python3 -m pip install sphinx
