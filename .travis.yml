@@ -29,6 +29,7 @@ deploy:
 after_success:
   - cd ..
   - cd ..
+  - echo $PWD
   - coverage run tests.py
   - codecov
   
