@@ -22,6 +22,12 @@ AMSIMP is distributed on `Anaconda Cloud <https://anaconda.org/amsimp/amsimp>`_ 
 
    $ conda install -c amsimp amsimp
 
+Following which, you will also need to install the following packages from PyPI:
+
+.. code:: sh
+
+   $ pip install wget && pip install pynverse
+
 If you run into any issues, you can either create an issue on
 `GitHub <https://github.com/amsimp/amsimp/issues>`_ or
 contact me by `email <support@amsimp.com>`_.
