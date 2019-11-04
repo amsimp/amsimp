@@ -29,10 +29,12 @@ cdef class Dynamics(Water):
     """
     AMSIMP Dynamics Class - Also, known as Motus Aeris @ AMSIMP. This class
     generates rudimentary simulation of tropospheric and stratsopheric
-    dynamics on a synoptic scale. Predictions are made by calculating the
-    derivative of each element using finite-difference. The initial conditions
+    dynamics on a synoptic scale. Predictions are made by numerically
+    solving the Primitive Equations (they are PDEs). The initial conditions
     are defined in the class methods of Water, Wind, and Backend. For more
-    information on the initial conditions, please see those classes.
+    information on the initial conditions, please see those classes. The
+    boundary conditions are handled by the gradient function between
+    NumPy.
 
     Below is a list of the methods included within this class, with a short
     description of their intended purpose. Please see the relevant class methods
@@ -40,13 +42,19 @@ cdef class Dynamics(Water):
 
     forecast_temperature ~ this method outputs the forecasted temperature
     for the specified number of forecast days. Every single day is divided
-    into 6, meaning the length of the outputted list is six times the number
+    into hours, meaning the length of the outputted list is 24 times the number
     of forecast days specified.
-    forecast_pressure ~ 
-    forecast_pressurethickness ~ 
+    forecast_pressure ~ this method outputs the forecasted atmospheric
+    pressure for the specified number of forecast days. Every single day is
+    divided into hours, meaning the length of the outputted list is 24 times the
+    number of forecast days specified.
+    forecast_pressurethickness ~ this method outputs the forecasted pressure
+    thickness for the specified number of forecast days. Every single day is
+    divided into hours, meaning the length of the outputted list is 24 times the
+    number of forecast days specified.
     forecast_precipitablewater ~ this method outputs the forecasted precipitable
     water for the specified number of forecast days. Every single day is divided
-    into 6, meaning the length of the outputted list is six times the number
+    into hours, meaning the length of the outputted list is 24 times the number
     of forecast days specified.
 
     simulate ~ this method outputs a visualisation of how temperature, pressure
@@ -129,12 +137,19 @@ cdef class Dynamics(Water):
 
     cpdef list forecast_temperature(self):
         """
-        Description is placed here.
+        Utilising the initial conditions as defined by 
+        amsimp.Backend.temperature() and the temperature primitive
+        equation, this method generates a forecast for temperature
+        for the specified number of days. The finite difference 
+        method is utilised to get a numerical solution to the
+        partial derivative equation. The value of delta t (the
+        change in time) is one minute. The time interval between
+        two elements in the outputted list is one hour.
 
         Equation:
-        \frac{\partial T}{\partial t} = u \* \frac{\partial T}{\partial x} +
-                                        v \* \frac{\partial T}{\partial y} +
-                                        w \* \frac{\partial T}{\partial z}
+        frac{\partial T}{\partial t} = u \* frac{\partial T}{\partial x} +
+                                       v \* frac{\partial T}{\partial y} +
+                                       w \* frac{\partial T}{\partial z}
         """
         # Define the forecast period.
         forecast_days = int(self.forecast_days)
@@ -208,7 +223,18 @@ cdef class Dynamics(Water):
     
     cpdef list forecast_pressure(self):
         """
-        Description is place here.
+        Utilising the forecasted temperature as defined by
+        amsimp.Dynamics.forecast_temperature(), the Ideal Gas Law
+        and assuming constant atmospheric density as defined by the
+        conservation of mass equation (primitive equation), this
+        method generates a forecast for atmospheric pressure for the
+        specified number of days. For more information on the
+        forecasted temperature, please see 
+        amsimp.Dynamics.forecast_temperature()
+
+        Equation:
+            \del \cdot rho = 0
+            p = rho \* R \* T
         """
         # Store the forecasted temperature in a variable. Atmospheric
         # density remains constant as described by the Conservation
@@ -240,7 +266,16 @@ cdef class Dynamics(Water):
 
     cpdef list forecast_pressurethickness(self):
         """
-        Description is place here.
+        Utilising the forecasted pressure as defined by 
+        amsimp.Dynamics.forecast_pressure() and utilising non-linear
+        regression, similiar to the amsimp.Backend.pressure_thickness()
+        method, this method generates a forecast of the atmospheric 
+        pressure thickness between 1000 hPa and 500 hPa. For 
+        more information on the forecasted pressure, please see
+        amsimp.Dynamics.forecast_temperature()
+
+        Equation:
+            y = a - frac{b}{c} * (1 - \exp(-c * x))
         """
         # Store the forecasted temperature in a variable.
         cdef list forecast_pressure = self.forecast_pressure()
@@ -285,12 +320,19 @@ cdef class Dynamics(Water):
 
     cpdef list forecast_precipitablewater(self):
         """
-        Description is placed here.
+        Utilising the initial conditions as defined by 
+        amsimp.Backend.precipitable_water() and the precipitable water
+        primitive equation, this method generates a forecast for precipitable
+        water for the specified number of days. The finite difference 
+        method is utilised to get a numerical solution to the partial
+        derivative equation. The value of delta t (the change in time) is
+        one minute. The time interval between two elements in the outputted
+        list is one hour.
 
         Equation:
-        \frac{\partial W}{\partial t} = u \* \frac{\partial W}{\partial x} +
-                                        v \* \frac{\partial W}{\partial y} +
-                                        w \* \frac{\partial W}{\partial z}
+        frac{\partial W}{\partial t} = u \* frac{\partial W}{\partial x} +
+                                       v \* frac{\partial W}{\partial y} +
+                                       w \* frac{\partial W}{\partial z}
         """
         # Define the forecast period.
         forecast_days = int(self.forecast_days)
@@ -384,19 +426,19 @@ cdef class Dynamics(Water):
     def simulate(self):
         """
         This method outputs a visualisation of how temperature, pressure
-        thickness, atmospheric pressure, and precipitable water vapor will evolve.
-        The atmospheric pressure and precipitable water elements of this 
-        visualisation operate similarly to the method, 
-        amsimp.Backend.longitude_contourf(), so, please refer to this method for a
-        detailed description of the aforementioned elements. Likewise, please refer
-        to amsimp.Water.water_contourf() for more information on the visualisation
-        element of precipitable water vapor, or to
-        amsimp.Backend.altitude_contourf() for more information on the visualisation
-        element of temperature.
+        thickness, atmospheric pressure, and precipitable water vapor will 
+        evolve. The atmospheric pressure and precipitable water elements of
+        this visualisation operate similarly to the method, 
+        amsimp.Backend.longitude_contourf(), so, please refer to this method for
+        a detailed description of the aforementioned elements. Likewise, please
+        refer to amsimp.Water.water_contourf() for more information on the
+        visualisation element of precipitable water vapor, or to
+        amsimp.Backend.altitude_contourf() for more information on the
+        visualisation element of temperature.
 
-        For a visualisation of geostrophic wind (zonal and meridional components),
-        please refer to the amsimp.Wind.wind_contourf(), or amsimp.Wind.globe()
-        methods.
+        For a visualisation of geostrophic wind (zonal and meridional
+        components), please refer to the amsimp.Wind.wind_contourf(), or
+        amsimp.Wind.globe() methods.
         """
         # Define the forecast period.
         forecast_days = int(self.forecast_days)

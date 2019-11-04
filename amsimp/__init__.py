@@ -1,7 +1,7 @@
 """
 AMSIMP - An Open Source Implementation to Simulating Atmospheric
 Dynamics in the Troposphere and the Stratosphere, written in
-Cython.
+the programming language of Cython.
 """
 import sys
 

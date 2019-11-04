@@ -41,6 +41,9 @@ cdef class Water(Wind):
         meteorology, is the partial pressure of water vapor. The partial
         pressure of water vapor is the pressure that water vapor contributes
         to the total atmospheric pressure.
+
+        Equation:
+            e = 6.112 \* \exp((17.67 * T) / (T + 243.15))
         """
         # Ensures that the detail_level must be higher than 2 in order to utilise this method.
         if self.detail_level < 3:
@@ -88,6 +91,9 @@ cdef class Water(Wind):
         specified levels. For a contour plot of this data, please use the
         amsimp.Water.contourf() method. If sum_altitude is equal to True, 
         it will sum the altitude component making the output 2-dimensional.
+
+        Equation:
+            PW = frac{1}{rho \* g} \* \int r dp
         """
         # Ensure sum_altitude is a boolean value.
         if not isinstance(sum_altitude, bool):

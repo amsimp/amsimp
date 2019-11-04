@@ -38,37 +38,48 @@ cdef class Backend:
     For methods to be included in this class they must meet one of the following
     criteria:
     (1) they are considered essential components of the software.
-    (2) the output of these methods are generated from the methods classified
-    as (1).
+    (2) the output of these methods are generated solely from the methods
+    classified as (1).
     (3) these methods import data from the NRLMSISE-00 atmospheric model.
-    This data is retrieved from the AMSIMP data repo, which is updated 
-    four times every day.
+    This data is retrieved from the AMSIMP data repository, which is updated 
+    every hour.
     (4) they don't classify nicely into any other class.
-    (5) they offer a visualisation of any of the atmospheric processes found
-    in this class.
+    (5) they offer a visualisation of any of the methods found in this class.
 
     Below is a list of the methods included within this class, with a short
     description of their intended purpose and a bracketed number signifying
     which of the above criteria they meet. Please see the relevant class methods
-    for more information.
+    for more information. Please note that the unit information with AMSIMP
+    is provided by the unit module within astropy.
 
-    latitude_lines ~ generates a NumPy array of latitude lines (1).
-    altitude_level ~ generates a NumPy array of altitude levels (1).
+    latitude_lines ~ generates a NumPy array of latitude lines (1). The unit
+    of measurement is degrees.
+    longitude_lines ~ generates a NumPy array of longitude lines (1). The unit
+    of measurement is degrees.
+    altitude_level ~ generates a NumPy array of altitude levels (1). The unit
+    of measurement is metres.
 
     coriolis_parameter ~ generates a NumPy arrray of the Coriolis parameter (2).
+    The unit of measurement is radians per second.
     gravitational_acceleration ~ generates a NumPy arrray of the gravitational
-    acceleration (2).
+    acceleration (2). The unit of measurement is metres per second squared.
 
-    temperature ~ outputs a NumPy array of temperature (3).
-    density ~ outputs a NumPy array of atmospheric density (3).
+    temperature ~ outputs a NumPy array of temperature (3). The unit of
+    measurement is Kelvin.
+    density ~ outputs a NumPy array of atmospheric density (3). The unit of
+    measurement is kilograms per cubic metre.
     
-    pressure ~ outputs a NumPy array of atmospheric pressure (4).
+    pressure ~ outputs a NumPy array of atmospheric pressure (4). The unit of
+    measurement is hectopascals (millibars).
     pressure_thickness ~ outputs a NumPy array of atmospheric pressure
-    thickness (4).
+    thickness (4). The unit of measurement is metres.
     potential_temperature ~ outputs a NumPy array of potential temperature (4).
-    exner_function ~ outputs a NumPy array of the Exner function (4).
-    troposphere_boundaryline ~ generates a NumPy array of the mean
-    troposphere - stratosphere boundary line (4).
+    The unit of measurement is Kelvin.
+    exner_function ~ outputs a NumPy array of the Exner function (4). This
+    method has no unit of measurement, i.e. it is dimensionless.
+    troposphere_boundaryline ~ generates a NumPy array of the
+    troposphere - stratosphere boundary line (4). The unit of measurement is
+    metres.
     
     longitude_contourf ~ generates a contour plot for a desired atmospheric
     process, with the axes being latitude, and longitude (5).
@@ -202,13 +213,13 @@ cdef class Backend:
 
     cpdef np.ndarray coriolis_parameter(self):
         """
-        Equation:
-            f = 2 \* Upomega * sin(\phi)
-
         Generates a NumPy arrray of the Coriolis parameter at various latitudes
         of the Earth's surface. The Coriolis parameter is defined as two times
         the angular rotation of the Earth by the sin of the latitude you are
         interested in.
+
+        Equation:
+            f = 2 \* Upomega * sin(\phi)
         """
         coriolis_parameter = (
             2 * self.Upomega * np.sin(np.radians(self.latitude_lines()))
@@ -353,10 +364,14 @@ cdef class Backend:
 
     cpdef np.ndarray pressure(self):
         """
-        Description is placed here.
+        Generates a NumPy array of atmospheric pressure utilising the Ideal
+        Gas Law. The ideal gas equation is the equation of state for the
+        atmosphere, and is defined as an equation relating temperature,
+        pressure, and specific volume of a system in theromodynamic
+        equilibrium.
 
         Equation:
-            p = \rho \* R * T
+            p = rho \* R * T
 
         Pressure is defined as the flux of momentum component normal to a given
         surface.
@@ -380,9 +395,18 @@ cdef class Backend:
 
     cpdef np.ndarray pressure_thickness(self):
         """
-        Description to be added.
+        Generates a NumPy array of atmospheric pressure thickness
+        between 1000 hPa and 500 hPa, using non-linear regression.
+        Non-linear regression is when emperical data is modelled
+        by a selected non-linear function. The equation of the
+        function utilised by this method is below. Note: the R
+        squared value of this method is approximately 0.99.
 
-        Pressure thickness is the distance between two pressure surfaces.
+        Equation:
+            y = a - frac{b}{c} * (1 - \exp(-c * x))
+
+        Pressure thickness is defined as the distance between two
+        pressure surfaces.
         """
         cdef np.ndarray pressure = self.pressure().value
         cdef np.ndarray altitude = self.altitude_level()[:20].value
@@ -422,6 +446,9 @@ cdef class Backend:
         temperature of a parcel of fluid at pressure P is the temperature that
         the parcel would attain if adiabatically brought to a standard reference
         pressure
+
+        Equation:
+            theta = T \* (frac{P}{P_0}) ** (-R / c_p)
         """
         cdef np.ndarray temperature = self.temperature().value
         cdef np.ndarray pressure = self.pressure().value
@@ -453,6 +480,9 @@ cdef class Backend:
         """
         Generates a NumPy array of the exner function. The Exner function can be
         viewed as non-dimensionalized pressure.
+
+        Equation:
+            \Pi = frac{T}{theta}
         """
         cdef np.ndarray temperature = self.temperature()
         cdef np.ndarray potential_temperature = self.potential_temperature()
@@ -499,10 +529,10 @@ cdef class Backend:
 
     def longitude_contourf(self, which=0, alt=0):
         """
-        Plots a desired atmospheric process on a contour plot, with the axes being
-        latitude and longitude. This plot is then layed on top of a EckertIII
-        global projection. For the raw data, please see the other methods
-        found in this class.
+        Plots a desired atmospheric process on a contour plot, with the axes
+        being latitude and longitude. This plot is then layed on top of a 
+        EckertIII global projection. For the raw data, please see the other
+        methods found in this class.
 
         For a temperature contour plot, the value of which is 0.
         For a pressure contour plot, the value of which is 1.

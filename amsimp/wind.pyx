@@ -45,6 +45,9 @@ cdef class Wind(Backend):
         Geostrophic wind is a theoretical wind that is a result of a perfect
         balance between the Coriolis force and the pressure gradient force.
         This balance is known as geostrophic balance. 
+
+        Equation:
+            u_g = -frac{1}{rho * f} \* frac{\partial p}{\partial y}
         
         Note: Geostrophic balance does not hold near the equator.
         """
@@ -104,7 +107,10 @@ cdef class Wind(Backend):
         
         Geostrophic wind is a theoretical wind that is a result of a perfect
         balance between the Coriolis force and the pressure gradient force.
-        This balance is known as geostrophic balance. 
+        This balance is known as geostrophic balance.
+
+        Equation:
+            v_g = frac{1}{rho * f} \* frac{\partial p}{\partial y} 
         
         Note: Geostrophic balance does not hold near the equator.
         """

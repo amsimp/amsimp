@@ -10,9 +10,10 @@ An open-source implementation to simulating atmospheric dynamics in the troposph
 
 **Features:**
 
-* Provides a visualisation of a rudimentary simulation of tropospheric and stratsopheric dynamics on a synoptic scale (Motus Aeris @ AMSIMP).
+* Provides a visualisation of tropospheric and stratsopheric dynamics on a synoptic scale (Motus Aeris @ AMSIMP).
+* Provides the raw data of the simulation of tropospheric and stratsopheric dynamics. The forecasted values are achieved by numerically solving the Primitive Equations through the finite difference method.
 * Provides example visualisations of different atmospheric processes, an example being a contour plot of geostrophic wind, overlayed by wind vectors, with axes being transformed onto a [Nearside Projection](https://scitools.org.uk/cartopy/docs/v0.15/crs/projections.html) (a perspective view looking directly down at a point on the globe).
-* It's cool.
+* Provides extensive unit support through the utilisation of the unit module with astropy.
 
 ## Installation
 
@@ -23,3 +24,6 @@ $ conda install -c amsimp amsimp
 ```
 
 For more information, please [read the documentation](https://docs.amsimp.com) on the website.
+
+<sub><sup>AMSIMP does not provide a weather forecast! Please visit the website of your local meteorological agency for accurate weather information. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</sup></sub>
