@@ -41,6 +41,6 @@ after_success:
   - cd ..
   - cd ..
   - cd ..
-  - coverage run tests.py
+  - coverage run test.py
   - codecov
   
