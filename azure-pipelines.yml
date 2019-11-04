@@ -16,6 +16,8 @@ steps:
   displayName: Create Anaconda environment
 - bash: |
     conda install --yes -c amsimp amsimp
+    pip install wget
+    pip install pynverse
   displayName: Install Anaconda packages
 - task: PythonScript@0
   inputs:
