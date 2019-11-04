@@ -7,7 +7,7 @@ pool:
 steps:
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3.8.0'
+    versionSpec: '3.7.5'
 - bash: echo "##vso[task.prependpath]$CONDA/bin"
   displayName: Add conda to PATH
 - bash: sudo chown -R $USER $CONDA
@@ -23,9 +23,6 @@ steps:
     script: |
       import amsimp
 
-      detail = amsimp.Dynamics(3)
+      detail = amsimp.Dynamics(5, 1)
 
-      detail.predict_temperature()
-      detail.predict_pressurethickness()
-      detail.predict_geostrophicwind()
-      detail.predict_precipitablewater()
+      detail.simulate()
