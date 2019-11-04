@@ -5,6 +5,7 @@
 ![GitHub](https://img.shields.io/github/license/amsimp/amsimp.svg?style=flat-square)
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/downloads.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/amsimp/amsimp.svg?style=flat-square)
+![codecov](https://codecov.io/gh/amsimp/amsimp/branch/master/graph/badge.svg)(https://codecov.io/gh/amsimp/amsimp)
 
 An open-source implementation to simulating atmospheric dynamics in the troposphere and the stratosphere.
 
