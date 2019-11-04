@@ -38,8 +38,6 @@ deploy:
     branch: master
 
 after_success:
-  - echo $PWD
-  - cd ..
   - cd ..
   - cd ..
   - cd ..
