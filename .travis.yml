@@ -41,7 +41,7 @@ after_success:
   - cd ..
   - cd ..
   - cd ..
-  - echo $PWD
+  - cd ..
   - coverage run tests.py
   - codecov
   
