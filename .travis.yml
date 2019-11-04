@@ -4,9 +4,25 @@ os: osx
 git:
   depth: false
 
-script:
+install:
+  - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  - brew install gcc
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - source "$HOME/miniconda/etc/profile.d/conda.sh"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda install -c amsimp amsimp
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - source $HOME/miniconda/bin/activate
+  - pip install codecov
+  - pip install pynverse
+  - pip install wget
   - python3 -m pip install sphinx
   - python3 -m pip install guzzle_sphinx_theme
+
+script:
   - cd docs
   - make html
   - cd _build/html
@@ -22,4 +38,12 @@ deploy:
   local_dir: ./docs/_build/html
   on:
     branch: master
+
+after_success:
+  - cd ..
+  - cd ..
+  - cd ..
+  - python setup.py build_ext --inplace
+  - coverage run test.py
+  - codecov
   

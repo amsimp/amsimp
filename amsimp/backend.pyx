@@ -1,3 +1,5 @@
+#cython: linetrace=True
+#distutils: define_macros=CYTHON_TRACE_NOGIL=1
 #cython: language_level=3
 """
 AMSIMP Backend Class. For information about this class is described below.
@@ -6,20 +8,23 @@ AMSIMP Backend Class. For information about this class is described below.
 # -----------------------------------------------------------------------------------------#
 
 # Importing Dependencies
+import os
 from datetime import datetime
 import io
 import socket
-import dateutil.relativedelta as future_month
+import wget
 import numpy as np
 from astropy import constants as const
+from astropy import units
 from scipy.constants import gas_constant
 from scipy.optimize import curve_fit
-import pandas as pd
+from pynverse import inversefunc
 import requests
 cimport numpy as np
 from cpython cimport bool
 import matplotlib.pyplot as plt
 from matplotlib import ticker
+import cartopy.crs as ccrs
 
 # -----------------------------------------------------------------------------------------#
 
@@ -33,82 +38,94 @@ cdef class Backend:
     For methods to be included in this class they must meet one of the following
     criteria:
     (1) they are considered essential components of the software.
-    (2) the output of these methods are generated from the methods classified
-    as (1).
-    (3) these methods import data from a comma-separated values file.
+    (2) the output of these methods are generated solely from the methods
+    classified as (1).
+    (3) these methods import data from the NRLMSISE-00 atmospheric model.
+    This data is retrieved from the AMSIMP data repository, which is updated 
+    every hour.
     (4) they don't classify nicely into any other class.
+    (5) they offer a visualisation of any of the methods found in this class.
 
     Below is a list of the methods included within this class, with a short
     description of their intended purpose and a bracketed number signifying
     which of the above criteria they meet. Please see the relevant class methods
-    for more information.
+    for more information. Please note that the unit information with AMSIMP
+    is provided by the unit module within astropy.
 
-    latitude_lines ~ generates a NumPy array of latitude lines (1).
-    altitude_level ~ generates a NumPy array of altitude levels (1).
+    latitude_lines ~ generates a NumPy array of latitude lines (1). The unit
+    of measurement is degrees.
+    longitude_lines ~ generates a NumPy array of longitude lines (1). The unit
+    of measurement is degrees.
+    altitude_level ~ generates a NumPy array of altitude levels (1). The unit
+    of measurement is metres.
 
     coriolis_parameter ~ generates a NumPy arrray of the Coriolis parameter (2).
+    The unit of measurement is radians per second.
     gravitational_acceleration ~ generates a NumPy arrray of the gravitational
-    acceleration (2).
+    acceleration (2). The unit of measurement is metres per second squared.
 
-    geopotential_height ~ outputs a NumPy arrray of geopotential height (3).
-    temperature ~ outputs a NumPy array of temperature (3).
-    pressure ~ outputs a NumPy array of atmospheric pressure (3).
+    temperature ~ outputs a NumPy array of temperature (3). The unit of
+    measurement is Kelvin.
+    density ~ outputs a NumPy array of atmospheric density (3). The unit of
+    measurement is kilograms per cubic metre.
+    
+    pressure ~ outputs a NumPy array of atmospheric pressure (4). The unit of
+    measurement is hectopascals (millibars).
     pressure_thickness ~ outputs a NumPy array of atmospheric pressure
-    thickness (3).
-
-    density ~ outputs a NumPy array of atmospheric density (4).
+    thickness (4). The unit of measurement is metres.
     potential_temperature ~ outputs a NumPy array of potential temperature (4).
-    exner_function ~ outputs a NumPy array of the Exner function (4).
-    troposphere_boundaryline ~ generates a NumPy array of the mean
-    troposphere - stratosphere boundary line (4).
-    temperature_contourf ~ generates a temperature contour plot (4).
+    The unit of measurement is Kelvin.
+    exner_function ~ outputs a NumPy array of the Exner function (4). This
+    method has no unit of measurement, i.e. it is dimensionless.
+    troposphere_boundaryline ~ generates a NumPy array of the
+    troposphere - stratosphere boundary line (4). The unit of measurement is
+    metres.
+    
+    longitude_contourf ~ generates a contour plot for a desired atmospheric
+    process, with the axes being latitude, and longitude (5).
+    altitude_contourf ~ generates a contour plot for a desired atmospheric
+    process, with the axes being latitude, and altitude (5).
+    pressure_thickness ~ generates a contour plot for pressure thickness,
+    with the axes being latitude and longitude. This plot is then layed
+    on top of a EckertIII global projection (5).
     """
 
-    # Current month. the number of days in it.
+    # Define units of measurement for AMSIMP.
+    units = units
+
+    # Current date.
     date = datetime.now()
-    month = date.strftime("%B").lower()
-    # Next month.
-    future_date = date + future_month.relativedelta(months=+1)
-    next_month = future_date.strftime("%B").lower()
-    # The number of days in the current month.
-    number_of_days = (future_date - date).days
 
     # Predefined Constants.
     # Angular rotation rate of Earth.
-    sidereal_day = (23 + (56 / 60)) * 3600
-    Upomega = (2 * np.pi) / sidereal_day
+    sidereal_day = ((23 + (56 / 60)) * 3600) * units.s
+    Upomega = ((2 * np.pi) / sidereal_day) * units.rad
     # Ideal Gas Constant
-    R = gas_constant
+    R = gas_constant * (units.J / (units.mol * units.K))
     # Mean radius of the Earth.
     a = const.R_earth
-    a = a.value
+    a = a.value * units.m
     # Universal Gravitational Constant.
     G = const.G
-    G = G.value
+    G = G.value * G.unit
     # Mass of the Earth.
     M = const.M_earth
-    M = M.value
+    M = M.value  * M.unit
     # Molar mass of the Earth's air.
-    m = 0.02896
+    # m = 0.02896 (Unnecessary?)
     # The specific heat capacity on a constant pressure surface for dry air.
-    c_p = 29.100609300000002
+    c_p = 29.100609300000002 * (units.J / (units.mol * units.K))
     # Gravitational acceleration at the Earth's surface.
     g = (G * M) / (a ** 2)
 
-    def __cinit__(self, int detail_level=3, bool future=False):
+    def __cinit__(self, int detail_level=3, int forecast_days=3):
         """
         The parameter, detail_level, is the numerical value for the level of
         computational detail that will be used in the mathematical calculations.
-        This value is between 1 and 5.
-
-        If the parameter, future, has a boolean truth value, all class methods
-        will output information related to the following month (e.g. it will
-        output information related to August if the current month is July).
+        This value is between 1 and 5. Defaults to a value of 3.
         """
-
-        # Make these parameters available globally.
+        # Make detail_level available else where in the class.
         self.detail_level = detail_level
-        self.future = future
 
         # Ensure self.detail_level is between 1 and 5.
         if self.detail_level > 5 or self.detail_level <= 0:
@@ -117,9 +134,6 @@ cdef class Backend:
                     self.detail_level
                 )
             )
-
-        self.detail_level -= 1
-        self.detail_level = 5 ** self.detail_level
 
         # Check for an internet connection.
         def is_connected():
@@ -145,19 +159,36 @@ cdef class Backend:
         cdef float i
         latitude_lines = [
             i
-            for i in np.arange(-90, 91, (180 / self.detail_level))
+            for i in np.arange(-90, 91, (180 / (5 ** (3 - 1))))
             if -90 <= i <= 90 and i != 0
         ]
+        
+        # Remove the North and South Pole from the list.
+        del latitude_lines[0]
+        del latitude_lines[-1]
 
-        if self.detail_level != (5 ** (1 - 1)) and self.detail_level != (5 ** (3 - 1)):
-            del latitude_lines[0]
-            del latitude_lines[-1]
-        elif self.detail_level == (5 ** (3 - 1)):
-            del latitude_lines[0]
-            del latitude_lines[-1]
+        # Convert list to NumPy array and add the unit of measurement.
+        latitude_lines = np.asarray(latitude_lines) * units.deg
 
-        latitude_lines = np.asarray(latitude_lines)
+        # Adjust array in accordance with the level of detail specified.
+        if self.detail_level == 4:
+            latitude_lines = latitude_lines[::2]
+        elif self.detail_level == 3:
+            latitude_lines = latitude_lines[1::3]
+        elif self.detail_level == 2:
+            latitude_lines = latitude_lines[2::4]
+        elif self.detail_level ==1:
+            latitude_lines = latitude_lines[2::5]
+
         return latitude_lines
+    
+    cpdef np.ndarray longitude_lines(self):
+        """
+        Generates a NumPy array of longitude lines.
+        """
+        longitude_lines = self.latitude_lines() * 2
+
+        return longitude_lines
 
     cpdef np.ndarray altitude_level(self):
         """
@@ -170,12 +201,12 @@ cdef class Backend:
         altitude_level = [
             i
             for i in np.arange(
-                0, max_height + 1, (mim_height_detail / self.detail_level)
+                0, max_height + 1, (mim_height_detail / (5 ** (3 - 1)))
             )
             if i <= max_height
         ]
 
-        altitude_level = np.asarray(altitude_level)
+        altitude_level = np.asarray(altitude_level) * units.m
         return altitude_level
 
 # -----------------------------------------------------------------------------------------#
@@ -186,6 +217,9 @@ cdef class Backend:
         of the Earth's surface. The Coriolis parameter is defined as two times
         the angular rotation of the Earth by the sin of the latitude you are
         interested in.
+
+        Equation:
+            f = 2 \* Upomega * sin(\phi)
         """
         coriolis_parameter = (
             2 * self.Upomega * np.sin(np.radians(self.latitude_lines()))
@@ -196,9 +230,11 @@ cdef class Backend:
     cpdef np.ndarray gravitational_acceleration(self):
         """
         Generates a NumPy arrray of the effective gravitational acceleration
-        according to WGS84 at a distance z from the Globe.
+        according to WGS84 at a distance z from the Globe. The output is
+        in the shape of (len(latitude_lines), len(altitude_level())). There
+        is no longitudinal variation in gravitational accleration.
         """
-        cdef np.ndarray latitude = np.radians(self.latitude_lines())
+        cdef np.ndarray latitude = np.radians(self.latitude_lines().value)
         cdef float a = 6378137
         cdef float b = 6356752.3142
         cdef float g_e = 9.7803253359
@@ -215,11 +251,13 @@ cdef class Backend:
         # Magnitude of the effective gravitational acceleration according to WGS84 at
         # a distance z from the ellipsoid.
         cdef float f = (a - b) / a
-        cdef float m = ((self.Upomega ** 2) * (a ** 2) * b) / (self.G * self.M)
+        cdef float m = (
+            (self.Upomega.value ** 2) * (a ** 2) * b
+            ) / (self.G.value * self.M.value)
 
         gravitational_acceleration = []
         cdef float z
-        cdef np.ndarray altitude = self.altitude_level()
+        cdef np.ndarray altitude = self.altitude_level().value
         for z in altitude:
             g_z = g_0 * (
                 1
@@ -230,395 +268,177 @@ cdef class Backend:
             gravitational_acceleration.append(g_z)
 
         gravitational_acceleration = np.asarray(gravitational_acceleration)
+        gravitational_acceleration = np.transpose(gravitational_acceleration)
+        gravitational_acceleration *= (units.m / (units.s ** 2))
         return gravitational_acceleration
 
 # -----------------------------------------------------------------------------------------#
 
-    cpdef np.ndarray geopotential_height(self):
-        """
-        This method imports geopotential height data from a comma-separated
-        values file, which is located within a folder labelled
-        'amsimp/data/geopotential_height'. Following which, it outputs a NumPy
-        array in the shape of (len(altitude_level), len(latitude_lines)).
-
-        To define geopotential height it is better to look at an example.
-        If the geopotential height of a pressure surface of '500 hPa' is
-        '6000 m' at a given latitude and longitude, it says that at that given
-        point the pressure at 6000 m is 500 hPa.
-        """
-        # Location of file.
-        url = "https://raw.githubusercontent.com/amsimp/amsimp/master/"
-        file_folder = url + "amsimp/data/geopotential_height/"
-
-        # Determine which month of data to import.
-        if not self.future:
-            file = file_folder + self.month + ".csv"
-        else:
-            file = file_folder + self.next_month + ".csv"
-
-        # Import the data as a dataframe.
-        s = requests.get(file).content
-        data = pd.read_csv(io.StringIO(s.decode("utf-8")))
-
-        # Generates a NumPy array of latitude values that match the given dataset.
-        cdef np.ndarray column_values
-        column_values = np.asarray([i for i in np.arange(-80, 81, 5)])
-
-        # Hypsometric equation.
-        cdef np.ndarray scale_height = data["Scale Height"].values
-        cdef np.ndarray pressure_surface = data["Pressure (hPa)"].values
-        cdef np.ndarray geometric_height = (
-            np.log(pressure_surface[0] / pressure_surface) * scale_height
-        ) * 1000
-
-        # Generate a NumPy array that matches the shape of latitude_lines.
-        cdef list potential_height = []
-        cdef np.ndarray altitude = self.altitude_level()
-        cdef list geo_alt
-        cdef np.ndarray alt_data
-        cdef float y2, y1, x2, x1, m, c, z, y
-        cdef int n
-        for i in column_values:
-            i = str(i)
-            alt_data = data[i].values
-
-            geo_alt = []
-            n = 0
-            while n < (len(alt_data) - 1):
-                y2 = alt_data[n + 1]
-                y1 = alt_data[n]
-                x2 = geometric_height[n + 1]
-                x1 = geometric_height[n]
-
-                m = (y2 - y1) / (x2 - x1)
-                c = y1 - (m * x1)
-
-                for z in altitude:
-                    if x1 <= z < x2:
-                        y = (m * z) + c
-                        geo_alt.append(y)
-                    elif z > x2 and x2 > 47000:
-                        y = (m * z) + c
-                        geo_alt.append(y)
-
-                n += 1
-
-            potential_height.append(geo_alt)
-        cdef np.ndarray np_potentialheight = np.transpose(np.asarray(potential_height))
-
-        # Generate the final output from the above NumPy array, potential_height.
-        cdef list list_geopotentialheight = []
-        cdef np.ndarray latitude = self.latitude_lines()
-        cdef list geo_lat
-        cdef np.ndarray geo
-        cdef float phi
-        cdef int k
-        n = 0
-        for geo in np_potentialheight:
-            geo_lat = []
-            k = 0
-            while k < (len(geo) - 1):
-                y2 = geo[k + 1]
-                y1 = geo[k]
-                x2 = column_values[k + 1]
-                x1 = column_values[k]
-
-                m = (y2 - y1) / (x2 - x1)
-                c = y1 - (m * x1)
-
-                for phi in latitude:
-                    if x1 <= phi < x2:
-                        y = (m * phi) + c
-                        geo_lat.append(y)
-                    elif phi < x1 and x1 == -80:
-                        y = (m * phi) + c
-                        geo_lat.append(y)
-                    elif phi > x2 and x2 == 80:
-                        y = (m * phi) + c
-                        geo_lat.append(y)
-
-                k += 1
-
-            list_geopotentialheight.append(geo_lat)
-
-        geopotential_height = np.asarray(list_geopotentialheight)
-        return geopotential_height
-
     cpdef np.ndarray temperature(self):
         """
-        This method imports temperature data from a comma-separated values file,
-        which is located within a folder labelled 'amsimp/data/temperature'.
+        This method imports temperature data from a NumPy file, which is
+        located in the AMSIMP data repository on GitHub. The data
+        stored within this repo is updated every six hours by amsimp-bot.
         Following which, it outputs a NumPy array in the shape of
-        (len(altitude_level), len(latitude_lines)).
+        (len(longitude_lines), len(latitude_lines), len(altitude_level)).
 
         Temperature is defined as the mean kinetic energy density of molecular
         motion.
+
+        I strongly recommend storing the output into a variable in order to
+        prevent the need to repeatly download the file. For more information,
+        visit https://github.com/amsimp/amsimp-data.
         """
-        # Location of file.
-        url = "https://raw.githubusercontent.com/amsimp/amsimp/master/"
-        file_folder = url + "amsimp/data/temperature/"
+        # The url to the NumPy temperature file stored on the AMSIMP data repository.
+        url = "https://github.com/amsimp/amsimp-data/raw/master/temperature.npy"
 
-        # Determine which month of data to import.
-        if not self.future:
-            file = file_folder + self.month + ".csv"
-        else:
-            file = file_folder + self.next_month + ".csv"
+        # Download the NumPy file.
+        temperature_file = wget.download(url, bar=None)
 
-        # Import the data as a dataframe.
-        s = requests.get(file).content
-        data = pd.read_csv(io.StringIO(s.decode("utf-8")))
+        # Load and store the NumPy array into a variable.
+        temperature_array = np.load(temperature_file)
 
-        # Generates a NumPy array of latitude values that match the given dataset.
-        cdef np.ndarray column_values
-        column_values = np.asarray([i for i in np.arange(-80, 81, 10)])
+        # Remove the NumPy file in order to prevent clutter.
+        os.remove(temperature_file)
+        
+        # Adjust the temperature array in order to meet the level of detail specified.
+        if self.detail_level == 5:
+            temperature = temperature_array
+        elif self.detail_level == 4:
+            temperature = temperature_array[::2, ::2, :]
+        elif self.detail_level == 3:
+            temperature = temperature_array[1::3, 1::3, :]
+        elif self.detail_level == 2:
+            temperature = temperature_array[2::4, 2::4, :]
+        elif self.detail_level == 1:
+            temperature = temperature_array[2::5, 2::5, :]
 
-        # Generate a NumPy array that matches the shape of latitude_lines.
-        cdef list temp = []
-        cdef list temp_alt
-        cdef np.ndarray altitude = self.altitude_level()
-        cdef np.ndarray alt_data
-        cdef float y2, y1, x2, x1, m, c, z, y
-        cdef int n
-        for i in column_values:
-            i = str(i)
-            alt_data = data[i].values
-
-            temp_alt = []
-            n = 0
-            while n < (len(alt_data) - 1):
-                y2 = alt_data[n + 1]
-                y1 = alt_data[n]
-                x2 = data["Alt / Lat"].values[n + 1]
-                x1 = data["Alt / Lat"].values[n]
-
-                m = (y2 - y1) / (x2 - x1)
-                c = y1 - (m * x1)
-
-                for z in altitude:
-                    if x1 <= z < x2:
-                        y = (m * z) + c
-                        temp_alt.append(y)
-                    elif z == x2 and x2 == 50000:
-                        y = (m * z) + c
-                        temp_alt.append(y)
-
-                n += 1
-
-            temp.append(temp_alt)
-        cdef np.ndarray np_temp = np.transpose(np.asarray(temp))
-
-        # Generate the final output from the above NumPy array, temp.
-        cdef list list_temperature = []
-        cdef np.ndarray latitude = self.latitude_lines()
-        cdef list temp_lat
-        cdef np.ndarray t
-        cdef float phi
-        cdef int k
-        n = 0
-        for t in np_temp:
-            temp_lat = []
-            k = 0
-            while k < (len(t) - 1):
-                y2 = t[k + 1]
-                y1 = t[k]
-                x2 = column_values[k + 1]
-                x1 = column_values[k]
-
-                m = (y2 - y1) / (x2 - x1)
-                c = y1 - (m * x1)
-
-                for phi in latitude:
-                    if x1 <= phi < x2:
-                        y = (m * phi) + c
-                        temp_lat.append(y)
-                    elif phi < x1 and x1 == -80:
-                        y = (m * phi) + c
-                        temp_lat.append(y)
-                    elif phi > x2 and x2 == 80:
-                        y = (m * phi) + c
-                        temp_lat.append(y)
-
-                k += 1
-
-            list_temperature.append(temp_lat)
-
-        temperature = np.asarray(list_temperature)
+        # Define the unit of measurement for temperature.
+        temperature *= units.K
         return temperature
     
-    cpdef fit_method(self, x, a, b, c):
+    cpdef np.ndarray density(self):
         """
-        This method is solely utilised for non-linear regression in the
-        amsimp.Backend.pressure() method. Please do not interact with
-        the method directly.
+        This method imports atmospheric density data from a NumPy file, 
+        which is located in the AMSIMP data repository on GitHub. The data
+        stored within this repo is updated every six hours by amsimp-bot.
+        Following which, it outputs a NumPy array in the shape of
+        (len(longitude_lines), len(latitude_lines), len(altitude_level)).
+
+        The atmospheric density is the mass of the atmosphere per unit
+        volume.
+
+        I strongly recommend storing the output into a variable in order to
+        prevent the need to repeatly download the file. For more information,
+        visit https://github.com/amsimp/amsimp-data.
         """
-        return a - (b / c) * (1 - np.exp(-c * x))
+        # The url to the NumPy density file stored on the AMSIMP data repository.
+        url = "https://github.com/amsimp/amsimp-data/raw/master/density.npy"
+
+        # Download the NumPy file.
+        density_file = wget.download(url, bar=None)
+
+        # Load and store the NumPy array into a variable.
+        density_array = np.load(density_file)
+
+        # Remove the NumPy file in order to prevent clutter.
+        os.remove(density_file)
+        
+        # Adjust the density array in order to meet the level of detail specified.
+        if self.detail_level == 5:
+            density = density_array
+        elif self.detail_level == 4:
+            density = density_array[::2, ::2, :]
+        elif self.detail_level == 3:
+            density = density_array[1::3, 1::3, :]
+        elif self.detail_level == 2:
+            density = density_array[2::4, 2::4, :]
+        elif self.detail_level == 1:
+            density = density_array[2::5, 2::5, :]
+
+        # Define the unit of measurement for atmospheric density.
+        density *= (units.kg / (units.m ** 3))
+        return density
+
+# -----------------------------------------------------------------------------------------#
 
     cpdef np.ndarray pressure(self):
         """
-        This method imports pressure data from a comma-separated values file,
-        which is located within a folder labelled 'amsimp/data/pressure'.
-        Following which, it outputs a NumPy array in the shape of
-        (len(altitude_level), len(latitude_lines)).
+        Generates a NumPy array of atmospheric pressure utilising the Ideal
+        Gas Law. The ideal gas equation is the equation of state for the
+        atmosphere, and is defined as an equation relating temperature,
+        pressure, and specific volume of a system in theromodynamic
+        equilibrium.
+
+        Equation:
+            p = rho \* R * T
 
         Pressure is defined as the flux of momentum component normal to a given
         surface.
         """
-        # Location of file.
-        url = "https://raw.githubusercontent.com/amsimp/amsimp/master/"
-        file_folder = url + "amsimp/data/pressure/"
+        # Universal gas constant (J * kg^-1 * K^-1)
+        R = 287 * (units.J / (units.kg * units.K))
+    
+        pressure = self.density() * R * self.temperature()
 
-        # Determine which month of data to import.
-        if not self.future:
-            file = file_folder + self.month + ".csv"
-        else:
-            file = file_folder + self.next_month + ".csv"
-
-        # Import the data as a dataframe.
-        s = requests.get(file).content
-        data = pd.read_csv(io.StringIO(s.decode("utf-8")))
-
-        # Generates a NumPy array of latitude values that match the given dataset.
-        cdef np.ndarray column_values
-        column_values = np.asarray([i for i in np.arange(-80, 81, 10)])
-
-        # Generate a NumPy array that matches the shape of latitude_lines.
-        cdef list p = []
-        cdef np.ndarray altitude = self.altitude_level()
-        cdef np.ndarray x, y_, p_alt, abc
-        cdef tuple c_
-        cdef list guess
-        for i in column_values:
-            i = str(i)
-            x = data["Alt / Lat"].values
-            y_ = data[i].values
-
-            guess = [1013.256, 0.1685119, 0.00016627]
-            c_ = curve_fit(self.fit_method, x, y_, guess)
-            abc = c_[0]
-
-            p_alt = self.fit_method(altitude, abc[0], abc[1], abc[2])
-            p.append(p_alt)
-        cdef np.ndarray np_p = np.transpose(np.asarray(p))
-
-        # Generate the final output from the above NumPy array, p.
-        cdef list list_pressure = []
-        cdef np.ndarray latitude = self.latitude_lines()
-        cdef p_lat
-        cdef np.ndarray _p
-        cdef float y2, y1, x2, x1, m, c, phi, y
-        cdef int k
-        for _p in np_p:
-            p_lat = []
-            k = 0
-            while k < (len(_p) - 1):
-                y2 = _p[k + 1]
-                y1 = _p[k]
-                x2 = column_values[k + 1]
-                x1 = column_values[k]
-
-                m = (y2 - y1) / (x2 - x1)
-                c = y1 - (m * x1)
-
-                for phi in latitude:
-                    if x1 <= phi < x2:
-                        y = (m * phi) + c
-                        p_lat.append(y)
-                    elif phi < x1 and x1 == -80:
-                        y = (m * phi) + c
-                        p_lat.append(y)
-                    elif phi > x2 and x2 == 80:
-                        y = (m * phi) + c
-                        p_lat.append(y)
-
-                k += 1
-
-            list_pressure.append(p_lat)
-
-        pressure = np.asarray(list_pressure)
-        pressure *= 100
+        pressure = pressure.to(units.hPa)
 
         return pressure
+    
+    cpdef fit_method(self, x, a, b, c):
+        """
+        This method is solely utilised for non-linear regression in the
+        amsimp.Backend.pressure_thickness() method. Please do not
+        interact with the method directly.
+        """
+        return a - (b / c) * (1 - np.exp(-c * x))
 
     cpdef np.ndarray pressure_thickness(self):
         """
-        This method imports geopotential height data from a comma-separated
-        values file, which is located within a folder labelled
-        'amsimp/data/geopotential_height'. Following which, it outputs a NumPy
-        array, with pressure thickness values (1000 hPa - 500 hPa), in the shape
-        of latitude_lines.
+        Generates a NumPy array of atmospheric pressure thickness
+        between 1000 hPa and 500 hPa, using non-linear regression.
+        Non-linear regression is when emperical data is modelled
+        by a selected non-linear function. The equation of the
+        function utilised by this method is below. Note: the R
+        squared value of this method is approximately 0.99.
 
-        Pressure thickness is the distance between two pressure surfaces.
+        Equation:
+            y = a - frac{b}{c} * (1 - \exp(-c * x))
+
+        Pressure thickness is defined as the distance between two
+        pressure surfaces.
         """
-        # Location of file.
-        url = "https://raw.githubusercontent.com/amsimp/amsimp/master/"
-        file_folder = url + "amsimp/data/geopotential_height/"
+        cdef np.ndarray pressure = self.pressure().value
+        cdef np.ndarray altitude = self.altitude_level()[:20].value
 
-        # Determine which month of data to import.
-        if not self.future:
-            file = file_folder + self.month + ".csv"
-        else:
-            file = file_folder + self.next_month + ".csv"
-
-        # Import the data as a dataframe.
-        s = requests.get(file).content
-        data = pd.read_csv(io.StringIO(s.decode("utf-8")))
-
-        # Generates a NumPy array of latitude values that match the given dataset.
-        cdef np.ndarray column_values
-        column_values = np.asarray([i for i in np.arange(-80, 81, 5)])
-
-        # Pressure surfaces.
-        cdef np.ndarray mb_1000 = data.iloc[0].values[2:]
-        cdef np.ndarray mb_500 = data.iloc[3].values[2:]
-
-        # Pressure thickness between 1000 hPa and 500 hPa.
-        cdef np.ndarray p_thickness = mb_500 - mb_1000
-
-        # Generate a NumPy array that matches the shape of latitude_lines.
+        cdef np.ndarray p, p_lat, abc
         cdef list list_pressurethickness = []
-        cdef np.ndarray latitude = self.latitude_lines()
-        cdef float y2, y1, x2, x1, m, c, phi, y
-        cdef int n
-        n = 0
-        while n < (len(column_values) - 1):
-            y2 = p_thickness[n + 1]
-            y1 = p_thickness[n]
-            x2 = column_values[n + 1]
-            x1 = column_values[n]
+        cdef list guess = [1000, 0.12, 0.00010]
+        cdef list pthickness_lat
+        cdef tuple c
+        cdef float hPa1000_height, hPa500_height, pthickness
+        for p in pressure:
+            pthickness_lat =  []
+            for p_lat in p:
+                p_lat = p_lat[:20]
 
-            m = (y2 - y1) / (x2 - x1)
-            c = y1 - (m * x1)
+                c = curve_fit(self.fit_method, altitude, p_lat, guess)
+                abc = c[0]
 
-            for phi in latitude:
-                if x1 <= phi < x2:
-                    y = (m * phi) + c
-                    list_pressurethickness.append(y)
-                elif phi < x1 and x1 == -80:
-                    y = (m * phi) + c
-                    list_pressurethickness.append(y)
-                elif phi > x2 and x2 == 80:
-                    y = (m * phi) + c
-                    list_pressurethickness.append(y)
+                inverse_fitmethod = inversefunc(self.fit_method,
+                    args=(abc[0], abc[1], abc[2])
+                )
 
-            n += 1
+                hPa1000_height = inverse_fitmethod(1000)
+                hPa500_height = inverse_fitmethod(500)
+                pthickness = hPa500_height - hPa1000_height
 
+                pthickness_lat.append(pthickness)
+            list_pressurethickness.append(pthickness_lat)
+        
         pressure_thickness = np.asarray(list_pressurethickness)
+        pressure_thickness *= units.m
         return pressure_thickness
-
-# -----------------------------------------------------------------------------------------#
-
-    cpdef np.ndarray density(self):
-        """
-        Generates a NumPy array of atmospheric density by utilizing the Ideal
-        Gas Law.
-        """
-        cdef float R = 287.05
-        cdef np.ndarray pressure = self.pressure()
-        cdef np.ndarray temperature = self.temperature()
-
-        density = pressure / (R * temperature)
-
-        return density
 
     cpdef np.ndarray potential_temperature(self):
         """
@@ -626,22 +446,43 @@ cdef class Backend:
         temperature of a parcel of fluid at pressure P is the temperature that
         the parcel would attain if adiabatically brought to a standard reference
         pressure
+
+        Equation:
+            theta = T \* (frac{P}{P_0}) ** (-R / c_p)
         """
-        cdef np.ndarray temperature = self.temperature()
-        cdef np.ndarray pressure = self.pressure()
-        cdef float R = -self.R
-        cdef float c_p = self.c_p
+        cdef np.ndarray temperature = self.temperature().value
+        cdef np.ndarray pressure = self.pressure().value
+        cdef float R = -self.R.value
+        cdef float c_p = self.c_p.value
 
-        potential_temperature = temperature * (
-            (pressure / pressure[0]) ** (R / c_p)
-        )
+        cdef np.ndarray array_potentialtemperature
+        cdef list list_potentialtemperature = []
+        cdef list p_temp
+        cdef int n = 0
+        cdef float len_pressure = len(pressure[0][0])
+        while n < len_pressure:
+            array_potentialtemperature = temperature[:, :, n] * (
+                (pressure[:, :, n] / pressure[:, :, 0]) ** (R / c_p)
+            )
 
+            p_temp = list(array_potentialtemperature)
+
+            list_potentialtemperature.append(p_temp)
+
+            n += 1
+        
+        potential_temperature = np.asarray(list_potentialtemperature)
+        potential_temperature = np.transpose(potential_temperature, (1, 2, 0))
+        potential_temperature *= units.K
         return potential_temperature
 
     cpdef np.ndarray exner_function(self):
         """
         Generates a NumPy array of the exner function. The Exner function can be
         viewed as non-dimensionalized pressure.
+
+        Equation:
+            \Pi = frac{T}{theta}
         """
         cdef np.ndarray temperature = self.temperature()
         cdef np.ndarray potential_temperature = self.potential_temperature()
@@ -652,80 +493,223 @@ cdef class Backend:
 
     cpdef np.ndarray troposphere_boundaryline(self):
         """
-        Generates a NumPy array of the mean troposphere - stratosphere
-        boundary line in the shape of the output of latitude_lines. This is
-        calculated by looking at the vertical temperature profile in the method,
-        temperature.
+        Generates a NumPy array of the troposphere - stratosphere
+        boundary line in the shape (len(longitude_lines), len(latitude_lines).
+        This is calculated by looking at the vertical temperature profile in
+        the method, amsimp.Backend.temperature().
         """
-        cdef np.ndarray temperature = np.transpose(self.temperature())
+        cdef np.ndarray temperature = self.temperature().value
+        grad_temperature = np.gradient(temperature)
+        cdef np.ndarray gradient_temperature = grad_temperature[2]
+
+        cdef np.ndarray altitude = self.altitude_level().value
 
         cdef list trop_strat_line = []
-        cdef np.ndarray altitude = self.altitude_level()
-        cdef np.ndarray temp
-        cdef float y1, y2, alt
+        cdef list lat_trop_strat_line
+        cdef np.ndarray temp, t
         cdef int n
-        for temp in temperature:
-            n = 0
-            while n < (len(temp)):
-                y1 = temp[n]
-                y2 = temp[n + 1]
+        cdef float t_n, alt
+        for temp in gradient_temperature:
+            lat_trop_strat_line = []
+            for t in temp:
+                n = 0
+                while n < len(t):
+                    t_n = t[n]
+                    if t[n] >= 0:
+                        alt = altitude[n]
+                        lat_trop_strat_line.append(alt)
+                        n = len(t)
+                    n += 1
+            trop_strat_line.append(lat_trop_strat_line)
 
-                if (y2 - y1) > 0 and altitude[n] >= 10000:
-                    alt = altitude[n]
-                    trop_strat_line.append(alt)
-                    n = len(temp)
-
-                n += 1
-        cdef np.ndarray np_tropstratline = np.asarray(trop_strat_line)
-
-        troposphere_boundaryline = np.mean(trop_strat_line) + np.zeros(
-            len(np_tropstratline)
-        )
-
+        troposphere_boundaryline = np.asarray(trop_strat_line) * units.m
         return troposphere_boundaryline
 
-    def temperature_contourf(self):
+# -----------------------------------------------------------------------------------------#
+
+    def longitude_contourf(self, which=0, alt=0):
         """
-        Generates a temperature contour plot, with the axes being latitude,
-        and longitude. For the raw data, please use the
-        amsimp.Backend.temperature() method.
+        Plots a desired atmospheric process on a contour plot, with the axes
+        being latitude and longitude. This plot is then layed on top of a 
+        EckertIII global projection. For the raw data, please see the other
+        methods found in this class.
+
+        For a temperature contour plot, the value of which is 0.
+        For a pressure contour plot, the value of which is 1.
+        For a density contour plot, the value of which is 2.
         """
+        info = " For a temperature contour plot, the value of which is 0. "
+        info += "For a pressure contour plot, the value of which is 1. For a "
+        info += "density contour plot, the value of which is 2."
+
+        # Ensure, which, is a number between 0 and 2.
+        if which < 0 or which > 2:
+            raise Exception(
+                "which must be a natural number between 0 and 2. The value of which was: {}.".format(
+                    which
+                ) + info
+            )
+        
+        # Ensure, which, is a integer.
+        if not isinstance(which, int):
+            raise Exception(
+                "which must be a natural number between 0 and 2. The value of which was: {}.".format(
+                    which
+                ) + info
+            )
+
+        # Ensure alt is between 0 and 50000 metres above sea level.
+        if alt < 0 or alt > 50000:
+            raise Exception(
+                "alt must be a real number between 0 and 50,000. The value of alt was: {}".format(
+                    alt
+                )
+            )
+
+        # Index of the nearest alt in amsimp.Backend.altitude_level()
+        indx_alt = (np.abs(self.altitude_level().value - alt)).argmin()
+        
         # Defines the axes, and the data.
-        latitude, altitude = np.meshgrid(self.latitude_lines(), self.altitude_level())
-        temperature = self.temperature()
+        latitude, longitude = np.meshgrid(self.latitude_lines(),
+         self.longitude_lines()
+        )
+        if which == 0:
+            data = self.temperature()[:, :, indx_alt]
+            data_type = "Temperature"
+            unit = " (K)"
+        elif which == 1:
+            data = self.pressure()[:, :, indx_alt]
+            data_type = "Atmospheric Pressure"
+            unit = " (hPa)"
+        elif which == 2:
+            data = self.density()[:, :, indx_alt]
+            data_type = "Atmospheric Density"
+            unit = " ($\\frac{kg}{m^3}$)"
+
+        # EckertIII projection details.
+        ax = plt.axes(projection=ccrs.EckertIII())
+        ax.set_global()
+        ax.coastlines()
+        ax.gridlines()
 
         # Contourf plotting.
-        cmap = plt.get_cmap("hot")
-        minimum = temperature.min()
-        maximum = temperature.max()
+        minimum = data.min()
+        maximum = data.max()
         levels = np.linspace(minimum, maximum, 21)
-        plt.contourf(
+        contour = plt.contourf(
+            longitude,
             latitude,
-            altitude,
-            temperature,
-            cmap=cmap,
+            data,
+            transform=ccrs.PlateCarree(),
             levels=levels,
         )
 
-        # Adds SALT to the graph.
-        if self.future:
-            month = self.next_month.title()
-        else:
-            month = self.month.title()
-
+        # Add SALT.
         plt.xlabel("Latitude ($\phi$)")
-        plt.ylabel("Altitude (m)")
-        plt.title("Temperature in the Month of " + month)
+        plt.ylabel("Longitude ($\lambda$)")
+        plt.title(
+            data_type + " ("
+            + self.date.strftime("%d-%m-%Y") + ", Altitude = "
+            + str(self.altitude_level()[indx_alt]) +")"
+        )
 
         # Colorbar creation.
         colorbar = plt.colorbar()
         tick_locator = ticker.MaxNLocator(nbins=15)
         colorbar.locator = tick_locator
         colorbar.update_ticks()
-        colorbar.set_label("Temperature (K)")
+        colorbar.set_label(
+            data_type + unit
+        )
+
+        plt.show()
+        plt.close()
+    
+    def altitude_contourf(self, which=0, central_long=-7.6921):
+        """
+        Plots a desired atmospheric process on a contour plot,
+        with the axes being latitude, and altitude. For the raw
+        data, please see the other methods found in this class.
+        If you would like a particular atmospheric process to
+        be added to this method, either create an issue on
+        GitHub or send an email to support@amsimp.com.
+
+        For a temperature contour plot, the value of which is 0.
+        """
+        info = " For a temperature contour plot, the value of which is 0. "
+
+        # Ensure, which, is equal to 0.
+        if which < 0 or which > 0:
+            raise Exception(
+                "which must be equal to zero. The value of which was: {}.".format(
+                    which
+                ) + info
+            )
+        
+        # Ensure, which, is a integer.
+        if not isinstance(which, int):
+            raise Exception(
+                "which must be equal to zero. The value of which was: {}.".format(
+                    which
+                ) + info
+            )
+        
+        # Ensure central_long is between -180 and 180.
+        if central_long < -180 or central_long > 180:
+            raise Exception(
+                "central_long must be a real number between -180 and 180. The value of central_long was: {}".format(
+                    central_long
+                )
+            )
+        
+        # Index of the nearest central_long in amsimp.Backend.longtitude_lines()
+        indx_long = (np.abs(self.longitude_lines().value - central_long)).argmin()
+
+        # Defines the axes, and the data.
+        latitude, altitude = np.meshgrid(self.latitude_lines(), self.altitude_level())
+        
+        if which == 0:
+            data = self.temperature()[indx_long, :, :]
+            data = np.transpose(data)
+            data_type = "Temperature"
+            unit = " (K)"
+            cmap = plt.get_cmap("hot")
+
+        # Contourf plotting.
+        minimum = data.min()
+        maximum = data.max()
+        levels = np.linspace(minimum, maximum, 21)
+        plt.contourf(
+            latitude,
+            altitude,
+            data,
+            cmap=cmap,
+            levels=levels,
+        )
+
+        # Add SALT.
+        plt.xlabel("Latitude ($\phi$)")
+        plt.ylabel("Altitude (m)")
+        plt.title(
+            data_type + " ("
+            + self.date.strftime("%d-%m-%Y") + ", Longitude = "
+            + str(np.round(self.longitude_lines()[indx_long], 2)) + ")"
+        )
+
+        # Colorbar creation.
+        colorbar = plt.colorbar()
+        tick_locator = ticker.MaxNLocator(nbins=15)
+        colorbar.locator = tick_locator
+        colorbar.update_ticks()
+        colorbar.set_label(
+            data_type + unit
+        )
 
         # Average boundary line between the troposphere and the stratosphere.
-        avg_tropstratline = self.troposphere_boundaryline()
+        troposphere_boundaryline = self.troposphere_boundaryline()
+        avg_tropstratline = np.mean(troposphere_boundaryline) + np.zeros(
+            len(troposphere_boundaryline[0])
+        )
 
         # Plot average boundary line on the contour plot.
         plt.plot(
@@ -738,3 +722,65 @@ cdef class Backend:
         plt.legend(loc=0)
 
         plt.show()
+        plt.close()
+    
+    def pressurethickness_contourf(self):
+        """
+        Plots pressure thickness on a contour plot, with the axes being
+        latitude and longitude. This plot is then layed on top of a EckertIII
+        global projection. For the raw data, please use the
+        amsimp.Backend.pressure_thickness() method.
+        """
+        # Defines the axes, and the data.
+        latitude, longitude = np.meshgrid(self.latitude_lines(),
+         self.longitude_lines()
+        )
+        cdef np.ndarray pressure_thickness = self.pressure_thickness()
+
+        # EckertIII projection details.
+        ax = plt.axes(projection=ccrs.EckertIII())
+        ax.set_global()
+        ax.coastlines()
+        ax.gridlines()
+
+        # Contourf plotting.
+        minimum = pressure_thickness.min()
+        maximum = pressure_thickness.max()
+        levels = np.linspace(minimum, maximum, 21)
+        contour = plt.contourf(
+            longitude,
+            latitude,
+            pressure_thickness,
+            transform=ccrs.PlateCarree(),
+            levels=levels,
+        )
+
+        # Index of the rain / snow line
+        indx_snowline = (np.abs(levels.value - 5400)).argmin()
+        contour.collections[indx_snowline].set_color('black')
+        contour.collections[indx_snowline].set_linewidth(1) 
+
+        # Add SALT.
+        plt.xlabel("Latitude ($\phi$)")
+        plt.ylabel("Longitude ($\lambda$)")
+        plt.title("Pressure Thickness ("
+         + self.date.strftime("%d-%m-%Y") + ")"
+        )
+
+        # Colorbar creation.
+        colorbar = plt.colorbar()
+        tick_locator = ticker.MaxNLocator(nbins=15)
+        colorbar.locator = tick_locator
+        colorbar.update_ticks()
+        colorbar.set_label("Pressure Thickness (1000 hPa - 500 hPa) (m)")
+
+        # Footnote
+        plt.figtext(
+            0.99,
+            0.01,
+            "Rain / Snow Line is marked by the black line (5,400 m).",
+            horizontalalignment="right",
+        )
+
+        plt.show()
+        plt.close()

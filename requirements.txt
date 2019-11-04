@@ -3,4 +3,5 @@ astropy
 matplotlib
 numpy
 cartopy
-pandas
+wget
+pynverse

@@ -1,3 +1,5 @@
+#cython: linetrace=True
+#distutils: define_macros=CYTHON_TRACE_NOGIL=1
 #cython: language_level=3
 """
 AMSIMP Precipitable Water Class. For information about this class is described below.
@@ -14,6 +16,7 @@ from matplotlib import ticker
 from amsimp.wind cimport Wind
 from amsimp.wind import Wind
 cimport numpy as np
+from cpython cimport bool
 
 # -----------------------------------------------------------------------------------------#
 
@@ -38,52 +41,40 @@ cdef class Water(Wind):
         meteorology, is the partial pressure of water vapor. The partial
         pressure of water vapor is the pressure that water vapor contributes
         to the total atmospheric pressure.
+
+        Equation:
+            e = 6.112 \* \exp((17.67 * T) / (T + 243.15))
         """
         # Ensures that the detail_level must be higher than 2 in order to utilise this method.
-        if self.detail_level < (5 ** (3 - 1)):
+        if self.detail_level < 3:
             raise Exception(
                 "detail_level must be greater than 2 in order to utilise this method."
             )
-
-        cdef list list_vaporpressure = []
+        
+        # Average boundary line between the troposphere and the stratosphere.
+        troposphere_boundaryline = self.troposphere_boundaryline()
+        avg_tropstratline = np.mean(troposphere_boundaryline)
+        idx_troposphereboundaryline = (
+            np.abs(self.altitude_level().value - avg_tropstratline.value)
+        ).argmin()
 
         # Convert temperature in Kelvin to degrees centigrade.
-        cdef np.ndarray temperature = self.temperature() - 273.15
+        cdef np.ndarray temperature = self.temperature().to(
+            self.units.deg_C, equivalencies=self.units.temperature()
+        )
+        temperature = temperature[:, :, 0:idx_troposphereboundaryline].value
 
-        # Troposphere boundary line.
-        cdef float delta_z = self.altitude_level()[1]
-        cdef float index_of_maxz = int(np.floor(self.troposphere_boundaryline()[0] / delta_z))
+        # Saturated water vapor pressure
+        vapor_pressure = 6.112 * np.exp(
+            (17.67 * temperature) / (temperature + 243.15)
+        )
 
-        # Calculations.
-        cdef np.ndarray temp
-        cdef list e
-        cdef float t
-        cdef int n
-        n = 0
-        while n <= index_of_maxz:
-            e = []
-
-            temp = temperature[n]
-            for t in temp:
-                if t >= 0:
-                    ans = 0.61121 * np.exp((18.678 - (t / 234.5)) * (t / (257.14 + t)))
-                elif t < 0:
-                    ans = 0.61115 * np.exp((23.036 - (t / 333.7)) * (t / (279.82 + t)))
-                e.append(ans)
-            list_vaporpressure.append(e)
-
-            n += 1
-        vapor_pressure = np.asarray(list_vaporpressure)
-
-        # Convert from kPa to hPa.
-        vapor_pressure *= 10
-        
-        # Convert from hPa to Pa.
-        vapor_pressure *= 100
+        # Add units of measurement.
+        vapor_pressure *= self.units.hPa
 
         return vapor_pressure
 
-    def integration_eq(self, pressure, vapor_pressure):
+    def mixing_ratio(self, pressure, vapor_pressure):
         """
         This method is solely utilised for integration in the
         amsimp.Water.precipitable_water() method. Please do not interact with
@@ -92,57 +83,89 @@ cdef class Water(Wind):
         y = (0.622 * vapor_pressure) / (pressure - vapor_pressure)
         return y
 
-    cpdef np.ndarray precipitable_water(self):
+    cpdef np.ndarray precipitable_water(self, sum_altitude=True):
         """
         Generates a NumPy array of saturated precipitable water vapor.
         Precipitable water is the total atmospheric water vapor contained in a
         vertical column of unit cross-sectional area extending between any two
         specified levels. For a contour plot of this data, please use the
-        amsimp.Water.contourf() method.
+        amsimp.Water.contourf() method. If sum_altitude is equal to True, 
+        it will sum the altitude component making the output 2-dimensional.
+
+        Equation:
+            PW = frac{1}{rho \* g} \* \int r dp
         """
-        cdef list list_precipitablewater = []
+        # Ensure sum_altitude is a boolean value.
+        if not isinstance(sum_altitude, bool):
+            raise Exception(
+                "sum_altitude must be a boolean value. The value of which was: {}.".format(
+                    sum_altitude
+                )
+            )
 
-        # Define variables.
-        cdef float delta_z = self.altitude_level()[1]
-        cdef float index_of_maxz = int(np.floor(self.troposphere_boundaryline()[0] / delta_z))
+        # Average boundary line between the troposphere and the stratosphere.
+        troposphere_boundaryline = self.troposphere_boundaryline()
+        avg_tropstratline = np.mean(troposphere_boundaryline)
+        idx_troposphereboundaryline = (
+            np.abs(self.altitude_level().value - avg_tropstratline.value)
+        ).argmin()
 
-        cdef np.ndarray pressure = np.transpose(self.pressure()[0:index_of_maxz] / 100)
-        cdef np.ndarray vapor_pressure = np.transpose(self.vapor_pressure() / 100)
-        cdef float g = -self.g
+        # Defining some variables.
+        cdef np.ndarray pressure = self.pressure().to(self.units.Pa).value
+        pressure = pressure[:, :, 0:idx_troposphereboundaryline]
+        cdef np.ndarray vapor_pressure = self.vapor_pressure().to(self.units.Pa)
+        vapor_pressure = vapor_pressure.value
+        cdef float g = -self.g.value
         cdef float rho_w = 997
 
         # Integrate the mixing ratio with respect to pressure between the
         # pressure boundaries of p1, and p2.
-        cdef list intergration
+        cdef list list_precipitablewater = []
+        cdef list pwv_lat, pwv_alt
         cdef tuple integration_term
         cdef float p1, p2, e, P_wv, Pwv_intergrationterm
-        cdef int n, k
-        n = 0
-        while n < len(pressure):
-            intergration = []
+        cdef int len_pressurelong = len(pressure)
+        cdef int len_pressurelat = len(pressure[0])
+        cdef int len_pressurealt = len(pressure[0][0]) - 1
+        cdef int i, n, k
+        i = 0
+        while i < len_pressurelong:
+            pwv_lat = []
 
-            k = 0
-            while k < (len(pressure[0]) - 1):
-                p1 = pressure[n][k]
-                p2 = pressure[n][k + 1]
-                e = (vapor_pressure[n][k] + vapor_pressure[n][k + 1]) / 2
+            n = 0
+            while n < len_pressurelat:
+                pwv_alt = []
 
-                integration_term = quad(self.integration_eq, p1, p2, args=(e,))
-                Pwv_intergrationterm = integration_term[0]
-                intergration.append(integration_term)
+                k = 0
+                while k < len_pressurealt:
+                    p1 = pressure[i][n][k]
+                    p2 = pressure[i][n][k + 1]
+                    e = (vapor_pressure[i][n][k] + vapor_pressure[i][n][k + 1]) / 2
 
-                k += 1
+                    integration_term = quad(self.mixing_ratio, p1, p2, args=(e,))
+                    Pwv_intergrationterm = integration_term[0]
+                    pwv_alt.append(Pwv_intergrationterm)
 
-            P_wv = np.sum(intergration)
-            list_precipitablewater.append(P_wv)
+                    k += 1
 
-            n += 1
+                if sum_altitude == False:
+                    pwv_lat.append(pwv_alt)
+                else:
+                    P_wv = np.sum(pwv_alt)
+                    pwv_lat.append(P_wv)                   
 
-        precipitable_water = np.asarray(np.transpose(list_precipitablewater))
+                n += 1
+            
+            list_precipitablewater.append(pwv_lat)
+            i += 1
+
+        precipitable_water = np.asarray(list_precipitablewater)
 
         # Multiplication term by integration.
         precipitable_water *= 1 / (rho_w * g)
 
+        precipitable_water *= self.units.m
+        precipitable_water = precipitable_water.to(self.units.mm)
         return precipitable_water
 
     def water_contourf(self):
@@ -152,19 +175,13 @@ cdef class Water(Wind):
         global projection. For the raw data, please use the
         amsimp.Water.precipitable_water() method.
         """
-        # Defines the axes.
-        long = self.latitude_lines() * 2
-        latitude, longitude = np.meshgrid(self.latitude_lines(), long)
-
-        # Define the data.
-        precipitable_water = []
-        P_wv = self.precipitable_water()
-        n = 0
-        while n < len(longitude):
-            precipitable_water.append(list(P_wv))
-
-            n += 1
-        precipitable_water = np.asarray(precipitable_water)
+        # Defines the axes, and the data.
+        latitude, longitude = np.meshgrid(self.latitude_lines(),
+         self.longitude_lines()
+        )
+        cdef np.ndarray precipitable_water = self.precipitable_water(
+            sum_altitude=True
+        )
 
         # EckertIII projection details.
         ax = plt.axes(projection=ccrs.EckertIII())
@@ -173,8 +190,8 @@ cdef class Water(Wind):
         ax.gridlines()
 
         # Contourf plotting.
-        minimum = self.precipitable_water().min()
-        maximum = self.precipitable_water().max()
+        minimum = precipitable_water.min()
+        maximum = precipitable_water.max()
         levels = np.linspace(minimum, maximum, 21)
         plt.contourf(
             longitude,
@@ -184,15 +201,12 @@ cdef class Water(Wind):
             levels=levels,
         )
 
-        # Adds SALT to the graph.
-        if self.future:
-            month = self.next_month.title()
-        else:
-            month = self.month.title()
-
+        # Add SALT.
         plt.xlabel("Latitude ($\phi$)")
         plt.ylabel("Longitude ($\lambda$)")
-        plt.title("Precipitable Water in the Month of " + month)
+        plt.title("Precipitable Water ("
+         + self.date.strftime("%d-%m-%Y") + ")"
+        )
 
         # Colorbar creation.
         colorbar = plt.colorbar()
@@ -202,3 +216,4 @@ cdef class Water(Wind):
         colorbar.set_label("Precipitable Water (mm)")
 
         plt.show()
+        plt.close()
