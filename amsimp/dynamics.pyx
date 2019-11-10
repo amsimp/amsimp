@@ -650,9 +650,14 @@ cdef class Dynamics(Water):
             hour = now.hour
             minute = now.minute
 
+            if minute < 10:
+                minute = "0" + str(minute)
+            else:
+                minute = str(minute)
+
             fig.suptitle(
                 "Motus Aeris @ AMSIMP (" + str(hour)
-                + ":" + str(minute) + " "
+                + ":" + minute + " "
                 + now.strftime("%d-%m-%Y") + ")"
             )
 

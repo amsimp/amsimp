@@ -43,7 +43,7 @@ after_success:
   - cd ..
   - cd ..
   - cd ..
-  - python setup.py build_ext --inplace
+  - python setup.py build_ext --force --inplace --define CYTHON_TRACE
   - coverage run test.py
   - codecov
   

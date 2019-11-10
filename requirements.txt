@@ -3,5 +3,5 @@ astropy
 matplotlib
 numpy
 cartopy
-python-wget
+wget
 pynverse
