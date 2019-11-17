@@ -57,4 +57,4 @@ delta_y = (
 # the Continuity Equation. Answer should be close to zero.
 ans = (u_gradientx / delta_x) + (v_gradienty / delta_y)
 ans = np.abs(ans)
-print(np.mean(ans.value))
+print("The Continuity Equation holds (" + str(np.mean(ans.value)) + ").")
