@@ -241,15 +241,13 @@ cdef class Dynamics(Water):
         # of Mass Equation (Primitive Equations).
         cdef list forecast_temperature = self.forecast_temperature()
         cdef np.ndarray density = self.density()
-        # Universal gas constant (J * kg^-1 * K^-1)
-        cdef R = 287 * (self.units.J / (self.units.kg * self.units.K))
 
         # Generate a forecast for pressure for the specified number of
         # days.
         cdef np.ndarray forecast_temp, forecast_p
         forecast_pressure = []
         for forecast_temp in forecast_temperature:
-            forecast_p = density * R * forecast_temp
+            forecast_p = density * self.R * forecast_temp
             forecast_p = forecast_p.to(self.units.hPa)
 
             forecast_pressure.append(forecast_p)

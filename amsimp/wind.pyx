@@ -64,6 +64,7 @@ cdef class Wind(Backend):
         cdef delta_y = (
             self.latitude_lines()[-1].value - self.latitude_lines()[-2].value
         ) * lat_d
+        delta_y *= 2
 
         # Gradient of geopotential height over latitudinal distance.
         pressure_gradient = np.gradient(self.pressure())
@@ -148,6 +149,7 @@ cdef class Wind(Backend):
             n += 1
         delta_x = np.asarray(list_deltax)
         delta_x *= self.units.m
+        delta_x *= 2
 
         # Gradient of geopotential height over latitudinal distance.
         pressure_gradient = np.gradient(self.pressure())

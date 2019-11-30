@@ -11,10 +11,10 @@ detail = amsimp.Dynamics(5)
 latitude = detail.latitude_lines().value
 longitude = detail.longitude_lines().value
 
-# AMSIMP temperature prediction.
+# AMSIMP temperature.
 amsimp_temperature = detail.temperature()[:, :, 0].value
 
-# AMSIMP density prediction.
+# AMSIMP atmospheric density.
 amsimp_density = detail.density()[:, :, 0].value
 
 # Real time weather.
@@ -64,9 +64,12 @@ while n < len(longitude):
 
     n += 1
 
+# Actual temperature
 actual_temperature = np.asarray(actual_temperature)
 actual_pressure = np.asarray(actual_pressure) * detail.units.hPa
 actual_temp = actual_temperature * detail.units.K
+
+# Calculate the actual atmospheric density using the Ideal Gas Law.
 R = 287 * (detail.units.J / (detail.units.kg * detail.units.K))
 actual_density = actual_pressure / (R * actual_temp)
 actual_density = actual_density.to(detail.units.kg / (detail.units.m ** 3))
@@ -78,8 +81,8 @@ temp_error *= 100
 temp_error = np.abs(temp_error)
 meantemp_error = np.mean(temp_error)
 mediantemp_error = np.median(temp_error)
-meantemp_error = np.round(meantemp_error, 1)
-mediantemp_error = np.round(mediantemp_error)
+meantemp_error = np.round(meantemp_error, 2)
+mediantemp_error = np.round(mediantemp_error, 2)
 
 # The density mean, and median absolute percentage errors.
 density_error = (actual_density - amsimp_density) / actual_density
@@ -87,41 +90,38 @@ density_error *= 100
 density_error = np.abs(density_error)
 meandensity_error = np.mean(density_error)
 mediandensity_error = np.median(density_error)
-meandensity_error = np.round(meandensity_error, 1)
-mediandensity_error = np.round(mediandensity_error, 1)
+meandensity_error = np.round(meandensity_error, 2)
+mediandensity_error = np.round(mediandensity_error, 2)
 
 # Print mean absolute percentage error to console.
 print(
-    "The temperature mean absolute percentage error is: +-"
-    + str(meantemp_error / 2)
+    "The temperature mean absolute percentage error is: "
+    + str(meantemp_error)
     + "%"
 )
 print(
-    "The atmospheric density mean absolute percentage error is: +-"
-    + str(meandensity_error / 2)
+    "The atmospheric density mean absolute percentage error is: "
+    + str(meandensity_error)
     + "%"
 )
 
 # Print median absolute percentage error.
 print(
-    "The temperature median absolute percentage error is: +-"
-    + str(mediantemp_error / 2)
+    "The temperature median absolute percentage error is: "
+    + str(mediantemp_error)
     + "%"
 )
 print(
-    "The atmospheric density median absolute percentage error is: +-"
-    + str(mediandensity_error / 2)
+    "The atmospheric density median absolute percentage error is: "
+    + str(mediandensity_error)
     + "%"
 )
 
 mean_error = (meantemp_error + meandensity_error) / 2
 median_error = (mediantemp_error + mediandensity_error) / 2
 
-mean_error /= 2
-median_error /= 2
-
 mean_error = np.round(mean_error, 2)
 median_error = np.round(median_error, 2)
 
-print("AMSIMP's MAPE: +-" + str(mean_error) + "%")
-print("AMSIMP's MdAPE: +-" + str(median_error) + "%")
+print("AMSIMP's MAPE: " + str(mean_error) + "%")
+print("AMSIMP's MdAPE: " + str(median_error) + "%")

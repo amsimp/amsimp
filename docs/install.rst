@@ -38,7 +38,7 @@ however, as mentioned previously this approach is strongly discouraged:
 
 Please note: you will also need to have a C compiler installed
 on your machine. On macOS or Linux, you could use GCC and on
-Windows, you could use MiniGW.
+Windows, you could use MinGW.
 
 Installing from Source
 ----------------------

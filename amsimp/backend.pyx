@@ -16,7 +16,6 @@ import wget
 import numpy as np
 from astropy import constants as const
 from astropy import units
-from scipy.constants import gas_constant
 from scipy.optimize import curve_fit
 from pynverse import inversefunc
 import requests
@@ -101,7 +100,7 @@ cdef class Backend:
     sidereal_day = ((23 + (56 / 60)) * 3600) * units.s
     Upomega = ((2 * np.pi) / sidereal_day) * units.rad
     # Ideal Gas Constant
-    R = gas_constant * (units.J / (units.mol * units.K))
+    R = 287 * (units.J / (units.kg * units.K))
     # Mean radius of the Earth.
     a = const.R_earth
     a = a.value * units.m
@@ -114,7 +113,7 @@ cdef class Backend:
     # Molar mass of the Earth's air.
     # m = 0.02896 (Unnecessary?)
     # The specific heat capacity on a constant pressure surface for dry air.
-    c_p = 29.100609300000002 * (units.J / (units.mol * units.K))
+    c_p = 1004 * (units.J / (units.kg * units.K))
     # Gravitational acceleration at the Earth's surface.
     g = (G * M) / (a ** 2)
 
@@ -376,10 +375,7 @@ cdef class Backend:
         Pressure is defined as the flux of momentum component normal to a given
         surface.
         """
-        # Universal gas constant (J * kg^-1 * K^-1)
-        R = 287 * (units.J / (units.kg * units.K))
-    
-        pressure = self.density() * R * self.temperature()
+        pressure = self.density() * self.R * self.temperature()
 
         pressure = pressure.to(units.hPa)
 

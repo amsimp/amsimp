@@ -32,7 +32,7 @@ setup(
     name="amsimp",
     ext_modules=extensions,
     include_dirs=[numpy.get_include()],
-    version="0.3.3",
+    version="0.3.4",
     author="Conor Casey",
     author_email="support@amsimp.com",
     description="Simulator for Atmospheric Dynamics",
