@@ -44,6 +44,10 @@ cdef class Dynamics(Water):
     for the specified number of forecast days. Every single day is divided
     into hours, meaning the length of the outputted list is 24 times the number
     of forecast days specified.
+    forecast_density ~ this method outputs the forecasted atmospheric
+    density for the specified number of forecast days. Every single day is
+    divided into hours, meaning the length of the outputted list is 24 times the
+    number of forecast days specified.
     forecast_pressure ~ this method outputs the forecasted atmospheric
     pressure for the specified number of forecast days. Every single day is
     divided into hours, meaning the length of the outputted list is 24 times the
@@ -209,28 +213,93 @@ cdef class Dynamics(Water):
             forecast_temperature.append(temp)
         
         forecast_temperature = forecast_temperature[::60]
-        
-        # Remove extreme values from the forecast.
-        one_percentile = np.percentile(forecast_temperature, 1)
-        temp = []
-        for forecast_temp in forecast_temperature:
-            forecast_temp = forecast_temp.value
-            forecast_temp[forecast_temp < one_percentile] = one_percentile
-            forecast_temp *= self.units.K
-            temp.append(forecast_temp)
 
         return forecast_temperature
+
+    cpdef list forecast_density(self):
+        """
+        Utilising the initial conditions as defined by 
+        amsimp.Backend.density() and the mass continunity
+        equation, this method generates a forecast for atmospheric 
+        denisty for the specified number of days. The finite difference 
+        method is utilised to get a numerical solution to the
+        partial derivative equation. The value of delta t (the
+        change in time) is one minute. The time interval between
+        two elements in the outputted list is one hour.
+
+        Equation:
+        frac{\partial rho}{\partial t} = u \* frac{\partial rho}{\partial x} +
+                                       v \* frac{\partial rho}{\partial y} +
+                                       w \* frac{\partial rho}{\partial z}
+        """
+        # Define the forecast period.
+        forecast_days = int(self.forecast_days)
+        cdef np.ndarray time = np.linspace(
+            0, forecast_days, (forecast_days * 1440)
+        )
+
+        # Define the initial atmospheric density condition.
+        cdef np.ndarray density = self.density()
+
+        # Define delta_x, delta_y, and delta_y.
+        delta_xyz = self.delta_xyz()
+        cdef np.ndarray delta_x = delta_xyz[0]
+        cdef delta_y = delta_xyz[1]
+        cdef delta_z = delta_xyz[2]
+
+        # Define delta_t
+        delta_t = time[1] - time[0]
+        delta_xval = delta_x.value
+        delta_t = delta_t + np.zeros(
+            (len(delta_xval), len(delta_xval[0]), len(delta_xval[0][0]))
+        )
+        delta_t *= self.units.day
+        delta_t = delta_t.to(self.units.s)
+
+        # Define the zonal, meridional, and vertical wind velocities.
+        cdef np.ndarray u = self.zonal_wind()
+        cdef np.ndarray v = self.meridional_wind()
+        w = 0 * (self.units.m / self.units.s)
+
+        # Calculate how atmospheric density will evolve over time.
+        forecast_density = []
+        cdef list density_gradient
+        cdef np.ndarray density_gradientx, density_gradienty
+        cdef np.ndarray density_gradientz
+        for t in time:
+            # Define the atmospheric density gradient.
+            density_gradient = np.gradient(density)
+
+            # Define the atmospheric density gradient in the longitude,
+            # latitude, and altitude directions.
+            density_gradientx = density_gradient[0]
+            density_gradienty = density_gradient[1]
+            density_gradientz = density_gradient[2]
+
+            # Calculate how atmospheric density at a particular point in time.
+            rho = density + (
+                u * (delta_t / delta_x) * density_gradientx
+            ) + (
+                v * (delta_t / delta_y) * density_gradienty
+            ) + (
+                w * (delta_t / delta_z) * density_gradientz
+            )
+            density = rho.copy()
+
+            # Store the data within a list.
+            forecast_density.append(rho)
+        
+        forecast_density = forecast_density[::60]
+
+        return forecast_density
     
     cpdef list forecast_pressure(self):
         """
         Utilising the forecasted temperature as defined by
-        amsimp.Dynamics.forecast_temperature(), the Ideal Gas Law
-        and assuming constant atmospheric density as defined by the
-        conservation of mass equation (primitive equation), this
-        method generates a forecast for atmospheric pressure for the
-        specified number of days. For more information on the
-        forecasted temperature, please see 
-        amsimp.Dynamics.forecast_temperature()
+        amsimp.Dynamics.forecast_temperature() and the atmospheric
+        density as defined by amsimp.Dynamics.forecast_temperature(), 
+        this method generates a forecast for atmospheric pressure for 
+        the specified number of days using the ideal gas law.
 
         Equation:
             \del \cdot rho = 0
@@ -240,17 +309,23 @@ cdef class Dynamics(Water):
         # density remains constant as described by the Conservation
         # of Mass Equation (Primitive Equations).
         cdef list forecast_temperature = self.forecast_temperature()
-        cdef np.ndarray density = self.density()
+        cdef list forecast_density = self.forecast_density()
 
         # Generate a forecast for pressure for the specified number of
         # days.
-        cdef np.ndarray forecast_temp, forecast_p
+        cdef np.ndarray forecast_p
         forecast_pressure = []
-        for forecast_temp in forecast_temperature:
-            forecast_p = density * self.R * forecast_temp
+        cdef int n = 0
+        cdef int len_temprho = len(forecast_temperature)
+        while n < len_temprho:
+            forecast_p = (
+                forecast_density[n] * self.R * forecast_temperature[n]
+            )
             forecast_p = forecast_p.to(self.units.hPa)
 
             forecast_pressure.append(forecast_p)
+
+            n += 1
 
         return forecast_pressure
 
@@ -403,22 +478,6 @@ cdef class Dynamics(Water):
 
         forecast_precipitablewater = forecast_precipitablewater[::60]
 
-        # Remove extreme values from the forecast.
-        one_percentile = np.percentile(forecast_precipitablewater, 1)
-        ninetynine_percentile = np.percentile(
-            forecast_precipitablewater, 99
-        )
-        pwv = []
-        for forecast_pwv in forecast_precipitablewater:
-            forecast_pwv = forecast_pwv.value
-            forecast_pwv[forecast_pwv < one_percentile] = one_percentile
-            forecast_pwv[
-                forecast_pwv > ninetynine_percentile
-            ] = ninetynine_percentile
-            forecast_pwv *= self.units.mm
-            pwv.append(forecast_pwv)
-
-        forecast_precipitablewater = pwv
         return forecast_precipitablewater
 
     def simulate(self):

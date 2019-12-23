@@ -101,3 +101,6 @@ while x < 4:
 
     x += 1
 graph("MdAPE")
+
+print("AMSIMP's MAPE: " + str(np.round(np.mean(df["mape"]), 2)) + "%")
+print("AMSIMP's MdAPE: " + str(np.round(np.mean(df["mdape"]), 2)) + "%")
