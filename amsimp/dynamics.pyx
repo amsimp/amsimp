@@ -21,6 +21,7 @@ from amsimp.wind cimport Wind
 from amsimp.wind import Wind
 from amsimp.water cimport Water
 from amsimp.water import Water
+from sklearn.metrics import r2_score
 
 # -----------------------------------------------------------------------------------------#
 
@@ -228,8 +229,8 @@ cdef class Dynamics(Water):
         two elements in the outputted list is one hour.
 
         Equation:
-        frac{\partial rho}{\partial t} = u \* frac{\partial rho}{\partial x} +
-                                       v \* frac{\partial rho}{\partial y} +
+        frac{\partial rho}{\partial t} = u \* frac{\partial rho}{\partial x} -
+                                       v \* frac{\partial rho}{\partial y} -
                                        w \* frac{\partial rho}{\partial z}
         """
         # Define the forecast period.
@@ -277,7 +278,7 @@ cdef class Dynamics(Water):
             density_gradientz = density_gradient[2]
 
             # Calculate how atmospheric density at a particular point in time.
-            rho = density + (
+            rho = density - (
                 u * (delta_t / delta_x) * density_gradientx
             ) + (
                 v * (delta_t / delta_y) * density_gradienty
@@ -297,7 +298,7 @@ cdef class Dynamics(Water):
         """
         Utilising the forecasted temperature as defined by
         amsimp.Dynamics.forecast_temperature() and the atmospheric
-        density as defined by amsimp.Dynamics.forecast_temperature(), 
+        density as defined by amsimp.Dynamics.forecast_density(), 
         this method generates a forecast for atmospheric pressure for 
         the specified number of days using the ideal gas law.
 
@@ -305,9 +306,8 @@ cdef class Dynamics(Water):
             \del \cdot rho = 0
             p = rho \* R \* T
         """
-        # Store the forecasted temperature in a variable. Atmospheric
-        # density remains constant as described by the Conservation
-        # of Mass Equation (Primitive Equations).
+        # Store the forecasted temperature and atmospheric
+        # densituy in a variable.
         cdef list forecast_temperature = self.forecast_temperature()
         cdef list forecast_density = self.forecast_density()
 
@@ -337,31 +337,60 @@ cdef class Dynamics(Water):
         """
         return a - (b / c) * (1 - np.exp(-c * x))
 
-    cpdef list forecast_pressurethickness(self):
+    cpdef list forecast_pressurethickness(self, p1=1000, p2=500):
         """
         Utilising the forecasted pressure as defined by 
         amsimp.Dynamics.forecast_pressure() and utilising non-linear
         regression, similiar to the amsimp.Backend.pressure_thickness()
         method, this method generates a forecast of the atmospheric 
-        pressure thickness between 1000 hPa and 500 hPa. For 
-        more information on the forecasted pressure, please see
-        amsimp.Dynamics.forecast_temperature()
+        pressure thickness between two constant pressure surfaces, p1 and
+        p2. For more information on the forecasted pressure, please see
+        amsimp.Dynamics.forecast_pressure()
 
         Equation:
             y = a - frac{b}{c} * (1 - \exp(-c * x))
         """
-        # Store the forecasted temperature in a variable.
+        # Ensure p1 is greater than p2.
+        if p1 < p2:
+            raise Exception("Please note that p1 must be greater than p2.")
+
+        # Store the forecasted pressure in a variable.
         cdef list forecast_pressure = self.forecast_pressure()
-        cdef np.ndarray altitude = self.altitude_level()[:20].value
+        
+        # Find the nearest constant pressure surface to p1 and p2 in pressure.
+        cdef int indx_p1 = (
+            np.abs(forecast_pressure[0].value[0, 0, :] - p1)
+        ).argmin()
+        cdef int indx_p2 = (
+            np.abs(forecast_pressure[0].value[0, 0, :] - p2)
+        ).argmin()
+
+        # Find the approximate altitude of the constant pressure surfaces
+        # p1 and p2. Following which, take away 5400 from the p1 values 
+        # and add 1000 to the p2 value.
+        approx_p1_alt = (self.altitude_level().value)[indx_p1]
+        approx_p2_alt = (self.altitude_level().value)[indx_p2]
+        approx_p1_alt -= 5400
+        approx_p2_alt += 2000
+
+        indx_p1 = (
+            np.abs(self.altitude_level().value - approx_p1_alt)
+        ).argmin()
+        indx_p2 = (
+            np.abs(self.altitude_level().value - approx_p2_alt)
+        ).argmin() 
+
+        cdef np.ndarray altitude = self.altitude_level()[indx_p1:indx_p2].value
         
         forecast_pressurethickness = []
         cdef np.ndarray forecast_p, pressure_thickness
         cdef np.ndarray p, p_lat, abc
         cdef list list_pressurethickness = []
+        cdef list r_values = []
         cdef list guess = [1000, 0.12, 0.00010]
         cdef list pthickness_lat
         cdef tuple c
-        cdef float hPa1000_height, hPa500_height, pthickness
+        cdef float p1_height, p2_height, pthickness, r_value
         for forecast_p in forecast_pressure:
             forecast_p = forecast_p.value
 
@@ -369,18 +398,26 @@ cdef class Dynamics(Water):
             for p in forecast_p:
                 pthickness_lat = []
                 for p_lat in p:
-                    p_lat = p_lat[:20]
+                    p_lat = p_lat[indx_p1:indx_p2]
 
                     c = curve_fit(self.fit_method, altitude, p_lat, guess)
                     abc = c[0]
+
+                    predicted_pressure = self.fit_method(
+                        altitude, abc[0], abc[1], abc[2]
+                    )
+                    r_value = r2_score(
+                        predicted_pressure, p_lat
+                    )
+                    r_values.append(r_value)
 
                     inverse_fitmethod = inversefunc(self.fit_method,
                         args=(abc[0], abc[1], abc[2])
                     )
 
-                    hPa1000_height = inverse_fitmethod(1000)
-                    hPa500_height = inverse_fitmethod(500)
-                    pthickness = hPa500_height - hPa1000_height
+                    p1_height = inverse_fitmethod(p1)
+                    p2_height = inverse_fitmethod(p2)
+                    pthickness = p2_height - p1_height
 
                     pthickness_lat.append(pthickness)
                 list_pressurethickness.append(pthickness_lat)
@@ -388,6 +425,13 @@ cdef class Dynamics(Water):
             pressure_thickness = np.asarray(list_pressurethickness)
             pressure_thickness *= self.units.m
             forecast_pressurethickness.append(pressure_thickness)
+
+        # Ensure the R^2 value is greater than 0.9.
+        r_value = np.mean(r_values)
+        if r_value < 0.99:
+            raise Exception("Unable to determine the pressure thickness"
+            + " at this time. Please contact the developer for futher"
+            + " assistance.")
 
         return forecast_pressurethickness
 

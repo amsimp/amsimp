@@ -24,6 +24,7 @@ from cpython cimport bool
 import matplotlib.pyplot as plt
 from matplotlib import ticker
 import cartopy.crs as ccrs
+from sklearn.metrics import r2_score
 
 # -----------------------------------------------------------------------------------------#
 
@@ -389,14 +390,17 @@ cdef class Backend:
         """
         return a - (b / c) * (1 - np.exp(-c * x))
 
-    cpdef np.ndarray pressure_thickness(self):
+    cpdef np.ndarray pressure_thickness(self, p1=1000, p2=500):
         """
         Generates a NumPy array of atmospheric pressure thickness
-        between 1000 hPa and 500 hPa, using non-linear regression.
-        Non-linear regression is when emperical data is modelled
-        by a selected non-linear function. The equation of the
-        function utilised by this method is below. Note: the R
-        squared value of this method is approximately 0.99.
+        between two constant pressure surfaces, p1 and p2, using
+        non-linear regression. Non-linear regression is when
+        emperical data is modelled by a selected non-linear
+        function. The equation of the function utilised by this
+        method is below. The method will generate an exception
+        if the R^2 value is less than 0.99. Note: p1 must be
+        greater than p2. The default p1 value is 1000 hPa and
+        the default p2 value is 500 hPa.
 
         Equation:
             y = a - frac{b}{c} * (1 - \exp(-c * x))
@@ -404,33 +408,73 @@ cdef class Backend:
         Pressure thickness is defined as the distance between two
         pressure surfaces.
         """
-        cdef np.ndarray pressure = self.pressure().value
-        cdef np.ndarray altitude = self.altitude_level()[:20].value
+        # Ensure p1 is greater than p2.
+        if p1 < p2:
+            raise Exception("Please note that p1 must be greater than p2.")
 
-        cdef np.ndarray p, p_lat, abc
+        cdef np.ndarray pressure = self.pressure().value
+
+        # Find the nearest constant pressure surface to p1 and p2 in pressure.
+        cdef int indx_p1 = (np.abs(pressure[0, 0, :] - p1)).argmin()
+        cdef int indx_p2 = (np.abs(pressure[0, 0, :] - p2)).argmin()
+
+        # Find the approximate altitude of the constant pressure surfaces
+        # p1 and p2. Following which, take away 5400 from the p1 values 
+        # and add 1000 to the p2 value.
+        approx_p1_alt = (self.altitude_level().value)[indx_p1]
+        approx_p2_alt = (self.altitude_level().value)[indx_p2]
+        approx_p1_alt -= 5400
+        approx_p2_alt += 2000
+
+        indx_p1 = (
+            np.abs(self.altitude_level().value - approx_p1_alt)
+        ).argmin()
+        indx_p2 = (
+            np.abs(self.altitude_level().value - approx_p2_alt)
+        ).argmin() 
+
+        cdef np.ndarray altitude = self.altitude_level()[indx_p1:indx_p2].value
+
+        cdef np.ndarray p, p_lat, abc, predicted_pressure
         cdef list list_pressurethickness = []
+        cdef list r_values = []
         cdef list guess = [1000, 0.12, 0.00010]
         cdef list pthickness_lat
         cdef tuple c
-        cdef float hPa1000_height, hPa500_height, pthickness
+        cdef float p1_height, p2_height, pthickness, r_value
         for p in pressure:
             pthickness_lat =  []
             for p_lat in p:
-                p_lat = p_lat[:20]
+                p_lat = p_lat[indx_p1:indx_p2]
 
                 c = curve_fit(self.fit_method, altitude, p_lat, guess)
                 abc = c[0]
+
+                predicted_pressure = self.fit_method(
+                    altitude, abc[0], abc[1], abc[2]
+                )
+                r_value = r2_score(
+                    predicted_pressure, p_lat
+                )
+                r_values.append(r_value)
 
                 inverse_fitmethod = inversefunc(self.fit_method,
                     args=(abc[0], abc[1], abc[2])
                 )
 
-                hPa1000_height = inverse_fitmethod(1000)
-                hPa500_height = inverse_fitmethod(500)
-                pthickness = hPa500_height - hPa1000_height
+                p1_height = inverse_fitmethod(p1)
+                p2_height = inverse_fitmethod(p2)
+                pthickness = p2_height - p1_height
 
                 pthickness_lat.append(pthickness)
             list_pressurethickness.append(pthickness_lat)
+        
+        # Ensure the R^2 value is greater than 0.9.
+        r_value = np.mean(r_values)
+        if r_value < 0.99:
+            raise Exception("Unable to determine the pressure thickness"
+            + " at this time. Please contact the developer for futher"
+            + " assistance.")
         
         pressure_thickness = np.asarray(list_pressurethickness)
         pressure_thickness *= units.m

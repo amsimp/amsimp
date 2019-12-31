@@ -1109,6 +1109,20 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  * cdef inline object PyArray_MultiIterNew1(a):
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
+struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_thickness;
+
+/* "amsimp/backend.pxd":20
+ *     cpdef np.ndarray pressure(self)
+ *     cpdef fit_method(self, x, a, b, c)
+ *     cpdef np.ndarray pressure_thickness(self, p1=?, p2=?)             # <<<<<<<<<<<<<<
+ *     cpdef np.ndarray potential_temperature(self)
+ *     cpdef np.ndarray exner_function(self)
+ */
+struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_thickness {
+  int __pyx_n;
+  PyObject *p1;
+  PyObject *p2;
+};
 struct __pyx_opt_args_6amsimp_5water_5Water_precipitable_water;
 
 /* "amsimp/water.pxd":8
@@ -1178,7 +1192,7 @@ struct __pyx_vtabstruct_6amsimp_7backend_Backend {
   PyArrayObject *(*density)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*pressure)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyObject *(*fit_method)(struct __pyx_obj_6amsimp_7backend_Backend *, PyObject *, PyObject *, PyObject *, PyObject *, int __pyx_skip_dispatch);
-  PyArrayObject *(*pressure_thickness)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
+  PyArrayObject *(*pressure_thickness)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch, struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_thickness *__pyx_optional_args);
   PyArrayObject *(*potential_temperature)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*exner_function)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*troposphere_boundaryline)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);

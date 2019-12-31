@@ -32,7 +32,7 @@ setup(
     name="amsimp",
     ext_modules=extensions,
     include_dirs=[numpy.get_include()],
-    version="0.3.5",
+    version="0.3.6",
     author="Conor Casey",
     author_email="support@amsimp.com",
     description="Simulator for Atmospheric Dynamics",
@@ -67,6 +67,7 @@ setup(
         "pandas",
         "python-wget",
         "pynverse",
+        "scikit-learn",
     ],
     zip_safe=False,
 )

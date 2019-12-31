@@ -9,5 +9,5 @@ cdef class Dynamics(Water):
     cpdef list forecast_density(self)
     cpdef list forecast_pressure(self)
     cpdef fit_method(self, x, a, b, c)
-    cpdef list forecast_pressurethickness(self)
+    cpdef list forecast_pressurethickness(self, p1=?, p2=?)
     cpdef list forecast_precipitablewater(self)

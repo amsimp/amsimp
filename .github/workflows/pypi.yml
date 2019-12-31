@@ -30,6 +30,7 @@ jobs:
         pip install pynverse
         conda install -c conda-forge cartopy
         conda install twine
+        conda install scikit-learn
     - name: Build package for PyPI
       run: |
         export PATH="$HOME/miniconda/bin:$PATH"

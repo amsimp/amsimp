@@ -287,9 +287,6 @@ cdef class Wind(Backend):
         By default, the perspective view is looking directly down at the city
         of Dublin in the country of Ireland.
 
-        Known bug(s):
-        Some vectors appear to float to the side of the projection.
-
         Note:
         The NumPy method, seterr, is used to suppress a weird RunTime warning
         error that occurs on certain detail_level values in certain months.
@@ -325,11 +322,34 @@ cdef class Wind(Backend):
         np.seterr(all="ignore")
 
         # Define the axes, and the data.
-        latitude, longitude = np.meshgrid(self.latitude_lines().value,
-         self.longitude_lines().value
-        )
+        latitude = list(self.latitude_lines().value)
+        longitude = list(self.longitude_lines().value)
+        
+        latitude.append(-89.99)
+        latitude.append(89.99)
+        longitude.append(-179.99)
+        longitude.append(179.99)
+        latitude = np.asarray(np.sort(latitude))
+        longitude = np.asarray(np.sort(longitude))
+        
+        latitude, longitude = np.meshgrid(latitude,longitude)
         u = self.zonal_wind()[:, :, indx_alt].value
         v = self.meridional_wind()[:, :, indx_alt].value
+        u = u.tolist()
+        v = v.tolist()
+        
+        for n in u:
+            n.insert(0, n[0])
+            n.append(n[-1])
+        for n in v:
+            n.insert(0, n[0])
+            n.append(n[-1])
+        u.insert(0, u[0])
+        u.append(u[-1])
+        v.insert(0, v[0])
+        v.append(v[-1])
+        u = np.asarray(u)
+        v = np.asarray(v)
 
         u_norm = u / np.sqrt(u ** 2 + v ** 2)
         v_norm = v / np.sqrt(u ** 2 + v ** 2)
@@ -362,7 +382,13 @@ cdef class Wind(Backend):
         )
 
         # Add geostrophic wind vectors.
-        plt.quiver(longitude, latitude, u_norm, v_norm, transform=ccrs.PlateCarree())
+        plt.quiver(
+            longitude,
+            latitude,
+            u_norm,
+            v_norm,
+            transform=ccrs.PlateCarree(),   
+        )
 
         # Add SALT.
         plt.xlabel("Latitude ($\phi$)")

@@ -78,7 +78,7 @@ def graph(x):
     plt.ylabel(y + " Absolute Percentage Error")
     plt.title("Prediction Accuracy of AMSIMP")
     plt.legend(loc=0)
-    plt.savefig(x.lower() + "_graph", dpi=400)
+    plt.savefig(x.lower() + "_graph", dpi=1400)
     plt.show()
 
 
