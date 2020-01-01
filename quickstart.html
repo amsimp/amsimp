@@ -13,7 +13,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Getting Started &#8212; AMSIMP 0.3.3 documentation</title>
+    <title>Getting Started &#8212; AMSIMP 0.3.6 documentation</title>
     <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="install.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">AMSIMP 0.3.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">AMSIMP 0.3.6 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -103,12 +103,18 @@ and <code class="xref py py-class docutils literal notranslate"><span class="pre
 <p>In most situations, you will interact with the
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Dynamics</span></code> class. Once you have chosen
 a particular class, you must then decide on a
-level of simulation detail. You can choose
-a level of simulation detail between 1 and
-5, as seen below:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Choose a level of simulation detail</span>
-<span class="c1"># combined with a class you want to use.</span>
-<span class="n">detail</span> <span class="o">=</span> <span class="n">amsimp</span><span class="o">.</span><span class="n">Dynamics</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+level of simulation detail between 1 and 5. If
+you are interacting with the <code class="xref py py-class docutils literal notranslate"><span class="pre">Dynamics</span></code>
+class, you must also specify the length of
+forecast that will be generated. The forecast
+length must at least one day in length, and
+can have a maximum length of five. An example
+of the initialisation needed for the <code class="xref py py-class docutils literal notranslate"><span class="pre">Dynamics</span></code>
+class is given below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Choose a level of simulation detail combined with a class you want to use.</span>
+<span class="c1"># The forecast length must also be specified.</span>
+<span class="n">detail</span> <span class="o">=</span> <span class="n">amsimp</span><span class="o">.</span><span class="n">Dynamics</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="c1">#    Simulation detail---^  ^---Forecast length</span>
 </pre></div>
 </div>
 <p>In this tutorial, I will show you how to
@@ -116,13 +122,12 @@ get a visualisation of a rudimentary
 simulation of tropospheric and stratsopheric
 dynamics on a synoptic scale. To do this,
 you can use the code below:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualisation of a rudimentary</span>
-<span class="c1"># simulation of tropospheric and stratsopheric</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualisation of a rudimentary simulation of tropospheric and stratsopheric</span>
 <span class="c1"># dynamics on a synoptic scale.</span>
 <span class="n">detail</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="https://github.com/amsimp/amsimp/raw/master/images/september/dynamics.png"><img alt="Visualisation of a rudimentary simulation of tropospheric and stratsopheric dynamics on a synoptic scale." class="align-center" src="https://github.com/amsimp/amsimp/raw/master/images/september/dynamics.png" style="width: 90%;" /></a>
+<a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/project-book/Graphs/contour_plots/forecast.png"><img alt="Visualisation of a rudimentary simulation of tropospheric and stratsopheric dynamics on a synoptic scale." class="align-center" src="https://github.com/amsimp/papers/raw/master/project-book/Graphs/contour_plots/forecast.png" style="width: 90%;" /></a>
 </div>
 
 
@@ -149,7 +154,7 @@ you can use the code below:</p>
         <li class="right" >
           <a href="install.html" title="Installation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">AMSIMP 0.3.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">AMSIMP 0.3.6 documentation</a> &#187;</li> 
       </ul>
     </div>
 <script type="text/javascript">
@@ -159,7 +164,7 @@ you can use the code below:</p>
 </script>
 <script type="text/javascript" src="_static/js/bootstrap.js"></script>
   <div class="footer">
-    &copy; Copyright 2019, Conor Casey. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    &copy; Copyright 2020, Conor Casey. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
   </div>
   </body>
 </html>
