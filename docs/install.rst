@@ -14,6 +14,12 @@ without the use of Anaconda Cloud.
 
 .. _Anaconda's documentation page: https://docs.anaconda.com/anaconda/install/
 
+Before installation you must install the following packages from PyPI:
+
+.. code:: sh
+
+   $ pip install wget && pip install pynverse
+
 Installing from Anaconda Cloud
 ------------------------------
 AMSIMP is distributed on `Anaconda Cloud <https://anaconda.org/amsimp/amsimp>`_ and can be installed using conda:

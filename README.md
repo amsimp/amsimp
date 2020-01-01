@@ -7,7 +7,7 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/amsimp/amsimp.svg?style=flat-square)
 ![codecov](https://codecov.io/gh/amsimp/amsimp/branch/master/graph/badge.svg)
 
-An open-source implementation to simulating atmospheric dynamics in the troposphere and the stratosphere.
+An open-source implementation to simulating atmospheric dynamics in the troposphere and the stratosphere. Read the [paper](https://github.com/amsimp/papers/raw/master/project-book/main.pdf).
 
 **Features:**
 
