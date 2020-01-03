@@ -24,7 +24,7 @@ level of simulation detail between 1 and 5. If
 you are interacting with the :class:`Dynamics`
 class, you must also specify the length of
 forecast that will be generated. The forecast
-length must at least one day in length, and
+length, in days, must at least one day in length, and
 can have a maximum length of five. An example
 of the initialisation needed for the :class:`Dynamics`
 class is given below:
