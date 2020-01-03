@@ -31,4 +31,5 @@ Table of Contents
    install
    quickstart
    visualisations
-
+   math
+   code
