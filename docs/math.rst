@@ -289,8 +289,8 @@ constituent to the mass of dry air.
    \label{pwv_derive_fin}
        \therefore W = -\frac{1}{g} \int_{p_1}^{p_2} m dp
 
-The units as given by the equation are :math:`\frac{kg}{m^2}`
-(dimensionless), but, the preferred unit of measurement for rainfall is
+The units as given by the equation are :math:`\frac{kg}{m^2}`, but,
+the preferred unit of measurement for rainfall is
 :math:`mm`. The conversion between the two units of measurements is one
 to one (:math:`1 \frac{kg}{m^2} = 1 mm`) In actual rainstorms,
 particularly thunderstorms, amounts of rain very often exceed the total
