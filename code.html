@@ -1083,7 +1083,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_connected</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                 <span class="s">&quot;You must connect to the internet in order to utilise AMSIMP.&quot;</span>
-                <span class="o">+</span> <span class="s">&quot; Apologises for any inconvenience caused.&quot;</span>
+                <span class="o">+</span> <span class="s">&quot; Apologies for any inconvenience caused.&quot;</span>
             <span class="p">)</span>
 
     <span class="k">cpdef</span> <span class="kt">np</span>.<span class="kt">ndarray</span> <span class="nf">latitude_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1111,7 +1111,7 @@
             <span class="n">latitude_lines</span> <span class="o">=</span> <span class="n">latitude_lines</span><span class="p">[</span><span class="mf">1</span><span class="p">::</span><span class="mf">3</span><span class="p">]</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">detail_level</span> <span class="o">==</span> <span class="mf">2</span><span class="p">:</span>
             <span class="n">latitude_lines</span> <span class="o">=</span> <span class="n">latitude_lines</span><span class="p">[</span><span class="mf">2</span><span class="p">::</span><span class="mf">4</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">detail_level</span> <span class="o">==</span><span class="mf">1</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">detail_level</span> <span class="o">==</span> <span class="mf">1</span><span class="p">:</span>
             <span class="n">latitude_lines</span> <span class="o">=</span> <span class="n">latitude_lines</span><span class="p">[</span><span class="mf">2</span><span class="p">::</span><span class="mf">5</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">latitude_lines</span>
@@ -1403,7 +1403,7 @@
                 <span class="n">pthickness_lat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pthickness</span><span class="p">)</span>
             <span class="n">list_pressurethickness</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pthickness_lat</span><span class="p">)</span>
         
-        <span class="c"># Ensure the R^2 value is greater than 0.9.</span>
+        <span class="c"># Ensure the R^2 value is greater than 0.99.</span>
         <span class="n">r_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">r_values</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">r_value</span> <span class="o">&lt;</span> <span class="mf">0.99</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;Unable to determine the pressure thickness&quot;</span>
