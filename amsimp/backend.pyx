@@ -149,7 +149,7 @@ cdef class Backend:
         if not is_connected():
             raise Exception(
                 "You must connect to the internet in order to utilise AMSIMP."
-                + " Apologises for any inconvenience caused."
+                + " Apologies for any inconvenience caused."
             )
 
     cpdef np.ndarray latitude_lines(self):
@@ -177,7 +177,7 @@ cdef class Backend:
             latitude_lines = latitude_lines[1::3]
         elif self.detail_level == 2:
             latitude_lines = latitude_lines[2::4]
-        elif self.detail_level ==1:
+        elif self.detail_level == 1:
             latitude_lines = latitude_lines[2::5]
 
         return latitude_lines
@@ -469,7 +469,7 @@ cdef class Backend:
                 pthickness_lat.append(pthickness)
             list_pressurethickness.append(pthickness_lat)
         
-        # Ensure the R^2 value is greater than 0.9.
+        # Ensure the R^2 value is greater than 0.99.
         r_value = np.mean(r_values)
         if r_value < 0.99:
             raise Exception("Unable to determine the pressure thickness"
