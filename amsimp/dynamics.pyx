@@ -229,9 +229,9 @@ cdef class Dynamics(Water):
         two elements in the outputted list is one hour.
 
         Equation:
-        frac{\partial rho}{\partial t} = u \* frac{\partial rho}{\partial x} -
-                                       v \* frac{\partial rho}{\partial y} -
-                                       w \* frac{\partial rho}{\partial z}
+        frac{\partial rho}{\partial t} = - frac{\partial rho u}{\partial x} -
+                                        frac{\partial rho v}{\partial y} -
+                                        frac{\partial rho w}{\partial z}
         """
         # Define the forecast period.
         forecast_days = int(self.forecast_days)
@@ -239,7 +239,7 @@ cdef class Dynamics(Water):
             0, forecast_days, (forecast_days * 1440)
         )
 
-        # Define the initial atmospheric density condition.
+        # Define the initial atmospheric density conditions.
         cdef np.ndarray density = self.density()
 
         # Define delta_x, delta_y, and delta_y.
@@ -260,6 +260,10 @@ cdef class Dynamics(Water):
         # Define the zonal, meridional, and vertical wind velocities.
         cdef np.ndarray u = self.zonal_wind()
         cdef np.ndarray v = self.meridional_wind()
+        u_gradient = np.gradient(u)
+        cdef np.ndarray u_gradientx = u_gradient[0]
+        v_gradient = np.gradient(v)
+        cdef np.ndarray v_gradienty = v_gradient[1]
         w = 0 * (self.units.m / self.units.s)
 
         # Calculate how atmospheric density will evolve over time.
@@ -278,13 +282,21 @@ cdef class Dynamics(Water):
             density_gradientz = density_gradient[2]
 
             # Calculate how atmospheric density at a particular point in time.
-            rho = density - (
+            rho_leftdright = - (
+                density * (delta_t / delta_x) * u_gradientx
+            ) + (
+                density * (delta_t / delta_y) * v_gradienty
+            ) + (
+                density * (delta_t / delta_z) * w
+            )
+            rho_rightdleft = - (
                 u * (delta_t / delta_x) * density_gradientx
             ) + (
                 v * (delta_t / delta_y) * density_gradienty
             ) + (
                 w * (delta_t / delta_z) * density_gradientz
             )
+            rho = density + rho_leftdright + rho_rightdleft
             density = rho.copy()
 
             # Store the data within a list.

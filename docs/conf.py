@@ -22,7 +22,7 @@ copyright = '2020, Conor Casey'
 author = 'Conor Casey'
 
 # The full version, including alpha/beta/rc tags
-release = '0.3.6'
+release = '0.3.7'
 
 
 # -- General configuration ---------------------------------------------------
