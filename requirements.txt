@@ -4,5 +4,4 @@ matplotlib
 numpy
 cartopy
 wget
-pynverse
 scikit-learn

@@ -1,13 +1,11 @@
 #cython: language_level=3
 cimport numpy as np
-from amsimp.water cimport Water
+from amsimp.wind cimport Wind
+from cpython cimport bool
 
-cdef class Dynamics(Water):
-    cdef float forecast_days
+cdef class Dynamics(Wind):
+    cdef forecast_length
+    cdef bool efs, ai
+    cdef int models
 
-    cpdef list forecast_temperature(self)
-    cpdef list forecast_density(self)
-    cpdef list forecast_pressure(self)
-    cpdef fit_method(self, x, a, b, c)
-    cpdef list forecast_pressurethickness(self, p1=?, p2=?)
-    cpdef list forecast_precipitablewater(self)
+    cpdef atmospheric_prognostic_method(self, bool save_file=?, p1=?, p2=?)

@@ -14,19 +14,23 @@ from matplotlib import style
 import matplotlib.gridspec as gridspec
 from matplotlib import ticker
 import numpy as np
-from pynverse import inversefunc
-from scipy.optimize import curve_fit
 import cartopy.crs as ccrs
+from cpython cimport bool
 from amsimp.wind cimport Wind
 from amsimp.wind import Wind
-from amsimp.water cimport Water
-from amsimp.water import Water
-from sklearn.metrics import r2_score
+from astropy.units.quantity import Quantity
+from iris.coords import DimCoord
+from iris.coords import AuxCoord
+from iris.cube import Cube
+from iris.cube import CubeList
+from iris import save
+from progress.bar import IncrementalBar
+from metpy.calc import smooth_gaussian
+from numpy.random import random_sample
 
 # -----------------------------------------------------------------------------------------#
 
-
-cdef class Dynamics(Water):
+cdef class Dynamics(Wind):
     """
     AMSIMP Dynamics Class - Also, known as Motus Aeris @ AMSIMP. This class
     generates rudimentary simulation of tropospheric and stratsopheric
@@ -67,474 +71,884 @@ cdef class Dynamics(Water):
     the specified number of forecast days.
     """
 
-    def __cinit__(self, int detail_level=3, int forecast_days=3):
+    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=31, bool ai=True, bool input_data=False, geo=None, temp=None, rh=None):
         """
-        Defines the number of days that will be included within the simulation.
-        This value must be greater than 0, and less than 5 in order
+        Defines the length of the forecast (in hours) generated in the simulation.
+        This value must be greater than 0, and less than 168 in order
         to ensure that the simulation methods function correctly. Defaults to
-        a value of 3.
+        a value of 72.
 
         For more information, please refer to amsimp.Backend.__cinit__()
         method.
         """
-        # Declare class variables.
-        super().__init__(detail_level)
-        self.forecast_days = forecast_days
+        # Add units to forecast length variable.
+        if type(forecast_length) != Quantity:
+            forecast_length = forecast_length * self.units.h
 
-        # Ensure self.forecast_days is between 0 and 10.
-        if self.forecast_days > 5 or self.forecast_days <= 0:
+        # Declare class variables.
+        super().__init__(delta_latitude)
+        super().__init__(delta_longitude)
+        super().__init__(remove_files)
+        self.forecast_length = forecast_length
+        self.efs = efs
+        self.ai = ai
+        super().__init__(input_data)
+        super().__init__(geo)
+        super().__init__(temp)
+        super().__init__(rh)
+
+        # Ensure self.forecast_length is between 0 and 168.
+        if self.forecast_length.value > 168 or self.forecast_length.value <= 0:
             raise Exception(
-                "forecast_days must be a positive integer between 1 and 5. The value of forecast_days was: {}".format(
-                    self.forecast_days
+                "forecast_length must be a positive integer between 1 and 168. The value of forecast_length was: {}".format(
+                    self.forecast_length
                 )
             )
 
-    def delta_xyz(self):
+        # Ensure efs is a boolean value.
+        if not isinstance(self.efs, bool):
+            raise Exception(
+                "efs must be a boolean value. The value of efs was: {}".format(
+                    self.efs
+                )
+            )
+
+        # If efs is disabled, ensure only one model is run.
+        if self.efs:
+            self.models = models
+        else:
+            self.models = 1
+
+        # Ensure models is an integer value.
+        if not isinstance(self.models, int):
+            raise Exception(
+                "models must be a integer value. The value of integer was: {}".format(
+                    self.ai
+                )
+            )
+
+        # Ensure models is a natural number.
+        if not self.models > 0:
+            raise Exception(
+                "models must be a integer value. The value of integer was: {}".format(
+                    self.ai
+                )
+            )
+        
+        # Ensure ai is a boolean value.
+        if not isinstance(self.ai, bool):
+            raise Exception(
+                "ai must be a boolean value. The value of ai was: {}".format(
+                    self.ai
+                )
+            )
+
+    def forecast_period(self):
         """
-        Defines delta_x (the distance in metres between lines
-        of latitude), delta_y (the distance in metres between
-        lines of longitude), and delta_z (the distance between
-        altitude levels). Please do not interact with
-        the method directly.
+        Explain here.
         """
-        # delta_x
-        # Distance between longitude lines at the equator.
-        cdef eq_longd = 111.19 * self.units.km
-        eq_longd = eq_longd.to(self.units.m)
-        # Distance of one degree of longitude (e.g. 0W - 1W/1E), measured in metres.
-        # The distance between two lines of longitude is not constant.
-        cdef np.ndarray long_d = np.cos(self.latitude_lines()) * eq_longd
-        # Distance between latitude lines in the class method,
-        # amsimp.Backend.latitude_lines().
-        cdef np.ndarray delta_x = (
-            self.longitude_lines()[-1].value - self.longitude_lines()[-2].value
-        ) * long_d
-        # Defining a 3D longitudinal distance NumPy array.
-        delta_x = delta_x.value
-        cdef list long_alt = []
-        cdef int len_altitude = len(self.altitude_level())
-        for x in delta_x:
-            x = x + np.zeros(len_altitude)
-            x = list(x)
-            long_alt.append(x)
-        cdef list list_deltax = []
-        cdef int len_longitudelines = len(self.longitude_lines())
-        cdef int n = 0
-        while n < len_longitudelines:
-            list_deltax.append(long_alt)
-            n += 1
-        delta_x = np.asarray(list_deltax)
-        delta_x *= self.units.m
+        forecast_length = int(self.forecast_length.value)
 
-        # delta_y
-        # Distance of one degree of latitude (e.g. 0N - 1N/1S), measured in metres.
-        cdef lat_d = (2 * np.pi * self.a) / 360
-        # Distance between latitude lines in the class method, 
-        # amsimp.Backend.latitude_lines().
-        cdef delta_y = (
-            self.latitude_lines()[-1].value - self.latitude_lines()[-2].value
-        ) * lat_d
-
-        # delta_z
-        cdef delta_z = self.altitude_level()[1]
-
-        return delta_x, delta_y, delta_z
-
-    cpdef list forecast_temperature(self):
-        """
-        Utilising the initial conditions as defined by 
-        amsimp.Backend.temperature() and the temperature primitive
-        equation, this method generates a forecast for temperature
-        for the specified number of days. The finite difference 
-        method is utilised to get a numerical solution to the
-        partial derivative equation. The value of delta t (the
-        change in time) is one minute. The time interval between
-        two elements in the outputted list is one hour.
-
-        Equation:
-        frac{\partial T}{\partial t} = u \* frac{\partial T}{\partial x} +
-                                       v \* frac{\partial T}{\partial y} +
-                                       w \* frac{\partial T}{\partial z}
-        """
         # Define the forecast period.
-        forecast_days = int(self.forecast_days)
-        cdef np.ndarray time = np.linspace(
-            0, forecast_days, (forecast_days * 1440)
-        )
+        forecast_period = np.linspace(
+            0, forecast_length, (forecast_length * 30) + 1
+        ) * self.forecast_length.unit
 
-        # Define the initial temperature condition.
-        cdef np.ndarray temperature = self.temperature()
-
-        # Define delta_x, delta_y, and delta_y.
-        delta_xyz = self.delta_xyz()
-        cdef np.ndarray delta_x = delta_xyz[0]
-        cdef delta_y = delta_xyz[1]
-        cdef delta_z = delta_xyz[2]
-
-        # Define delta_t
-        delta_t = time[1] - time[0]
-        delta_xval = delta_x.value
-        delta_t = delta_t + np.zeros(
-            (len(delta_xval), len(delta_xval[0]), len(delta_xval[0][0]))
-        )
-        delta_t *= self.units.day
+        # Change in time (delta t) utilised to get a numerical solution to the
+        # partial derivative equations.
+        delta_t = (1/30) * self.units.hr
         delta_t = delta_t.to(self.units.s)
 
-        # Define the zonal, meridional, and vertical wind velocities.
-        cdef np.ndarray u = self.zonal_wind()
-        cdef np.ndarray v = self.meridional_wind()
-        w = 0 * (self.units.m / self.units.s)
+        return forecast_period, delta_t
 
-        # Calculate how temperature will evolve over time.
-        forecast_temperature = []
-        cdef list temperature_gradient
-        cdef np.ndarray temperature_gradientx, temperature_gradienty
-        cdef np.ndarray temperature_gradientz
-        for t in time:
-            # Define the temperature gradient.
-            temperature_gradient = np.gradient(temperature)
-
-            # Define the temperature gradient in the longitude, latitude, and
-            # altitude directions.
-            temperature_gradientx = temperature_gradient[0]
-            temperature_gradienty = temperature_gradient[1]
-            temperature_gradientz = temperature_gradient[2]
-
-            # Calculate how temperature at a particular point in time.
-            temp = temperature + (
-                u * (delta_t / delta_x) * temperature_gradientx
-            ) + (
-                v * (delta_t / delta_y) * temperature_gradienty
-            ) + (
-                w * (delta_t / delta_z) * temperature_gradientz
-            )
-            temperature = temp.copy()
-
-            # Store the data within a list.
-            forecast_temperature.append(temp)
-        
-        forecast_temperature = forecast_temperature[::60]
-
-        return forecast_temperature
-
-    cpdef list forecast_density(self):
+    cpdef atmospheric_prognostic_method(self, bool save_file=False, p1=1000, p2=500):
         """
-        Utilising the initial conditions as defined by 
-        amsimp.Backend.density() and the mass continunity
-        equation, this method generates a forecast for atmospheric 
-        denisty for the specified number of days. The finite difference 
-        method is utilised to get a numerical solution to the
-        partial derivative equation. The value of delta t (the
-        change in time) is one minute. The time interval between
-        two elements in the outputted list is one hour.
-
-        Equation:
-        frac{\partial rho}{\partial t} = - frac{\partial rho u}{\partial x} -
-                                        frac{\partial rho v}{\partial y} -
-                                        frac{\partial rho w}{\partial z}
-        """
-        # Define the forecast period.
-        forecast_days = int(self.forecast_days)
-        cdef np.ndarray time = np.linspace(
-            0, forecast_days, (forecast_days * 1440)
-        )
-
-        # Define the initial atmospheric density conditions.
-        cdef np.ndarray density = self.density()
-
-        # Define delta_x, delta_y, and delta_y.
-        delta_xyz = self.delta_xyz()
-        cdef np.ndarray delta_x = delta_xyz[0]
-        cdef delta_y = delta_xyz[1]
-        cdef delta_z = delta_xyz[2]
-
-        # Define delta_t
-        delta_t = time[1] - time[0]
-        delta_xval = delta_x.value
-        delta_t = delta_t + np.zeros(
-            (len(delta_xval), len(delta_xval[0]), len(delta_xval[0][0]))
-        )
-        delta_t *= self.units.day
-        delta_t = delta_t.to(self.units.s)
-
-        # Define the zonal, meridional, and vertical wind velocities.
-        cdef np.ndarray u = self.zonal_wind()
-        cdef np.ndarray v = self.meridional_wind()
-        u_gradient = np.gradient(u)
-        cdef np.ndarray u_gradientx = u_gradient[0]
-        v_gradient = np.gradient(v)
-        cdef np.ndarray v_gradienty = v_gradient[1]
-        w = 0 * (self.units.m / self.units.s)
-
-        # Calculate how atmospheric density will evolve over time.
-        forecast_density = []
-        cdef list density_gradient
-        cdef np.ndarray density_gradientx, density_gradienty
-        cdef np.ndarray density_gradientz
-        for t in time:
-            # Define the atmospheric density gradient.
-            density_gradient = np.gradient(density)
-
-            # Define the atmospheric density gradient in the longitude,
-            # latitude, and altitude directions.
-            density_gradientx = density_gradient[0]
-            density_gradienty = density_gradient[1]
-            density_gradientz = density_gradient[2]
-
-            # Calculate how atmospheric density at a particular point in time.
-            rho_leftdright = - (
-                density * (delta_t / delta_x) * u_gradientx
-            ) + (
-                density * (delta_t / delta_y) * v_gradienty
-            ) + (
-                density * (delta_t / delta_z) * w
-            )
-            rho_rightdleft = - (
-                u * (delta_t / delta_x) * density_gradientx
-            ) + (
-                v * (delta_t / delta_y) * density_gradienty
-            ) + (
-                w * (delta_t / delta_z) * density_gradientz
-            )
-            rho = density + rho_leftdright + rho_rightdleft
-            density = rho.copy()
-
-            # Store the data within a list.
-            forecast_density.append(rho)
-        
-        forecast_density = forecast_density[::60]
-
-        return forecast_density
-    
-    cpdef list forecast_pressure(self):
-        """
-        Utilising the forecasted temperature as defined by
-        amsimp.Dynamics.forecast_temperature() and the atmospheric
-        density as defined by amsimp.Dynamics.forecast_density(), 
-        this method generates a forecast for atmospheric pressure for 
-        the specified number of days using the ideal gas law.
-
-        Equation:
-            \del \cdot rho = 0
-            p = rho \* R \* T
-        """
-        # Store the forecasted temperature and atmospheric
-        # densituy in a variable.
-        cdef list forecast_temperature = self.forecast_temperature()
-        cdef list forecast_density = self.forecast_density()
-
-        # Generate a forecast for pressure for the specified number of
-        # days.
-        cdef np.ndarray forecast_p
-        forecast_pressure = []
-        cdef int n = 0
-        cdef int len_temprho = len(forecast_temperature)
-        while n < len_temprho:
-            forecast_p = (
-                forecast_density[n] * self.R * forecast_temperature[n]
-            )
-            forecast_p = forecast_p.to(self.units.hPa)
-
-            forecast_pressure.append(forecast_p)
-
-            n += 1
-
-        return forecast_pressure
-
-    cpdef fit_method(self, x, a, b, c):
-        """
-        This method is solely utilised for non-linear regression in the
-        amsimp.Dynamics.forecast_pressurethickness() method. Please do not
-        interact with the method directly.
-        """
-        return a - (b / c) * (1 - np.exp(-c * x))
-
-    cpdef list forecast_pressurethickness(self, p1=1000, p2=500):
-        """
-        Utilising the forecasted pressure as defined by 
-        amsimp.Dynamics.forecast_pressure() and utilising non-linear
-        regression, similiar to the amsimp.Backend.pressure_thickness()
-        method, this method generates a forecast of the atmospheric 
-        pressure thickness between two constant pressure surfaces, p1 and
-        p2. For more information on the forecasted pressure, please see
-        amsimp.Dynamics.forecast_pressure()
-
-        Equation:
-            y = a - frac{b}{c} * (1 - \exp(-c * x))
+        Explain here.
         """
         # Ensure p1 is greater than p2.
         if p1 < p2:
             raise Exception("Please note that p1 must be greater than p2.")
-
-        # Store the forecasted pressure in a variable.
-        cdef list forecast_pressure = self.forecast_pressure()
         
-        # Find the nearest constant pressure surface to p1 and p2 in pressure.
-        cdef int indx_p1 = (
-            np.abs(forecast_pressure[0].value[0, 0, :] - p1)
-        ).argmin()
-        cdef int indx_p2 = (
-            np.abs(forecast_pressure[0].value[0, 0, :] - p2)
-        ).argmin()
-
-        # Find the approximate altitude of the constant pressure surfaces
-        # p1 and p2. Following which, take away 5400 from the p1 values 
-        # and add 1000 to the p2 value.
-        approx_p1_alt = (self.altitude_level().value)[indx_p1]
-        approx_p2_alt = (self.altitude_level().value)[indx_p2]
-        approx_p1_alt -= 5400
-        approx_p2_alt += 2000
-
-        indx_p1 = (
-            np.abs(self.altitude_level().value - approx_p1_alt)
-        ).argmin()
-        indx_p2 = (
-            np.abs(self.altitude_level().value - approx_p2_alt)
-        ).argmin() 
-
-        cdef np.ndarray altitude = self.altitude_level()[indx_p1:indx_p2].value
-        
-        forecast_pressurethickness = []
-        cdef np.ndarray forecast_p, pressure_thickness
-        cdef np.ndarray p, p_lat, abc
-        cdef list list_pressurethickness = []
-        cdef list r_values = []
-        cdef list guess = [1000, 0.12, 0.00010]
-        cdef list pthickness_lat
-        cdef tuple c
-        cdef float p1_height, p2_height, pthickness, r_value
-        for forecast_p in forecast_pressure:
-            forecast_p = forecast_p.value
-
-            list_pressurethickness = []
-            for p in forecast_p:
-                pthickness_lat = []
-                for p_lat in p:
-                    p_lat = p_lat[indx_p1:indx_p2]
-
-                    c = curve_fit(self.fit_method, altitude, p_lat, guess)
-                    abc = c[0]
-
-                    predicted_pressure = self.fit_method(
-                        altitude, abc[0], abc[1], abc[2]
-                    )
-                    r_value = r2_score(
-                        predicted_pressure, p_lat
-                    )
-                    r_values.append(r_value)
-
-                    inverse_fitmethod = inversefunc(self.fit_method,
-                        args=(abc[0], abc[1], abc[2])
-                    )
-
-                    p1_height = inverse_fitmethod(p1)
-                    p2_height = inverse_fitmethod(p2)
-                    pthickness = p2_height - p1_height
-
-                    pthickness_lat.append(pthickness)
-                list_pressurethickness.append(pthickness_lat)
-            
-            pressure_thickness = np.asarray(list_pressurethickness)
-            pressure_thickness *= self.units.m
-            forecast_pressurethickness.append(pressure_thickness)
-
-        # Ensure the R^2 value is greater than 0.9.
-        r_value = np.mean(r_values)
-        if r_value < 0.99:
-            raise Exception("Unable to determine the pressure thickness"
-            + " at this time. Please contact the developer for futher"
-            + " assistance.")
-
-        return forecast_pressurethickness
-
-    cpdef list forecast_precipitablewater(self):
-        """
-        Utilising the initial conditions as defined by 
-        amsimp.Backend.precipitable_water() and the precipitable water
-        primitive equation, this method generates a forecast for precipitable
-        water for the specified number of days. The finite difference 
-        method is utilised to get a numerical solution to the partial
-        derivative equation. The value of delta t (the change in time) is
-        one minute. The time interval between two elements in the outputted
-        list is one hour.
-
-        Equation:
-        frac{\partial W}{\partial t} = u \* frac{\partial W}{\partial x} +
-                                       v \* frac{\partial W}{\partial y} +
-                                       w \* frac{\partial W}{\partial z}
-        """
-        # Define the forecast period.
-        forecast_days = int(self.forecast_days)
-        cdef np.ndarray time = np.linspace(
-            0, forecast_days, (forecast_days * 1440)
-        )
-
-        # Define the initial precipitable water condition.
-        cdef np.ndarray precipitable_water = self.precipitable_water(
-            sum_altitude=False
-        )
-
-        # Define delta_x, delta_y, and delta_y.
-        delta_xyz = self.delta_xyz()
-        cdef np.ndarray delta_x = delta_xyz[0][:, :, :40]
-        cdef delta_y = delta_xyz[1]
-        cdef delta_z = delta_xyz[2]
-
-        # Define delta_t
-        delta_t = time[1] - time[0]
-        delta_xval = delta_x.value
-        delta_t = delta_t + np.zeros(
-            (len(delta_xval), len(delta_xval[0]), len(delta_xval[0][0]))
-        )
-        delta_t *= self.units.day
-        delta_t = delta_t.to(self.units.s)
-
-        # Define the zonal, meridional, and vertical wind velocities.
-        cdef np.ndarray u = self.zonal_wind()[:, :, :40]
-        cdef np.ndarray v = self.meridional_wind()[:, :, :40]
-        w = 0 * (self.units.m / self.units.s)
-
-        # Calculate how precipitable water will evolve over time.
-        forecast_precipitablewater = []
-        cdef list pwv_gradient
-        cdef np.ndarray pwv_gradientx, pwv_gradienty, pwv_gradientz
-        for t in time:
-            # Define the precipitable water gradient.
-            pwv_gradient = np.gradient(precipitable_water)
-
-            # Define the precipitable water gradient in the longitude,
-            # latitude, and altitude directions.
-            pwv_gradientx = pwv_gradient[0]
-            pwv_gradienty = pwv_gradient[1]
-            pwv_gradientz = pwv_gradient[2]
-
-            # Calculate how temperature at a particular point in time.
-            pwv = precipitable_water + (
-                u * (delta_t / delta_x) * pwv_gradientx
-            ) + (
-                v * (delta_t / delta_y) * pwv_gradienty
-            ) + (
-                w * (delta_t / delta_z) * pwv_gradientz
+        # Ensure save_file is a boolean value.
+        if not isinstance(save_file, bool):
+            raise Exception(
+                "save_file must be a boolean value. The value of save_file was: {}".format(
+                    save_file
+                )
             )
-            precipitable_water = pwv.copy()
 
-            # Sum by the altitude component.
-            pwv_output = pwv.value
-            list_pwv = []
-            for pwv_long in pwv_output:
-                list_pwvlat = []
-                for pwv_lat in pwv_long:
-                    pwv_alt = np.sum(pwv_lat)
-                    list_pwvlat.append(pwv_alt)
-                list_pwv.append(list_pwvlat)
-            pwv_output = np.asarray(list_pwv) * self.units.mm
+        # Define variables that do not vary with respect to time.
+        cdef lat = self.latitude_lines().value
+        cdef np.ndarray latitude = np.radians(lat)
+        cdef np.ndarray longitude = np.radians(self.longitude_lines().value)
+        cdef np.ndarray pressure = self.pressure_surfaces()
+        cdef np.ndarray pressure_3d = self.pressure_surfaces(dim_3d=True)
+        cdef time = self.forecast_period()[0]
+        cdef np.ndarray g = self.gravitational_acceleration()
+        
+        # The Coriolis parameter at various latitudes of the Earth's surface,
+        # under the beta plane approximation.
+        cdef np.ndarray f = self.beta_plane().value / self.units.s
+        f = self.make_3dimensional_array(parameter=f, axis=1)
 
-            # Store the predicted amount of precipitable water into a list.
-            forecast_precipitablewater.append(pwv_output)
+        # The Coriolis parameter at various reference latitudes
+        # of the Earth's surface, under the beta plane approximation.
+        cdef np.ndarray f_0 = self.coriolis_parameter(f=True).value
+        cdef np.ndarray lat_0 = self.latitude_lines(f=True).value
+        cdef int n = 0
+        cdef f0_list = []
+        while n < len(latitude):
+            # Define the nearest reference latitude line (index value).
+            nearest_lat0_index = (np.abs(lat_0 - lat[n])).argmin()
 
-        forecast_precipitablewater = forecast_precipitablewater[::60]
+            # Define the nearest reference latitude line.
+            nearest_lat0 = lat_0[nearest_lat0_index]
+            # Define the nearest reference Coriolis parameter.
+            nearest_f0 = f_0[nearest_lat0_index]
 
-        return forecast_precipitablewater
+            f0_list.append(nearest_f0)
+
+            n += 1
+        f_0 = np.asarray(f0_list) / self.units.s
+        f_0 = self.make_3dimensional_array(parameter=f_0, axis=1)
+
+        # Define the change with respect to time.
+        cdef delta_t = self.forecast_period()[1]
+        cdef delta_2t = delta_t * 2
+        cdef delta_halfstep = delta_t / 2
+        # Forecast length.
+        cdef forecast_length = self.forecast_period()[0][-1].to(self.units.s)
+        cdef int t
+
+        # Define initial conditions.
+        # Geopotential Height.
+        cdef np.ndarray height = self.geopotential_height()
+        # Geopotential.
+        cdef np.ndarray geo = height * g
+        cdef np.ndarray geo_i = geo
+        cdef np.ndarray geo_initial = geo
+        # Geostrophic Wind.
+        # Zonal Wind.
+        cdef np.ndarray u_g = self.zonal_wind()
+        # Meridional Wind.
+        cdef np.ndarray v_g = self.meridional_wind()
+        # Vertical Motion.
+        cdef np.ndarray omega = self.vertical_motion()
+        # Static Stability.
+        cdef np.ndarray sigma = self.static_stability()
+        # Temperature.
+        # Air Temperature.
+        cdef np.ndarray T = self.temperature()
+        cdef np.ndarray T_i = T
+        cdef np.ndarray T_initial = T
+        # Virtual Temperature.
+        cdef np.ndarray T_v = self.virtual_temperature()
+        cdef np.ndarray Tv_i = T_v
+        cdef np.ndarray Tv_initial = T_v
+        # Relative Humidity.
+        cdef np.ndarray rh = self.relative_humidity()
+        # Thickness.
+        cdef np.ndarray thickness = self.pressure_thickness(p1=p1, p2=p2)
+        # Precipitable Water.
+        cdef np.ndarray pwv = self.precipitable_water()
+
+        # Index of pressure surfaces.
+        cdef int indx_p1 = (np.abs(self.pressure_surfaces().value - p1)).argmin()
+        cdef int indx_p2 = (np.abs(self.pressure_surfaces().value - p2)).argmin()
+
+        # Create a bar to determine progress.
+        max_bar = len(time) * self.models
+        bar = IncrementalBar('Progress', max=max_bar)
+        # Start progress bar.
+        bar.next()
+
+        # Ensemble Forecast System (EFS)
+        # Define lists.
+        # Geopotential Height.
+        cdef list HeightList = []
+        # Geostrophic Wind.
+        # Zonal Wind.
+        cdef list ZonalList = []
+        # Meridional Wind.
+        cdef list MeridionalList = []
+        # Vertical Motion.
+        cdef list VerticalList = []
+        # Static Stability.
+        cdef list StabilityList = []
+        # Temperature.
+        # Air Temperature.
+        cdef list TemperatureList = []
+        # Virtual Temperature.
+        cdef list VirtualList = []
+        # Relative Humidity.
+        cdef list HumidityList = []
+        # Pressure Thickness.
+        cdef list ThicknessList = []
+        # Precipitable Water.
+        cdef list WaterList = []
+
+        # Acceptable amount of devivation from initial conditions.
+        # Geopotential Height.
+        cdef np.ndarray geo_max = np.max(np.max(geo_i, axis=2), axis=1)
+        cdef np.ndarray geo_mean = np.max(np.mean(geo_i, axis=2), axis=1)
+        cdef np.ndarray geo_dev = self.make_3dimensional_array((geo_max - geo_mean), axis=0)
+        # Temperature.
+        cdef np.ndarray T_max = np.max(np.max(T_i, axis=2), axis=1)
+        cdef np.ndarray T_mean = np.max(np.mean(T_i, axis=2), axis=1)
+        cdef np.ndarray T_dev = self.make_3dimensional_array((T_max - T_mean), axis=0)
+        # Virtual Temperature.
+        cdef np.ndarray Tv_max = np.max(np.max(Tv_i, axis=2), axis=1)
+        cdef np.ndarray Tv_mean = np.max(np.mean(Tv_i, axis=2), axis=1)
+        cdef np.ndarray Tv_dev = self.make_3dimensional_array((Tv_max - Tv_mean), axis=0)
+
+        # Model runs.
+        cdef int model_run = self.models
+        cdef int m = 0
+
+        # Define variable types.
+        # Numy Arrays.
+        cdef np.ndarray geo_0, geo_n, T_0, T_n, Tv_0, Tv_n
+        cdef np.ndarray dv_dx, du_dy, geostrophic_vorticity, A, A_diffx, A_diffy, Part_1
+        cdef np.ndarray dT_dx, dT_dy, nabla_T, B, dB_dp, Part_2, RHS_geo
+        cdef np.ndarray change_geopotential, u_0, v_0, C, RHS,
+        cdef np.ndarray dTv_dx, dTv_dy, e, T_c, sat_vapor_pressure
+        cdef np.ndarray randomise, geo_rand, T_rand, Tv_rand
+        # Lists.
+        cdef list geopotential_height, temperature, virtual_temperature
+        cdef list zonal_wind, meridional_wind, vertical_motion, static_stability 
+        cdef list relative_humidity, pressure_thickness, precipitable_water
+
+        while m < model_run:
+            # Smoothing operator (filter with normal distribution
+            # of weights) on initial conditions.
+            geo_i = smooth_gaussian(
+                scalar_grid=geo_i.value,
+                n=3,
+            ).magnitude * geo_i.unit
+            T_i = smooth_gaussian(
+                scalar_grid=T_i.value,
+                n=3,
+            ).magnitude * T.unit
+            Tv_i = smooth_gaussian(
+                scalar_grid=Tv_i.value,
+                n=3,
+            ).magnitude * Tv_i.unit
+
+            # Define lists for ouputs.
+            # Geopotential Height.
+            geopotential_height = []
+            geopotential_height.append(geo_i.value)
+            # Temperature.
+            # Air Temperature.
+            temperature = []
+            temperature.append(T_i.value)
+            # Virtual Temperature.
+            virtual_temperature = []
+            virtual_temperature.append(Tv_i.value)
+            # Geostrophic Wind.
+            # Zonal Wind.
+            zonal_wind = []
+            zonal_wind.append(u_g.value)
+            # Meridional Wind.
+            meridional_wind = []
+            meridional_wind.append(v_g.value)
+            # Vertical Motion.
+            vertical_motion = []
+            vertical_motion.append(omega.value)
+            # Static Stability.
+            static_stability = []
+            static_stability.append(sigma.value)
+            # Relative Humidity.
+            relative_humidity = []
+            relative_humidity.append(rh.value)
+            # Pressure Thickness.
+            pressure_thickness = []
+            pressure_thickness.append(thickness.value)
+            # Precipitable Water.
+            precipitable_water = []
+            precipitable_water.append(pwv.value)
+
+            # For initial state.
+            n = 0
+            # Forecast using the models initial conditions.
+            t = 0
+            while t < forecast_length.value:
+                # Define initial state.
+                # Geopotential.
+                if n > 2:
+                    geo_0 = geo
+                    geo = geo_n
+
+                # Temperature.
+                if n > 2:
+                    T_0 = T
+                    T = T_n
+                
+                # Virtual temperature.
+                if n > 2:
+                    Tv_0 = T_v
+                    T_v = Tv_n
+
+                # The Prognostic Section for Geopotential Height (Height
+                # Tendency Equation).
+                # Geostrophic Vorticity.
+                dv_dx = self.gradient_x(
+                    parameter=np.gradient(
+                        v_g, longitude, axis=2
+                    )
+                )
+                du_dy = np.gradient(u_g, self.a * latitude, axis=1)
+                geostrophic_vorticity = dv_dx - du_dy
+                
+                # Part (1).
+                A = geostrophic_vorticity + f
+                A_diffx = self.gradient_x(
+                    parameter=np.gradient(
+                        A, longitude, axis=2
+                    )
+                )
+                A_diffy = np.gradient(A, self.a * latitude, axis=1)
+                Part_1 = f_0 * (
+                    (-u_g * A_diffx) + (-v_g * A_diffy)
+                )
+
+                # The derivative of temperature with respect to latitude
+                # and longitude.
+                dT_dx = self.gradient_x(
+                    parameter=np.gradient(
+                        T, longitude, axis=2
+                    )
+                )
+                dT_dy = np.gradient(T, self.a * latitude, axis=1)
+
+                # Part (2)
+                nabla_T = -u_g * dT_dx + -v_g * dT_dy
+                
+                B = (self.R / pressure_3d) * nabla_T
+                dB_dp = np.gradient(B, pressure, axis=0)
+
+                Part_2 = ((f_0 ** 2) / sigma) * dB_dp
+
+                RHS_geo = Part_1 - Part_2
+                RHS_geo *= -1
+
+                # Change with respect to time for geopotential.
+                if n == 0:
+                    RHS_geo = RHS_geo * delta_halfstep
+                else:
+                    RHS_geo = RHS_geo * delta_2t
+                change_geopotential = RHS_geo.value * geo.unit
+
+                # Smoothing operator (filter with normal distribution
+                # of weights).
+                change_geopotential = smooth_gaussian(
+                    scalar_grid=change_geopotential.value,
+                    n=14,
+                ).magnitude * change_geopotential.unit
+
+                if n == 0:
+                    geo = geo_i + change_geopotential
+                elif n == 1:
+                    geo = geo_i + change_geopotential
+                elif n == 2:
+                    geo_n = geo_i + change_geopotential
+                else:
+                    geo_n = geo_0 + change_geopotential
+                    # Apply Robert-Asselin time filter.
+                    geo = geo + 0.1 * (geo_n - 2*geo + geo_0)
+                
+                # Convert to geopotential height.
+                height = geo / g
+
+                # Pressure thickness.
+                thickness = height[indx_p2] - height[indx_p1]
+
+                # Temperature.
+                # Air Temperature.
+                # Determine the mean flow to linearise the PDE.
+                u_0 = np.mean(u_g)
+                v_0 = np.mean(v_g)
+
+                # Thermodynamic Equation.
+                A = -u_0 * dT_dx
+                B = -v_0 * dT_dy
+                C = (pressure_3d / self.R) * sigma * omega
+                
+                if n == 0:
+                    RHS = (A + B + C) * delta_halfstep
+                else:
+                    RHS = (A + B + C) * delta_2t
+
+                # Smoothing operator (filter with normal distribution
+                # of weights).
+                RHS = smooth_gaussian(
+                    scalar_grid=RHS.value,
+                    n=14,
+                ).magnitude * RHS.unit
+
+                if n == 0:
+                    T = T_i + RHS
+                elif n == 1:
+                    T = T_i + RHS
+                elif n == 2:
+                    T_n = T_i + RHS
+                else:
+                    T_n = T_0 + RHS
+                    # Apply Robert-Asselin time filter.
+                    T = T + 0.1 * (T_n - 2*T + T_0)
+
+                # Virtual Temperature
+                # The derivative of virtual temperature with
+                # respect to latitude and longitude.
+                dTv_dx = self.gradient_x(
+                    parameter=np.gradient(
+                        T_v, longitude, axis=2
+                    )
+                )
+                dTv_dy = np.gradient(T_v, self.a * latitude, axis=1)
+
+                # Thermodynamic Equation.
+                A = -u_0 * dTv_dx
+                B = -v_0 * dTv_dy
+                C = (pressure_3d / self.R) * sigma * omega
+                
+                if n == 0:
+                    RHS = (A + B + C) * delta_halfstep
+                else:
+                    RHS = (A + B + C) * delta_2t
+                
+                # Smoothing operator (filter with normal distribution
+                # of weights).
+                RHS = smooth_gaussian(
+                    scalar_grid=RHS.value,
+                    n=14,
+                ).magnitude * RHS.unit
+
+                if n == 0:
+                    T_v = Tv_i + RHS
+                elif n == 1:
+                    T_v = Tv_i + RHS
+                elif n == 2:
+                    Tv_n = Tv_i + RHS
+                else:
+                    Tv_n = Tv_0 + RHS
+                    # Apply Robert-Asselin time filter.
+                    T_v = T_v + 0.1 * (Tv_n - 2*T_v + Tv_0)
+
+                # Vapor pressure.
+                e = (
+                    (
+                        (pressure_3d) / (1 - 0.622)
+                    ) - (
+                        (pressure_3d * T) / (T_v * (1 - 0.622))
+                    )
+                )
+
+                # Convert temperature in Kelvin to degrees centigrade.
+                T_c = T.value - 273.15
+                # Saturated vapor pressure.
+                sat_vapor_pressure = 0.61121 * np.exp(
+                    (
+                        18.678 - (T_c / 234.5)
+                    ) * (T_c / (257.14 + T_c)
+                    )
+                ) 
+                # Add units of measurement.
+                sat_vapor_pressure *= self.units.kPa
+                sat_vapor_pressure = sat_vapor_pressure.to(self.units.hPa)
+
+                # Relative Humidity.
+                rh = (e.value / sat_vapor_pressure.value) * 100
+                rh[rh > 100] = 100
+                rh[rh < 0] = 0
+                rh *= self.units.percent
+                
+                # Configure the Wind class, so, that it aligns with the
+                # paramaters defined by the user.
+                config = Wind(
+                    delta_latitude=self.delta_latitude,
+                    delta_longitude=self.delta_longitude,
+                    remove_files=self.remove_files,
+                    input_data=True, 
+                    geo=height, 
+                    temp=T, 
+                    rh=rh, 
+                )
+
+                # Geostrophic Wind.
+                # Zonal Wind.
+                u_g = config.zonal_wind()
+                # Meridional Wind.
+                v_g = config.meridional_wind()
+
+                # Vertical Motion.
+                omega = config.vertical_motion()
+
+                # Static Stability.
+                sigma = config.static_stability()
+
+                # Precipitable Water.
+                pwv = config.precipitable_water()
+
+                # Append predictions to list.
+                if n > 1:
+                    # Geopotential Height.
+                    geopotential_height.append(height.value)
+                    # Geostrophic Wind.
+                    # Zonal Wind.
+                    zonal_wind.append(u_g.value)
+                    # Meridional Wind.
+                    meridional_wind.append(v_g.value)
+                    # Vertical Motion.
+                    vertical_motion.append(omega.value)
+                    # Static Stability
+                    static_stability.append(sigma.value)
+                    # Temperature.
+                    # Air Temperature.
+                    temperature.append(T.value)
+                    # Virtual Temperature.
+                    virtual_temperature.append(T_v.value)
+                    # Relative Humidity.
+                    relative_humidity.append(rh.value)
+                    # Thickness.
+                    pressure_thickness.append(thickness.value)
+                    # Precipitable Water.
+                    precipitable_water.append(pwv.value)
+
+                    # Add time step.
+                    t += delta_t.value
+                    bar.next()
+                
+                n += 1
+
+            # Append model lists to the relevant EFS list.
+            HeightList.append(geopotential_height)
+            ZonalList.append(zonal_wind)
+            MeridionalList.append(meridional_wind)
+            VerticalList.append(vertical_motion)
+            StabilityList.append(static_stability)
+            TemperatureList.append(temperature)
+            VirtualList.append(virtual_temperature)
+            HumidityList.append(relative_humidity)
+            ThicknessList.append(pressure_thickness)
+            WaterList.append(precipitable_water)
+
+            # Randomise the initial conditions.
+            randomise = (2 * random_sample(np.shape(geo_i)) - 1)
+            randomise /= 4
+            # Geopotential Height.
+            geo_rand = randomise * geo_dev
+            geo_i = geo_initial + geo_rand
+            # Temperature.
+            T_rand = randomise * T_dev
+            T_i = T_initial + T_rand
+            # Virtual Temperature.
+            Tv_rand = randomise * Tv_dev
+            Tv_i = Tv_initial + Tv_rand
+
+            # Redefine the otherr output variables in
+            # accordance with these newly defined initial
+            # conditions.
+            # Geopotential Height.
+            height = geo_i / g
+            # Relative Humidity.
+            # Vapor pressure.
+            e = (
+                (
+                    (pressure_3d) / (1 - 0.622)
+                ) - (
+                    (pressure_3d * T_i) / (Tv_i * (1 - 0.622))
+                )
+            )
+            # Convert temperature in Kelvin to degrees centigrade.
+            T_c = T_i.value - 273.15
+            # Saturated vapor pressure.
+            sat_vapor_pressure = 0.61121 * np.exp(
+                (
+                    18.678 - (T_c / 234.5)
+                ) * (T_c / (257.14 + T_c)
+                )
+            ) 
+            # Add units of measurement.
+            sat_vapor_pressure *= self.units.kPa
+            sat_vapor_pressure = sat_vapor_pressure.to(self.units.hPa)
+            # Determine relative humidity.
+            rh = (e.value / sat_vapor_pressure.value) * 100
+            rh[rh > 100] = 100
+            rh[rh < 0] = 0
+            rh *= self.units.percent
+            # Configure the Wind class, so, that it aligns with the
+            # paramaters defined by the user.
+            config = Wind(
+                delta_latitude=self.delta_latitude,
+                delta_longitude=self.delta_longitude,
+                remove_files=self.remove_files,
+                input_data=True, 
+                geo=height, 
+                temp=T_i, 
+                rh=rh, 
+            )
+            # Geostrophic Wind.
+            # Zonal Wind.
+            u_g = config.zonal_wind()
+            # Meridional Wind.
+            v_g = config.meridional_wind()
+            # Vertical Motion.
+            omega = config.vertical_motion()
+            # Static Stability.
+            sigma = config.static_stability()
+            # Precipitable Water.
+            pwv = config.precipitable_water()
+
+            m += 1
+
+        # Convert lists to arrays, and generate the mean forecast.
+        # Geopotential Height.
+        GeopotentialHeight = np.asarray(HeightList)
+        GeopotentialHeight = np.sum(
+            GeopotentialHeight, axis=0
+        ) / model_run
+        GeopotentialHeight[0] = self.geopotential_height()
+        # Zonal Wind.
+        ZonalWind = np.asarray(ZonalList)
+        ZonalWind = np.sum(
+            ZonalWind, axis=0
+        ) / model_run
+        ZonalWind[0] = self.zonal_wind()
+        # Meridional Wind.
+        MeridionalWind = np.asarray(MeridionalList)
+        MeridionalWind = np.sum(
+            MeridionalWind, axis=0
+        ) / model_run
+        MeridionalWind[0] = self.meridional_wind()
+        # Vertical Motion.
+        VerticalMotion = np.asarray(VerticalList)
+        VerticalMotion = np.sum(
+            VerticalMotion, axis=0
+        ) / model_run
+        VerticalMotion[0] = self.vertical_motion()
+        # Static Stability.
+        StaticStability = np.asarray(StabilityList)
+        StaticStability = np.sum(
+            StaticStability, axis=0
+        ) / model_run
+        static_stability[0] = self.static_stability()
+        # Air Temperature.
+        AirTemperature = np.asarray(TemperatureList)
+        AirTemperature = np.sum(
+            AirTemperature, axis=0
+        ) / model_run
+        AirTemperature[0] = self.temperature()
+        # Virtual Temperature.
+        VirtualTemperature = np.asarray(VirtualList)
+        VirtualTemperature = np.sum(
+            VirtualTemperature, axis=0
+        ) / model_run
+        VirtualTemperature[0] = self.virtual_temperature()
+        # Relative Humidity.
+        RelativeHumidity = np.asarray(HumidityList)
+        RelativeHumidity = np.sum(
+            RelativeHumidity, axis=0
+        ) / model_run
+        RelativeHumidity[0] = self.relative_humidity()
+        # Pressure Thickness.
+        Thickness = np.asarray(ThicknessList)
+        Thickness = np.sum(
+            Thickness, axis=0
+        ) / model_run
+        Thickness[0] = self.pressure_thickness(p1=p1, p2=p2)
+        # Precipitable Water.
+        PrecipitableWater = np.asarray(WaterList)
+        PrecipitableWater = np.sum(
+            PrecipitableWater, axis=0
+        ) / model_run
+        PrecipitableWater[0] = self.precipitable_water()
+
+        # Finish progress bar.
+        bar.finish()
+
+        # Recurrent Neural Network.
+        if self.ai:
+            pass
+
+        # Define the coordinates for the cube. 
+        lat = DimCoord(
+            self.latitude_lines(),
+            standard_name='latitude',
+            units='degrees'
+        )
+        lon = DimCoord(
+            self.longitude_lines(),
+            standard_name='longitude', 
+            units='degrees'
+        )
+        p = DimCoord(
+            pressure,
+            long_name='pressure', 
+            units='hPa'
+        )
+
+        # Time coordinates.
+        forecast_period = DimCoord(
+            time,
+            standard_name='forecast_period', 
+            units='hours'
+        )
+
+        # Cubes
+        # Forecast reference time.
+        ref_time = AuxCoord(
+            self.date.strftime("%Y-%m-%d %H:%M:%S"),
+            standard_name='forecast_reference_time'
+        )
+        # Geopotential Height Cube.
+        height_cube = Cube(GeopotentialHeight,
+            standard_name='geopotential_height',
+            units='m',
+            dim_coords_and_dims=[
+                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+            ],
+            attributes={
+                'source': 'Motus Aeris @ AMSIMP',
+            }
+        )
+        height_cube.add_aux_coord(ref_time)
+        # Geostrophic Wind Cubes.
+        # Zonal Wind Cube.
+        u_cube = Cube(ZonalWind,
+            standard_name='x_wind',
+            units='m s-1',
+            dim_coords_and_dims=[
+                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+            ],
+            attributes={
+                'source': 'Motus Aeris @ AMSIMP',
+            }
+        )
+        u_cube.add_aux_coord(ref_time)
+        # Meridional Wind Cube.
+        v_cube = Cube(MeridionalWind,
+            standard_name='y_wind',
+            units='m s-1',
+            dim_coords_and_dims=[
+                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+            ],
+            attributes={
+                'source': 'Motus Aeris @ AMSIMP',
+            }
+        )
+        v_cube.add_aux_coord(ref_time)
+        # Vertical Motion.
+        omega_cube = Cube(VerticalMotion,
+            standard_name='lagrangian_tendency_of_air_pressure',
+            units='hPa s-1',
+            dim_coords_and_dims=[
+                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+            ],
+            attributes={
+                'source': 'Motus Aeris @ AMSIMP',
+            }
+        )
+        omega_cube.add_aux_coord(ref_time)
+        # Static Stability.
+        sigma_cube = Cube(StaticStability,
+            long_name='static_stability',
+            units='J hPa-2 kg-1',
+            dim_coords_and_dims=[
+                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+            ],
+            attributes={
+                'source': 'Motus Aeris @ AMSIMP',
+            }
+        )
+        sigma_cube.add_aux_coord(ref_time)
+        # Temperature.
+        # Air Temperature.
+        T_cube = Cube(AirTemperature,
+            standard_name='air_temperature',
+            units='K',
+            dim_coords_and_dims=[
+                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+            ],
+            attributes={
+                'source': 'Motus Aeris @ AMSIMP',
+            }
+        )
+        T_cube.add_aux_coord(ref_time)
+        # Virtual Temperature.
+        Tv_cube = Cube(VirtualTemperature,
+            standard_name='virtual_temperature',
+            units='K',
+            dim_coords_and_dims=[
+                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+            ],
+            attributes={
+                'source': 'Motus Aeris @ AMSIMP',
+            }
+        )
+        Tv_cube.add_aux_coord(ref_time)
+        # Relative Humidity.
+        rh_cube = Cube(RelativeHumidity,
+            standard_name='relative_humidity',
+            units='%',
+            dim_coords_and_dims=[
+                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+            ],
+            attributes={
+                'source': 'Motus Aeris @ AMSIMP',
+            }
+        )
+        rh_cube.add_aux_coord(ref_time)
+        # Pressure Thickness.
+        thickness_cube = Cube(Thickness,
+            long_name='pressure_thickness',
+            units='m',
+            dim_coords_and_dims=[
+                (forecast_period, 0), (lat, 1), (lon, 2)
+            ],
+            attributes={
+                'source': 'Motus Aeris @ AMSIMP',
+            }
+        )
+        thickness_cube.add_aux_coord(ref_time)
+        # Precipitable Water.
+        pwv_cube = Cube(PrecipitableWater,
+            long_name='precipitable_water',
+            units='mm',
+            dim_coords_and_dims=[
+                (forecast_period, 0), (lat, 1), (lon, 2)
+            ],
+            attributes={
+                'source': 'Motus Aeris @ AMSIMP',
+            }
+        )
+        pwv_cube.add_aux_coord(ref_time)
+
+        # Create Cube list of output parameters.
+        output = CubeList([
+            height_cube,
+            u_cube,
+            v_cube,
+            omega_cube,
+            sigma_cube,
+            T_cube,
+            Tv_cube,
+            rh_cube,
+            thickness_cube,
+            pwv_cube
+        ])
+
+        # If specified, save the forecast in the file format, .nc.
+        if save_file:
+            # Establish the file name.
+            filename = 'motusaeris_amsimp_' + str(self.date.year)
+            filename += str(self.date.month) + str(self.date.day)
+            filename += str(self.date.hour) + '.nc'
+
+            # Save.
+            save(output, filename)
+
+        return output
 
     def simulate(self):
         """
@@ -571,16 +985,16 @@ cdef class Dynamics(Water):
         # Temperature
         indx_long = (np.abs(self.longitude_lines().value - 0)).argmin()
         ax1 = plt.subplot(gs[0, 0])
-        forecast_temp = self.forecast_temperature()
+        forecast_temp = self.atmospheric_prognostic_method()
         # Atmospheric Pressure
         ax2 = plt.subplot(gs[1, 0], projection=ccrs.EckertIII())
-        forecast_pressure = self.forecast_pressure()
+        forecast_pressure = self.atmospheric_prognostic_method()
         # Precipitable Water
         ax3 = plt.subplot(gs[0, 1], projection=ccrs.EckertIII())
-        forecast_Pwv = self.forecast_precipitablewater()
+        forecast_Pwv = self.atmospheric_prognostic_method()
         # Pressure Thickness (1000hPa - 500hPa).
         ax4 = plt.subplot(gs[1, 1], projection=ccrs.EckertIII())
-        forecast_pthickness = self.forecast_pressurethickness()
+        forecast_pthickness = self.atmospheric_prognostic_method()
 
         # Troposphere - Stratosphere Boundary Line
         trop_strat_line = self.troposphere_boundaryline()

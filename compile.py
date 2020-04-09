@@ -9,12 +9,12 @@ get_directive_defaults()['binding'] = True
 
 ext_modules = [
     Extension("amsimp.backend", ["amsimp/backend.pxd"]),
+    Extension("amsimp.moist", ["amsimp/moist.pxd"]),
     Extension("amsimp.wind", ["amsimp/wind.pxd"]),
-    Extension("amsimp.water", ["amsimp/water.pxd"]),
     Extension("amsimp.dynamics", ["amsimp/dynamics.pxd"]),
     Extension("amsimp.backend", ["amsimp/backend.pyx"], define_macros=[('CYTHON_TRACE', '1')]),
+    Extension("amsimp.moist", ["amsimp/moist.pyx"], define_macros=[('CYTHON_TRACE', '1')]),
     Extension("amsimp.wind", ["amsimp/wind.pyx"], define_macros=[('CYTHON_TRACE', '1')]),
-    Extension("amsimp.water", ["amsimp/water.pyx"], define_macros=[('CYTHON_TRACE', '1')]),
     Extension("amsimp.dynamics", ["amsimp/dynamics.pyx"], define_macros=[('CYTHON_TRACE', '1')]),
 ]
 

@@ -27,7 +27,7 @@ from amsimp.backend import Backend
 from amsimp.wind import Wind
 
 # Precipitable Water Module.
-from amsimp.water import Water
+from amsimp.moist import Moist
 
 # Weather Module.
 from amsimp.dynamics import Dynamics
