@@ -44,8 +44,6 @@ def get_version():
     return get_distribution(__package__).version
 
 # Version of AMSIMP.
-try:
-    __version__ = get_version()
-    del  get_version
-except ImportError:
-    pass
+#    __version__ = get_version()
+#    del  get_version
+
