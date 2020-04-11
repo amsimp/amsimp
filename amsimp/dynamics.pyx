@@ -9,6 +9,8 @@ AMSIMP Dynamics Class. For information about this class is described below.
 
 # Importing Dependencies
 from datetime import timedelta
+import wget
+import tensorflow as tf
 import matplotlib.pyplot as plt
 from matplotlib import style
 import matplotlib.gridspec as gridspec
@@ -19,6 +21,7 @@ from cpython cimport bool
 from amsimp.wind cimport Wind
 from amsimp.wind import Wind
 from astropy.units.quantity import Quantity
+import iris
 from iris.coords import DimCoord
 from iris.coords import AuxCoord
 from iris.cube import Cube
@@ -29,6 +32,336 @@ from metpy.calc import smooth_gaussian
 from numpy.random import random_sample
 
 # -----------------------------------------------------------------------------------------#
+
+class RNN(Wind):
+    """
+    Detailed explanation.
+    """
+
+    def __init__(self, data_size=60, epochs=200):
+        """
+        Explain here.
+        """
+        # Declare class variables.
+        super().__init__(delta_latitude)
+        super().__init__(delta_longitude)
+        super().__init__(remove_files)
+        super().__init__(input_data)
+        super().__init__(geo)
+        super().__init__(temp)
+        super().__init__(rh)
+        self.epochs = epochs
+        self.data_size = data_size
+
+        # Ensure epochs is an integer value.
+        if not isinstance(self.epochs, int):
+            raise Exception(
+                "epochs must be a integer value. The value of epochs was: {}".format(
+                    self.ai
+                )
+            )
+
+        # Ensure epochs is a natural number.
+        if not self.epochs > 0:
+            raise Exception(
+                "epochs must be a integer value. The value of epochs was: {}".format(
+                    self.ai
+                )
+            )
+
+        # Ensure data_size is an integer value.
+        if not isinstance(self.data_size, int):
+            raise Exception(
+                "data_size must be a integer value. The value of data_size was: {}".format(
+                    self.ai
+                )
+            )
+
+        # Ensure data_size is a natural number and is greater than 14.
+        if not self.data_size > 14:
+            raise Exception(
+                "data_size must be a integer value. The value of data_size was: {}".format(
+                    self.ai
+                )
+            )
+
+        # Setting seed to ensure reproducibility.
+        tf.random.set_seed(13)
+
+    def download_historical_data(self):
+        """
+        Explain here.
+        """
+        # Folder containing historical data on GitHub.
+        folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
+
+        # Data lists.
+        # Temperature.
+        cdef list T_list = []
+
+        # Geopotential Height.
+        cdef list geo_list = []
+
+        # Relative Humidity.
+        cdef list rh_list = []
+
+        # Define variable types.
+        cdef np.ndarray T, geo, rh
+
+        # Beginning date of the dataset.
+        cdef date = self.date
+        date = date + timedelta(days=-self.data_size)
+
+        for i in range(self.data_size * 4):
+            # Define the date in terms of integers.
+            day = date.day
+            month = date.month
+            year = date.year
+            hour = date.hour
+
+            # Adds zero before single digit numbers.
+            if day < 10:
+            day = "0" + str(day)
+
+            if month < 10:
+            month =  "0" + str(month)
+
+            if hour < 10:
+            hour = "0" + str(hour)
+
+            # Converts integers to strings.
+            day = str(day)
+            month = str(month)
+            year = str(year)
+            hour = str(hour)
+
+            # File url.
+            file_url = folder+year+"/"+month+"/"+day+"/"+hour+"/"
+            file_url += "initial_conditions.nc"
+
+            # Download file.
+            download = wget.download(file_url)
+
+            # Load file.
+            data = iris.load(download)
+
+            # Convert data to NumPy arrays
+            # Temperature.
+            T = np.asarray(data[0].data)
+            # Geopotential Height.
+            geo = np.asarray(data[1].data)
+            # Relative Humidity.
+            rh = np.asarray(data[2].data)
+
+            # Configure the Wind class, so, that it aligns with the
+            # paramaters defined by the user.
+            config = Wind(
+                delta_latitude=self.delta_latitude,
+                delta_longitude=self.delta_longitude,
+                remove_files=self.remove_files,
+                input_data=True, 
+                geo=geo, 
+                temp=T, 
+                rh=rh, 
+            )
+
+            # Redefine NumPy arrays.
+            # Temperature.
+            T = config.temperature()
+            # Geopotential Height.
+            geo = config.geopotential_height()
+            # Relative Humidity.
+            rh = config.relative_humidity()
+
+            # Append to list.
+            # Temperature.
+            T_list.append(T)
+            # Geopotential Height.
+            geo_list.append(geo)
+            # Relative Humidity.
+            rh_list.append(rh)
+
+            # Add six hours to date to get the next dataset.
+            date = date + timedelta(hours=+6)
+
+            # Remove download file.
+            os.remove(download)
+
+        # Convert lists to NumPy arrays.
+        # Temperature.
+        temperature = np.asarray(T_list)
+        # Geopotential Height.
+        geopotential_height = np.asarray(geo_list)
+        # Relative Humidity.
+        relative_humidity = np.asarray(rh_list)
+
+        # Output.
+        return temperature, geopotential_height, relative_humidity       
+
+    def standardise_data(self):
+        """
+        Explain here.
+        """
+        # Define atmospheric parameters.
+        temperature, geopotential_height, relative_humidity = self.download_historical_data()
+
+        # Training / Validation split.
+        split = np.floor(np.shape(temp)[0] * 0.9)
+
+        # Standardise the data.
+        # Temperature.
+        temp_mean = np.mean(temperature[:split])
+        temp_std = np.std(temperature[:split])
+        temperature = (temperature - temp_mean) / temp_std
+        # Geopotential Height.
+        geo_mean = np.mean(geopotential_height[:split])
+        geo_std = np.mean(geopotential_height[:split])
+        geopotential_height = (geopotential_height - geo_mean) / geo_std
+        # Relative Humidity.
+        rh_mean = np.mean(relative_humidity[:split])
+        rh_std = np.std(relative_humidity[:split])
+        relative_humidity = (relative_humidity - rh_mean) / rh_std
+
+        # Join datasets together.
+        output = []
+        output.append(temperature)
+        output.append(geopotential_height)
+        output.append(relative_humidity)
+
+        # Convert list to NumPy array.
+        output = np.asarray(output)
+        output = np.transpose(output, (1, 2, 3, 0))
+
+        return output
+
+    def format_data(
+        self, dataset, target, start_index, end_index, history_size, target_size
+    ):
+        """
+        Explain here.
+        """
+        data = []
+        labels = []
+
+        start_index = start_index + history_size
+        if end_index is None:
+            end_index = len(dataset) - target_size
+
+        for i in range(start_index, end_index):
+            indices = range(i-history_size, i, 1)
+            data.append(dataset[indices])
+
+            labels.append(target[i:i+target_size])
+
+        return np.array(data), np.array(labels)
+
+    def model_learning(self):
+        """
+        Explain here.
+        """
+        dataset = self.standardise_data()
+
+        # Training / Validation split.
+        split = np.floor(np.shape(temp)[0] * 0.9)
+
+        # Batch size.
+        batch_size = 5
+
+        # The network is shown data from the last 30 days.
+        past_history = 30 * 4
+
+        # The network predicts the next 10 days worth of steps.
+        future_target = 10 * 4
+
+        # Training / Validation split.
+        split = np.floor(np.shape(temp)[0] * 0.9)
+
+        # The dataset is prepared, and sorted.
+        # Temperature.
+        x_temp_train, y_temp_train = self.format_data(
+            dataset, dataset[:, :, :, 0], 0, split, past_history, future_target
+        )
+        x_temp_val, y_temp_val = self.format_data(
+            dataset, dataset[:, :, :, 0], split, None, past_history, future_target
+        )
+        # Geopotential Height.
+        x_geo_train, y_geo_train = self.format_data(
+            dataset, dataset[:, :, :, 1], 0, split, past_history, future_target
+        )
+        x_geo_val, y_geo_val = self.format_data(
+            dataset, dataset[:, :, :, 1], split, None, past_history, future_target
+        )
+        # Geopotential Height.
+        x_rh_train, y_rh_train = self.format_data(
+            dataset, dataset[:, :, :, 2], 0, split, past_history, future_target
+        )
+        x_rh_val, y_rh_val = self.format_data(
+            dataset, dataset[:, :, :, 2], split, None, past_history, future_target
+        )
+
+        # Batch the data.
+        # Temperature.
+        temp_train = tf.data.Dataset.from_tensor_slices((x_temp_train, y_temp_train))
+        temp_train = temp_train.batch(batch_size).repeat()
+        temp_val = tf.data.Dataset.from_tensor_slices((x_temp_val, y_temp_val))
+        temp_val = temp_val.batch(batch_size).repeat()
+        # Geopotential Height.
+        geo_train = tf.data.Dataset.from_tensor_slices((x_geo_train, y_geo_train))
+        geo_train = geo_train.batch(batch_size).repeat()
+        geo_val = tf.data.Dataset.from_tensor_slices((x_geo_val, y_geo_val))
+        geo_val = geo_val.batch(batch_size).repeat()
+        # Relative Humidity.
+        rh_train = tf.data.Dataset.from_tensor_slices((x_rh_train, y_rh_train))
+        rh_train = rh_train.batch(batch_size).repeat()
+        rh_val = tf.data.Dataset.from_tensor_slices((x_rh_val, y_rh_val))
+        rh_val = rh_val.batch(batch_size).repeat()
+
+        # Create models
+        # Output layer.
+        temperature = self.temperature()
+        len_pressure = len(temperature)
+        len_lat = len(temperature[0])
+        len_lon = len(temperature[0][0])
+        # Temperature.
+        temp_model = tf.keras.models.Sequential()
+        temp_model.add(tf.keras.layers.LSTM(32,
+                                          return_sequences=True,
+                                          input_shape=x_temp_train.shape[-2:]))
+        temp_model.add(tf.keras.layers.LSTM(16, activation='relu'))
+        temp_model.add(tf.keras.layers.Dense(np.shape(future_target, len_pressure, len_lon)))
+        temp_model.compile(optimizer=tf.keras.optimizers.RMSprop(clipvalue=1.0), loss='mae')
+        # Geopotential Height.
+        geo_model = tf.keras.models.Sequential()
+        geo_model.add(tf.keras.layers.LSTM(32,
+                                          return_sequences=True,
+                                          input_shape=x_geo_train.shape[-2:]))
+        geo_model.add(tf.keras.layers.LSTM(16, activation='relu'))
+        geo_model.add(tf.keras.layers.Dense(np.shape(future_target, len_pressure, len_lon)))
+        geo_model.compile(optimizer=tf.keras.optimizers.RMSprop(clipvalue=1.0), loss='mae')
+        # Relative Humidity.
+        rh_model = tf.keras.models.Sequential()
+        rh_model.add(tf.keras.layers.LSTM(32,
+                                          return_sequences=True,
+                                          input_shape=x_rh_train.shape[-2:]))
+        rh_model.add(tf.keras.layers.LSTM(16, activation='relu'))
+        rh_model.add(tf.keras.layers.Dense(np.shape(future_target, len_pressure, len_lon)))
+        rh_model.compile(optimizer=tf.keras.optimizers.RMSprop(clipvalue=1.0), loss='mae')
+
+        # Train models.
+        # Temperature.
+        temp_history = temp_model.fit(
+            temp_train, epochs=self.epochs, validation_data=temp_val
+        )
+        # Geopotential Height.
+        geo_history = geo_model.fit(
+            geo_train, epochs=self.epochs, validation_data=geo_val
+        )
+        # Relative Humidity.
+        rh_history = rh_model.fit(
+            rh_train, epochs=self.epochs, validation_data=rh_val
+        )
+
+        return True
 
 cdef class Dynamics(Wind):
     """

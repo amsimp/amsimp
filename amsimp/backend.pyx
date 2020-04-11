@@ -117,7 +117,7 @@ cdef class Backend:
     # recent the data is).
     data_date = np.load(
         wget.download(
-            "https://github.com/amsimp/amsimp-data/raw/master/date.npy", 
+            "https://github.com/amsimp/initial-conditions/raw/master/date.npy", 
             bar=None,
         )
     )
@@ -285,7 +285,7 @@ cdef class Backend:
         """
         # The url to the NumPy pressure surfaces file stored on the AMSIMP
         # Initial Conditions Data repository.
-        url = "https://github.com/amsimp/amsimp-data/raw/master/pressure_surfaces.npy"
+        url = "https://github.com/amsimp/initial-conditions/raw/master/pressure_surfaces.npy"
 
         # Download the NumPy file and store the NumPy array into a variable.
         try:
@@ -458,33 +458,33 @@ cdef class Backend:
 
         I strongly recommend storing the output into a variable in order to
         prevent the need to repeatly download the file. For more information,
-        visit https://github.com/amsimp/amsimp-data.
+        visit https://github.com/amsimp/initial-conditions.
         """
         if not self.input_data:
-            folder = "https://github.com/amsimp/amsimp-data/raw/master/initial_conditions/"
+            folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
             folder += (
                 str(self.data_date[2]) + "/" + str(self.data_date[1]) + "/"
             )
-            folder += str(self.data_date[0]) + "/" + str(self.data_date[3])
+            folder += str(self.data_date[0]) + "/" + str(self.data_date[3]) + "/"
             # The url to the NumPy pressure surfaces file stored on the AMSIMP
             # Initial Conditions Data repository.
             url = folder + "initial_conditions.nc"
 
             # Download the NumPy file and store the NumPy array into a variable.
             try:
-                geo_cube = iris.load("geopotential_height.nc")
-                geo = np.asarray(geo_cube[2].data)
+                geo_cube = iris.load("initial_conditions.nc")
+                geo = np.asarray(geo_cube[1].data)
             except OSError:  
                 geo_file = wget.download(url)
                 geo_cube = iris.load(geo_file)
-                geo = np.asarray(geo_cube[2].data)
+                geo = np.asarray(geo_cube[1].data)
 
             # Ensure that the correct data was downloaded (geopotential height).
-            if geo_cube[2].units != units.m:
+            if geo_cube[1].units != units.m:
                 raise Exception("Unable to determine the geopotential height"
                 + " at this time. Please contact the developer for futher"
                 + " assistance.")
-            elif geo_cube[2].metadata[0] != 'geopotential_height':
+            elif geo_cube[1].metadata[0] != 'geopotential_height':
                 raise Exception("Unable to determine the geopotential height"
                 + " at this time. Please contact the developer for futher"
                 + " assistance.")
@@ -536,33 +536,33 @@ cdef class Backend:
 
         I strongly recommend storing the output into a variable in order to
         prevent the need to repeatly download the file. For more information,
-        visit https://github.com/amsimp/amsimp-data.
+        visit https://github.com/amsimp/initial-conditions.
         """
         if not self.input_data:
-            folder = "https://github.com/amsimp/amsimp-data/raw/master/initial_conditions/"
+            folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
             folder += (
                 str(self.data_date[2]) + "/" + str(self.data_date[1]) + "/"
             )
-            folder += str(self.data_date[0]) + "/"
+            folder += str(self.data_date[0]) + "/" + str(self.data_date[3]) + "/"
             # The url to the NumPy pressure surfaces file stored on the AMSIMP
             # Initial Conditions Data repository.
-            url = folder + "relative_humdity.nc"
+            url = folder + "initial_conditions.nc"
 
             # Download the NumPy file and store the NumPy array into a variable.
             try:
-                rh_cube = iris.load("relative_humdity.nc")
-                rh = np.asarray(rh_cube[1].data)
+                rh_cube = iris.load("initial_conditions.nc")
+                rh = np.asarray(rh_cube[2].data)
             except OSError:  
                 rh_file = wget.download(url)
                 rh_cube = iris.load(rh_file)
-                rh = np.asarray(rh_cube[1].data)
+                rh = np.asarray(rh_cube[2].data)
 
             # Ensure that the correct data was downloaded (relative humidity).
-            if rh_cube[1].units != units.percent:
+            if rh_cube[2].units != units.percent:
                 raise Exception("Unable to determine the relative humidity"
                 + " at this time. Please contact the developer for futher"
                 + " assistance.")
-            elif rh_cube[1].metadata[0] != 'relative_humidity':
+            elif rh_cube[2].metadata[0] != 'relative_humidity':
                 raise Exception("Unable to determine the relative humidity"
                 + " at this time. Please contact the developer for futher"
                 + " assistance.")
@@ -614,21 +614,21 @@ cdef class Backend:
 
         I strongly recommend storing the output into a variable in order to
         prevent the need to repeatly download the file. For more information,
-        visit https://github.com/amsimp/amsimp-data.
+        visit https://github.com/amsimp/initial-conditions.
         """
         if not self.input_data:
-            folder = "https://github.com/amsimp/amsimp-data/raw/master/initial_conditions/"
+            folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
             folder += (
                 str(self.data_date[2]) + "/" + str(self.data_date[1]) + "/"
             )
-            folder += str(self.data_date[0]) + "/"
+            folder += str(self.data_date[0]) + "/" + str(self.data_date[3]) + "/"
             # The url to the NumPy pressure surfaces file stored on the AMSIMP
             # Initial Conditions Data repository.
-            url = folder + "temperature.nc"
+            url = folder + "initial_conditions.nc"
 
             # Download the NumPy file and store the NumPy array into a variable.
             try:
-                temp_cube = iris.load("temperature.nc")
+                temp_cube = iris.load("initial_conditions.nc")
                 temp = np.asarray(temp_cube[0].data)
             except OSError:  
                 temp_file = wget.download(url)
