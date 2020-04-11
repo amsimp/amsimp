@@ -263,7 +263,7 @@ class RNN(Wind):
         dataset = self.standardise_data()
 
         # Training / Validation split.
-        split = np.floor(np.shape(temp)[0] * 0.9)
+        split = np.floor(np.shape(temperature)[0] * 0.9)
 
         # Batch size.
         batch_size = 5
