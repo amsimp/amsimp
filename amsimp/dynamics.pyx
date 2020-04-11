@@ -121,13 +121,13 @@ class RNN(Wind):
 
             # Adds zero before single digit numbers.
             if day < 10:
-            day = "0" + str(day)
+                day = "0" + str(day)
 
             if month < 10:
-            month =  "0" + str(month)
+                month =  "0" + str(month)
 
             if hour < 10:
-            hour = "0" + str(hour)
+                hour = "0" + str(hour)
 
             # Converts integers to strings.
             day = str(day)
