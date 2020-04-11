@@ -233,7 +233,7 @@ class RNN(Wind):
         output = np.asarray(output)
         output = np.transpose(output, (1, 2, 3, 0))
 
-        return output
+        return output, split
 
     def format_data(
         self, dataset, target, start_index, end_index, history_size, target_size
@@ -260,10 +260,10 @@ class RNN(Wind):
         """
         Explain here.
         """
-        dataset = self.standardise_data()
+        dataset = self.standardise_data()[0]
 
         # Training / Validation split.
-        split = np.floor(np.shape(temperature)[0] * 0.9)
+        split = self.standardise_data()[0]
 
         # Batch size.
         batch_size = 5
@@ -273,9 +273,6 @@ class RNN(Wind):
 
         # The network predicts the next 10 days worth of steps.
         future_target = 10 * 4
-
-        # Training / Validation split.
-        split = np.floor(np.shape(temp)[0] * 0.9)
 
         # The dataset is prepared, and sorted.
         # Temperature.
