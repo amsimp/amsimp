@@ -9,6 +9,7 @@ AMSIMP Dynamics Class. For information about this class is described below.
 
 # Importing Dependencies
 from datetime import timedelta
+import os
 import wget
 import tensorflow as tf
 import matplotlib.pyplot as plt
@@ -206,7 +207,7 @@ class RNN(Wind):
         temperature, geopotential_height, relative_humidity = self.download_historical_data()
 
         # Training / Validation split.
-        split = np.floor(np.shape(temp)[0] * 0.9)
+        split = np.floor(np.shape(temperature)[0] * 0.9)
 
         # Standardise the data.
         # Temperature.
