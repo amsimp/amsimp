@@ -39,60 +39,13 @@ class RNN(Wind):
     Detailed explanation.
     """
 
-    def __init__(self, delta_latitude=10, delta_longitude=10, remove_files=False, forecast_length=72, efs=True, models=31, ai=True, data_size=60, epochs=200, input_data=False, geo=None, temp=None, rh=None):
-        """
-        Explain here.
-        """
-        # Declare class variables.
-        super().__init__(delta_latitude)
-        super().__init__(delta_longitude)
-        super().__init__(remove_files)
-        super().__init__(input_data)
-        super().__init__(geo)
-        super().__init__(temp)
-        super().__init__(rh)
-        self.epochs = epochs
-        self.data_size = data_size
-
-        # Ensure epochs is an integer value.
-        if not isinstance(self.epochs, int):
-            raise Exception(
-                "epochs must be a integer value. The value of epochs was: {}".format(
-                    self.ai
-                )
-            )
-
-        # Ensure epochs is a natural number.
-        if not self.epochs > 0:
-            raise Exception(
-                "epochs must be a integer value. The value of epochs was: {}".format(
-                    self.ai
-                )
-            )
-
-        # Ensure data_size is an integer value.
-        if not isinstance(self.data_size, int):
-            raise Exception(
-                "data_size must be a integer value. The value of data_size was: {}".format(
-                    self.ai
-                )
-            )
-
-        # Ensure data_size is a natural number and is greater than 14.
-        if not self.data_size > 14:
-            raise Exception(
-                "data_size must be a integer value. The value of data_size was: {}".format(
-                    self.ai
-                )
-            )
-
-        # Setting seed to ensure reproducibility.
-        tf.random.set_seed(13)
-
     def download_historical_data(self):
         """
         Explain here.
         """
+        # Setting seed to ensure reproducibility.
+        tf.random.set_seed(13)
+
         # Folder containing historical data on GitHub.
         folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
 

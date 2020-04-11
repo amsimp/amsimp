@@ -231,6 +231,42 @@ cdef class Backend:
                     + " Apologies for any inconvenience caused."
                 )
 
+        # RNN.
+        self.epochs = epochs
+        self.data_size = data_size
+
+        # Ensure epochs is an integer value.
+        if not isinstance(self.epochs, int):
+            raise Exception(
+                "epochs must be a integer value. The value of epochs was: {}".format(
+                    self.ai
+                )
+            )
+
+        # Ensure epochs is a natural number.
+        if not self.epochs > 0:
+            raise Exception(
+                "epochs must be a integer value. The value of epochs was: {}".format(
+                    self.ai
+                )
+            )
+
+        # Ensure data_size is an integer value.
+        if not isinstance(self.data_size, int):
+            raise Exception(
+                "data_size must be a integer value. The value of data_size was: {}".format(
+                    self.ai
+                )
+            )
+
+        # Ensure data_size is a natural number and is greater than 14.
+        if not self.data_size > 14:
+            raise Exception(
+                "data_size must be a integer value. The value of data_size was: {}".format(
+                    self.ai
+                )
+            )
+
     cpdef np.ndarray latitude_lines(self, bool f=False):
         """
         Generates a NumPy array of latitude lines.

@@ -29,8 +29,11 @@ from amsimp.wind import Wind
 # Precipitable Water Module.
 from amsimp.moist import Moist
 
-# Weather Module.
+# Dynamics Module.
 from amsimp.dynamics import Dynamics
+
+# RNN Module.
+from amsimp.dynamics import RNN
 
 def get_version():
     """
@@ -41,5 +44,8 @@ def get_version():
     return get_distribution(__package__).version
 
 # Version of AMSIMP.
-__version__ = get_version()
-del  get_version
+try:
+    __version__ = get_version()
+    del  get_version
+except ImportError:
+    pass
