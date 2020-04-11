@@ -38,7 +38,7 @@ class RNN(Wind):
     Detailed explanation.
     """
 
-    def __init__(self, data_size=60, epochs=200):
+    def __init__(self, delta_latitude=10, delta_longitude=10, remove_files=False, forecast_length=72, efs=True, models=31, ai=True, data_size=60, epochs=200, input_data=False, geo=None, temp=None, rh=None):
         """
         Explain here.
         """
