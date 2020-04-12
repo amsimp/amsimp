@@ -6,6 +6,8 @@ cdef class Backend:
     cdef int delta_latitude
     cdef int delta_longitude
     cdef bool remove_files
+    cdef bool ai
+    cdef int data_size, epochs
     cdef bool input_data
     cdef input_geo, input_rh, input_temp
 

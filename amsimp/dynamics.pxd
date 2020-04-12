@@ -5,7 +5,7 @@ from cpython cimport bool
 
 cdef class Dynamics(Wind):
     cdef forecast_length
-    cdef bool efs, ai
+    cdef bool efs
     cdef int models
 
     cpdef atmospheric_prognostic_method(self, bool save_file=?, p1=?, p2=?)

@@ -34,7 +34,7 @@ from numpy.random import random_sample
 
 # -----------------------------------------------------------------------------------------#
 
-class RNN(Wind):
+cdef class RNN(Wind):
     """
     Detailed explanation.
     """

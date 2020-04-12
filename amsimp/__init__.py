@@ -18,7 +18,7 @@ switch to Python 3. You can find this article at:
 https://wiki.python.org/moin/Python2orPython3
 
 We apologise for any inconvience caused."""
-    )
+)
 
 # Backend Module.
 from amsimp.backend import Backend
@@ -44,6 +44,9 @@ def get_version():
     return get_distribution(__package__).version
 
 # Version of AMSIMP.
-#    __version__ = get_version()
-#    del  get_version
+try:
+    __version__ = get_version()
+    del  get_version
+except:
+    pass
 

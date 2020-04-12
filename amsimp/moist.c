@@ -1115,7 +1115,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_coriolis_parameter;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_rossby_parameter;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_thickness;
 
-/* "amsimp/backend.pxd":12
+/* "amsimp/backend.pxd":14
  *     cdef input_geo, input_rh, input_temp
  * 
  *     cpdef np.ndarray latitude_lines(self, bool f=?)             # <<<<<<<<<<<<<<
@@ -1127,7 +1127,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_latitude_lines {
   PyBoolObject *f;
 };
 
-/* "amsimp/backend.pxd":14
+/* "amsimp/backend.pxd":16
  *     cpdef np.ndarray latitude_lines(self, bool f=?)
  *     cpdef np.ndarray longitude_lines(self)
  *     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)             # <<<<<<<<<<<<<<
@@ -1139,7 +1139,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_surfaces {
   PyObject *dim_3d;
 };
 
-/* "amsimp/backend.pxd":15
+/* "amsimp/backend.pxd":17
  *     cpdef np.ndarray longitude_lines(self)
  *     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)
  *     cdef np.ndarray gradient_x(self, parameter=?)             # <<<<<<<<<<<<<<
@@ -1151,7 +1151,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_x {
   PyObject *parameter;
 };
 
-/* "amsimp/backend.pxd":16
+/* "amsimp/backend.pxd":18
  *     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)
  *     cdef np.ndarray gradient_x(self, parameter=?)
  *     cdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)             # <<<<<<<<<<<<<<
@@ -1164,7 +1164,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_make_3dimensional_array {
   PyObject *axis;
 };
 
-/* "amsimp/backend.pxd":18
+/* "amsimp/backend.pxd":20
  *     cdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)
  * 
  *     cpdef np.ndarray coriolis_parameter(self, bool f=?)             # <<<<<<<<<<<<<<
@@ -1176,7 +1176,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_coriolis_parameter {
   PyBoolObject *f;
 };
 
-/* "amsimp/backend.pxd":19
+/* "amsimp/backend.pxd":21
  * 
  *     cpdef np.ndarray coriolis_parameter(self, bool f=?)
  *     cpdef np.ndarray rossby_parameter(self, bool f=?)             # <<<<<<<<<<<<<<
@@ -1188,7 +1188,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_rossby_parameter {
   PyBoolObject *f;
 };
 
-/* "amsimp/backend.pxd":28
+/* "amsimp/backend.pxd":30
  * 
  *     cpdef np.ndarray gravitational_acceleration(self)
  *     cpdef np.ndarray pressure_thickness(self, p1=?, p2=?)             # <<<<<<<<<<<<<<
@@ -1225,6 +1225,9 @@ struct __pyx_obj_6amsimp_7backend_Backend {
   int delta_latitude;
   int delta_longitude;
   PyBoolObject *remove_files;
+  PyBoolObject *ai;
+  int data_size;
+  int epochs;
   PyBoolObject *input_data;
   PyObject *input_geo;
   PyObject *input_rh;
@@ -2393,7 +2396,7 @@ static const char __pyx_k_AMSIMP_Moist_Thermodynamics_Cla[] = "\nAMSIMP Moist Th
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
 static const char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static const char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
-static const char __pyx_k_Incompatible_checksums_s_vs_0xf8[] = "Incompatible checksums (%s vs 0xf8d6da6 = (delta_latitude, delta_longitude, input_data, input_geo, input_rh, input_temp, remove_files))";
+static const char __pyx_k_Incompatible_checksums_s_vs_0x60[] = "Incompatible checksums (%s vs 0x6014809 = (ai, data_size, delta_latitude, delta_longitude, epochs, input_data, input_geo, input_rh, input_temp, remove_files))";
 static const char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
 static const char __pyx_k_moist_must_be_a_boolean_value_Th[] = "moist must be a boolean value. The value of moist was: {}";
 static const char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not Fortran contiguous";
@@ -2405,7 +2408,7 @@ static PyObject *__pyx_n_s_EckertIII;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
 static PyObject *__pyx_n_s_ImportError;
-static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0xf8;
+static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x60;
 static PyObject *__pyx_n_s_K;
 static PyObject *__pyx_kp_u_Latitude_phi;
 static PyObject *__pyx_kp_u_Longitude_lambda;
@@ -2570,7 +2573,7 @@ static PyObject *__pyx_int_15;
 static PyObject *__pyx_int_21;
 static PyObject *__pyx_int_100;
 static PyObject *__pyx_int_997;
-static PyObject *__pyx_int_260926886;
+static PyObject *__pyx_int_100747273;
 static PyObject *__pyx_int_neg_1;
 static PyObject *__pyx_codeobj_;
 static PyObject *__pyx_tuple__8;
@@ -6282,9 +6285,11 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
-  int __pyx_t_4;
-  int __pyx_t_5;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
   int __pyx_t_6;
+  int __pyx_t_7;
+  int __pyx_t_8;
   __Pyx_TraceFrameInit(__pyx_codeobj__12)
   __Pyx_RefNannySetupContext("__reduce_cython__", 0);
   __Pyx_TraceCall("__reduce_cython__", __pyx_f[1], 1, 0, __PYX_ERR(1, 1, __pyx_L1_error));
@@ -6292,65 +6297,78 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   /* "(tree fragment)":5
  *     cdef object _dict
  *     cdef bint use_setstate
- *     state = (self.delta_latitude, self.delta_longitude, self.input_data, self.input_geo, self.input_rh, self.input_temp, self.remove_files)             # <<<<<<<<<<<<<<
+ *     state = (self.ai, self.data_size, self.delta_latitude, self.delta_longitude, self.epochs, self.input_data, self.input_geo, self.input_rh, self.input_temp, self.remove_files)             # <<<<<<<<<<<<<<
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:
  */
   __Pyx_TraceLine(5,0,__PYX_ERR(1, 5, __pyx_L1_error))
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.delta_latitude); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.data_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.delta_longitude); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.delta_latitude); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyTuple_New(7); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.delta_longitude); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.epochs); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = PyTuple_New(10); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_INCREF(((PyObject *)__pyx_v_self->__pyx_base.ai));
+  __Pyx_GIVEREF(((PyObject *)__pyx_v_self->__pyx_base.ai));
+  PyTuple_SET_ITEM(__pyx_t_5, 0, ((PyObject *)__pyx_v_self->__pyx_base.ai));
   __Pyx_GIVEREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_5, 2, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_5, 3, __pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_5, 4, __pyx_t_4);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->__pyx_base.input_data));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->__pyx_base.input_data));
-  PyTuple_SET_ITEM(__pyx_t_3, 2, ((PyObject *)__pyx_v_self->__pyx_base.input_data));
+  PyTuple_SET_ITEM(__pyx_t_5, 5, ((PyObject *)__pyx_v_self->__pyx_base.input_data));
   __Pyx_INCREF(__pyx_v_self->__pyx_base.input_geo);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.input_geo);
-  PyTuple_SET_ITEM(__pyx_t_3, 3, __pyx_v_self->__pyx_base.input_geo);
+  PyTuple_SET_ITEM(__pyx_t_5, 6, __pyx_v_self->__pyx_base.input_geo);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.input_rh);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.input_rh);
-  PyTuple_SET_ITEM(__pyx_t_3, 4, __pyx_v_self->__pyx_base.input_rh);
+  PyTuple_SET_ITEM(__pyx_t_5, 7, __pyx_v_self->__pyx_base.input_rh);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.input_temp);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.input_temp);
-  PyTuple_SET_ITEM(__pyx_t_3, 5, __pyx_v_self->__pyx_base.input_temp);
+  PyTuple_SET_ITEM(__pyx_t_5, 8, __pyx_v_self->__pyx_base.input_temp);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->__pyx_base.remove_files));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->__pyx_base.remove_files));
-  PyTuple_SET_ITEM(__pyx_t_3, 6, ((PyObject *)__pyx_v_self->__pyx_base.remove_files));
+  PyTuple_SET_ITEM(__pyx_t_5, 9, ((PyObject *)__pyx_v_self->__pyx_base.remove_files));
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
-  __pyx_v_state = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
+  __pyx_t_4 = 0;
+  __pyx_v_state = ((PyObject*)__pyx_t_5);
+  __pyx_t_5 = 0;
 
   /* "(tree fragment)":6
  *     cdef bint use_setstate
- *     state = (self.delta_latitude, self.delta_longitude, self.input_data, self.input_geo, self.input_rh, self.input_temp, self.remove_files)
+ *     state = (self.ai, self.data_size, self.delta_latitude, self.delta_longitude, self.epochs, self.input_data, self.input_geo, self.input_rh, self.input_temp, self.remove_files)
  *     _dict = getattr(self, '__dict__', None)             # <<<<<<<<<<<<<<
  *     if _dict is not None:
  *         state += (_dict,)
  */
   __Pyx_TraceLine(6,0,__PYX_ERR(1, 6, __pyx_L1_error))
-  __pyx_t_3 = __Pyx_GetAttr3(((PyObject *)__pyx_v_self), __pyx_n_s_dict, Py_None); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 6, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_v__dict = __pyx_t_3;
-  __pyx_t_3 = 0;
+  __pyx_t_5 = __Pyx_GetAttr3(((PyObject *)__pyx_v_self), __pyx_n_s_dict, Py_None); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 6, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_v__dict = __pyx_t_5;
+  __pyx_t_5 = 0;
 
   /* "(tree fragment)":7
- *     state = (self.delta_latitude, self.delta_longitude, self.input_data, self.input_geo, self.input_rh, self.input_temp, self.remove_files)
+ *     state = (self.ai, self.data_size, self.delta_latitude, self.delta_longitude, self.epochs, self.input_data, self.input_geo, self.input_rh, self.input_temp, self.remove_files)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
  *         use_setstate = True
  */
   __Pyx_TraceLine(7,0,__PYX_ERR(1, 7, __pyx_L1_error))
-  __pyx_t_4 = (__pyx_v__dict != Py_None);
-  __pyx_t_5 = (__pyx_t_4 != 0);
-  if (__pyx_t_5) {
+  __pyx_t_6 = (__pyx_v__dict != Py_None);
+  __pyx_t_7 = (__pyx_t_6 != 0);
+  if (__pyx_t_7) {
 
     /* "(tree fragment)":8
  *     _dict = getattr(self, '__dict__', None)
@@ -6360,29 +6378,29 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
  *     else:
  */
     __Pyx_TraceLine(8,0,__PYX_ERR(1, 8, __pyx_L1_error))
-    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 8, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 8, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
     __Pyx_INCREF(__pyx_v__dict);
     __Pyx_GIVEREF(__pyx_v__dict);
-    PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_v__dict);
-    __pyx_t_2 = PyNumber_InPlaceAdd(__pyx_v_state, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 8, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF_SET(__pyx_v_state, ((PyObject*)__pyx_t_2));
-    __pyx_t_2 = 0;
+    PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_v__dict);
+    __pyx_t_4 = PyNumber_InPlaceAdd(__pyx_v_state, __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 8, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __Pyx_DECREF_SET(__pyx_v_state, ((PyObject*)__pyx_t_4));
+    __pyx_t_4 = 0;
 
     /* "(tree fragment)":9
  *     if _dict is not None:
  *         state += (_dict,)
  *         use_setstate = True             # <<<<<<<<<<<<<<
  *     else:
- *         use_setstate = self.input_data is not None or self.input_geo is not None or self.input_rh is not None or self.input_temp is not None or self.remove_files is not None
+ *         use_setstate = self.ai is not None or self.input_data is not None or self.input_geo is not None or self.input_rh is not None or self.input_temp is not None or self.remove_files is not None
  */
     __Pyx_TraceLine(9,0,__PYX_ERR(1, 9, __pyx_L1_error))
     __pyx_v_use_setstate = 1;
 
     /* "(tree fragment)":7
- *     state = (self.delta_latitude, self.delta_longitude, self.input_data, self.input_geo, self.input_rh, self.input_temp, self.remove_files)
+ *     state = (self.ai, self.data_size, self.delta_latitude, self.delta_longitude, self.epochs, self.input_data, self.input_geo, self.input_rh, self.input_temp, self.remove_files)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -6394,138 +6412,145 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   /* "(tree fragment)":11
  *         use_setstate = True
  *     else:
- *         use_setstate = self.input_data is not None or self.input_geo is not None or self.input_rh is not None or self.input_temp is not None or self.remove_files is not None             # <<<<<<<<<<<<<<
+ *         use_setstate = self.ai is not None or self.input_data is not None or self.input_geo is not None or self.input_rh is not None or self.input_temp is not None or self.remove_files is not None             # <<<<<<<<<<<<<<
  *     if use_setstate:
- *         return __pyx_unpickle_Moist, (type(self), 0xf8d6da6, None), state
+ *         return __pyx_unpickle_Moist, (type(self), 0x6014809, None), state
  */
   __Pyx_TraceLine(11,0,__PYX_ERR(1, 11, __pyx_L1_error))
   /*else*/ {
-    __pyx_t_4 = (((PyObject *)__pyx_v_self->__pyx_base.input_data) != Py_None);
-    __pyx_t_6 = (__pyx_t_4 != 0);
+    __pyx_t_6 = (((PyObject *)__pyx_v_self->__pyx_base.ai) != Py_None);
+    __pyx_t_8 = (__pyx_t_6 != 0);
+    if (!__pyx_t_8) {
+    } else {
+      __pyx_t_7 = __pyx_t_8;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_8 = (((PyObject *)__pyx_v_self->__pyx_base.input_data) != Py_None);
+    __pyx_t_6 = (__pyx_t_8 != 0);
     if (!__pyx_t_6) {
     } else {
-      __pyx_t_5 = __pyx_t_6;
+      __pyx_t_7 = __pyx_t_6;
       goto __pyx_L4_bool_binop_done;
     }
     __pyx_t_6 = (__pyx_v_self->__pyx_base.input_geo != Py_None);
-    __pyx_t_4 = (__pyx_t_6 != 0);
-    if (!__pyx_t_4) {
+    __pyx_t_8 = (__pyx_t_6 != 0);
+    if (!__pyx_t_8) {
     } else {
-      __pyx_t_5 = __pyx_t_4;
+      __pyx_t_7 = __pyx_t_8;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_4 = (__pyx_v_self->__pyx_base.input_rh != Py_None);
-    __pyx_t_6 = (__pyx_t_4 != 0);
+    __pyx_t_8 = (__pyx_v_self->__pyx_base.input_rh != Py_None);
+    __pyx_t_6 = (__pyx_t_8 != 0);
     if (!__pyx_t_6) {
     } else {
-      __pyx_t_5 = __pyx_t_6;
+      __pyx_t_7 = __pyx_t_6;
       goto __pyx_L4_bool_binop_done;
     }
     __pyx_t_6 = (__pyx_v_self->__pyx_base.input_temp != Py_None);
-    __pyx_t_4 = (__pyx_t_6 != 0);
-    if (!__pyx_t_4) {
+    __pyx_t_8 = (__pyx_t_6 != 0);
+    if (!__pyx_t_8) {
     } else {
-      __pyx_t_5 = __pyx_t_4;
+      __pyx_t_7 = __pyx_t_8;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_4 = (((PyObject *)__pyx_v_self->__pyx_base.remove_files) != Py_None);
-    __pyx_t_6 = (__pyx_t_4 != 0);
-    __pyx_t_5 = __pyx_t_6;
+    __pyx_t_8 = (((PyObject *)__pyx_v_self->__pyx_base.remove_files) != Py_None);
+    __pyx_t_6 = (__pyx_t_8 != 0);
+    __pyx_t_7 = __pyx_t_6;
     __pyx_L4_bool_binop_done:;
-    __pyx_v_use_setstate = __pyx_t_5;
+    __pyx_v_use_setstate = __pyx_t_7;
   }
   __pyx_L3:;
 
   /* "(tree fragment)":12
  *     else:
- *         use_setstate = self.input_data is not None or self.input_geo is not None or self.input_rh is not None or self.input_temp is not None or self.remove_files is not None
+ *         use_setstate = self.ai is not None or self.input_data is not None or self.input_geo is not None or self.input_rh is not None or self.input_temp is not None or self.remove_files is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_Moist, (type(self), 0xf8d6da6, None), state
+ *         return __pyx_unpickle_Moist, (type(self), 0x6014809, None), state
  *     else:
  */
   __Pyx_TraceLine(12,0,__PYX_ERR(1, 12, __pyx_L1_error))
-  __pyx_t_5 = (__pyx_v_use_setstate != 0);
-  if (__pyx_t_5) {
+  __pyx_t_7 = (__pyx_v_use_setstate != 0);
+  if (__pyx_t_7) {
 
     /* "(tree fragment)":13
- *         use_setstate = self.input_data is not None or self.input_geo is not None or self.input_rh is not None or self.input_temp is not None or self.remove_files is not None
+ *         use_setstate = self.ai is not None or self.input_data is not None or self.input_geo is not None or self.input_rh is not None or self.input_temp is not None or self.remove_files is not None
  *     if use_setstate:
- *         return __pyx_unpickle_Moist, (type(self), 0xf8d6da6, None), state             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_Moist, (type(self), 0x6014809, None), state             # <<<<<<<<<<<<<<
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0xf8d6da6, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0x6014809, state)
  */
     __Pyx_TraceLine(13,0,__PYX_ERR(1, 13, __pyx_L1_error))
     __Pyx_XDECREF(__pyx_r);
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_pyx_unpickle_Moist); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 13, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 13, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_pyx_unpickle_Moist); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_5 = PyTuple_New(3); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    PyTuple_SET_ITEM(__pyx_t_3, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_260926886);
-    __Pyx_GIVEREF(__pyx_int_260926886);
-    PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_int_260926886);
+    PyTuple_SET_ITEM(__pyx_t_5, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
+    __Pyx_INCREF(__pyx_int_100747273);
+    __Pyx_GIVEREF(__pyx_int_100747273);
+    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_100747273);
     __Pyx_INCREF(Py_None);
     __Pyx_GIVEREF(Py_None);
-    PyTuple_SET_ITEM(__pyx_t_3, 2, Py_None);
-    __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 13, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_GIVEREF(__pyx_t_2);
-    PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_2);
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_3);
+    PyTuple_SET_ITEM(__pyx_t_5, 2, Py_None);
+    __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 13, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_GIVEREF(__pyx_t_4);
+    PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_4);
+    __Pyx_GIVEREF(__pyx_t_5);
+    PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_5);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
-    PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_v_state);
-    __pyx_t_2 = 0;
+    PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_v_state);
+    __pyx_t_4 = 0;
+    __pyx_t_5 = 0;
+    __pyx_r = __pyx_t_3;
     __pyx_t_3 = 0;
-    __pyx_r = __pyx_t_1;
-    __pyx_t_1 = 0;
     goto __pyx_L0;
 
     /* "(tree fragment)":12
  *     else:
- *         use_setstate = self.input_data is not None or self.input_geo is not None or self.input_rh is not None or self.input_temp is not None or self.remove_files is not None
+ *         use_setstate = self.ai is not None or self.input_data is not None or self.input_geo is not None or self.input_rh is not None or self.input_temp is not None or self.remove_files is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_Moist, (type(self), 0xf8d6da6, None), state
+ *         return __pyx_unpickle_Moist, (type(self), 0x6014809, None), state
  *     else:
  */
   }
 
   /* "(tree fragment)":15
- *         return __pyx_unpickle_Moist, (type(self), 0xf8d6da6, None), state
+ *         return __pyx_unpickle_Moist, (type(self), 0x6014809, None), state
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0xf8d6da6, state)             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_Moist, (type(self), 0x6014809, state)             # <<<<<<<<<<<<<<
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
   __Pyx_TraceLine(15,0,__PYX_ERR(1, 15, __pyx_L1_error))
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_pyx_unpickle_Moist); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 15, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 15, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_pyx_unpickle_Moist); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 15, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_5 = PyTuple_New(3); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 15, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    PyTuple_SET_ITEM(__pyx_t_3, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_260926886);
-    __Pyx_GIVEREF(__pyx_int_260926886);
-    PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_int_260926886);
+    PyTuple_SET_ITEM(__pyx_t_5, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
+    __Pyx_INCREF(__pyx_int_100747273);
+    __Pyx_GIVEREF(__pyx_int_100747273);
+    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_100747273);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
-    PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_v_state);
-    __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 15, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_GIVEREF(__pyx_t_1);
-    PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
+    PyTuple_SET_ITEM(__pyx_t_5, 2, __pyx_v_state);
+    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 15, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_3);
-    __pyx_t_1 = 0;
+    PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
+    __Pyx_GIVEREF(__pyx_t_5);
+    PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_5);
     __pyx_t_3 = 0;
-    __pyx_r = __pyx_t_2;
-    __pyx_t_2 = 0;
+    __pyx_t_5 = 0;
+    __pyx_r = __pyx_t_4;
+    __pyx_t_4 = 0;
     goto __pyx_L0;
   }
 
@@ -6540,6 +6565,8 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
   __Pyx_AddTraceback("amsimp.moist.Moist.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -6553,7 +6580,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
 
 /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0xf8d6da6, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0x6014809, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
@@ -6582,7 +6609,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_18__setstate_cython__(struct __p
   __Pyx_TraceCall("__setstate_cython__", __pyx_f[1], 16, 0, __PYX_ERR(1, 16, __pyx_L1_error));
 
   /* "(tree fragment)":17
- *         return __pyx_unpickle_Moist, (type(self), 0xf8d6da6, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0x6014809, state)
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)             # <<<<<<<<<<<<<<
  */
@@ -6594,7 +6621,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_18__setstate_cython__(struct __p
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0xf8d6da6, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0x6014809, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
@@ -6711,19 +6738,19 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
   /* "(tree fragment)":4
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0xf8d6da6:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0x6014809:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xf8d6da6 = (delta_latitude, delta_longitude, input_data, input_geo, input_rh, input_temp, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x6014809 = (ai, data_size, delta_latitude, delta_longitude, epochs, input_data, input_geo, input_rh, input_temp, remove_files))" % __pyx_checksum)
  */
   __Pyx_TraceLine(4,0,__PYX_ERR(1, 4, __pyx_L1_error))
-  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0xf8d6da6) != 0);
+  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0x6014809) != 0);
   if (__pyx_t_1) {
 
     /* "(tree fragment)":5
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0xf8d6da6:
+ *     if __pyx_checksum != 0x6014809:
  *         from pickle import PickleError as __pyx_PickleError             # <<<<<<<<<<<<<<
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xf8d6da6 = (delta_latitude, delta_longitude, input_data, input_geo, input_rh, input_temp, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x6014809 = (ai, data_size, delta_latitude, delta_longitude, epochs, input_data, input_geo, input_rh, input_temp, remove_files))" % __pyx_checksum)
  *     __pyx_result = Moist.__new__(__pyx_type)
  */
     __Pyx_TraceLine(5,0,__PYX_ERR(1, 5, __pyx_L1_error))
@@ -6743,16 +6770,16 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":6
- *     if __pyx_checksum != 0xf8d6da6:
+ *     if __pyx_checksum != 0x6014809:
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xf8d6da6 = (delta_latitude, delta_longitude, input_data, input_geo, input_rh, input_temp, remove_files))" % __pyx_checksum)             # <<<<<<<<<<<<<<
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x6014809 = (ai, data_size, delta_latitude, delta_longitude, epochs, input_data, input_geo, input_rh, input_temp, remove_files))" % __pyx_checksum)             # <<<<<<<<<<<<<<
  *     __pyx_result = Moist.__new__(__pyx_type)
  *     if __pyx_state is not None:
  */
     __Pyx_TraceLine(6,0,__PYX_ERR(1, 6, __pyx_L1_error))
     __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v___pyx_checksum); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 6, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0xf8, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 6, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0x60, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 6, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_INCREF(__pyx_v___pyx_PickleError);
@@ -6779,15 +6806,15 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
     /* "(tree fragment)":4
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0xf8d6da6:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0x6014809:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xf8d6da6 = (delta_latitude, delta_longitude, input_data, input_geo, input_rh, input_temp, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x6014809 = (ai, data_size, delta_latitude, delta_longitude, epochs, input_data, input_geo, input_rh, input_temp, remove_files))" % __pyx_checksum)
  */
   }
 
   /* "(tree fragment)":7
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xf8d6da6 = (delta_latitude, delta_longitude, input_data, input_geo, input_rh, input_temp, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x6014809 = (ai, data_size, delta_latitude, delta_longitude, epochs, input_data, input_geo, input_rh, input_temp, remove_files))" % __pyx_checksum)
  *     __pyx_result = Moist.__new__(__pyx_type)             # <<<<<<<<<<<<<<
  *     if __pyx_state is not None:
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
@@ -6814,7 +6841,7 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
   __pyx_t_3 = 0;
 
   /* "(tree fragment)":8
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xf8d6da6 = (delta_latitude, delta_longitude, input_data, input_geo, input_rh, input_temp, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x6014809 = (ai, data_size, delta_latitude, delta_longitude, epochs, input_data, input_geo, input_rh, input_temp, remove_files))" % __pyx_checksum)
  *     __pyx_result = Moist.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
@@ -6839,7 +6866,7 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":8
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xf8d6da6 = (delta_latitude, delta_longitude, input_data, input_geo, input_rh, input_temp, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x6014809 = (ai, data_size, delta_latitude, delta_longitude, epochs, input_data, input_geo, input_rh, input_temp, remove_files))" % __pyx_checksum)
  *     __pyx_result = Moist.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
@@ -6852,7 +6879,7 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
  *     return __pyx_result             # <<<<<<<<<<<<<<
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):
- *     __pyx_result.delta_latitude = __pyx_state[0]; __pyx_result.delta_longitude = __pyx_state[1]; __pyx_result.input_data = __pyx_state[2]; __pyx_result.input_geo = __pyx_state[3]; __pyx_result.input_rh = __pyx_state[4]; __pyx_result.input_temp = __pyx_state[5]; __pyx_result.remove_files = __pyx_state[6]
+ *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.delta_latitude = __pyx_state[2]; __pyx_result.delta_longitude = __pyx_state[3]; __pyx_result.epochs = __pyx_state[4]; __pyx_result.input_data = __pyx_state[5]; __pyx_result.input_geo = __pyx_state[6]; __pyx_result.input_rh = __pyx_state[7]; __pyx_result.input_temp = __pyx_state[8]; __pyx_result.remove_files = __pyx_state[9]
  */
   __Pyx_TraceLine(10,0,__PYX_ERR(1, 10, __pyx_L1_error))
   __Pyx_XDECREF(__pyx_r);
@@ -6887,8 +6914,8 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.delta_latitude = __pyx_state[0]; __pyx_result.delta_longitude = __pyx_state[1]; __pyx_result.input_data = __pyx_state[2]; __pyx_result.input_geo = __pyx_state[3]; __pyx_result.input_rh = __pyx_state[4]; __pyx_result.input_temp = __pyx_state[5]; __pyx_result.remove_files = __pyx_state[6]
- *     if len(__pyx_state) > 7 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.delta_latitude = __pyx_state[2]; __pyx_result.delta_longitude = __pyx_state[3]; __pyx_result.epochs = __pyx_state[4]; __pyx_result.input_data = __pyx_state[5]; __pyx_result.input_geo = __pyx_state[6]; __pyx_result.input_rh = __pyx_state[7]; __pyx_result.input_temp = __pyx_state[8]; __pyx_result.remove_files = __pyx_state[9]
+ *     if len(__pyx_state) > 10 and hasattr(__pyx_result, '__dict__'):
  */
 
 static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct __pyx_obj_6amsimp_5moist_Moist *__pyx_v___pyx_result, PyObject *__pyx_v___pyx_state) {
@@ -6910,9 +6937,9 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
   /* "(tree fragment)":12
  *     return __pyx_result
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):
- *     __pyx_result.delta_latitude = __pyx_state[0]; __pyx_result.delta_longitude = __pyx_state[1]; __pyx_result.input_data = __pyx_state[2]; __pyx_result.input_geo = __pyx_state[3]; __pyx_result.input_rh = __pyx_state[4]; __pyx_result.input_temp = __pyx_state[5]; __pyx_result.remove_files = __pyx_state[6]             # <<<<<<<<<<<<<<
- *     if len(__pyx_state) > 7 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[7])
+ *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.delta_latitude = __pyx_state[2]; __pyx_result.delta_longitude = __pyx_state[3]; __pyx_result.epochs = __pyx_state[4]; __pyx_result.input_data = __pyx_state[5]; __pyx_result.input_geo = __pyx_state[6]; __pyx_result.input_rh = __pyx_state[7]; __pyx_result.input_temp = __pyx_state[8]; __pyx_result.remove_files = __pyx_state[9]             # <<<<<<<<<<<<<<
+ *     if len(__pyx_state) > 10 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[10])
  */
   __Pyx_TraceLine(12,0,__PYX_ERR(1, 12, __pyx_L1_error))
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
@@ -6921,9 +6948,12 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
   }
   __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v___pyx_result->__pyx_base.delta_latitude = __pyx_t_2;
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_7cpython_4bool_bool))))) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.ai);
+  __Pyx_DECREF(((PyObject *)__pyx_v___pyx_result->__pyx_base.ai));
+  __pyx_v___pyx_result->__pyx_base.ai = ((PyBoolObject *)__pyx_t_1);
+  __pyx_t_1 = 0;
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
@@ -6932,12 +6962,39 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v___pyx_result->__pyx_base.delta_longitude = __pyx_t_2;
+  __pyx_v___pyx_result->__pyx_base.data_size = __pyx_t_2;
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
   __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v___pyx_result->__pyx_base.delta_latitude = __pyx_t_2;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v___pyx_result->__pyx_base.delta_longitude = __pyx_t_2;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v___pyx_result->__pyx_base.epochs = __pyx_t_2;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 5, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_7cpython_4bool_bool))))) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
@@ -6949,7 +7006,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 6, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.input_geo);
@@ -6960,7 +7017,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 7, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.input_rh);
@@ -6971,7 +7028,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 5, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 8, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.input_temp);
@@ -6982,7 +7039,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 6, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 9, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_7cpython_4bool_bool))))) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
@@ -6993,9 +7050,9 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
 
   /* "(tree fragment)":13
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):
- *     __pyx_result.delta_latitude = __pyx_state[0]; __pyx_result.delta_longitude = __pyx_state[1]; __pyx_result.input_data = __pyx_state[2]; __pyx_result.input_geo = __pyx_state[3]; __pyx_result.input_rh = __pyx_state[4]; __pyx_result.input_temp = __pyx_state[5]; __pyx_result.remove_files = __pyx_state[6]
- *     if len(__pyx_state) > 7 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[7])
+ *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.delta_latitude = __pyx_state[2]; __pyx_result.delta_longitude = __pyx_state[3]; __pyx_result.epochs = __pyx_state[4]; __pyx_result.input_data = __pyx_state[5]; __pyx_result.input_geo = __pyx_state[6]; __pyx_result.input_rh = __pyx_state[7]; __pyx_result.input_temp = __pyx_state[8]; __pyx_result.remove_files = __pyx_state[9]
+ *     if len(__pyx_state) > 10 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[10])
  */
   __Pyx_TraceLine(13,0,__PYX_ERR(1, 13, __pyx_L1_error))
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
@@ -7003,7 +7060,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     __PYX_ERR(1, 13, __pyx_L1_error)
   }
   __pyx_t_4 = PyTuple_GET_SIZE(__pyx_v___pyx_state); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(1, 13, __pyx_L1_error)
-  __pyx_t_5 = ((__pyx_t_4 > 7) != 0);
+  __pyx_t_5 = ((__pyx_t_4 > 10) != 0);
   if (__pyx_t_5) {
   } else {
     __pyx_t_3 = __pyx_t_5;
@@ -7016,9 +7073,9 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
   if (__pyx_t_3) {
 
     /* "(tree fragment)":14
- *     __pyx_result.delta_latitude = __pyx_state[0]; __pyx_result.delta_longitude = __pyx_state[1]; __pyx_result.input_data = __pyx_state[2]; __pyx_result.input_geo = __pyx_state[3]; __pyx_result.input_rh = __pyx_state[4]; __pyx_result.input_temp = __pyx_state[5]; __pyx_result.remove_files = __pyx_state[6]
- *     if len(__pyx_state) > 7 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[7])             # <<<<<<<<<<<<<<
+ *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.delta_latitude = __pyx_state[2]; __pyx_result.delta_longitude = __pyx_state[3]; __pyx_result.epochs = __pyx_state[4]; __pyx_result.input_data = __pyx_state[5]; __pyx_result.input_geo = __pyx_state[6]; __pyx_result.input_rh = __pyx_state[7]; __pyx_result.input_temp = __pyx_state[8]; __pyx_result.remove_files = __pyx_state[9]
+ *     if len(__pyx_state) > 10 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[10])             # <<<<<<<<<<<<<<
  */
     __Pyx_TraceLine(14,0,__PYX_ERR(1, 14, __pyx_L1_error))
     __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v___pyx_result), __pyx_n_s_dict); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
@@ -7030,7 +7087,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(1, 14, __pyx_L1_error)
     }
-    __pyx_t_7 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 7, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 10, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_9 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
@@ -7052,9 +7109,9 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
 
     /* "(tree fragment)":13
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):
- *     __pyx_result.delta_latitude = __pyx_state[0]; __pyx_result.delta_longitude = __pyx_state[1]; __pyx_result.input_data = __pyx_state[2]; __pyx_result.input_geo = __pyx_state[3]; __pyx_result.input_rh = __pyx_state[4]; __pyx_result.input_temp = __pyx_state[5]; __pyx_result.remove_files = __pyx_state[6]
- *     if len(__pyx_state) > 7 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[7])
+ *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.delta_latitude = __pyx_state[2]; __pyx_result.delta_longitude = __pyx_state[3]; __pyx_result.epochs = __pyx_state[4]; __pyx_result.input_data = __pyx_state[5]; __pyx_result.input_geo = __pyx_state[6]; __pyx_result.input_rh = __pyx_state[7]; __pyx_result.input_temp = __pyx_state[8]; __pyx_result.remove_files = __pyx_state[9]
+ *     if len(__pyx_state) > 10 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[10])
  */
   }
 
@@ -7062,8 +7119,8 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.delta_latitude = __pyx_state[0]; __pyx_result.delta_longitude = __pyx_state[1]; __pyx_result.input_data = __pyx_state[2]; __pyx_result.input_geo = __pyx_state[3]; __pyx_result.input_rh = __pyx_state[4]; __pyx_result.input_temp = __pyx_state[5]; __pyx_result.remove_files = __pyx_state[6]
- *     if len(__pyx_state) > 7 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.delta_latitude = __pyx_state[2]; __pyx_result.delta_longitude = __pyx_state[3]; __pyx_result.epochs = __pyx_state[4]; __pyx_result.input_data = __pyx_state[5]; __pyx_result.input_geo = __pyx_state[6]; __pyx_result.input_rh = __pyx_state[7]; __pyx_result.input_temp = __pyx_state[8]; __pyx_result.remove_files = __pyx_state[9]
+ *     if len(__pyx_state) > 10 and hasattr(__pyx_result, '__dict__'):
  */
 
   /* function exit code */
@@ -9848,7 +9905,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_Format_string_allocated_too_shor, __pyx_k_Format_string_allocated_too_shor, sizeof(__pyx_k_Format_string_allocated_too_shor), 0, 1, 0, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
-  {&__pyx_kp_s_Incompatible_checksums_s_vs_0xf8, __pyx_k_Incompatible_checksums_s_vs_0xf8, sizeof(__pyx_k_Incompatible_checksums_s_vs_0xf8), 0, 0, 1, 0},
+  {&__pyx_kp_s_Incompatible_checksums_s_vs_0x60, __pyx_k_Incompatible_checksums_s_vs_0x60, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x60), 0, 0, 1, 0},
   {&__pyx_n_s_K, __pyx_k_K, sizeof(__pyx_k_K), 0, 0, 1, 1},
   {&__pyx_kp_u_Latitude_phi, __pyx_k_Latitude_phi, sizeof(__pyx_k_Latitude_phi), 0, 1, 0, 0},
   {&__pyx_kp_u_Longitude_lambda, __pyx_k_Longitude_lambda, sizeof(__pyx_k_Longitude_lambda), 0, 1, 0, 0},
@@ -10197,7 +10254,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0xf8d6da6, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0x6014809, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
@@ -10238,7 +10295,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   __pyx_int_21 = PyInt_FromLong(21); if (unlikely(!__pyx_int_21)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_100 = PyInt_FromLong(100); if (unlikely(!__pyx_int_100)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_997 = PyInt_FromLong(997); if (unlikely(!__pyx_int_997)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_260926886 = PyInt_FromLong(260926886L); if (unlikely(!__pyx_int_260926886)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_int_100747273 = PyInt_FromLong(100747273L); if (unlikely(!__pyx_int_100747273)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_neg_1 = PyInt_FromLong(-1); if (unlikely(!__pyx_int_neg_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
@@ -10845,7 +10902,7 @@ if (!__Pyx_RefNanny) {
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0xf8d6da6, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0x6014809, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
@@ -10870,8 +10927,8 @@ if (!__Pyx_RefNanny) {
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.delta_latitude = __pyx_state[0]; __pyx_result.delta_longitude = __pyx_state[1]; __pyx_result.input_data = __pyx_state[2]; __pyx_result.input_geo = __pyx_state[3]; __pyx_result.input_rh = __pyx_state[4]; __pyx_result.input_temp = __pyx_state[5]; __pyx_result.remove_files = __pyx_state[6]
- *     if len(__pyx_state) > 7 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.delta_latitude = __pyx_state[2]; __pyx_result.delta_longitude = __pyx_state[3]; __pyx_result.epochs = __pyx_state[4]; __pyx_result.input_data = __pyx_state[5]; __pyx_result.input_geo = __pyx_state[6]; __pyx_result.input_rh = __pyx_state[7]; __pyx_result.input_temp = __pyx_state[8]; __pyx_result.remove_files = __pyx_state[9]
+ *     if len(__pyx_state) > 10 and hasattr(__pyx_result, '__dict__'):
  */
   __Pyx_TraceLine(11,0,__PYX_ERR(1, 11, __pyx_L1_error))
 
