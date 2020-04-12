@@ -66,7 +66,11 @@ cdef class RNN(Wind):
         cdef date = self.date
         date = date + timedelta(days=-self.data_size)
 
-        for i in range(self.data_size * 4):
+        # Download progresss.
+        max_bar = self.data_size * 4
+        bar = IncrementalBar('Progress', max=max_bar)
+
+        for i in range(max_bar):
             # Define the date in terms of integers.
             day = date.day
             month = date.month
@@ -94,7 +98,7 @@ cdef class RNN(Wind):
             file_url += "initial_conditions.nc"
 
             # Download file.
-            download = wget.download(file_url)
+            download = wget.download(file_url, bar=None)
 
             # Load file.
             data = iris.load(download)
@@ -141,6 +145,9 @@ cdef class RNN(Wind):
             # Remove download file.
             os.remove(download)
 
+            # Increment progress bar.
+            bar.next()
+
         # Convert lists to NumPy arrays.
         # Temperature.
         temperature = np.asarray(T_list)
@@ -148,6 +155,9 @@ cdef class RNN(Wind):
         geopotential_height = np.asarray(geo_list)
         # Relative Humidity.
         relative_humidity = np.asarray(rh_list)
+
+        # Finish bar.
+        bar.finish()
 
         # Output.
         return temperature, geopotential_height, relative_humidity       
