@@ -228,10 +228,11 @@ cdef class RNN(Wind):
         """
         Explain here.
         """
-        dataset = self.standardise_data()[0]
+        input_from_method = self.standardise_data()
 
         # Training / Validation split.
-        split = self.standardise_data()[1]
+        dataset = input_from_method[0]
+        split = input_from_method[1]
 
         # Batch size.
         batch_size = 5
@@ -267,6 +268,7 @@ cdef class RNN(Wind):
 
         # Batch the data.
         # Temperature.
+        print(x_temp_train, y_temp_train)
         temp_train = tf.data.Dataset.from_tensor_slices((x_temp_train, y_temp_train))
         temp_train = temp_train.batch(batch_size).repeat()
         temp_val = tf.data.Dataset.from_tensor_slices((x_temp_val, y_temp_val))
