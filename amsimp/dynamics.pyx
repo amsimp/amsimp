@@ -199,7 +199,7 @@ cdef class RNN(Wind):
 
         # Convert list to NumPy array.
         output = np.asarray(output)
-        output = np.transpose(output, (1, 2, 3, 0))
+        output = np.transpose(output, (1, 2, 3, 4, 0))
 
         return output, split
 
@@ -245,24 +245,24 @@ cdef class RNN(Wind):
         # The dataset is prepared, and sorted.
         # Temperature.
         x_temp_train, y_temp_train = self.format_data(
-            dataset, dataset[:, :, :, 0], 0, split, past_history, future_target
+            dataset, dataset[:, :, :, :, 0], 0, split, past_history, future_target
         )
         x_temp_val, y_temp_val = self.format_data(
-            dataset, dataset[:, :, :, 0], split, None, past_history, future_target
+            dataset, dataset[:, :, :, :, 0], split, None, past_history, future_target
         )
         # Geopotential Height.
         x_geo_train, y_geo_train = self.format_data(
-            dataset, dataset[:, :, :, 1], 0, split, past_history, future_target
+            dataset, dataset[:, :, :, :, 1], 0, split, past_history, future_target
         )
         x_geo_val, y_geo_val = self.format_data(
-            dataset, dataset[:, :, :, 1], split, None, past_history, future_target
+            dataset, dataset[:, :, :, :, 1], split, None, past_history, future_target
         )
         # Geopotential Height.
         x_rh_train, y_rh_train = self.format_data(
-            dataset, dataset[:, :, :, 2], 0, split, past_history, future_target
+            dataset, dataset[:, :, :, :, 2], 0, split, past_history, future_target
         )
         x_rh_val, y_rh_val = self.format_data(
-            dataset, dataset[:, :, :, 2], split, None, past_history, future_target
+            dataset, dataset[:, :, :, :, 2], split, None, past_history, future_target
         )
 
         # Batch the data.
