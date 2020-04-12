@@ -294,7 +294,7 @@ cdef class RNN(Wind):
                                           return_sequences=True,
                                           input_shape=x_temp_train.shape[-2:]))
         temp_model.add(tf.keras.layers.LSTM(16, activation='relu'))
-        temp_model.add(tf.keras.layers.Dense(np.shape(future_target, len_pressure, len_lon)))
+        temp_model.add(tf.keras.layers.Dense(np.shape(future_target, len_pressure, len_lat, len_lon)))
         temp_model.compile(optimizer=tf.keras.optimizers.RMSprop(clipvalue=1.0), loss='mae')
         # Geopotential Height.
         geo_model = tf.keras.models.Sequential()
@@ -302,7 +302,7 @@ cdef class RNN(Wind):
                                           return_sequences=True,
                                           input_shape=x_geo_train.shape[-2:]))
         geo_model.add(tf.keras.layers.LSTM(16, activation='relu'))
-        geo_model.add(tf.keras.layers.Dense(np.shape(future_target, len_pressure, len_lon)))
+        geo_model.add(tf.keras.layers.Dense(np.shape(future_target, len_pressure, len_lat, len_lon)))
         geo_model.compile(optimizer=tf.keras.optimizers.RMSprop(clipvalue=1.0), loss='mae')
         # Relative Humidity.
         rh_model = tf.keras.models.Sequential()
@@ -310,7 +310,7 @@ cdef class RNN(Wind):
                                           return_sequences=True,
                                           input_shape=x_rh_train.shape[-2:]))
         rh_model.add(tf.keras.layers.LSTM(16, activation='relu'))
-        rh_model.add(tf.keras.layers.Dense(np.shape(future_target, len_pressure, len_lon)))
+        rh_model.add(tf.keras.layers.Dense(np.shape(future_target, len_pressure, len_lat, len_lon)))
         rh_model.compile(optimizer=tf.keras.optimizers.RMSprop(clipvalue=1.0), loss='mae')
 
         # Train models.
