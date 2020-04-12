@@ -68,7 +68,7 @@ cdef class RNN(Wind):
 
         # Download progresss.
         max_bar = self.data_size * 4
-        bar = IncrementalBar('Progress', max=max_bar)
+        bar = IncrementalBar('Downloading Historical Data', max=max_bar)
 
         for i in range(max_bar):
             # Define the date in terms of integers.
@@ -125,11 +125,11 @@ cdef class RNN(Wind):
 
             # Redefine NumPy arrays.
             # Temperature.
-            T = config.temperature()
+            T = config.temperature().value
             # Geopotential Height.
-            geo = config.geopotential_height()
+            geo = config.geopotential_height().value
             # Relative Humidity.
-            rh = config.relative_humidity()
+            rh = config.relative_humidity().value
 
             # Append to list.
             # Temperature.
