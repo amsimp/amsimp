@@ -12,6 +12,7 @@ from datetime import timedelta
 import os
 import wget
 import tensorflow as tf
+from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 from matplotlib import style
 import matplotlib.gridspec as gridspec
@@ -38,6 +39,9 @@ cdef class RNN(Wind):
     """
     Detailed explanation.
     """
+
+    # Feature Scaling 
+    sc = MinMaxScaler(feature_range=(0,1))
 
     def download_historical_data(self):
         """
@@ -179,17 +183,11 @@ cdef class RNN(Wind):
 
         # Standardise the data.
         # Temperature.
-        temp_mean = np.mean(temperature[:split])
-        temp_std = np.std(temperature[:split])
-        temperature = (temperature - temp_mean) / temp_std
+        temperature = sc.fit_transform(temperature)
         # Geopotential Height.
-        geo_mean = np.mean(geopotential_height[:split])
-        geo_std = np.mean(geopotential_height[:split])
-        geopotential_height = (geopotential_height - geo_mean) / geo_std
+        geopotential_height = sc.fit_transform(geopotential_height)
         # Relative Humidity.
-        rh_mean = np.mean(relative_humidity[:split])
-        rh_std = np.std(relative_humidity[:split])
-        relative_humidity = (relative_humidity - rh_mean) / rh_std
+        relative_humidity = sc.fit_transform(relative_humidity)
 
         # Join datasets together.
         output = []
@@ -266,24 +264,6 @@ cdef class RNN(Wind):
             dataset, dataset[:, :, :, :, 2], split, None, past_history, future_target
         )
 
-        # Batch the data.
-        # Temperature.
-        print(x_temp_train, y_temp_train)
-        temp_train = tf.data.Dataset.from_tensor_slices((x_temp_train, y_temp_train))
-        temp_train = temp_train.batch(batch_size).repeat()
-        temp_val = tf.data.Dataset.from_tensor_slices((x_temp_val, y_temp_val))
-        temp_val = temp_val.batch(batch_size).repeat()
-        # Geopotential Height.
-        geo_train = tf.data.Dataset.from_tensor_slices((x_geo_train, y_geo_train))
-        geo_train = geo_train.batch(batch_size).repeat()
-        geo_val = tf.data.Dataset.from_tensor_slices((x_geo_val, y_geo_val))
-        geo_val = geo_val.batch(batch_size).repeat()
-        # Relative Humidity.
-        rh_train = tf.data.Dataset.from_tensor_slices((x_rh_train, y_rh_train))
-        rh_train = rh_train.batch(batch_size).repeat()
-        rh_val = tf.data.Dataset.from_tensor_slices((x_rh_val, y_rh_val))
-        rh_val = rh_val.batch(batch_size).repeat()
-
         # Create models
         # Output layer.
         temperature = self.temperature()
@@ -318,15 +298,15 @@ cdef class RNN(Wind):
         # Train models.
         # Temperature.
         temp_history = temp_model.fit(
-            temp_train, epochs=self.epochs, validation_data=temp_val
+            x_temp_train, y_temp_train, epochs=self.epochs, validation_data=(x_temp_val, y_temp_val)
         )
         # Geopotential Height.
         geo_history = geo_model.fit(
-            geo_train, epochs=self.epochs, validation_data=geo_val
+            x_geo_train, y_geo_train, epochs=self.epochs, validation_data=(x_geo_val, y_geo_val)
         )
         # Relative Humidity.
         rh_history = rh_model.fit(
-            rh_train, epochs=self.epochs, validation_data=rh_val
+            x_rh_train, y_rh_train, epochs=self.epochs, validation_data=(x_rh_val, y_rh_val)
         )
 
         return True
