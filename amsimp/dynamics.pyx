@@ -175,6 +175,7 @@ cdef class RNN(Wind):
 
         # Training / Validation split.
         split = np.floor((np.shape(temperature)[0]) * 0.9)
+        split = int(split)
 
         # Standardise the data.
         # Temperature.
