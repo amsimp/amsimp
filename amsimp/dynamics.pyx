@@ -160,17 +160,21 @@ cdef class RNN(Wind):
         bar.finish()
 
         # Output.
-        return temperature, geopotential_height, relative_humidity       
+        output = (temperature, geopotential_height, relative_humidity)
+        return output        
 
     def standardise_data(self):
         """
         Explain here.
         """
         # Define atmospheric parameters.
-        temperature, geopotential_height, relative_humidity = self.download_historical_data()
+        historical_data = self.download_historical_data()
+        temperature = historical_data[0]
+        geopotential_height = historical_data[1]
+        relative_humidity = historical_data[2]
 
         # Training / Validation split.
-        split = np.floor(np.shape(temperature)[0] * 0.9)
+        split = np.floor((np.shape(temperature)[0]) * 0.9)
 
         # Standardise the data.
         # Temperature.
