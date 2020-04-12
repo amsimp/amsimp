@@ -231,7 +231,7 @@ cdef class RNN(Wind):
         dataset = self.standardise_data()[0]
 
         # Training / Validation split.
-        split = self.standardise_data()[0]
+        split = self.standardise_data()[1]
 
         # Batch size.
         batch_size = 5
