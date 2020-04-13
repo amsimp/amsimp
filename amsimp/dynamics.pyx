@@ -130,10 +130,13 @@ cdef class RNN(Wind):
             # Redefine NumPy arrays.
             # Temperature.
             T = config.temperature().value
+            T = T.flatten()
             # Geopotential Height.
             geo = config.geopotential_height().value
+            geo = geo.flatten()
             # Relative Humidity.
             rh = config.relative_humidity().value
+            rh = rh.flatten()
 
             # Append to list.
             # Temperature.
@@ -183,11 +186,11 @@ cdef class RNN(Wind):
 
         # Standardise the data.
         # Temperature.
-        temperature = sc.fit_transform(temperature)
+        temperature = self.sc.fit_transform(temperature)
         # Geopotential Height.
-        geopotential_height = sc.fit_transform(geopotential_height)
+        geopotential_height = self.sc.fit_transform(geopotential_height)
         # Relative Humidity.
-        relative_humidity = sc.fit_transform(relative_humidity)
+        relative_humidity = self.sc.fit_transform(relative_humidity)
 
         # Join datasets together.
         output = []
@@ -197,7 +200,8 @@ cdef class RNN(Wind):
 
         # Convert list to NumPy array.
         output = np.asarray(output)
-        output = np.transpose(output, (1, 2, 3, 4, 0))
+        output = np.transpose(output, (1, 2, 0))
+        print(output.shape)
 
         return output, split
 
