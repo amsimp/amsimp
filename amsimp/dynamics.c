@@ -2699,8 +2699,6 @@ static const char __pyx_k_Pressure_hPa[] = "Pressure (hPa)";
 static const char __pyx_k_RepeatVector[] = "RepeatVector";
 static const char __pyx_k_RuntimeError[] = "RuntimeError";
 static const char __pyx_k_forecast_Pwv[] = "forecast_Pwv";
-static const char __pyx_k_keras_layers[] = "keras.layers";
-static const char __pyx_k_keras_models[] = "keras.models";
 static const char __pyx_k_len_pressure[] = "len_pressure";
 static const char __pyx_k_numpy_random[] = "numpy.random";
 static const char __pyx_k_past_history[] = "past_history";
@@ -2783,6 +2781,8 @@ static const char __pyx_k_initial_conditions_nc[] = "initial_conditions.nc";
 static const char __pyx_k_sklearn_preprocessing[] = "sklearn.preprocessing";
 static const char __pyx_k_astropy_units_quantity[] = "astropy.units.quantity";
 static const char __pyx_k_forecast_reference_time[] = "forecast_reference_time";
+static const char __pyx_k_tensorflow_keras_layers[] = "tensorflow.keras.layers";
+static const char __pyx_k_tensorflow_keras_models[] = "tensorflow.keras.models";
 static const char __pyx_k_Atmospheric_Pressure_Alt[] = "Atmospheric Pressure (Alt = ";
 static const char __pyx_k_Dynamics___reduce_cython[] = "Dynamics.__reduce_cython__";
 static const char __pyx_k_Dynamics_forecast_period[] = "Dynamics.forecast_period";
@@ -3025,8 +3025,6 @@ static PyObject *__pyx_n_s_iris_coords;
 static PyObject *__pyx_n_s_iris_cube;
 static PyObject *__pyx_n_u_jet;
 static PyObject *__pyx_n_s_kPa;
-static PyObject *__pyx_n_s_keras_layers;
-static PyObject *__pyx_n_s_keras_models;
 static PyObject *__pyx_n_s_label;
 static PyObject *__pyx_n_u_lagrangian_tendency_of_air_press;
 static PyObject *__pyx_n_s_lat;
@@ -3193,6 +3191,8 @@ static PyObject *__pyx_n_s_t;
 static PyObject *__pyx_n_s_temp;
 static PyObject *__pyx_n_s_temp_model;
 static PyObject *__pyx_n_s_temperature;
+static PyObject *__pyx_n_s_tensorflow_keras_layers;
+static PyObject *__pyx_n_s_tensorflow_keras_models;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_tick_locator;
 static PyObject *__pyx_n_s_ticker;
@@ -25639,8 +25639,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_iris_cube, __pyx_k_iris_cube, sizeof(__pyx_k_iris_cube), 0, 0, 1, 1},
   {&__pyx_n_u_jet, __pyx_k_jet, sizeof(__pyx_k_jet), 0, 1, 0, 1},
   {&__pyx_n_s_kPa, __pyx_k_kPa, sizeof(__pyx_k_kPa), 0, 0, 1, 1},
-  {&__pyx_n_s_keras_layers, __pyx_k_keras_layers, sizeof(__pyx_k_keras_layers), 0, 0, 1, 1},
-  {&__pyx_n_s_keras_models, __pyx_k_keras_models, sizeof(__pyx_k_keras_models), 0, 0, 1, 1},
   {&__pyx_n_s_label, __pyx_k_label, sizeof(__pyx_k_label), 0, 0, 1, 1},
   {&__pyx_n_u_lagrangian_tendency_of_air_press, __pyx_k_lagrangian_tendency_of_air_press, sizeof(__pyx_k_lagrangian_tendency_of_air_press), 0, 1, 0, 1},
   {&__pyx_n_s_lat, __pyx_k_lat, sizeof(__pyx_k_lat), 0, 0, 1, 1},
@@ -25807,6 +25805,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_temp, __pyx_k_temp, sizeof(__pyx_k_temp), 0, 0, 1, 1},
   {&__pyx_n_s_temp_model, __pyx_k_temp_model, sizeof(__pyx_k_temp_model), 0, 0, 1, 1},
   {&__pyx_n_s_temperature, __pyx_k_temperature, sizeof(__pyx_k_temperature), 0, 0, 1, 1},
+  {&__pyx_n_s_tensorflow_keras_layers, __pyx_k_tensorflow_keras_layers, sizeof(__pyx_k_tensorflow_keras_layers), 0, 0, 1, 1},
+  {&__pyx_n_s_tensorflow_keras_models, __pyx_k_tensorflow_keras_models, sizeof(__pyx_k_tensorflow_keras_models), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_tick_locator, __pyx_k_tick_locator, sizeof(__pyx_k_tick_locator), 0, 0, 1, 1},
   {&__pyx_n_s_ticker, __pyx_k_ticker, sizeof(__pyx_k_ticker), 0, 0, 1, 1},
@@ -26676,7 +26676,7 @@ if (!__Pyx_RefNanny) {
  * import os
  * import wget             # <<<<<<<<<<<<<<
  * from sklearn.preprocessing import MinMaxScaler
- * from keras.models import Sequential
+ * from tensorflow.keras.models import Sequential
  */
   __Pyx_TraceLine(13,0,__PYX_ERR(0, 13, __pyx_L1_error))
   __pyx_t_2 = __Pyx_Import(__pyx_n_s_wget, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 13, __pyx_L1_error)
@@ -26688,8 +26688,8 @@ if (!__Pyx_RefNanny) {
  * import os
  * import wget
  * from sklearn.preprocessing import MinMaxScaler             # <<<<<<<<<<<<<<
- * from keras.models import Sequential
- * from keras.layers import LSTM
+ * from tensorflow.keras.models import Sequential
+ * from tensorflow.keras.layers import LSTM
  */
   __Pyx_TraceLine(14,0,__PYX_ERR(0, 14, __pyx_L1_error))
   __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 14, __pyx_L1_error)
@@ -26709,9 +26709,9 @@ if (!__Pyx_RefNanny) {
   /* "amsimp/dynamics.pyx":15
  * import wget
  * from sklearn.preprocessing import MinMaxScaler
- * from keras.models import Sequential             # <<<<<<<<<<<<<<
- * from keras.layers import LSTM
- * from keras.layers import Dense
+ * from tensorflow.keras.models import Sequential             # <<<<<<<<<<<<<<
+ * from tensorflow.keras.layers import LSTM
+ * from tensorflow.keras.layers import Dense
  */
   __Pyx_TraceLine(15,0,__PYX_ERR(0, 15, __pyx_L1_error))
   __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 15, __pyx_L1_error)
@@ -26719,7 +26719,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_Sequential);
   __Pyx_GIVEREF(__pyx_n_s_Sequential);
   PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_Sequential);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_keras_models, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 15, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_tensorflow_keras_models, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 15, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Sequential); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 15, __pyx_L1_error)
@@ -26730,10 +26730,10 @@ if (!__Pyx_RefNanny) {
 
   /* "amsimp/dynamics.pyx":16
  * from sklearn.preprocessing import MinMaxScaler
- * from keras.models import Sequential
- * from keras.layers import LSTM             # <<<<<<<<<<<<<<
- * from keras.layers import Dense
- * from keras.layers import RepeatVector
+ * from tensorflow.keras.models import Sequential
+ * from tensorflow.keras.layers import LSTM             # <<<<<<<<<<<<<<
+ * from tensorflow.keras.layers import Dense
+ * from tensorflow.keras.layers import RepeatVector
  */
   __Pyx_TraceLine(16,0,__PYX_ERR(0, 16, __pyx_L1_error))
   __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 16, __pyx_L1_error)
@@ -26741,7 +26741,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_LSTM);
   __Pyx_GIVEREF(__pyx_n_s_LSTM);
   PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_LSTM);
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_keras_layers, __pyx_t_2, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_tensorflow_keras_layers, __pyx_t_2, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_LSTM); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 16, __pyx_L1_error)
@@ -26751,11 +26751,11 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "amsimp/dynamics.pyx":17
- * from keras.models import Sequential
- * from keras.layers import LSTM
- * from keras.layers import Dense             # <<<<<<<<<<<<<<
- * from keras.layers import RepeatVector
- * from keras.layers import TimeDistributed
+ * from tensorflow.keras.models import Sequential
+ * from tensorflow.keras.layers import LSTM
+ * from tensorflow.keras.layers import Dense             # <<<<<<<<<<<<<<
+ * from tensorflow.keras.layers import RepeatVector
+ * from tensorflow.keras.layers import TimeDistributed
  */
   __Pyx_TraceLine(17,0,__PYX_ERR(0, 17, __pyx_L1_error))
   __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
@@ -26763,7 +26763,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_Dense);
   __Pyx_GIVEREF(__pyx_n_s_Dense);
   PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_Dense);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_keras_layers, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_tensorflow_keras_layers, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Dense); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
@@ -26773,10 +26773,10 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "amsimp/dynamics.pyx":18
- * from keras.layers import LSTM
- * from keras.layers import Dense
- * from keras.layers import RepeatVector             # <<<<<<<<<<<<<<
- * from keras.layers import TimeDistributed
+ * from tensorflow.keras.layers import LSTM
+ * from tensorflow.keras.layers import Dense
+ * from tensorflow.keras.layers import RepeatVector             # <<<<<<<<<<<<<<
+ * from tensorflow.keras.layers import TimeDistributed
  * import matplotlib.pyplot as plt
  */
   __Pyx_TraceLine(18,0,__PYX_ERR(0, 18, __pyx_L1_error))
@@ -26785,7 +26785,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_RepeatVector);
   __Pyx_GIVEREF(__pyx_n_s_RepeatVector);
   PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_RepeatVector);
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_keras_layers, __pyx_t_2, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 18, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_tensorflow_keras_layers, __pyx_t_2, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 18, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_RepeatVector); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 18, __pyx_L1_error)
@@ -26795,9 +26795,9 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "amsimp/dynamics.pyx":19
- * from keras.layers import Dense
- * from keras.layers import RepeatVector
- * from keras.layers import TimeDistributed             # <<<<<<<<<<<<<<
+ * from tensorflow.keras.layers import Dense
+ * from tensorflow.keras.layers import RepeatVector
+ * from tensorflow.keras.layers import TimeDistributed             # <<<<<<<<<<<<<<
  * import matplotlib.pyplot as plt
  * from matplotlib import style
  */
@@ -26807,7 +26807,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_TimeDistributed);
   __Pyx_GIVEREF(__pyx_n_s_TimeDistributed);
   PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_TimeDistributed);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_keras_layers, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 19, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_tensorflow_keras_layers, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 19, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_TimeDistributed); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 19, __pyx_L1_error)
@@ -26817,8 +26817,8 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "amsimp/dynamics.pyx":20
- * from keras.layers import RepeatVector
- * from keras.layers import TimeDistributed
+ * from tensorflow.keras.layers import RepeatVector
+ * from tensorflow.keras.layers import TimeDistributed
  * import matplotlib.pyplot as plt             # <<<<<<<<<<<<<<
  * from matplotlib import style
  * import matplotlib.gridspec as gridspec
@@ -26836,7 +26836,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "amsimp/dynamics.pyx":21
- * from keras.layers import TimeDistributed
+ * from tensorflow.keras.layers import TimeDistributed
  * import matplotlib.pyplot as plt
  * from matplotlib import style             # <<<<<<<<<<<<<<
  * import matplotlib.gridspec as gridspec

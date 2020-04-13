@@ -12,11 +12,11 @@ from datetime import timedelta
 import os
 import wget
 from sklearn.preprocessing import MinMaxScaler
-from keras.models import Sequential
-from keras.layers import LSTM
-from keras.layers import Dense
-from keras.layers import RepeatVector
-from keras.layers import TimeDistributed
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import RepeatVector
+from tensorflow.keras.layers import TimeDistributed
 import matplotlib.pyplot as plt
 from matplotlib import style
 import matplotlib.gridspec as gridspec
