@@ -51,9 +51,6 @@ cdef class RNN(Wind):
         """
         Explain here.
         """
-        # Setting seed to ensure reproducibility.
-        tf.random.set_seed(13)
-
         # Folder containing historical data on GitHub.
         folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
 
@@ -223,7 +220,7 @@ cdef class RNN(Wind):
             X.append(seq_x)
             y.append(seq_y)
 
-        return array(X), array(y)
+        return np.asarray(X), np.asarray(y)
 
     def model_prediction(self):
         """
@@ -321,9 +318,9 @@ cdef class RNN(Wind):
         predict_geo_input = geopotential_height[-past_history]
         predict_rh_input = relative_humidity[-past_history]
         # Make predictions.
-        predict_temp = model.predict(predict_temp_input, verbose=0)
-        predict_geo = model.predict(predict_geo_input, verbose=0)
-        predict_rh = model.predict(predict_rh_input, verbose=0)
+        predict_temp = temp_model.predict(predict_temp_input, verbose=0)
+        predict_geo = geo_model.predict(predict_geo_input, verbose=0)
+        predict_rh = rh_model.predict(predict_rh_input, verbose=0)
 
         # Invert normalisation.
         predict_temp = self.sc.inverse_transform(predict_temp)
