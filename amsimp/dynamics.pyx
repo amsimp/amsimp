@@ -11,8 +11,12 @@ AMSIMP Dynamics Class. For information about this class is described below.
 from datetime import timedelta
 import os
 import wget
-import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
+from keras.models import Sequential
+from keras.layers import LSTM
+from keras.layers import Dense
+from keras.layers import RepeatVector
+from keras.layers import TimeDistributed
 import matplotlib.pyplot as plt
 from matplotlib import style
 import matplotlib.gridspec as gridspec
@@ -192,128 +196,151 @@ cdef class RNN(Wind):
         # Relative Humidity.
         relative_humidity = self.sc.fit_transform(relative_humidity)
 
-        # Join datasets together.
-        output = []
-        output.append(temperature)
-        output.append(geopotential_height)
-        output.append(relative_humidity)
-
-        # Convert list to NumPy array.
-        output = np.asarray(output)
-        output = np.transpose(output, (1, 2, 0))
-        print(output.shape)
-
+        # Output.
+        output = (temperature, geopotential_height, relative_humidity)
         return output, split
 
-    def format_data(
-        self, dataset, target, start_index, end_index, history_size, target_size
+    def preprocess_data(
+        dataset, past_history, future_target
     ):
         """
         Explain here.
         """
-        data = []
-        labels = []
+        X, y = list(), list()
+        for i in range(len(dataset)):
+            # Find the end.
+            end_ix = i + past_history
+            out_end_ix = end_ix + future_target
+            
+            # Determine if we are beyond the dataset.
+            if out_end_ix > len(dataset):
+                break
+            
+            # Gather the input and output components.
+            seq_x, seq_y = dataset[i:end_ix, :], dataset[end_ix:out_end_ix, :]
 
-        start_index = start_index + history_size
-        if end_index is None:
-            end_index = len(dataset) - target_size
+            # Append to list.
+            X.append(seq_x)
+            y.append(seq_y)
 
-        for i in range(start_index, end_index):
-            indices = range(i-history_size, i, 1)
-            data.append(dataset[indices])
+        return array(X), array(y)
 
-            labels.append(target[i:i+target_size])
-
-        return np.array(data), np.array(labels)
-
-    def model_learning(self):
+    def model_prediction(self):
         """
         Explain here.
         """
+        # Dataset.
         input_from_method = self.standardise_data()
+        dataset = input_from_method[0]
+
+        # Temperature.
+        temperature = dataset[0]
+        # Geopotential Height.
+        geopotential_height = dataset[1]
+        # Relative Humidity.
+        relative_humidity = dataset[2]
 
         # Training / Validation split.
-        dataset = input_from_method[0]
         split = input_from_method[1]
 
         # Batch size.
         batch_size = 5
 
-        # The network is shown data from the last 30 days.
-        past_history = 30 * 4
+        # The network is shown data from the last 15 days.
+        past_history = 15 * 4
 
-        # The network predicts the next 10 days worth of steps.
-        future_target = 10 * 4
+        # The network predicts the next 7 days worth of steps.
+        future_target = 7 * 4
 
-        # The dataset is prepared, and sorted.
+        # The dataset is preprocessed.
         # Temperature.
-        x_temp_train, y_temp_train = self.format_data(
-            dataset, dataset[:, :, :, :, 0], 0, split, past_history, future_target
-        )
-        x_temp_val, y_temp_val = self.format_data(
-            dataset, dataset[:, :, :, :, 0], split, None, past_history, future_target
+        x_temp, y_temp = self.preprocess_data(
+            temperature, past_history, future_target
         )
         # Geopotential Height.
-        x_geo_train, y_geo_train = self.format_data(
-            dataset, dataset[:, :, :, :, 1], 0, split, past_history, future_target
-        )
-        x_geo_val, y_geo_val = self.format_data(
-            dataset, dataset[:, :, :, :, 1], split, None, past_history, future_target
-        )
-        # Geopotential Height.
-        x_rh_train, y_rh_train = self.format_data(
-            dataset, dataset[:, :, :, :, 2], 0, split, past_history, future_target
-        )
-        x_rh_val, y_rh_val = self.format_data(
-            dataset, dataset[:, :, :, :, 2], split, None, past_history, future_target
-        )
-
-        # Create models
-        # Output layer.
-        temperature = self.temperature()
-        len_pressure = len(temperature)
-        len_lat = len(temperature[0])
-        len_lon = len(temperature[0][0])
-        # Temperature.
-        temp_model = tf.keras.models.Sequential()
-        temp_model.add(tf.keras.layers.LSTM(32,
-                                          return_sequences=True,
-                                          input_shape=x_temp_train.shape[-2:]))
-        temp_model.add(tf.keras.layers.LSTM(16, activation='relu'))
-        temp_model.add(tf.keras.layers.Dense(np.shape(future_target, len_pressure, len_lat, len_lon)))
-        temp_model.compile(optimizer=tf.keras.optimizers.RMSprop(clipvalue=1.0), loss='mae')
-        # Geopotential Height.
-        geo_model = tf.keras.models.Sequential()
-        geo_model.add(tf.keras.layers.LSTM(32,
-                                          return_sequences=True,
-                                          input_shape=x_geo_train.shape[-2:]))
-        geo_model.add(tf.keras.layers.LSTM(16, activation='relu'))
-        geo_model.add(tf.keras.layers.Dense(np.shape(future_target, len_pressure, len_lat, len_lon)))
-        geo_model.compile(optimizer=tf.keras.optimizers.RMSprop(clipvalue=1.0), loss='mae')
-        # Relative Humidity.
-        rh_model = tf.keras.models.Sequential()
-        rh_model.add(tf.keras.layers.LSTM(32,
-                                          return_sequences=True,
-                                          input_shape=x_rh_train.shape[-2:]))
-        rh_model.add(tf.keras.layers.LSTM(16, activation='relu'))
-        rh_model.add(tf.keras.layers.Dense(np.shape(future_target, len_pressure, len_lat, len_lon)))
-        rh_model.compile(optimizer=tf.keras.optimizers.RMSprop(clipvalue=1.0), loss='mae')
-
-        # Train models.
-        # Temperature.
-        temp_history = temp_model.fit(
-            x_temp_train, y_temp_train, epochs=self.epochs, validation_data=(x_temp_val, y_temp_val)
-        )
-        # Geopotential Height.
-        geo_history = geo_model.fit(
-            x_geo_train, y_geo_train, epochs=self.epochs, validation_data=(x_geo_val, y_geo_val)
+        x_geo, y_geo = self.preprocess_data(
+            geopotential_height, past_history, future_target
         )
         # Relative Humidity.
-        rh_history = rh_model.fit(
-            x_rh_train, y_rh_train, epochs=self.epochs, validation_data=(x_rh_val, y_rh_val)
+        x_rh, y_rh = self.preprocess_data(
+            relative_humidity, past_history, future_target
         )
 
-        return True
+        # Number of features.
+        features = x_temp.shape[2]
+
+        # Create, and train models.
+        # Temperature model.
+        # Create.
+        temp_model = Sequential()
+        temp_model.add(LSTM(
+            200, activation='relu', input_shape=(past_history, features)
+        ))
+        temp_model.add(RepeatVector(future_target))
+        temp_model.add(LSTM(200, activation='relu', return_sequences=True))
+        temp_model.add(TimeDistributed(Dense(features)))
+        temp_model.compile(optimizer='adam', loss='mse')
+        # Train.
+        temp_model.fit(
+            x_temp, y_temp, epochs=self.epochs, verbose=0, batch_size=batch_size
+        )
+
+        # Geopotential height model.
+        # Create.
+        geo_model = Sequential()
+        geo_model.add(LSTM(
+            200, activation='relu', input_shape=(past_history, features)
+        ))
+        geo_model.add(RepeatVector(future_target))
+        geo_model.add(LSTM(200, activation='relu', return_sequences=True))
+        geo_model.add(TimeDistributed(Dense(features)))
+        geo_model.compile(optimizer='adam', loss='mse')
+        # Train.
+        geo_model.fit(
+            x_geo, y_geo, epochs=self.epochs, verbose=0, batch_size=batch_size
+        )
+
+        # Relative Humidity model.
+        # Create.
+        rh_model = Sequential()
+        rh_model.add(LSTM(
+            200, activation='relu', input_shape=(past_history, features)
+        ))
+        rh_model.add(RepeatVector(future_target))
+        rh_model.add(LSTM(200, activation='relu', return_sequences=True))
+        rh_model.add(TimeDistributed(Dense(features)))
+        rh_model.compile(optimizer='adam', loss='mse')
+        # Train.
+        rh_model.fit(
+            x_rh, y_rh, epochs=self.epochs, verbose=0, batch_size=batch_size
+        )
+
+        # Prediction.
+        # Set up inputs.
+        predict_temp_input = temperature[-past_history]
+        predict_geo_input = geopotential_height[-past_history]
+        predict_rh_input = relative_humidity[-past_history]
+        # Make predictions.
+        predict_temp = model.predict(predict_temp_input, verbose=0)
+        predict_geo = model.predict(predict_geo_input, verbose=0)
+        predict_rh = model.predict(predict_rh_input, verbose=0)
+
+        # Invert normalisation.
+        predict_temp = self.sc.inverse_transform(predict_temp)
+        predict_geo = self.sc.inverse_transform(predict_geo)
+        predict_rh = self.sc.inverse_transform(predict_rh)
+
+        # Reshape into 3d arrays.
+        # Dimensions.
+        len_pressure = len(self.pressure_surfaces())
+        len_lat = len(self.latitude_lines())
+        len_lon = len(self.longitude_lines())
+        # Reshape.
+        predict_temp = predict_temp.reshape(len_pressure, len_lat, len_lon)
+        predict_geo = predict_geo.reshape(len_pressure, len_lat, len_lon)
+        predict_rh = predict_rh.reshape(len_pressure, len_lat, len_lon)
+
+        return predict_temp, predict_geo, predict_rh
 
 cdef class Dynamics(Wind):
     """
