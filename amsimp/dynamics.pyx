@@ -198,7 +198,7 @@ cdef class RNN(Wind):
         return output, split
 
     def preprocess_data(
-        dataset, past_history, future_target
+        self, dataset, past_history, future_target
     ):
         """
         Explain here.
@@ -329,13 +329,14 @@ cdef class RNN(Wind):
 
         # Reshape into 3d arrays.
         # Dimensions.
+        len_time = len(predict_temp)
         len_pressure = len(self.pressure_surfaces())
         len_lat = len(self.latitude_lines())
         len_lon = len(self.longitude_lines())
         # Reshape.
-        predict_temp = predict_temp.reshape(len_pressure, len_lat, len_lon)
-        predict_geo = predict_geo.reshape(len_pressure, len_lat, len_lon)
-        predict_rh = predict_rh.reshape(len_pressure, len_lat, len_lon)
+        predict_temp = predict_temp.reshape(len_time, len_pressure, len_lat, len_lon)
+        predict_geo = predict_geo.reshape(len_time, len_pressure, len_lat, len_lon)
+        predict_rh = predict_rh.reshape(len_time, len_pressure, len_lat, len_lon)
 
         return predict_temp, predict_geo, predict_rh
 
