@@ -381,7 +381,7 @@ cdef class Dynamics(Wind):
     the specified number of forecast days.
     """
 
-    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=31, bool ai=True, bool input_data=False, geo=None, temp=None, rh=None):
+    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, bool input_data=False, geo=None, temp=None, rh=None):
         """
         Defines the length of the forecast (in hours) generated in the simulation.
         This value must be greater than 0, and less than 168 in order
@@ -614,6 +614,13 @@ cdef class Dynamics(Wind):
         # Model runs.
         cdef int model_run = self.models
         cdef int m = 0
+
+        # Prediction from Recurrent Neural Network.
+        prediction_ai = RNN.model_prediction()
+        cdef np.ndarray prediction_ai_temp = prediction_ai[0] * self.units.K
+        cdef np.ndarray prediction_ai_height = prediction_ai[1] * self.units.m
+        cdef np.ndarray prediction_ai_rh = prediction_ai[2] * self.units.percent
+        cdef int iterator_ai = 0
 
         # Define variable types.
         # Numy Arrays.
@@ -872,6 +879,19 @@ cdef class Dynamics(Wind):
                 rh[rh > 100] = 100
                 rh[rh < 0] = 0
                 rh *= self.units.percent
+
+                # Recurrent Neural Network.
+                if self.ai:
+                    # Apply predictions every six hours.
+                    if t != 0 and t % 21600 == 0:
+                        # Temperature. 
+                        T = (T + prediction_ai_temp) / 2
+                        # Relative Humidity.
+                        rh = (rh + prediction_ai_rh) / 2
+                        # Geopotential Height.
+                        height = (height + prediction_ai_height) / 2
+                        # Geopotential.
+                        geo = height * g
                 
                 # Configure the Wind class, so, that it aligns with the
                 # paramaters defined by the user.
@@ -884,6 +904,13 @@ cdef class Dynamics(Wind):
                     temp=T, 
                     rh=rh, 
                 )
+
+                # Recurrent Neural Network.
+                if self.ai:
+                    # Apply predictions every six hours.
+                    if t != 0 and t % 21600 == 0:
+                        # Virtual Temperature.
+                        T_v = self.virtual_temperature()
 
                 # Geostrophic Wind.
                 # Zonal Wind.
@@ -1015,94 +1042,68 @@ cdef class Dynamics(Wind):
         # Convert lists to arrays, and generate the mean forecast.
         # Geopotential Height.
         GeopotentialHeight = np.asarray(HeightList)
-        GeopotentialHeight = np.sum(
-            GeopotentialHeight, axis=0
-        ) / model_run
-        GeopotentialHeight[0] = self.geopotential_height()
+        GeopotentialHeight[:, 0] = self.geopotential_height()
         # Zonal Wind.
         ZonalWind = np.asarray(ZonalList)
-        ZonalWind = np.sum(
-            ZonalWind, axis=0
-        ) / model_run
-        ZonalWind[0] = self.zonal_wind()
+        ZonalWind[:, 0] = self.zonal_wind()
         # Meridional Wind.
         MeridionalWind = np.asarray(MeridionalList)
-        MeridionalWind = np.sum(
-            MeridionalWind, axis=0
-        ) / model_run
-        MeridionalWind[0] = self.meridional_wind()
+        MeridionalWind[:, 0] = self.meridional_wind()
         # Vertical Motion.
         VerticalMotion = np.asarray(VerticalList)
-        VerticalMotion = np.sum(
-            VerticalMotion, axis=0
-        ) / model_run
-        VerticalMotion[0] = self.vertical_motion()
+        VerticalMotion[:, 0] = self.vertical_motion()
         # Static Stability.
         StaticStability = np.asarray(StabilityList)
-        StaticStability = np.sum(
-            StaticStability, axis=0
-        ) / model_run
-        static_stability[0] = self.static_stability()
+        StaticStability[:, 0] = self.static_stability()
         # Air Temperature.
         AirTemperature = np.asarray(TemperatureList)
-        AirTemperature = np.sum(
-            AirTemperature, axis=0
-        ) / model_run
-        AirTemperature[0] = self.temperature()
+        AirTemperature[:, 0] = self.temperature()
         # Virtual Temperature.
         VirtualTemperature = np.asarray(VirtualList)
-        VirtualTemperature = np.sum(
-            VirtualTemperature, axis=0
-        ) / model_run
-        VirtualTemperature[0] = self.virtual_temperature()
+        VirtualTemperature[:, 0] = self.virtual_temperature()
         # Relative Humidity.
         RelativeHumidity = np.asarray(HumidityList)
-        RelativeHumidity = np.sum(
-            RelativeHumidity, axis=0
-        ) / model_run
-        RelativeHumidity[0] = self.relative_humidity()
+        RelativeHumidity[:, 0] = self.relative_humidity()
         # Pressure Thickness.
         Thickness = np.asarray(ThicknessList)
-        Thickness = np.sum(
-            Thickness, axis=0
-        ) / model_run
-        Thickness[0] = self.pressure_thickness(p1=p1, p2=p2)
+        Thickness[:, 0] = self.pressure_thickness(p1=p1, p2=p2)
         # Precipitable Water.
         PrecipitableWater = np.asarray(WaterList)
-        PrecipitableWater = np.sum(
-            PrecipitableWater, axis=0
-        ) / model_run
-        PrecipitableWater[0] = self.precipitable_water()
+        PrecipitableWater[:, 0] = self.precipitable_water()
 
         # Finish progress bar.
         bar.finish()
 
-        # Recurrent Neural Network.
-        if self.ai:
-            pass
-
         # Define the coordinates for the cube. 
+        # Latitude.
         lat = DimCoord(
             self.latitude_lines(),
             standard_name='latitude',
             units='degrees'
         )
+        # Longitude
         lon = DimCoord(
             self.longitude_lines(),
             standard_name='longitude', 
             units='degrees'
         )
+        # Pressure Surfaces.
         p = DimCoord(
             pressure,
             long_name='pressure', 
             units='hPa'
         )
-
-        # Time coordinates.
+        # Time.
         forecast_period = DimCoord(
             time,
             standard_name='forecast_period', 
             units='hours'
+        )
+        # Model number.
+        model_runs = np.linspace(1, self.models, self.models + 1)
+        model_runs = DimCoord(
+            model_runs,
+            standard_name='efs_model', 
         )
 
         # Cubes
@@ -1116,7 +1117,7 @@ cdef class Dynamics(Wind):
             standard_name='geopotential_height',
             units='m',
             dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1129,7 +1130,7 @@ cdef class Dynamics(Wind):
             standard_name='x_wind',
             units='m s-1',
             dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1141,7 +1142,7 @@ cdef class Dynamics(Wind):
             standard_name='y_wind',
             units='m s-1',
             dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1153,7 +1154,7 @@ cdef class Dynamics(Wind):
             standard_name='lagrangian_tendency_of_air_pressure',
             units='hPa s-1',
             dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1165,7 +1166,7 @@ cdef class Dynamics(Wind):
             long_name='static_stability',
             units='J hPa-2 kg-1',
             dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1178,7 +1179,7 @@ cdef class Dynamics(Wind):
             standard_name='air_temperature',
             units='K',
             dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1190,7 +1191,7 @@ cdef class Dynamics(Wind):
             standard_name='virtual_temperature',
             units='K',
             dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1202,7 +1203,7 @@ cdef class Dynamics(Wind):
             standard_name='relative_humidity',
             units='%',
             dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
