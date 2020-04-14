@@ -10880,12 +10880,12 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   /* "amsimp/dynamics.pyx":619
  * 
  *         # Prediction from Recurrent Neural Network.
- *         prediction_ai = RNN.model_prediction()             # <<<<<<<<<<<<<<
+ *         prediction_ai = self.model_prediction()             # <<<<<<<<<<<<<<
  *         cdef np.ndarray prediction_ai_temp = prediction_ai[0] * self.units.K
  *         cdef np.ndarray prediction_ai_height = prediction_ai[1] * self.units.m
  */
   __Pyx_TraceLine(619,0,__PYX_ERR(0, 619, __pyx_L1_error))
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_6amsimp_8dynamics_RNN), __pyx_n_s_model_prediction); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 619, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_model_prediction); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 619, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -10907,7 +10907,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
 
   /* "amsimp/dynamics.pyx":620
  *         # Prediction from Recurrent Neural Network.
- *         prediction_ai = RNN.model_prediction()
+ *         prediction_ai = self.model_prediction()
  *         cdef np.ndarray prediction_ai_temp = prediction_ai[0] * self.units.K             # <<<<<<<<<<<<<<
  *         cdef np.ndarray prediction_ai_height = prediction_ai[1] * self.units.m
  *         cdef np.ndarray prediction_ai_rh = prediction_ai[2] * self.units.percent
@@ -10929,7 +10929,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __pyx_t_4 = 0;
 
   /* "amsimp/dynamics.pyx":621
- *         prediction_ai = RNN.model_prediction()
+ *         prediction_ai = self.model_prediction()
  *         cdef np.ndarray prediction_ai_temp = prediction_ai[0] * self.units.K
  *         cdef np.ndarray prediction_ai_height = prediction_ai[1] * self.units.m             # <<<<<<<<<<<<<<
  *         cdef np.ndarray prediction_ai_rh = prediction_ai[2] * self.units.percent
