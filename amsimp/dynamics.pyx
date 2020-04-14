@@ -340,7 +340,7 @@ cdef class RNN(Wind):
 
         return predict_temp, predict_geo, predict_rh
 
-cdef class Dynamics(Wind):
+cdef class Dynamics(RNN):
     """
     AMSIMP Dynamics Class - Also, known as Motus Aeris @ AMSIMP. This class
     generates rudimentary simulation of tropospheric and stratsopheric
@@ -616,7 +616,7 @@ cdef class Dynamics(Wind):
         cdef int m = 0
 
         # Prediction from Recurrent Neural Network.
-        prediction_ai = RNN.model_prediction()
+        prediction_ai = self.model_prediction()
         cdef np.ndarray prediction_ai_temp = prediction_ai[0] * self.units.K
         cdef np.ndarray prediction_ai_height = prediction_ai[1] * self.units.m
         cdef np.ndarray prediction_ai_rh = prediction_ai[2] * self.units.percent

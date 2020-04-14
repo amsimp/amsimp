@@ -3,7 +3,10 @@ cimport numpy as np
 from amsimp.wind cimport Wind
 from cpython cimport bool
 
-cdef class Dynamics(Wind):
+cdef class RNN(Wind):
+    pass
+
+cdef class Dynamics(RNN):
     cdef forecast_length
     cdef bool efs
     cdef int models
