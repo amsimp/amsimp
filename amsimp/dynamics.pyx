@@ -279,7 +279,7 @@ cdef class RNN(Wind):
         temp_model.compile(optimizer='adam', loss='mse')
         # Train.
         temp_model.fit(
-            x_temp, y_temp, epochs=self.epochs, verbose=0, batch_size=batch_size
+            x_temp, y_temp, epochs=self.epochs, verbose=1, batch_size=batch_size
         )
 
         # Geopotential height model.
@@ -294,7 +294,7 @@ cdef class RNN(Wind):
         geo_model.compile(optimizer='adam', loss='mse')
         # Train.
         geo_model.fit(
-            x_geo, y_geo, epochs=self.epochs, verbose=0, batch_size=batch_size
+            x_geo, y_geo, epochs=self.epochs, verbose=1, batch_size=batch_size
         )
 
         # Relative Humidity model.
@@ -309,7 +309,7 @@ cdef class RNN(Wind):
         rh_model.compile(optimizer='adam', loss='mse')
         # Train.
         rh_model.fit(
-            x_rh, y_rh, epochs=self.epochs, verbose=0, batch_size=batch_size
+            x_rh, y_rh, epochs=self.epochs, verbose=1, batch_size=batch_size
         )
 
         # Prediction.
@@ -318,9 +318,9 @@ cdef class RNN(Wind):
         predict_geo_input = geopotential_height[-past_history]
         predict_rh_input = relative_humidity[-past_history]
         # Make predictions.
-        predict_temp = temp_model.predict(predict_temp_input, verbose=0)
-        predict_geo = geo_model.predict(predict_geo_input, verbose=0)
-        predict_rh = rh_model.predict(predict_rh_input, verbose=0)
+        predict_temp = temp_model.predict(predict_temp_input, verbose=1)
+        predict_geo = geo_model.predict(predict_geo_input, verbose=1)
+        predict_rh = rh_model.predict(predict_rh_input, verbose=1)
 
         # Invert normalisation.
         predict_temp = self.sc.inverse_transform(predict_temp)

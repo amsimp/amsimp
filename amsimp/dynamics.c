@@ -6118,7 +6118,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
  *         temp_model.compile(optimizer='adam', loss='mse')
  *         # Train.
  *         temp_model.fit(             # <<<<<<<<<<<<<<
- *             x_temp, y_temp, epochs=self.epochs, verbose=0, batch_size=batch_size
+ *             x_temp, y_temp, epochs=self.epochs, verbose=1, batch_size=batch_size
  *         )
  */
   __Pyx_TraceLine(281,0,__PYX_ERR(0, 281, __pyx_L1_error))
@@ -6128,7 +6128,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   /* "amsimp/dynamics.pyx":282
  *         # Train.
  *         temp_model.fit(
- *             x_temp, y_temp, epochs=self.epochs, verbose=0, batch_size=batch_size             # <<<<<<<<<<<<<<
+ *             x_temp, y_temp, epochs=self.epochs, verbose=1, batch_size=batch_size             # <<<<<<<<<<<<<<
  *         )
  * 
  */
@@ -6147,7 +6147,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __Pyx_GOTREF(__pyx_t_6);
   if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_epochs, __pyx_t_6) < 0) __PYX_ERR(0, 282, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_verbose, __pyx_int_0) < 0) __PYX_ERR(0, 282, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_verbose, __pyx_int_1) < 0) __PYX_ERR(0, 282, __pyx_L1_error)
   __pyx_t_6 = __Pyx_PyInt_From_long(__pyx_v_batch_size); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 282, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_batch_size, __pyx_t_6) < 0) __PYX_ERR(0, 282, __pyx_L1_error)
@@ -6157,7 +6157,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
  *         temp_model.compile(optimizer='adam', loss='mse')
  *         # Train.
  *         temp_model.fit(             # <<<<<<<<<<<<<<
- *             x_temp, y_temp, epochs=self.epochs, verbose=0, batch_size=batch_size
+ *             x_temp, y_temp, epochs=self.epochs, verbose=1, batch_size=batch_size
  *         )
  */
   __Pyx_TraceLine(281,0,__PYX_ERR(0, 281, __pyx_L1_error))
@@ -6434,7 +6434,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
  *         geo_model.compile(optimizer='adam', loss='mse')
  *         # Train.
  *         geo_model.fit(             # <<<<<<<<<<<<<<
- *             x_geo, y_geo, epochs=self.epochs, verbose=0, batch_size=batch_size
+ *             x_geo, y_geo, epochs=self.epochs, verbose=1, batch_size=batch_size
  *         )
  */
   __Pyx_TraceLine(296,0,__PYX_ERR(0, 296, __pyx_L1_error))
@@ -6444,7 +6444,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   /* "amsimp/dynamics.pyx":297
  *         # Train.
  *         geo_model.fit(
- *             x_geo, y_geo, epochs=self.epochs, verbose=0, batch_size=batch_size             # <<<<<<<<<<<<<<
+ *             x_geo, y_geo, epochs=self.epochs, verbose=1, batch_size=batch_size             # <<<<<<<<<<<<<<
  *         )
  * 
  */
@@ -6463,7 +6463,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __Pyx_GOTREF(__pyx_t_4);
   if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_epochs, __pyx_t_4) < 0) __PYX_ERR(0, 297, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_verbose, __pyx_int_0) < 0) __PYX_ERR(0, 297, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_verbose, __pyx_int_1) < 0) __PYX_ERR(0, 297, __pyx_L1_error)
   __pyx_t_4 = __Pyx_PyInt_From_long(__pyx_v_batch_size); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 297, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_batch_size, __pyx_t_4) < 0) __PYX_ERR(0, 297, __pyx_L1_error)
@@ -6473,7 +6473,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
  *         geo_model.compile(optimizer='adam', loss='mse')
  *         # Train.
  *         geo_model.fit(             # <<<<<<<<<<<<<<
- *             x_geo, y_geo, epochs=self.epochs, verbose=0, batch_size=batch_size
+ *             x_geo, y_geo, epochs=self.epochs, verbose=1, batch_size=batch_size
  *         )
  */
   __Pyx_TraceLine(296,0,__PYX_ERR(0, 296, __pyx_L1_error))
@@ -6750,7 +6750,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
  *         rh_model.compile(optimizer='adam', loss='mse')
  *         # Train.
  *         rh_model.fit(             # <<<<<<<<<<<<<<
- *             x_rh, y_rh, epochs=self.epochs, verbose=0, batch_size=batch_size
+ *             x_rh, y_rh, epochs=self.epochs, verbose=1, batch_size=batch_size
  *         )
  */
   __Pyx_TraceLine(311,0,__PYX_ERR(0, 311, __pyx_L1_error))
@@ -6760,7 +6760,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   /* "amsimp/dynamics.pyx":312
  *         # Train.
  *         rh_model.fit(
- *             x_rh, y_rh, epochs=self.epochs, verbose=0, batch_size=batch_size             # <<<<<<<<<<<<<<
+ *             x_rh, y_rh, epochs=self.epochs, verbose=1, batch_size=batch_size             # <<<<<<<<<<<<<<
  *         )
  * 
  */
@@ -6779,7 +6779,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_epochs, __pyx_t_1) < 0) __PYX_ERR(0, 312, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_verbose, __pyx_int_0) < 0) __PYX_ERR(0, 312, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_verbose, __pyx_int_1) < 0) __PYX_ERR(0, 312, __pyx_L1_error)
   __pyx_t_1 = __Pyx_PyInt_From_long(__pyx_v_batch_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 312, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_batch_size, __pyx_t_1) < 0) __PYX_ERR(0, 312, __pyx_L1_error)
@@ -6789,7 +6789,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
  *         rh_model.compile(optimizer='adam', loss='mse')
  *         # Train.
  *         rh_model.fit(             # <<<<<<<<<<<<<<
- *             x_rh, y_rh, epochs=self.epochs, verbose=0, batch_size=batch_size
+ *             x_rh, y_rh, epochs=self.epochs, verbose=1, batch_size=batch_size
  *         )
  */
   __Pyx_TraceLine(311,0,__PYX_ERR(0, 311, __pyx_L1_error))
@@ -6837,7 +6837,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
  *         predict_geo_input = geopotential_height[-past_history]
  *         predict_rh_input = relative_humidity[-past_history]             # <<<<<<<<<<<<<<
  *         # Make predictions.
- *         predict_temp = temp_model.predict(predict_temp_input, verbose=0)
+ *         predict_temp = temp_model.predict(predict_temp_input, verbose=1)
  */
   __Pyx_TraceLine(319,0,__PYX_ERR(0, 319, __pyx_L1_error))
   __pyx_t_1 = PyNumber_Negative(__pyx_v_past_history); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 319, __pyx_L1_error)
@@ -6851,9 +6851,9 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   /* "amsimp/dynamics.pyx":321
  *         predict_rh_input = relative_humidity[-past_history]
  *         # Make predictions.
- *         predict_temp = temp_model.predict(predict_temp_input, verbose=0)             # <<<<<<<<<<<<<<
- *         predict_geo = geo_model.predict(predict_geo_input, verbose=0)
- *         predict_rh = rh_model.predict(predict_rh_input, verbose=0)
+ *         predict_temp = temp_model.predict(predict_temp_input, verbose=1)             # <<<<<<<<<<<<<<
+ *         predict_geo = geo_model.predict(predict_geo_input, verbose=1)
+ *         predict_rh = rh_model.predict(predict_rh_input, verbose=1)
  */
   __Pyx_TraceLine(321,0,__PYX_ERR(0, 321, __pyx_L1_error))
   __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_temp_model, __pyx_n_s_predict); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 321, __pyx_L1_error)
@@ -6865,7 +6865,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_predict_temp_input);
   __pyx_t_6 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 321, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_verbose, __pyx_int_0) < 0) __PYX_ERR(0, 321, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_verbose, __pyx_int_1) < 0) __PYX_ERR(0, 321, __pyx_L1_error)
   __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_1, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 321, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -6876,9 +6876,9 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
 
   /* "amsimp/dynamics.pyx":322
  *         # Make predictions.
- *         predict_temp = temp_model.predict(predict_temp_input, verbose=0)
- *         predict_geo = geo_model.predict(predict_geo_input, verbose=0)             # <<<<<<<<<<<<<<
- *         predict_rh = rh_model.predict(predict_rh_input, verbose=0)
+ *         predict_temp = temp_model.predict(predict_temp_input, verbose=1)
+ *         predict_geo = geo_model.predict(predict_geo_input, verbose=1)             # <<<<<<<<<<<<<<
+ *         predict_rh = rh_model.predict(predict_rh_input, verbose=1)
  * 
  */
   __Pyx_TraceLine(322,0,__PYX_ERR(0, 322, __pyx_L1_error))
@@ -6891,7 +6891,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_predict_geo_input);
   __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 322, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_verbose, __pyx_int_0) < 0) __PYX_ERR(0, 322, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_verbose, __pyx_int_1) < 0) __PYX_ERR(0, 322, __pyx_L1_error)
   __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 322, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -6901,9 +6901,9 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __pyx_t_4 = 0;
 
   /* "amsimp/dynamics.pyx":323
- *         predict_temp = temp_model.predict(predict_temp_input, verbose=0)
- *         predict_geo = geo_model.predict(predict_geo_input, verbose=0)
- *         predict_rh = rh_model.predict(predict_rh_input, verbose=0)             # <<<<<<<<<<<<<<
+ *         predict_temp = temp_model.predict(predict_temp_input, verbose=1)
+ *         predict_geo = geo_model.predict(predict_geo_input, verbose=1)
+ *         predict_rh = rh_model.predict(predict_rh_input, verbose=1)             # <<<<<<<<<<<<<<
  * 
  *         # Invert normalisation.
  */
@@ -6917,7 +6917,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_predict_rh_input);
   __pyx_t_6 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 323, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_verbose, __pyx_int_0) < 0) __PYX_ERR(0, 323, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_verbose, __pyx_int_1) < 0) __PYX_ERR(0, 323, __pyx_L1_error)
   __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_1, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 323, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
