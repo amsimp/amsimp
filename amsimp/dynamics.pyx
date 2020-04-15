@@ -261,7 +261,7 @@ cdef class RNN(Wind):
 
         # Create, and train models.
         # Optimiser.
-        opt = Adam(lr=1e-1, decay=1e-3)
+        opt = Adam(lr=1e-3, decay=1e-5)
         # Temperature model.
         # Create.
         temp_model = Sequential()
@@ -270,7 +270,7 @@ cdef class RNN(Wind):
         ))
         temp_model.add(RepeatVector(future_target))
         temp_model.add(LSTM(200, activation='relu', return_sequences=True))
-        temp_model.add(TimeDistributed(Dense(features)))
+        temp_model.add(TimeDistributed(Dense(features, activation='softmax')))
         temp_model.compile(optimizer=opt, loss='mse', metrics=['accuracy'])
         # Train.
         temp_model.fit(
@@ -285,7 +285,7 @@ cdef class RNN(Wind):
         ))
         geo_model.add(RepeatVector(future_target))
         geo_model.add(LSTM(200, activation='relu', return_sequences=True))
-        geo_model.add(TimeDistributed(Dense(features)))
+        geo_model.add(TimeDistributed(Dense(features, activation='softmax')))
         geo_model.compile(optimizer=opt, loss='mse', metrics=['accuracy'])
         # Train.
         geo_model.fit(
@@ -300,7 +300,7 @@ cdef class RNN(Wind):
         ))
         rh_model.add(RepeatVector(future_target))
         rh_model.add(LSTM(200, activation='relu', return_sequences=True))
-        rh_model.add(TimeDistributed(Dense(features)))
+        rh_model.add(TimeDistributed(Dense(features, activation='softmax')))
         rh_model.compile(optimizer=opt, loss='mse', metrics=['accuracy'])
         # Train.
         rh_model.fit(
