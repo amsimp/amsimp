@@ -181,10 +181,6 @@ cdef class RNN(Wind):
         geopotential_height = historical_data[1]
         relative_humidity = historical_data[2]
 
-        # Training / Validation split.
-        split = np.floor((np.shape(temperature)[0]) * 0.9)
-        split = int(split)
-
         # Standardise the data.
         # Temperature.
         temperature = self.sc.fit_transform(temperature)
@@ -195,7 +191,7 @@ cdef class RNN(Wind):
 
         # Output.
         output = (temperature, geopotential_height, relative_humidity)
-        return output, split
+        return output
 
     def preprocess_data(
         self, dataset, past_history, future_target
@@ -227,8 +223,7 @@ cdef class RNN(Wind):
         Explain here.
         """
         # Dataset.
-        input_from_method = self.standardise_data()
-        dataset = input_from_method[0]
+        dataset = self.standardise_data()
 
         # Temperature.
         temperature = dataset[0]
@@ -236,9 +231,6 @@ cdef class RNN(Wind):
         geopotential_height = dataset[1]
         # Relative Humidity.
         relative_humidity = dataset[2]
-
-        # Training / Validation split.
-        split = input_from_method[1]
 
         # Batch size.
         batch_size = 5
