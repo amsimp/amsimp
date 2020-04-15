@@ -233,9 +233,6 @@ cdef class RNN(Wind):
         # Relative Humidity.
         relative_humidity = dataset[2]
 
-        # Batch size.
-        batch_size = 5
-
         # The network is shown data from the last 15 days.
         past_history = 15 * 4
 
@@ -261,7 +258,7 @@ cdef class RNN(Wind):
 
         # Create, and train models.
         # Optimiser.
-        opt = Adam(lr=1e-3, decay=1e-5)
+        opt = Adam(lr=1e-4, decay=1e-6)
         # Temperature model.
         # Create.
         temp_model = Sequential()
@@ -271,10 +268,10 @@ cdef class RNN(Wind):
         temp_model.add(RepeatVector(future_target))
         temp_model.add(LSTM(200, activation='relu', return_sequences=True))
         temp_model.add(TimeDistributed(Dense(features)))
-        temp_model.compile(optimizer=opt, loss='mse', metrics=['accuracy'])
+        temp_model.compile(optimizer=opt, loss='mse', metrics=['mape'])
         # Train.
         temp_model.fit(
-            x_temp, y_temp, epochs=self.epochs, batch_size=batch_size
+            x_temp, y_temp, epochs=self.epochs
         )
 
         # Geopotential height model.
@@ -286,10 +283,10 @@ cdef class RNN(Wind):
         geo_model.add(RepeatVector(future_target))
         geo_model.add(LSTM(200, activation='relu', return_sequences=True))
         geo_model.add(TimeDistributed(Dense(features)))
-        geo_model.compile(optimizer=opt, loss='mse', metrics=['accuracy'])
+        geo_model.compile(optimizer=opt, loss='mse', metrics=['mape'])
         # Train.
         geo_model.fit(
-            x_geo, y_geo, epochs=self.epochs, batch_size=batch_size
+            x_geo, y_geo, epochs=self.epochs
         )
 
         # Relative Humidity model.
@@ -301,10 +298,10 @@ cdef class RNN(Wind):
         rh_model.add(RepeatVector(future_target))
         rh_model.add(LSTM(200, activation='relu', return_sequences=True))
         rh_model.add(TimeDistributed(Dense(features)))
-        rh_model.compile(optimizer=opt, loss='mse', metrics=['accuracy'])
+        rh_model.compile(optimizer=opt, loss='mse', metrics=['mape'])
         # Train.
         rh_model.fit(
-            x_rh, y_rh, epochs=self.epochs, batch_size=batch_size
+            x_rh, y_rh, epochs=self.epochs
         )
 
         # Prediction.
