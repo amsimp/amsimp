@@ -17,6 +17,7 @@ from tensorflow.keras.layers import LSTM
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import RepeatVector
 from tensorflow.keras.layers import TimeDistributed
+from tensorflow.keras.optimizers import Adam
 import matplotlib.pyplot as plt
 from matplotlib import style
 import matplotlib.gridspec as gridspec
@@ -259,6 +260,8 @@ cdef class RNN(Wind):
         features = x_temp.shape[2]
 
         # Create, and train models.
+        # Optimiser.
+        opt = Adam(lr=1e-5, decay=1e-7)
         # Temperature model.
         # Create.
         temp_model = Sequential()
@@ -268,7 +271,7 @@ cdef class RNN(Wind):
         temp_model.add(RepeatVector(future_target))
         temp_model.add(LSTM(200, activation='relu', return_sequences=True))
         temp_model.add(TimeDistributed(Dense(features)))
-        temp_model.compile(optimizer='adam', loss='mse')
+        temp_model.compile(optimizer=opt, loss='mse')
         # Train.
         temp_model.fit(
             x_temp, y_temp, epochs=self.epochs, batch_size=batch_size
@@ -283,7 +286,7 @@ cdef class RNN(Wind):
         geo_model.add(RepeatVector(future_target))
         geo_model.add(LSTM(200, activation='relu', return_sequences=True))
         geo_model.add(TimeDistributed(Dense(features)))
-        geo_model.compile(optimizer='adam', loss='mse')
+        geo_model.compile(optimizer=opt, loss='mse')
         # Train.
         geo_model.fit(
             x_geo, y_geo, epochs=self.epochs, batch_size=batch_size
@@ -298,7 +301,7 @@ cdef class RNN(Wind):
         rh_model.add(RepeatVector(future_target))
         rh_model.add(LSTM(200, activation='relu', return_sequences=True))
         rh_model.add(TimeDistributed(Dense(features)))
-        rh_model.compile(optimizer='adam', loss='mse')
+        rh_model.compile(optimizer=opt, loss='mse')
         # Train.
         rh_model.fit(
             x_rh, y_rh, epochs=self.epochs, batch_size=batch_size
