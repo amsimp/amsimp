@@ -11,7 +11,6 @@ AMSIMP Dynamics Class. For information about this class is described below.
 from datetime import timedelta
 import os
 import wget
-from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM
 from tensorflow.keras.layers import Dense
@@ -44,9 +43,6 @@ cdef class RNN(Wind):
     """
     Detailed explanation.
     """
-
-    # Feature Scaling 
-    sc = MinMaxScaler(feature_range=(0,1))
 
     def download_historical_data(self):
         """
@@ -170,28 +166,6 @@ cdef class RNN(Wind):
 
         # Output.
         output = (temperature, geopotential_height, relative_humidity)
-        return output        
-
-    def standardise_data(self):
-        """
-        Explain here.
-        """
-        # Define atmospheric parameters.
-        historical_data = self.download_historical_data()
-        temperature = historical_data[0]
-        geopotential_height = historical_data[1]
-        relative_humidity = historical_data[2]
-
-        # Standardise the data.
-        # Temperature.
-        temperature = self.sc.fit_transform(temperature)
-        # Geopotential Height.
-        geopotential_height = self.sc.fit_transform(geopotential_height)
-        # Relative Humidity.
-        relative_humidity = self.sc.fit_transform(relative_humidity)
-
-        # Output.
-        output = (temperature, geopotential_height, relative_humidity)
         return output
 
     def preprocess_data(
@@ -224,7 +198,7 @@ cdef class RNN(Wind):
         Explain here.
         """
         # Dataset.
-        dataset = self.standardise_data()
+        dataset = self.download_historical_data()
 
         # Temperature.
         temperature = dataset[0]
@@ -270,7 +244,7 @@ cdef class RNN(Wind):
         ))
         temp_model.add(RepeatVector(future_target))
         temp_model.add(LSTM(200, activation='relu', return_sequences=True))
-        temp_model.add(TimeDistributed(Dense(features, activation='softmax')))
+        temp_model.add(TimeDistributed(Dense(features)))
         temp_model.compile(optimizer=opt, loss='mse', metrics=['accuracy'])
         # Train.
         temp_model.fit(
@@ -285,7 +259,7 @@ cdef class RNN(Wind):
         ))
         geo_model.add(RepeatVector(future_target))
         geo_model.add(LSTM(200, activation='relu', return_sequences=True))
-        geo_model.add(TimeDistributed(Dense(features, activation='softmax')))
+        geo_model.add(TimeDistributed(Dense(features)))
         geo_model.compile(optimizer=opt, loss='mse', metrics=['accuracy'])
         # Train.
         geo_model.fit(
@@ -300,7 +274,7 @@ cdef class RNN(Wind):
         ))
         rh_model.add(RepeatVector(future_target))
         rh_model.add(LSTM(200, activation='relu', return_sequences=True))
-        rh_model.add(TimeDistributed(Dense(features, activation='softmax')))
+        rh_model.add(TimeDistributed(Dense(features)))
         rh_model.compile(optimizer=opt, loss='mse', metrics=['accuracy'])
         # Train.
         rh_model.fit(
@@ -316,11 +290,6 @@ cdef class RNN(Wind):
         predict_temp = temp_model.predict(predict_temp_input)
         predict_geo = geo_model.predict(predict_geo_input)
         predict_rh = rh_model.predict(predict_rh_input)
-
-        # Invert normalisation.
-        predict_temp = self.sc.inverse_transform(predict_temp)
-        predict_geo = self.sc.inverse_transform(predict_geo)
-        predict_rh = self.sc.inverse_transform(predict_rh)
 
         # Reshape into 3d arrays.
         # Dimensions.
