@@ -261,7 +261,7 @@ cdef class RNN(Wind):
 
         # Create, and train models.
         # Optimiser.
-        opt = Adam(lr=1e-5, decay=1e-7)
+        opt = Adam(lr=1e-3, decay=1e-5)
         # Temperature model.
         # Create.
         temp_model = Sequential()
