@@ -3246,8 +3246,8 @@ static PyObject *__pyx_float_7_5;
 static PyObject *__pyx_float_0_01;
 static PyObject *__pyx_float_0_99;
 static PyObject *__pyx_float_18_5;
-static PyObject *__pyx_float_1eneg_4;
-static PyObject *__pyx_float_1eneg_6;
+static PyObject *__pyx_float_1eneg_5;
+static PyObject *__pyx_float_1eneg_7;
 static PyObject *__pyx_float_0_105;
 static PyObject *__pyx_float_0_340;
 static PyObject *__pyx_float_0_905;
@@ -5737,7 +5737,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   /* "amsimp/dynamics.pyx":261
  *         # Create, and train models.
  *         # Optimiser.
- *         opt = Adam(lr=1e-4, decay=1e-6)             # <<<<<<<<<<<<<<
+ *         opt = Adam(lr=1e-5, decay=1e-7)             # <<<<<<<<<<<<<<
  *         # Temperature model.
  *         # Create.
  */
@@ -5746,8 +5746,8 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 261, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_lr, __pyx_float_1eneg_4) < 0) __PYX_ERR(0, 261, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_decay, __pyx_float_1eneg_6) < 0) __PYX_ERR(0, 261, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_lr, __pyx_float_1eneg_5) < 0) __PYX_ERR(0, 261, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_decay, __pyx_float_1eneg_7) < 0) __PYX_ERR(0, 261, __pyx_L1_error)
   __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_empty_tuple, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 261, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -26070,8 +26070,8 @@ static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   __pyx_float_0_01 = PyFloat_FromDouble(0.01); if (unlikely(!__pyx_float_0_01)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_0_99 = PyFloat_FromDouble(0.99); if (unlikely(!__pyx_float_0_99)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_18_5 = PyFloat_FromDouble(18.5); if (unlikely(!__pyx_float_18_5)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_float_1eneg_4 = PyFloat_FromDouble(1e-4); if (unlikely(!__pyx_float_1eneg_4)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_float_1eneg_6 = PyFloat_FromDouble(1e-6); if (unlikely(!__pyx_float_1eneg_6)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_float_1eneg_5 = PyFloat_FromDouble(1e-5); if (unlikely(!__pyx_float_1eneg_5)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_float_1eneg_7 = PyFloat_FromDouble(1e-7); if (unlikely(!__pyx_float_1eneg_7)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_0_105 = PyFloat_FromDouble(0.105); if (unlikely(!__pyx_float_0_105)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_0_340 = PyFloat_FromDouble(0.340); if (unlikely(!__pyx_float_0_340)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_0_905 = PyFloat_FromDouble(0.905); if (unlikely(!__pyx_float_0_905)) __PYX_ERR(0, 1, __pyx_L1_error)
