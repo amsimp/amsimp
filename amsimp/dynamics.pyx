@@ -271,7 +271,7 @@ cdef class RNN(Wind):
         temp_model.compile(optimizer=opt, loss='mean_absolute_error', metrics=['mse'])
         # Train.
         temp_model.fit(
-            x_temp, y_temp, epochs=self.epochs
+            x_temp, y_temp, epochs=self.epochs, batch_size=5
         )
 
         # Geopotential height model.
@@ -286,7 +286,7 @@ cdef class RNN(Wind):
         geo_model.compile(optimizer=opt, loss='mean_absolute_error', metrics=['mse'])
         # Train.
         geo_model.fit(
-            x_geo, y_geo, epochs=self.epochs
+            x_geo, y_geo, epochs=self.epochs, batch_size=5
         )
 
         # Relative Humidity model.
@@ -301,7 +301,7 @@ cdef class RNN(Wind):
         rh_model.compile(optimizer=opt, loss='mean_absolute_error', metrics=['mse'])
         # Train.
         rh_model.fit(
-            x_rh, y_rh, epochs=self.epochs
+            x_rh, y_rh, epochs=self.epochs, batch_size=5
         )
 
         # Prediction.

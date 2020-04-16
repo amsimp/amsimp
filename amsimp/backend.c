@@ -2902,7 +2902,6 @@ static PyObject *__pyx_int_26;
 static PyObject *__pyx_int_31;
 static PyObject *__pyx_int_33;
 static PyObject *__pyx_int_34;
-static PyObject *__pyx_int_60;
 static PyObject *__pyx_int_72;
 static PyObject *__pyx_int_80;
 static PyObject *__pyx_int_89;
@@ -2991,7 +2990,7 @@ static PyObject *__pyx_codeobj__45;
 /* "amsimp/backend.pyx":136
  *     remove_psurfaces = [23, 26, 33]
  * 
- *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=60, epochs=100, bool input_data=False, geo=None, temp=None, rh=None):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=100, epochs=100, bool input_data=False, geo=None, temp=None, rh=None):             # <<<<<<<<<<<<<<
  *         """
  *         The parameters, delta_latitude and delta_longitude, defines the
  */
@@ -3022,7 +3021,7 @@ static int __pyx_pw_6amsimp_7backend_7Backend_1__cinit__(PyObject *__pyx_v_self,
     values[3] = ((PyObject *)__pyx_int_72);
     values[4] = (PyObject *)((PyBoolObject *)Py_True);
     values[6] = (PyObject *)((PyBoolObject *)Py_True);
-    values[7] = ((PyObject *)__pyx_int_60);
+    values[7] = ((PyObject *)__pyx_int_100);
     values[8] = ((PyObject *)__pyx_int_100);
     values[9] = (PyObject *)((PyBoolObject *)Py_False);
     values[10] = ((PyObject *)Py_None);
@@ -3637,7 +3636,7 @@ static PyObject *__pyx_pf_6amsimp_7backend_7Backend_9__cinit___2is_connected(CYT
 /* "amsimp/backend.pyx":136
  *     remove_psurfaces = [23, 26, 33]
  * 
- *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=60, epochs=100, bool input_data=False, geo=None, temp=None, rh=None):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=100, epochs=100, bool input_data=False, geo=None, temp=None, rh=None):             # <<<<<<<<<<<<<<
  *         """
  *         The parameters, delta_latitude and delta_longitude, defines the
  */
@@ -4668,7 +4667,7 @@ static int __pyx_pf_6amsimp_7backend_7Backend___cinit__(struct __pyx_obj_6amsimp
   /* "amsimp/backend.pyx":136
  *     remove_psurfaces = [23, 26, 33]
  * 
- *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=60, epochs=100, bool input_data=False, geo=None, temp=None, rh=None):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=100, epochs=100, bool input_data=False, geo=None, temp=None, rh=None):             # <<<<<<<<<<<<<<
  *         """
  *         The parameters, delta_latitude and delta_longitude, defines the
  */
@@ -24452,7 +24451,6 @@ static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   __pyx_int_31 = PyInt_FromLong(31); if (unlikely(!__pyx_int_31)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_33 = PyInt_FromLong(33); if (unlikely(!__pyx_int_33)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_34 = PyInt_FromLong(34); if (unlikely(!__pyx_int_34)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_60 = PyInt_FromLong(60); if (unlikely(!__pyx_int_60)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_72 = PyInt_FromLong(72); if (unlikely(!__pyx_int_72)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_80 = PyInt_FromLong(80); if (unlikely(!__pyx_int_80)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_89 = PyInt_FromLong(89); if (unlikely(!__pyx_int_89)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -25673,7 +25671,7 @@ if (!__Pyx_RefNanny) {
  *     # geopotential height array.
  *     remove_psurfaces = [23, 26, 33]             # <<<<<<<<<<<<<<
  * 
- *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=60, epochs=100, bool input_data=False, geo=None, temp=None, rh=None):
+ *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=100, epochs=100, bool input_data=False, geo=None, temp=None, rh=None):
  */
   __Pyx_TraceLine(134,0,__PYX_ERR(0, 134, __pyx_L1_error))
   __pyx_t_3 = PyList_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 134, __pyx_L1_error)

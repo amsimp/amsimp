@@ -133,7 +133,7 @@ cdef class Backend:
     # geopotential height array.
     remove_psurfaces = [23, 26, 33]
 
-    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=60, epochs=100, bool input_data=False, geo=None, temp=None, rh=None):
+    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=100, epochs=100, bool input_data=False, geo=None, temp=None, rh=None):
         """
         The parameters, delta_latitude and delta_longitude, defines the
         horizontal resolution between grid points within the software. The
