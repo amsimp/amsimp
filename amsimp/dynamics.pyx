@@ -263,15 +263,15 @@ cdef class RNN(Wind):
         # Temperature model.
         # Create.
         temp_model = Sequential()
-        temp_model.add(Bidirectional(
+        temp_model.add(
             LSTM(
                 400, activation='relu', input_shape=(past_history, features)
             )
-        ))
+        )
         temp_model.add(RepeatVector(future_target))
-        temp_model.add(Bidirectional(LSTM(400, activation='relu', return_sequences=True)))
-        temp_model.add(Bidirectional(LSTM(400, activation='relu', return_sequences=True)))
-        temp_model.add(Bidirectional(LSTM(400, activation='relu', return_sequences=True)))
+        temp_model.add(LSTM(400, activation='relu', return_sequences=True))
+        temp_model.add(LSTM(400, activation='relu', return_sequences=True))
+        temp_model.add(LSTM(400, activation='relu', return_sequences=True))
         temp_model.add(TimeDistributed(Dense(features)))
         temp_model.compile(optimizer=opt_temp, loss='mean_absolute_error', metrics=['mse'])
         # Train.
@@ -284,15 +284,15 @@ cdef class RNN(Wind):
         # Geopotential height model.
         # Create.
         geo_model = Sequential()
-        geo_model.add(Bidirectional(
+        geo_model.add(
             LSTM(
                 400, activation='relu', input_shape=(past_history, features)
             )
-        ))
+        )
         geo_model.add(RepeatVector(future_target))
-        geo_model.add(Bidirectional(LSTM(400, activation='relu', return_sequences=True)))
-        geo_model.add(Bidirectional(LSTM(400, activation='relu', return_sequences=True)))
-        geo_model.add(Bidirectional(LSTM(400, activation='relu', return_sequences=True)))
+        geo_model.add(LSTM(400, activation='relu', return_sequences=True))
+        geo_model.add(LSTM(400, activation='relu', return_sequences=True))
+        geo_model.add(LSTM(400, activation='relu', return_sequences=True))
         geo_model.add(TimeDistributed(Dense(features)))
         geo_model.compile(optimizer=opt_geo, loss='mean_absolute_error', metrics=['mse'])
         # Train.
@@ -305,15 +305,15 @@ cdef class RNN(Wind):
         # Relative Humidity model.
         # Create.
         rh_model = Sequential()
-        rh_model.add(Bidirectional(
+        rh_model.add(
             LSTM(
                 400, activation='relu', input_shape=(past_history, features)
             )
-        ))
+        )
         rh_model.add(RepeatVector(future_target))
-        rh_model.add(Bidirectional(LSTM(400, activation='relu', return_sequences=True)))
-        rh_model.add(Bidirectional(LSTM(400, activation='relu', return_sequences=True)))
-        rh_model.add(Bidirectional(LSTM(400, activation='relu', return_sequences=True)))
+        rh_model.add(LSTM(400, activation='relu', return_sequences=True))
+        rh_model.add(LSTM(400, activation='relu', return_sequences=True))
+        rh_model.add(LSTM(400, activation='relu', return_sequences=True))
         rh_model.add(TimeDistributed(Dense(features)))
         rh_model.compile(optimizer=opt_rh, loss='mean_absolute_error', metrics=['mse'])
         # Train.
