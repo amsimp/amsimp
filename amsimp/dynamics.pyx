@@ -258,7 +258,7 @@ cdef class RNN(Wind):
 
         # Create, and train models.
         # Optimiser.
-        opt_temp = Adam(lr=1e-5, decay=1e-10)
+        opt_temp = Adam(lr=5e-5, decay=1e-7)
         # Temperature model.
         # Create.
         temp_model = Sequential()
@@ -271,11 +271,11 @@ cdef class RNN(Wind):
         temp_model.compile(optimizer=opt_temp, loss='mean_absolute_error', metrics=['mse'])
         # Train.
         temp_model.fit(
-            x_temp, y_temp, epochs=self.epochs, batch_size=20
+            x_temp, y_temp, epochs=self.epochs
         )
 
         # Optimiser.
-        opt_geo = Adam(lr=1e-7, decay=1e-12)
+        opt_geo = Adam(lr=5e-7, decay=1e-12)
         # Geopotential height model.
         # Create.
         geo_model = Sequential()
@@ -288,11 +288,11 @@ cdef class RNN(Wind):
         geo_model.compile(optimizer=opt_geo, loss='mean_absolute_error', metrics=['mse'])
         # Train.
         geo_model.fit(
-            x_geo, y_geo, epochs=self.epochs, batch_size=20
+            x_geo, y_geo, epochs=self.epochs
         )
         
         # Optimiser.
-        opt_rh = Adam(lr=1e-5, decay=1e-10)
+        opt_rh = Adam(lr=5e-5, decay=1e-7)
         # Relative Humidity model.
         # Create.
         rh_model = Sequential()
@@ -305,7 +305,7 @@ cdef class RNN(Wind):
         rh_model.compile(optimizer=opt_rh, loss='mean_absolute_error', metrics=['mse'])
         # Train.
         rh_model.fit(
-            x_rh, y_rh, epochs=self.epochs, batch_size=20
+            x_rh, y_rh, epochs=self.epochs
         )
 
         # Prediction.
