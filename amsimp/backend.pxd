@@ -9,7 +9,7 @@ cdef class Backend:
     cdef bool ai
     cdef int data_size, epochs
     cdef bool input_data
-    cdef input_geo, input_rh, input_temp
+    cdef input_date, date, input_geo, input_rh, input_temp
 
     cpdef np.ndarray latitude_lines(self, bool f=?)
     cpdef np.ndarray longitude_lines(self)

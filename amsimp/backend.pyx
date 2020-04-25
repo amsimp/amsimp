@@ -113,27 +113,12 @@ cdef class Backend:
     c_p = 1004 * (units.J / (units.kg * units.K))
     # Gravitational acceleration at the Earth's surface.
     g = 9.80665 * (units.m / (units.s ** 2)) 
-    # The date at which the initial conditions was gathered (i.e. how
-    # recent the data is).
-    data_date = np.load(
-        wget.download(
-            "https://github.com/amsimp/initial-conditions/raw/master/date.npy", 
-            bar=None,
-        )
-    )
-    os.remove('date.npy')
-    date = datetime(
-        int(data_date[2]),
-        int(data_date[1]),
-        int(data_date[0]),
-        int(data_date[3]),
-    )
     
     # Remove extra constant pressure surfaces from the temperature, and
     # geopotential height array.
     remove_psurfaces = [23, 26, 33]
 
-    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=110, epochs=150, bool input_data=False, geo=None, temp=None, rh=None):
+    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=90, epochs=150, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):
         """
         The parameters, delta_latitude and delta_longitude, defines the
         horizontal resolution between grid points within the software. The
@@ -149,6 +134,7 @@ cdef class Backend:
         self.delta_latitude = delta_latitude
         self.delta_longitude = delta_longitude
         self.remove_files = remove_files
+        self.input_date = input_date
         self.input_data = input_data
 
         # Ensure self.delta_latitude is between 5 and 30 degrees.
@@ -169,6 +155,34 @@ cdef class Backend:
                     self.delta_longitude
                 )
             )
+
+        # The date at which the initial conditions was gathered (i.e. how
+        # recent the data is).
+        if self.input_date == None:
+            data_date = np.load(
+                wget.download(
+                    "https://github.com/amsimp/initial-conditions/raw/master/date.npy", 
+                    bar=None,
+                )
+            )
+            os.remove('date.npy')
+            date = datetime(
+                int(data_date[2]),
+                int(data_date[1]),
+                int(data_date[0]),
+                int(data_date[3]),
+            )
+            self.date = date
+        else:        
+            # Ensure input_date is of the type "datetime.datetime".
+            if type(self.input_date) != datetime:
+                raise Exception(
+                    "input_date must of the type 'datetime.datetime'. The value of input_date was: {}".format(
+                        self.input_date
+                    )
+                )
+            date = self.input_date
+            self.date = date
 
         # Ensure input_data is a boolean value.
         if not isinstance(self.input_data, bool):
@@ -498,10 +512,32 @@ cdef class Backend:
         """
         if not self.input_data:
             folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
+
+            # Define date.
+            year = self.date.year
+            month = self.date.month
+            day = self.date.day
+            hour = self.date.hour
+
+            # Adds zero before single digit numbers.
+            if day < 10:
+                day = "0" + str(day)
+
+            if month < 10:
+                month =  "0" + str(month)
+
+            if hour < 10:
+                hour = "0" + str(hour)
+
+            # Converts integers to strings.
+            day = str(day)
+            month = str(month)
+            year = str(year)
+            hour = str(hour)
+
             folder += (
-                str(self.data_date[2]) + "/" + str(self.data_date[1]) + "/"
+                year + "/" + month + "/" + day + "/" + hour + "/"
             )
-            folder += str(self.data_date[0]) + "/" + str(self.data_date[3]) + "/"
             # The url to the NumPy pressure surfaces file stored on the AMSIMP
             # Initial Conditions Data repository.
             url = folder + "initial_conditions.nc"
@@ -576,10 +612,32 @@ cdef class Backend:
         """
         if not self.input_data:
             folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
+            
+            # Define date.
+            year = self.date.year
+            month = self.date.month
+            day = self.date.day
+            hour = self.date.hour
+
+            # Adds zero before single digit numbers.
+            if day < 10:
+                day = "0" + str(day)
+
+            if month < 10:
+                month =  "0" + str(month)
+
+            if hour < 10:
+                hour = "0" + str(hour)
+
+            # Converts integers to strings.
+            day = str(day)
+            month = str(month)
+            year = str(year)
+            hour = str(hour)
+
             folder += (
-                str(self.data_date[2]) + "/" + str(self.data_date[1]) + "/"
+                year + "/" + month + "/" + day + "/" + hour + "/"
             )
-            folder += str(self.data_date[0]) + "/" + str(self.data_date[3]) + "/"
             # The url to the NumPy pressure surfaces file stored on the AMSIMP
             # Initial Conditions Data repository.
             url = folder + "initial_conditions.nc"
@@ -654,10 +712,32 @@ cdef class Backend:
         """
         if not self.input_data:
             folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
+            
+            # Define date.
+            year = self.date.year
+            month = self.date.month
+            day = self.date.day
+            hour = self.date.hour
+
+            # Adds zero before single digit numbers.
+            if day < 10:
+                day = "0" + str(day)
+
+            if month < 10:
+                month =  "0" + str(month)
+
+            if hour < 10:
+                hour = "0" + str(hour)
+
+            # Converts integers to strings.
+            day = str(day)
+            month = str(month)
+            year = str(year)
+            hour = str(hour)
+
             folder += (
-                str(self.data_date[2]) + "/" + str(self.data_date[1]) + "/"
+                year + "/" + month + "/" + day + "/" + hour + "/"
             )
-            folder += str(self.data_date[0]) + "/" + str(self.data_date[3]) + "/"
             # The url to the NumPy pressure surfaces file stored on the AMSIMP
             # Initial Conditions Data repository.
             url = folder + "initial_conditions.nc"
@@ -726,21 +806,9 @@ cdef class Backend:
         except OSError:
             pass
 
-        # Geopotential height file.
+        # Initial atmospheric conditions file.
         try:
-            os.remove("geopotential_height.nc")
-        except OSError:
-            pass
-
-        # Relative Humidity file.
-        try:
-            os.remove("relative_humdity.nc")
-        except OSError:
-            pass
-
-        # Temperature file.
-        try:
-            os.remove("temperature.nc")
+            os.remove("initial_conditions.nc")
         except OSError:
             pass
 
@@ -974,8 +1042,8 @@ cdef class Backend:
         if not self.input_data:
             plt.title(
                 data_type + " ("
-                + self.data_date[0] + '-' + self.data_date[1] + '-'
-                + self.data_date[2] + " " + self.data_date[3]
+                + str(self.date.year) + '-' + str(self.date.month) + '-'
+                + str(self.date.day) + " " + str(self.date.hour)
                 + ":00 h, Pressure Surface = "
                 + str(self.pressure_surfaces()[indx_psurface]) +")"
             )
@@ -1067,8 +1135,8 @@ cdef class Backend:
         if not self.input_data:
             plt.title(
                 data_type + " ("
-                + self.data_date[0] + '-' + self.data_date[1] + '-'
-                + self.data_date[2] + " " + self.data_date[3]
+                + str(self.date.year) + '-' + str(self.date.month) + '-'
+                + str(self.date.day) + " " + str(self.date.hour)
                 + ":00 h, Longitude = "
                 + str(np.round(self.longitude_lines()[indx_long], 2)) + ")"
             )
@@ -1150,8 +1218,8 @@ cdef class Backend:
         plt.ylabel("Longitude ($\lambda$)")
         if not self.input_data:
             plt.title("Pressure Thickness ("
-                + self.data_date[0] + '-' + self.data_date[1] + '-'
-                + self.data_date[2] + " " + self.data_date[3] + ":00 h" + ")"
+                + str(self.date.year) + '-' + str(self.date.month) + '-'
+                + str(self.date.day) + " " + str(self.date.hour) + ":00 h" + ")"
             )
         else:
             plt.title("Pressure Thickness")

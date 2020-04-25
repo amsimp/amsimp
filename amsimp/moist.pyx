@@ -283,8 +283,8 @@ cdef class Moist(Backend):
         plt.ylabel("Longitude ($\lambda$)")
         if not self.input_data:
             plt.title("Precipitable Water" + " ("
-                + self.data_date[0] + '-' + self.data_date[1] + '-'
-                + self.data_date[2] + " " + self.data_date[3] + ":00 h)"
+                + str(self.date.year) + '-' + str(self.date.month) + '-'
+                + str(self.date.day) + " " + str(self.date.hour) + ":00 h)"
             )
         else:
             plt.title("Precipitable Water")

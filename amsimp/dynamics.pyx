@@ -258,30 +258,9 @@ cdef class RNN(Wind):
         features = x_temp.shape[2]
 
         # Create, and train models.
-        # Optimiser.
-        opt_temp = Adam(lr=1e-5, decay=1e-7)
-        # Temperature model.
-        # Create.
-        temp_model = Sequential()
-        temp_model.add(
-            LSTM(
-                400, activation='relu', input_shape=(past_history, features)
-            )
-        )
-        temp_model.add(RepeatVector(future_target))
-        temp_model.add(LSTM(400, activation='relu', return_sequences=True))
-        temp_model.add(LSTM(400, activation='relu', return_sequences=True))
-        temp_model.add(LSTM(400, activation='relu', return_sequences=True))
-        temp_model.add(TimeDistributed(Dense(features)))
-        temp_model.compile(optimizer=opt_temp, loss='mean_absolute_error', metrics=['mse'])
-        # Train.
-        temp_model.fit(
-            x_temp, y_temp, epochs=self.epochs, batch_size=10
-        )
-
+        # Geopotential height model.
         # Optimiser.
         opt_geo = Adam(lr=1e-7, decay=1e-12)
-        # Geopotential height model.
         # Create.
         geo_model = Sequential()
         geo_model.add(
@@ -299,10 +278,29 @@ cdef class RNN(Wind):
         geo_model.fit(
             x_geo, y_geo, epochs=self.epochs, batch_size=10
         )
-        
+        # Temperature model.
+        # Optimiser.
+        opt_temp = Adam(lr=1e-5, decay=1e-7)
+        # Create.
+        temp_model = Sequential()
+        temp_model.add(
+            LSTM(
+                400, activation='relu', input_shape=(past_history, features)
+            )
+        )
+        temp_model.add(RepeatVector(future_target))
+        temp_model.add(LSTM(400, activation='relu', return_sequences=True))
+        temp_model.add(LSTM(400, activation='relu', return_sequences=True))
+        temp_model.add(LSTM(400, activation='relu', return_sequences=True))
+        temp_model.add(TimeDistributed(Dense(features)))
+        temp_model.compile(optimizer=opt_temp, loss='mean_absolute_error', metrics=['mse'])
+        # Train.
+        temp_model.fit(
+            x_temp, y_temp, epochs=self.epochs, batch_size=10
+        )
+        # Relative Humidity model.
         # Optimiser.
         opt_rh = Adam(lr=1e-5, decay=1e-7)
-        # Relative Humidity model.
         # Create.
         rh_model = Sequential()
         rh_model.add(
@@ -399,7 +397,7 @@ cdef class Dynamics(RNN):
     the specified number of forecast days.
     """
 
-    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=60, epochs=100, bool input_data=False, geo=None, temp=None, rh=None):
+    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=90, epochs=150, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):
         """
         Defines the length of the forecast (in hours) generated in the simulation.
         This value must be greater than 0, and less than 168 in order
@@ -420,6 +418,7 @@ cdef class Dynamics(RNN):
         self.forecast_length = forecast_length
         self.efs = efs
         self.ai = ai
+        super().__init__(input_date)
         super().__init__(input_data)
         super().__init__(geo)
         super().__init__(temp)
@@ -584,12 +583,6 @@ cdef class Dynamics(RNN):
         cdef int indx_p1 = (np.abs(self.pressure_surfaces().value - p1)).argmin()
         cdef int indx_p2 = (np.abs(self.pressure_surfaces().value - p2)).argmin()
 
-        # Create a bar to determine progress.
-        max_bar = len(time) * self.models
-        bar = IncrementalBar('Progress', max=max_bar)
-        # Start progress bar.
-        bar.next()
-
         # Ensemble Forecast System (EFS)
         # Define lists.
         # Geopotential Height.
@@ -634,11 +627,14 @@ cdef class Dynamics(RNN):
         cdef int m = 0
 
         # Prediction from Recurrent Neural Network.
-        prediction_ai = self.model_prediction()
-        cdef np.ndarray prediction_ai_temp = prediction_ai[0] * self.units.K
-        cdef np.ndarray prediction_ai_height = prediction_ai[1] * self.units.m
-        cdef np.ndarray prediction_ai_rh = prediction_ai[2] * self.units.percent
-        cdef int iterator_ai = 0
+        cdef np.ndarray prediction_ai_temp, prediction_ai_height, prediction_ai_rh
+        cdef int iterator_ai
+        if self.ai:
+            prediction_ai = self.model_prediction()
+            prediction_ai_temp = prediction_ai[0] * self.units.K
+            prediction_ai_height = prediction_ai[1] * self.units.m
+            prediction_ai_rh = prediction_ai[2] * self.units.percent
+            iterator_ai = 0
 
         # Define variable types.
         # Numy Arrays.
@@ -652,6 +648,12 @@ cdef class Dynamics(RNN):
         cdef list geopotential_height, temperature, virtual_temperature
         cdef list zonal_wind, meridional_wind, vertical_motion, static_stability 
         cdef list relative_humidity, pressure_thickness, precipitable_water
+
+        # Create a bar to determine progress.
+        max_bar = (len(time) * self.models) - (self.models - 1)
+        bar = IncrementalBar('Progress', max=max_bar)
+        # Start progress bar.
+        bar.next()
 
         while m < model_run:
             # Smoothing operator (filter with normal distribution
@@ -1057,37 +1059,27 @@ cdef class Dynamics(RNN):
 
             m += 1
 
-        # Convert lists to arrays, and generate the mean forecast.
+        # Convert lists to arrays.
         # Geopotential Height.
         GeopotentialHeight = np.asarray(HeightList)
-        GeopotentialHeight[:, 0] = self.geopotential_height()
         # Zonal Wind.
         ZonalWind = np.asarray(ZonalList)
-        ZonalWind[:, 0] = self.zonal_wind()
         # Meridional Wind.
         MeridionalWind = np.asarray(MeridionalList)
-        MeridionalWind[:, 0] = self.meridional_wind()
         # Vertical Motion.
         VerticalMotion = np.asarray(VerticalList)
-        VerticalMotion[:, 0] = self.vertical_motion()
         # Static Stability.
         StaticStability = np.asarray(StabilityList)
-        StaticStability[:, 0] = self.static_stability()
         # Air Temperature.
         AirTemperature = np.asarray(TemperatureList)
-        AirTemperature[:, 0] = self.temperature()
         # Virtual Temperature.
         VirtualTemperature = np.asarray(VirtualList)
-        VirtualTemperature[:, 0] = self.virtual_temperature()
         # Relative Humidity.
         RelativeHumidity = np.asarray(HumidityList)
-        RelativeHumidity[:, 0] = self.relative_humidity()
         # Pressure Thickness.
         Thickness = np.asarray(ThicknessList)
-        Thickness[:, 0] = self.pressure_thickness(p1=p1, p2=p2)
         # Precipitable Water.
         PrecipitableWater = np.asarray(WaterList)
-        PrecipitableWater[:, 0] = self.precipitable_water()
 
         # Finish progress bar.
         bar.finish()
@@ -1117,20 +1109,20 @@ cdef class Dynamics(RNN):
             standard_name='forecast_period', 
             units='hours'
         )
-        # Model number.
-        model_runs = np.linspace(1, self.models, self.models + 1)
-        model_runs = DimCoord(
-            model_runs,
-            standard_name='efs_model', 
-        )
-
-        # Cubes
         # Forecast reference time.
         ref_time = AuxCoord(
             self.date.strftime("%Y-%m-%d %H:%M:%S"),
             standard_name='forecast_reference_time'
         )
+
+        # Cubes
         # Geopotential Height Cube.
+        # Model number.
+        model_runs = np.linspace(1, self.models, self.models)
+        model_runs = DimCoord(
+            model_runs,
+            long_name='efs_model', 
+        )
         height_cube = Cube(GeopotentialHeight,
             standard_name='geopotential_height',
             units='m',
@@ -1233,7 +1225,7 @@ cdef class Dynamics(RNN):
             long_name='pressure_thickness',
             units='m',
             dim_coords_and_dims=[
-                (forecast_period, 0), (lat, 1), (lon, 2)
+                (model_runs, 0), (forecast_period, 1), (lat, 2), (lon, 3)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1245,7 +1237,7 @@ cdef class Dynamics(RNN):
             long_name='precipitable_water',
             units='mm',
             dim_coords_and_dims=[
-                (forecast_period, 0), (lat, 1), (lon, 2)
+                (model_runs, 0), (forecast_period, 1), (lat, 2), (lon, 3)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1278,269 +1270,3 @@ cdef class Dynamics(RNN):
             save(output, filename)
 
         return output
-
-    def simulate(self):
-        """
-        This method outputs a visualisation of how temperature, pressure
-        thickness, atmospheric pressure, and precipitable water vapor will 
-        evolve. The atmospheric pressure and precipitable water elements of
-        this visualisation operate similarly to the method, 
-        amsimp.Backend.longitude_contourf(), so, please refer to this method for
-        a detailed description of the aforementioned elements. Likewise, please
-        refer to amsimp.Water.water_contourf() for more information on the
-        visualisation element of precipitable water vapor, or to
-        amsimp.Backend.altitude_contourf() for more information on the
-        visualisation element of temperature.
-
-        For a visualisation of geostrophic wind (zonal and meridional
-        components), please refer to the amsimp.Wind.wind_contourf(), or
-        amsimp.Wind.globe() methods.
-        """
-        # Define the forecast period.
-        forecast_days = int(self.forecast_days)
-        cdef np.ndarray time = np.linspace(
-            0, forecast_days, (forecast_days * 24)
-        )
-
-        # Style of graph.
-        style.use("fivethirtyeight")
-
-        # Define layout.
-        gs = gridspec.GridSpec(2, 2)
-        fig = plt.figure(figsize=(18.5, 7.5))
-        fig.subplots_adjust(hspace=0.340, bottom=0.105, top=0.905)
-        plt.ion()
-
-        # Temperature
-        indx_long = (np.abs(self.longitude_lines().value - 0)).argmin()
-        ax1 = plt.subplot(gs[0, 0])
-        forecast_temp = self.atmospheric_prognostic_method()
-        # Atmospheric Pressure
-        ax2 = plt.subplot(gs[1, 0], projection=ccrs.EckertIII())
-        forecast_pressure = self.atmospheric_prognostic_method()
-        # Precipitable Water
-        ax3 = plt.subplot(gs[0, 1], projection=ccrs.EckertIII())
-        forecast_Pwv = self.atmospheric_prognostic_method()
-        # Pressure Thickness (1000hPa - 500hPa).
-        ax4 = plt.subplot(gs[1, 1], projection=ccrs.EckertIII())
-        forecast_pthickness = self.atmospheric_prognostic_method()
-
-        # Troposphere - Stratosphere Boundary Line
-        trop_strat_line = self.troposphere_boundaryline()
-        trop_strat_line = (
-            np.zeros(len(trop_strat_line.value)) + np.mean(trop_strat_line)
-        )
-
-        t = 0
-        while t < len(time):
-            # Defines the axes.
-            # For the temperature contour plot.
-            latitude, altitude = np.meshgrid(
-                self.latitude_lines(), self.altitude_level()
-            )
-            # For the pressure, precipitable water, and pressure 
-            # thickness countour plot
-            lat, long = np.meshgrid(
-                self.latitude_lines(), self.longitude_lines()
-            )
-            
-            # Temperature contour plot.
-            # Temperature data.
-            temperature = forecast_temp[t]
-            temperature = temperature[indx_long, :, :]
-            temperature = np.transpose(temperature)
-
-            # Contour plotting.
-            cmap1 = plt.get_cmap("hot")
-            min1 = np.min(forecast_temp)
-            max1 = np.max(forecast_temp)
-            level1 = np.linspace(min1, max1, 21)
-            temp = ax1.contourf(
-                latitude, altitude, temperature, cmap=cmap1, levels=level1
-            )
-
-            # Checks for a colorbar.
-            if t == 0:
-                cb1 = fig.colorbar(temp, ax=ax1)
-                tick_locator = ticker.MaxNLocator(nbins=10)
-                cb1.locator = tick_locator
-                cb1.update_ticks()
-                cb1.set_label("Temperature (K)")
-
-            # Add SALT to the graph.
-            ax1.set_xlabel("Latitude ($\phi$)")
-            ax1.set_ylabel("Altitude (m)")
-            ax1.set_title("Temperature")
-
-            # Atmospheric pressure contour.
-            # Pressure data.
-            pressure = forecast_pressure[t]
-            pressure = pressure[:, :, 0]
-
-            # EckertIII projection details.
-            ax2.set_global()
-            ax2.coastlines()
-            ax2.gridlines()
-
-            # Contourf plotting.
-            pressure_sealevel = np.asarray(forecast_pressure)
-            pressure_sealevel = pressure_sealevel[:, :, :, 0]
-            cmap2 = plt.get_cmap("jet")
-            min2 = np.min(pressure_sealevel)
-            max2 = np.max(pressure_sealevel)
-            level2 = np.linspace(min2, max2, 21)
-            atmospheric_pressure = ax2.contourf(
-                long,
-                lat,
-                pressure,
-                cmap=cmap2,
-                levels=level2,
-                transform=ccrs.PlateCarree(),
-            )
-
-            # Checks for a colorbar.
-            if t == 0:
-                cb2 = fig.colorbar(atmospheric_pressure, ax=ax2)
-                tick_locator = ticker.MaxNLocator(nbins=10)
-                cb2.locator = tick_locator
-                cb2.update_ticks()
-                cb2.set_label("Pressure (hPa)")
-
-            # Add SALT to the graph.
-            ax2.set_xlabel("Longitude ($\lambda$)")
-            ax2.set_ylabel("Latitude ($\phi$)")
-            ax2.set_title(
-                "Atmospheric Pressure (Alt = " 
-                + str(self.altitude_level()[0])
-                + ")"
-            )
-
-            # Precipitable water contour.
-            # Precipitable water data.
-            precipitable_water = forecast_Pwv[t]
-
-            # EckertIII projection details.
-            ax3.set_global()
-            ax3.coastlines()
-            ax3.gridlines()
-
-            # Contourf plotting.
-            cmap3 = plt.get_cmap("seismic")
-            min3 = np.min(forecast_Pwv)
-            max3 = np.max(forecast_Pwv)
-            level3 = np.linspace(min3, max3, 21)
-            precipitable_watervapour = ax3.contourf(
-                long,
-                lat,
-                precipitable_water,
-                cmap=cmap3,
-                levels=level3,
-                transform=ccrs.PlateCarree(),
-            )
-
-            # Checks for a colorbar.
-            if t == 0:
-                cb3 = fig.colorbar(precipitable_watervapour, ax=ax3)
-                tick_locator = ticker.MaxNLocator(nbins=10)
-                cb3.locator = tick_locator
-                cb3.update_ticks()
-                cb3.set_label("Precipitable Water (mm)")
-
-            # Add SALT to the graph.
-            ax3.set_xlabel("Longitude ($\lambda$)")
-            ax3.set_ylabel("Latitude ($\phi$)")
-            ax3.set_title("Precipitable Water")
-
-            # Pressure thickness scatter plot.
-            # Pressure thickness data.
-            pressure_thickness = forecast_pthickness[t]
-
-            # EckertIII projection details.
-            ax4.set_global()
-            ax4.coastlines()
-            ax4.gridlines()
-
-            # Contourf plotting.
-            min4 = np.min(forecast_pthickness)
-            max4 = np.max(forecast_pthickness)
-            level4 = np.linspace(min4, max4, 21)
-            pressure_h = ax4.contourf(
-                long,
-                lat,
-                pressure_thickness,
-                transform=ccrs.PlateCarree(),
-                levels=level4,
-            )
-
-            # Index of the rain / snow line
-            indx_snowline = (np.abs(level4 - 5400)).argmin()
-            pressure_h.collections[indx_snowline].set_color('black')
-            pressure_h.collections[indx_snowline].set_linewidth(1) 
-
-            # Add SALT.
-            ax4.set_xlabel("Latitude ($\phi$)")
-            ax4.set_ylabel("Longitude ($\lambda$)")
-            ax4.set_title("Thickness (1000 hPa - 500 hPa)")
-
-            # Checks for a colorbar.
-            if t == 0:
-                cb4 = fig.colorbar(pressure_h, ax=ax4)
-                tick_locator = ticker.MaxNLocator(nbins=10)
-                cb4.locator = tick_locator
-                cb4.update_ticks()
-                cb4.set_label("Pressure Thickness (m)")
-
-            # Plots the average boundary line on two contourfs.
-            # Temperature contourf.
-            ax1.plot(
-                latitude[1],
-                trop_strat_line,
-                color="black",
-                linestyle="dashed",
-                label="Troposphere - Stratosphere Boundary Line",
-            )
-            ax1.legend(loc=0)
-
-            # Title of Simulation.
-            now = self.date + timedelta(hours=+t)
-            hour = now.hour
-            minute = now.minute
-
-            if minute < 10:
-                minute = "0" + str(minute)
-            else:
-                minute = str(minute)
-
-            fig.suptitle(
-                "Motus Aeris @ AMSIMP (" + str(hour)
-                + ":" + minute + " "
-                + now.strftime("%d-%m-%Y") + ")"
-            )
-
-            # Displaying simualtion.
-            plt.show()
-            plt.pause(0.01)
-            if t < (len(time) - 1):
-                ax1.clear()
-                ax2.clear()
-                ax3.clear()
-                ax4.clear()
-            else:
-                plt.pause(10)
-
-            note = (
-                "Note: Geostrophic balance does not hold near the equator."
-                + " Rain / Snow Line is marked on the Pressure Thickness" 
-                + " contour plot by the black line (5,400 m)."
-            )
-
-            # Footnote
-            plt.figtext(
-                0.99,
-                0.01,
-                note,
-                horizontalalignment="right",
-                fontsize=10,
-            )
-
-            t += 1

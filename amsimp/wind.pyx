@@ -268,8 +268,8 @@ cdef class Wind(Moist):
         plt.gca().invert_yaxis()
         if not self.input_data:
             plt.title(wind_type + " Wind Contour Plot ("
-                + self.data_date[0] + '-' + self.data_date[1] + '-'
-                + self.data_date[2] + " " + self.data_date[3]
+                + str(self.date.year) + '-' + str(self.date.month) + '-'
+                + str(self.date.day) + " " + str(self.date.hour)
                 + ":00 h, Longitude = "
                 + str(np.round(self.longitude_lines()[indx_long], 2)) + ")"
             )
@@ -408,8 +408,8 @@ cdef class Wind(Moist):
         plt.ylabel("Longitude ($\lambda$)")
         if not self.input_data:
             plt.title("Geostrophic Wind ("
-                + self.data_date[0] + '-' + self.data_date[1] + '-'
-                + self.data_date[2] + " " + self.data_date[3]
+                + str(self.date.year) + '-' + str(self.date.month) + '-'
+                + str(self.date.day) + " " + str(self.date.hour)
                 + ":00 h, Pressure Surface = "
                 + str(self.pressure_surfaces()[indx_psurface]) +")"
             )
