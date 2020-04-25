@@ -16,7 +16,7 @@ import pandas as pd
 
 # Creates a CSV file.
 def csv_file():
-    file = os.path.isfile("performance/performance.csv")
+    file = os.path.isfile("benchmarking/performance/performance.csv")
     csvfile = open(filename, "a")
 
     fieldnames = ["forecast_days", "time"]
