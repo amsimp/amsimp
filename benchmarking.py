@@ -19,7 +19,7 @@ def csv_file():
     file = os.path.isfile("benchmarking/performance/performance.csv")
     csvfile = open(filename, "a")
 
-    fieldnames = ["forecast_days", "time"]
+    fieldnames = ["scheme", "time"]
     writer = csv.DictWriter(
         csvfile, delimiter=",", lineterminator="\n", fieldnames=fieldnames
     )
