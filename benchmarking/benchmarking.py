@@ -285,6 +285,7 @@ def benchmarking():
                 tempv_df.to_csv(folder+"virtual_temperature/"+date.strftime("%Y-%m-%d")+".csv")
                 rh_df.to_csv(folder+"relative_humidity/"+date.strftime("%Y-%m-%d")+".csv") 
         
+        print(date)
         # Add 6 hours onto time.
         date = date + timedelta(days=+60)
 
