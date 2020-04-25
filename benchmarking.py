@@ -75,15 +75,15 @@ def rmse(prediction, actual):
 def accuracy_benchmark(prediction, actual):
     output = []
 
-    forecast_bias = forecast_bias(prediction, actual)
-    mae = mae(prediction, actual)
-    mse = mse(prediction, actual)
-    rmse = rmse(prediction, actual)
+    forecast_bias_value = forecast_bias(prediction, actual)
+    mae_value = mae(prediction, actual)
+    mse_value = mse(prediction, actual)
+    rmse_value = rmse(prediction, actual)
 
-    output.append(forecast_bias)
-    output.append(mae)
-    output.append(mse)
-    output.append(rmse)
+    output.append(forecast_bias_value)
+    output.append(mae_value)
+    output.append(mse_value)
+    output.append(rmse_value)
 
     return np.asarray(output)
 
@@ -169,7 +169,7 @@ def benchmarking():
                 detail = amsimp.Dynamics(input_date=date, forecast_length=120, efs=False)
                 label = "physical_model_with_rnn"
             elif num == 2:
-                detail = amsimp.Dynamics(input_date=date, forecast_length=120)
+                detail = amsimp.Dynamics(input_date=date, forecast_length=120, models=3)
                 label = "physical_model_with_rnn_and_efs"
 
             # Start timer.
