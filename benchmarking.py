@@ -95,11 +95,11 @@ def benchmarking():
     writer = csv_file()
     # Starting date.
     start_date = datetime(2020, 4, 15, 0)
-    date = start_date + timedelta(days=-30)
+    date = start_date + timedelta(days=-10)
     # End of forecast period.
     max_date = start_date + timedelta(days=+5)
     # Historical Dataset.
-    detail = amsimp.RNN(input_date=max_date, data_size=40)
+    detail = amsimp.RNN(input_date=max_date, data_size=20)
     historical_data = detail.download_historical_data()
     # Reshape Historical Dataset.
     # Dimensions.
@@ -156,7 +156,7 @@ def benchmarking():
     meridional_wind = np.asarray(meridional_wind)
     virtual_temperature = np.asarray(virtual_temperature)
 
-    n = 30 * 4
+    n = 10 * 4
     # Benchmark on the last 30 days of data.
     for i in range(n):
         for num in range(3):
