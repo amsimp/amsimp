@@ -178,7 +178,7 @@ def benchmarking():
             output = detail.atmospheric_prognostic_method()
 
             # Indices for DataFrame.
-            indices = detail.forecast_period()[0].value[::6]
+            indices = detail.forecast_period()[0].value[::(30*6)]
             # Columns for DataFrame.
             measures_of_error = np.array(['forecast_bias', 'mae', 'mse', 'rmse'])
 
