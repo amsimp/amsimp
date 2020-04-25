@@ -17,7 +17,7 @@ import pandas as pd
 # Creates a CSV file.
 def csv_file():
     file = os.path.isfile("benchmarking/performance/performance.csv")
-    csvfile = open(filename, "a")
+    csvfile = open("benchmarking/performance/performance.csv", "a")
 
     fieldnames = ["scheme", "time"]
     writer = csv.DictWriter(
