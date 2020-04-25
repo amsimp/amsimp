@@ -188,7 +188,7 @@ def benchmarking():
             # Geopotential Height.
             height = output[0].data
             height = height[:, ::6, :, :, :]
-            len_forecast = height.shape[1]
+            len_forecast = height.shape[1] + i
             # Geostrophic Wind.
             # Zonal Wind.
             u = output[1].data
