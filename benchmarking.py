@@ -187,25 +187,25 @@ def benchmarking():
             # Forecasted data.
             # Geopotential Height.
             height = output[0].data
-            height = height[:, ::6, :, :, :]
+            height = height[:, ::(30*6), :, :, :]
             len_forecast = height.shape[1] + i
             # Geostrophic Wind.
             # Zonal Wind.
             u = output[1].data
-            u = u[:, ::6, :, :, :]
+            u = u[:, ::(30*6), :, :, :]
             # Meridional Wind.
             v = output[2].data
-            v = v[:, ::6, :, :, :]
+            v = v[:, ::(30*6), :, :, :]
             # Temperature.
             # Air Temperature.
             temp = output[5].data
-            temp = temp[:, ::6, :, :, :]
+            temp = temp[:, ::(30*6), :, :, :]
             # Virtual Temperature.
             temp_v = output[6].data
-            temp_v = temp_v[:, ::6, :, :, :]
+            temp_v = temp_v[:, ::(30*6), :, :, :]
             # Relative Humidity.
             rh = output[7].data
-            rh = rh[:, ::6, :, :, :]
+            rh = rh[:, ::(30*6), :, :, :]
 
             # Store runtime in variable.
             finish = time.time()
