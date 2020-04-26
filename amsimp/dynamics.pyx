@@ -260,7 +260,7 @@ cdef class RNN(Wind):
         # Create, and train models.
         # Geopotential height model.
         # Optimiser.
-        opt_geo = Adam(lr=1e-3, decay=1e-5)
+        opt_geo = Adam(lr=1e-6, decay=1e-8)
         # Create.
         geo_model = Sequential()
         geo_model.add(
@@ -280,7 +280,7 @@ cdef class RNN(Wind):
         )
         # Temperature model.
         # Optimiser.
-        opt_temp = Adam(lr=1e-3, decay=1e-5)
+        opt_temp = Adam(lr=1e-5, decay=1e-7)
         # Create.
         temp_model = Sequential()
         temp_model.add(
@@ -300,7 +300,7 @@ cdef class RNN(Wind):
         )
         # Relative Humidity model.
         # Optimiser.
-        opt_rh = Adam(lr=1e-3, decay=1e-5)
+        opt_rh = Adam(lr=1e-5, decay=1e-7)
         # Create.
         rh_model = Sequential()
         rh_model.add(
