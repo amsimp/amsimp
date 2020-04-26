@@ -273,9 +273,19 @@ def benchmarking():
 
                 # Output folder and file name.
                 if i != 2:
-                    folder = "benchmarking/accuracy/amsimp/"+label+"/"
+                    folder = "benchmarking/accuracy/amsimp/"+label
+                    try:
+                        os.mkdir(folder)
+                    except OSError:
+                        pass
+                    folder += "/"
                 else:
-                    folder = "benchmarking/accuracy/amsimp/"+label+"/"+str(something)+"/"
+                    folder = "benchmarking/accuracy/amsimp/"+label+"/"+str(something+1)
+                    try:
+                        os.mkdir(folder)
+                    except OSError:
+                        pass
+                    folder += "/"
 
                 # Save Results.
                 height_df.to_csv(folder+"geopotential_height/"+date.strftime("%Y-%m-%d")+".csv")
