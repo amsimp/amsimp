@@ -87,6 +87,13 @@ def accuracy_benchmark(prediction, actual):
 
     return np.asarray(output)
 
+# Create folders.
+def create_folder(folder_name):
+    try:
+        os.mkdir(folder_name)
+    except OSError:
+        pass
+
 # -----------------------------------------------------------------------------------------#
 
 # Benchmark function.
@@ -273,27 +280,38 @@ def benchmarking():
 
                 # Output folder and file name.
                 if i != 2:
-                    folder = "benchmarking/accuracy/amsimp/"+label
-                    try:
-                        os.mkdir(folder)
-                    except OSError:
-                        pass
-                    folder += "/"
+                    folder = "benchmarking/accuracy/amsimp/"+label+"/"
                 else:
-                    folder = "benchmarking/accuracy/amsimp/"+label+"/"+str(something+1)
-                    try:
-                        os.mkdir(folder)
-                    except OSError:
-                        pass
-                    folder += "/"
+                    folder = "benchmarking/accuracy/amsimp/"+label+"/"+str(something+1)+"/"
 
                 # Save Results.
-                height_df.to_csv(folder+"geopotential_height/"+date.strftime("%Y-%m-%d")+".csv")
-                u_df.to_csv(folder+"zonal_wind/"+date.strftime("%Y-%m-%d")+".csv")
-                v_df.to_csv(folder+"meridional_wind/"+date.strftime("%Y-%m-%d")+".csv")
-                temp_df.to_csv(folder+"temperature/"+date.strftime("%Y-%m-%d")+".csv")
-                tempv_df.to_csv(folder+"virtual_temperature/"+date.strftime("%Y-%m-%d")+".csv")
-                rh_df.to_csv(folder+"relative_humidity/"+date.strftime("%Y-%m-%d")+".csv") 
+                # Create folders.
+                # Geopotential Height.
+                height_folder = folder+"geopotential_height/"
+                create_folder(height_folder)
+                height_df.to_csv(height_folder+date.strftime("%Y-%m-%d")+".csv")
+                # Geostrophic Wind.
+                # Zonal Wind.
+                u_folder = folder+"zonal_wind/"
+                create_folder(u_folder)
+                u_df.to_csv(u_folder+date.strftime("%Y-%m-%d")+".csv")
+                # Meridional Wind.
+                v_folder = folder+"meridional_wind/"
+                create_folder(v_folder)
+                v_df.to_csv(v_folder+date.strftime("%Y-%m-%d")+".csv")
+                # Temperature.
+                # Air Temperature.
+                temp_folder = folder+"temperature/"
+                create_folder(temp_folder)
+                temp_df.to_csv(temp_folder+date.strftime("%Y-%m-%d")+".csv")
+                # Virtual Temperature
+                tempv_folder = folder+"virtual_temperature/"
+                create_folder(tempv_folder)
+                tempv_df.to_csv(tempv_folder+date.strftime("%Y-%m-%d")+".csv")
+                # Relative Humidity.
+                rh_folder = folder+"relative_humidity/"
+                create_folder(rh_folder)
+                rh_df.to_csv(rh_folder+date.strftime("%Y-%m-%d")+".csv") 
         
         print(date)
         # Add 6 hours onto time.
