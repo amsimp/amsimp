@@ -113,8 +113,6 @@ cdef class RNN(Wind):
             # Convert data to NumPy arrays
             # Temperature.
             T = np.asarray(data[0].data)
-            # Geopotential Height.
-            geo = np.asarray(data[1].data)
             # Relative Humidity.
             rh = np.asarray(data[2].data)
 
@@ -125,7 +123,7 @@ cdef class RNN(Wind):
                 delta_longitude=self.delta_longitude,
                 remove_files=self.remove_files,
                 input_data=True, 
-                geo=geo, 
+                geo=self.geopotential_height(), 
                 temp=T, 
                 rh=rh, 
             )
@@ -134,9 +132,6 @@ cdef class RNN(Wind):
             # Temperature.
             T = config.temperature().value
             T = T.flatten()
-            # Geopotential Height.
-            geo = config.geopotential_height().value
-            geo = geo.flatten()
             # Relative Humidity.
             rh = config.relative_humidity().value
             rh = rh.flatten()
@@ -144,8 +139,6 @@ cdef class RNN(Wind):
             # Append to list.
             # Temperature.
             T_list.append(T)
-            # Geopotential Height.
-            geo_list.append(geo)
             # Relative Humidity.
             rh_list.append(rh)
 
@@ -161,16 +154,14 @@ cdef class RNN(Wind):
         # Convert lists to NumPy arrays.
         # Temperature.
         temperature = np.asarray(T_list)
-        # Geopotential Height.
-        geopotential_height = np.asarray(geo_list)
         # Relative Humidity.
         relative_humidity = np.asarray(rh_list)
 
         # Finish bar.
         bar.finish()
 
-        # Output.
-        output = (temperature, geopotential_height, relative_humidity)
+        # Output.s
+        output = (temperature, relative_humidity)
         return output        
 
     def standardise_data(self):
@@ -180,19 +171,16 @@ cdef class RNN(Wind):
         # Define atmospheric parameters.
         historical_data = self.download_historical_data()
         temperature = historical_data[0]
-        geopotential_height = historical_data[1]
-        relative_humidity = historical_data[2]
+        relative_humidity = historical_data[1]
 
         # Standardise the data.
         # Temperature.
         temperature = self.sc.fit_transform(temperature)
-        # Geopotential Height.
-        geopotential_height = self.sc.fit_transform(geopotential_height)
         # Relative Humidity.
         relative_humidity = self.sc.fit_transform(relative_humidity)
 
         # Output.
-        output = (temperature, geopotential_height, relative_humidity)
+        output = (temperature, relative_humidity)
         return output
 
     def preprocess_data(
@@ -229,10 +217,8 @@ cdef class RNN(Wind):
 
         # Temperature.
         temperature = dataset[0]
-        # Geopotential Height.
-        geopotential_height = dataset[1]
         # Relative Humidity.
-        relative_humidity = dataset[2]
+        relative_humidity = dataset[1]
 
         # The network is shown data from the last 15 days.
         past_history = 15 * 4
@@ -244,10 +230,6 @@ cdef class RNN(Wind):
         # Temperature.
         x_temp, y_temp = self.preprocess_data(
             temperature, past_history, future_target
-        )
-        # Geopotential Height.
-        x_geo, y_geo = self.preprocess_data(
-            geopotential_height, past_history, future_target
         )
         # Relative Humidity.
         x_rh, y_rh = self.preprocess_data(
@@ -278,26 +260,7 @@ cdef class RNN(Wind):
         temp_model.fit(
             x_temp, y_temp, epochs=self.epochs, batch_size=10
         )
-        # Geopotential height model.
-        # Optimiser.
-        opt_geo = Adam(lr=1e-7, decay=1e-9)
-        # Create.
-        geo_model = Sequential()
-        geo_model.add(
-            LSTM(
-                400, activation='relu', input_shape=(past_history, features)
-            )
-        )
-        geo_model.add(RepeatVector(future_target))
-        geo_model.add(LSTM(400, activation='relu', return_sequences=True))
-        geo_model.add(LSTM(400, activation='relu', return_sequences=True))
-        geo_model.add(LSTM(400, activation='relu', return_sequences=True))
-        geo_model.add(TimeDistributed(Dense(features)))
-        geo_model.compile(optimizer=opt_geo, loss='mean_absolute_error', metrics=['mse'])
-        # Train.
-        geo_model.fit(
-            x_geo, y_geo, epochs=self.epochs, batch_size=10
-        )
+
         # Relative Humidity model.
         # Optimiser.
         opt_rh = Adam(lr=1e-5, decay=1e-7)
@@ -325,22 +288,16 @@ cdef class RNN(Wind):
         predict_temp_input = predict_temp_input.reshape(
             1, predict_temp_input.shape[0], predict_temp_input.shape[1]
         )
-        predict_geo_input = geopotential_height[-past_history]
-        predict_geo_input = predict_geo_input.reshape(
-            1, predict_geo_input.shape[0], predict_geo_input.shape[1]
-        )
         predict_rh_input = relative_humidity[-past_history]
         predict_rh_input = predict_rh_input.reshape(
             1, predict_rh_input.shape[0], predict_rh_input.shape[1]
         )
         # Make predictions.
         predict_temp = temp_model.predict(predict_temp_input)
-        predict_geo = geo_model.predict(predict_geo_input)
         predict_rh = rh_model.predict(predict_rh_input)
 
         # Invert normalisation.
         predict_temp = self.sc.inverse_transform(predict_temp)
-        predict_geo = self.sc.inverse_transform(predict_geo)
         predict_rh = self.sc.inverse_transform(predict_rh)
 
         # Reshape into 3d arrays.
@@ -351,10 +308,9 @@ cdef class RNN(Wind):
         len_lon = len(self.longitude_lines())
         # Reshape.
         predict_temp = predict_temp.reshape(len_time, len_pressure, len_lat, len_lon)
-        predict_geo = predict_geo.reshape(len_time, len_pressure, len_lat, len_lon)
         predict_rh = predict_rh.reshape(len_time, len_pressure, len_lat, len_lon)
 
-        return predict_temp, predict_geo, predict_rh
+        return predict_temp, predict_rh
 
 cdef class Dynamics(RNN):
     """
@@ -908,10 +864,6 @@ cdef class Dynamics(RNN):
                         T = (T + prediction_ai_temp) / 2
                         # Relative Humidity.
                         rh = (rh + prediction_ai_rh) / 2
-                        # Geopotential Height.
-                        height = (height + prediction_ai_height) / 2
-                        # Geopotential.
-                        geo = height * g
                 
                 # Configure the Wind class, so, that it aligns with the
                 # paramaters defined by the user.
