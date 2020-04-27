@@ -258,29 +258,9 @@ cdef class RNN(Wind):
         features = x_temp.shape[2]
 
         # Create, and train models.
-        # Geopotential height model.
-        # Optimiser.
-        opt_geo = Adam(lr=1e-6, decay=1e-8)
-        # Create.
-        geo_model = Sequential()
-        geo_model.add(
-            LSTM(
-                400, activation='relu', input_shape=(past_history, features)
-            )
-        )
-        geo_model.add(RepeatVector(future_target))
-        geo_model.add(LSTM(400, activation='relu', return_sequences=True))
-        geo_model.add(LSTM(400, activation='relu', return_sequences=True))
-        geo_model.add(LSTM(400, activation='relu', return_sequences=True))
-        geo_model.add(TimeDistributed(Dense(features)))
-        geo_model.compile(optimizer=opt_geo, loss='mean_absolute_error', metrics=['mse'])
-        # Train.
-        geo_model.fit(
-            x_geo, y_geo, epochs=self.epochs, batch_size=10
-        )
         # Temperature model.
         # Optimiser.
-        opt_temp = Adam(lr=1e-5, decay=1e-7)
+        opt_temp = Adam(lr=1e-5, decay=1e-8)
         # Create.
         temp_model = Sequential()
         temp_model.add(
@@ -298,9 +278,29 @@ cdef class RNN(Wind):
         temp_model.fit(
             x_temp, y_temp, epochs=self.epochs, batch_size=10
         )
+        # Geopotential height model.
+        # Optimiser.
+        opt_geo = Adam(lr=1e-7, decay=1e-9)
+        # Create.
+        geo_model = Sequential()
+        geo_model.add(
+            LSTM(
+                400, activation='relu', input_shape=(past_history, features)
+            )
+        )
+        geo_model.add(RepeatVector(future_target))
+        geo_model.add(LSTM(400, activation='relu', return_sequences=True))
+        geo_model.add(LSTM(400, activation='relu', return_sequences=True))
+        geo_model.add(LSTM(400, activation='relu', return_sequences=True))
+        geo_model.add(TimeDistributed(Dense(features)))
+        geo_model.compile(optimizer=opt_geo, loss='mean_absolute_error', metrics=['mse'])
+        # Train.
+        geo_model.fit(
+            x_geo, y_geo, epochs=self.epochs, batch_size=10
+        )
         # Relative Humidity model.
         # Optimiser.
-        opt_rh = Adam(lr=1e-5, decay=1e-7)
+        opt_rh = Adam(lr=1e-5, decay=1e-8)
         # Create.
         rh_model = Sequential()
         rh_model.add(
@@ -397,7 +397,7 @@ cdef class Dynamics(RNN):
     the specified number of forecast days.
     """
 
-    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=90, epochs=150, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):
+    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=90, epochs=100, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):
         """
         Defines the length of the forecast (in hours) generated in the simulation.
         This value must be greater than 0, and less than 168 in order
