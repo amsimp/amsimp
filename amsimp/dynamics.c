@@ -2528,6 +2528,7 @@ static const char __pyx_k_DimCoord[] = "DimCoord";
 static const char __pyx_k_Dynamics[] = "Dynamics";
 static const char __pyx_k_Progress[] = "Progress";
 static const char __pyx_k_Quantity[] = "Quantity";
+static const char __pyx_k_clipnorm[] = "clipnorm";
 static const char __pyx_k_datetime[] = "datetime";
 static const char __pyx_k_download[] = "download";
 static const char __pyx_k_features[] = "features";
@@ -2539,6 +2540,7 @@ static const char __pyx_k_gridspec[] = "gridspec";
 static const char __pyx_k_latitude[] = "latitude";
 static const char __pyx_k_len_time[] = "len_time";
 static const char __pyx_k_linspace[] = "linspace";
+static const char __pyx_k_momentum[] = "momentum";
 static const char __pyx_k_opt_temp[] = "opt_temp";
 static const char __pyx_k_pressure[] = "pressure";
 static const char __pyx_k_pyx_type[] = "__pyx_type";
@@ -2749,6 +2751,7 @@ static PyObject *__pyx_n_s_batch_size;
 static PyObject *__pyx_n_s_cartopy_crs;
 static PyObject *__pyx_n_s_ccrs;
 static PyObject *__pyx_n_s_cline_in_traceback;
+static PyObject *__pyx_n_s_clipnorm;
 static PyObject *__pyx_n_s_compile;
 static PyObject *__pyx_n_s_config;
 static PyObject *__pyx_n_s_data;
@@ -2847,6 +2850,7 @@ static PyObject *__pyx_n_u_mm;
 static PyObject *__pyx_n_s_model_prediction;
 static PyObject *__pyx_n_s_models;
 static PyObject *__pyx_kp_u_models_must_be_a_integer_value_T;
+static PyObject *__pyx_n_s_momentum;
 static PyObject *__pyx_n_s_month;
 static PyObject *__pyx_n_u_motusaeris_amsimp;
 static PyObject *__pyx_n_u_mse;
@@ -2973,6 +2977,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static PyObject *__pyx_tp_new_6amsimp_8dynamics_RNN(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_6amsimp_8dynamics_Dynamics(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static PyObject *__pyx_float_1_;
 static PyObject *__pyx_float_0_1;
 static PyObject *__pyx_float_1eneg_5;
 static PyObject *__pyx_float_1eneg_7;
@@ -5123,17 +5128,19 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   /* "amsimp/dynamics.pyx":245
  *         # Temperature model.
  *         # Optimiser.
- *         opt_temp = Adam(lr=1e-5, decay=1e-7)             # <<<<<<<<<<<<<<
+ *         opt_temp = Adam(lr=1e-5, decay=1e-7, momentum=1, clipnorm=1.)             # <<<<<<<<<<<<<<
  *         # Create.
  *         temp_model = Sequential()
  */
   __Pyx_TraceLine(245,0,__PYX_ERR(0, 245, __pyx_L1_error))
   __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_Adam); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 245, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 245, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 245, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_lr, __pyx_float_1eneg_5) < 0) __PYX_ERR(0, 245, __pyx_L1_error)
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_decay, __pyx_float_1eneg_7) < 0) __PYX_ERR(0, 245, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_momentum, __pyx_int_1) < 0) __PYX_ERR(0, 245, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_clipnorm, __pyx_float_1_) < 0) __PYX_ERR(0, 245, __pyx_L1_error)
   __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 245, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -5142,7 +5149,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __pyx_t_6 = 0;
 
   /* "amsimp/dynamics.pyx":247
- *         opt_temp = Adam(lr=1e-5, decay=1e-7)
+ *         opt_temp = Adam(lr=1e-5, decay=1e-7, momentum=1, clipnorm=1.)
  *         # Create.
  *         temp_model = Sequential()             # <<<<<<<<<<<<<<
  *         temp_model.add(
@@ -5548,17 +5555,19 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   /* "amsimp/dynamics.pyx":266
  *         # Relative Humidity model.
  *         # Optimiser.
- *         opt_rh = Adam(lr=1e-5, decay=1e-7)             # <<<<<<<<<<<<<<
+ *         opt_rh = Adam(lr=1e-5, decay=1e-7, momentum=1, clipnorm=1.)             # <<<<<<<<<<<<<<
  *         # Create.
  *         rh_model = Sequential()
  */
   __Pyx_TraceLine(266,0,__PYX_ERR(0, 266, __pyx_L1_error))
   __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_Adam); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_6 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 266, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_lr, __pyx_float_1eneg_5) < 0) __PYX_ERR(0, 266, __pyx_L1_error)
   if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_decay, __pyx_float_1eneg_7) < 0) __PYX_ERR(0, 266, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_momentum, __pyx_int_1) < 0) __PYX_ERR(0, 266, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_clipnorm, __pyx_float_1_) < 0) __PYX_ERR(0, 266, __pyx_L1_error)
   __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -5567,7 +5576,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __pyx_t_1 = 0;
 
   /* "amsimp/dynamics.pyx":268
- *         opt_rh = Adam(lr=1e-5, decay=1e-7)
+ *         opt_rh = Adam(lr=1e-5, decay=1e-7, momentum=1, clipnorm=1.)
  *         # Create.
  *         rh_model = Sequential()             # <<<<<<<<<<<<<<
  *         rh_model.add(
@@ -20464,6 +20473,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_cartopy_crs, __pyx_k_cartopy_crs, sizeof(__pyx_k_cartopy_crs), 0, 0, 1, 1},
   {&__pyx_n_s_ccrs, __pyx_k_ccrs, sizeof(__pyx_k_ccrs), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
+  {&__pyx_n_s_clipnorm, __pyx_k_clipnorm, sizeof(__pyx_k_clipnorm), 0, 0, 1, 1},
   {&__pyx_n_s_compile, __pyx_k_compile, sizeof(__pyx_k_compile), 0, 0, 1, 1},
   {&__pyx_n_s_config, __pyx_k_config, sizeof(__pyx_k_config), 0, 0, 1, 1},
   {&__pyx_n_s_data, __pyx_k_data, sizeof(__pyx_k_data), 0, 0, 1, 1},
@@ -20562,6 +20572,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_model_prediction, __pyx_k_model_prediction, sizeof(__pyx_k_model_prediction), 0, 0, 1, 1},
   {&__pyx_n_s_models, __pyx_k_models, sizeof(__pyx_k_models), 0, 0, 1, 1},
   {&__pyx_kp_u_models_must_be_a_integer_value_T, __pyx_k_models_must_be_a_integer_value_T, sizeof(__pyx_k_models_must_be_a_integer_value_T), 0, 1, 0, 0},
+  {&__pyx_n_s_momentum, __pyx_k_momentum, sizeof(__pyx_k_momentum), 0, 0, 1, 1},
   {&__pyx_n_s_month, __pyx_k_month, sizeof(__pyx_k_month), 0, 0, 1, 1},
   {&__pyx_n_u_motusaeris_amsimp, __pyx_k_motusaeris_amsimp, sizeof(__pyx_k_motusaeris_amsimp), 0, 1, 0, 1},
   {&__pyx_n_u_mse, __pyx_k_mse, sizeof(__pyx_k_mse), 0, 1, 0, 1},
@@ -20984,6 +20995,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
 
 static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  __pyx_float_1_ = PyFloat_FromDouble(1.); if (unlikely(!__pyx_float_1_)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_0_1 = PyFloat_FromDouble(0.1); if (unlikely(!__pyx_float_0_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_1eneg_5 = PyFloat_FromDouble(1e-5); if (unlikely(!__pyx_float_1eneg_5)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_1eneg_7 = PyFloat_FromDouble(1e-7); if (unlikely(!__pyx_float_1eneg_7)) __PYX_ERR(0, 1, __pyx_L1_error)
