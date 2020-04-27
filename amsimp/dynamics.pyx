@@ -260,7 +260,7 @@ cdef class RNN(Wind):
         # Create, and train models.
         # Temperature model.
         # Optimiser.
-        opt_temp = Adam(lr=1e-5, decay=1e-8)
+        opt_temp = Adam(lr=1e-5, decay=1e-7)
         # Create.
         temp_model = Sequential()
         temp_model.add(
@@ -300,7 +300,7 @@ cdef class RNN(Wind):
         )
         # Relative Humidity model.
         # Optimiser.
-        opt_rh = Adam(lr=1e-5, decay=1e-8)
+        opt_rh = Adam(lr=1e-5, decay=1e-7)
         # Create.
         rh_model = Sequential()
         rh_model.add(
