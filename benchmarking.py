@@ -163,7 +163,7 @@ def benchmarking():
     meridional_wind = np.asarray(meridional_wind)
     virtual_temperature = np.asarray(virtual_temperature)
 
-    n = 10 * 4
+    n = 10
     # Benchmark on the last 30 days of data.
     for i in range(n):
         for num in range(3):
@@ -315,7 +315,7 @@ def benchmarking():
         
         print(date)
         # Add 6 hours onto time.
-        date = date + timedelta(days=+60)
+        date = date + timedelta(days=+1)
 
     # Benchmark complete.
     print("Benchmarking Complete.")
