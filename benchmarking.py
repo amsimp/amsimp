@@ -173,11 +173,11 @@ def benchmarking():
                 detail = amsimp.Dynamics(input_date=date, forecast_length=120, efs=False, ai=False)
                 label = "physical_model"
             elif num == 1:
-                detail = amsimp.Dynamics(input_date=date, forecast_length=120, efs=False)
-                label = "physical_model_with_rnn"
+                detail = amsimp.Dynamics(input_date=date, forecast_length=120, ai=False, models=3)
+                label = "physical_model_with_efs"
             elif num == 2:
                 detail = amsimp.Dynamics(input_date=date, forecast_length=120, models=3)
-                label = "physical_model_with_rnn_and_efs"
+                label = "physical_model_with_efs_and_rnn"
 
             # Start timer.
             start = time.time()
@@ -214,6 +214,38 @@ def benchmarking():
             rh = output[7].data
             rh = rh[:, ::(30*6), :, :, :]
 
+            # Get mean forecast if EFS is enabled.
+            if len(height.shape) == 5:
+                # Geopotential Height.
+                height = np.mean(height, axis=0)
+                # Geostrophic Wind.
+                # Zonal Wind.
+                u = np.mean(u, axis=0)
+                # Meridional Wind.
+                v = np.mean(v, axis=0)
+                # Temperature.
+                # Air Temperature.
+                temp = np.mean(temp, axis=0)
+                # Virtual Temperature.
+                temp_v = np.mean(temp_v, axis=0)
+                # Relative Humidity.
+                rh = np.mean(rh)
+            else:
+                # Geopotential Height.
+                height = height[0]
+                # Geostrophic Wind.
+                # Zonal Wind.
+                u = u[0]
+                # Meridional Wind.
+                v = v[0]
+                # Temperature.
+                # Air Temperature.
+                temp = temp[0]
+                # Virtual Temperature.
+                temp_v = temp_v[0]
+                # Relative Humidity.
+                rh = rh[0]
+
             # Store runtime in variable.
             finish = time.time()
             runtime = finish - start
@@ -238,80 +270,76 @@ def benchmarking():
             # Relative Humidity.
             actual_rh = relative_humidity[i:len_forecast, :, :, :]
             
-            for something in range(len(height)):
-                # Geopotential Height.
-                height_error = accuracy_benchmark(height[something], actual_height)
-                height_error = np.transpose(height_error)
-                height_df = pd.DataFrame(
-                    data=height_error, index=indices, columns=measures_of_error
-                )
-                # Geostrophic Wind.
-                # Zonal Wind.
-                u_error = accuracy_benchmark(u[something], actual_u)
-                u_error = np.transpose(u_error)
-                u_df = pd.DataFrame(
-                    data=u_error, index=indices, columns=measures_of_error
-                )
-                # Meridional Wind.
-                v_error = accuracy_benchmark(v[something], actual_v)
-                v_error = np.transpose(v_error)
-                v_df = pd.DataFrame(
-                    data=v_error, index=indices, columns=measures_of_error
-                )
-                # Temperature.
-                # Air Temperature.
-                temp_error = accuracy_benchmark(temp[something], actual_temp)
-                temp_error = np.transpose(temp_error)
-                temp_df = pd.DataFrame(
-                    data=temp_error, index=indices, columns=measures_of_error
-                )
-                # Virtual Temperature.
-                tempv_error = accuracy_benchmark(temp_v[something], actual_tempv)
-                tempv_error = np.transpose(tempv_error)
-                tempv_df = pd.DataFrame(
-                    data=tempv_error, index=indices, columns=measures_of_error
-                )
-                # Relative Humidity.
-                rh_error = accuracy_benchmark(rh[something], actual_rh)
-                rh_error = np.transpose(rh_error)
-                rh_df = pd.DataFrame(
-                    data=rh_error, index=indices, columns=measures_of_error
-                )
+            # Geopotential Height.
+            height_error = accuracy_benchmark(height, actual_height)
+            height_error = np.transpose(height_error)
+            height_df = pd.DataFrame(
+                data=height_error, index=indices, columns=measures_of_error
+            )
+            # Geostrophic Wind.
+            # Zonal Wind.
+            u_error = accuracy_benchmark(u, actual_u)
+            u_error = np.transpose(u_error)
+            u_df = pd.DataFrame(
+                data=u_error, index=indices, columns=measures_of_error
+            )
+            # Meridional Wind.
+            v_error = accuracy_benchmark(v, actual_v)
+            v_error = np.transpose(v_error)
+            v_df = pd.DataFrame(
+                data=v_error, index=indices, columns=measures_of_error
+            )
+            # Temperature.
+            # Air Temperature.
+            temp_error = accuracy_benchmark(temp, actual_temp)
+            temp_error = np.transpose(temp_error)
+            temp_df = pd.DataFrame(
+                data=temp_error, index=indices, columns=measures_of_error
+            )
+            # Virtual Temperature.
+            tempv_error = accuracy_benchmark(temp_v, actual_tempv)
+            tempv_error = np.transpose(tempv_error)
+            tempv_df = pd.DataFrame(
+                data=tempv_error, index=indices, columns=measures_of_error
+            )
+            # Relative Humidity.
+            rh_error = accuracy_benchmark(rh, actual_rh)
+            rh_error = np.transpose(rh_error)
+            rh_df = pd.DataFrame(
+                data=rh_error, index=indices, columns=measures_of_error
+            )
 
-                # Output folder and file name.
-                if i != 2:
-                    folder = "benchmarking/accuracy/amsimp/"+label+"/"
-                else:
-                    folder = "benchmarking/accuracy/amsimp/"+label+"/"+str(something+1)+"/"
+            # Output folder and file name.
+            folder = "benchmarking/accuracy/amsimp/"+label+"/"
 
-                # Save Results.
-                # Create folders.
-                # Geopotential Height.
-                height_folder = folder+"geopotential_height/"
-                create_folder(height_folder)
-                height_df.to_csv(height_folder+date.strftime("%Y-%m-%d")+".csv")
-                # Geostrophic Wind.
-                # Zonal Wind.
-                u_folder = folder+"zonal_wind/"
-                create_folder(u_folder)
-                u_df.to_csv(u_folder+date.strftime("%Y-%m-%d")+".csv")
-                # Meridional Wind.
-                v_folder = folder+"meridional_wind/"
-                create_folder(v_folder)
-                v_df.to_csv(v_folder+date.strftime("%Y-%m-%d")+".csv")
-                # Temperature.
-                # Air Temperature.
-                temp_folder = folder+"temperature/"
-                create_folder(temp_folder)
-                temp_df.to_csv(temp_folder+date.strftime("%Y-%m-%d")+".csv")
-                # Virtual Temperature
-                tempv_folder = folder+"virtual_temperature/"
-                create_folder(tempv_folder)
-                tempv_df.to_csv(tempv_folder+date.strftime("%Y-%m-%d")+".csv")
-                # Relative Humidity.
-                rh_folder = folder+"relative_humidity/"
-                create_folder(rh_folder)
-                rh_df.to_csv(rh_folder+date.strftime("%Y-%m-%d")+".csv") 
+            # Save Results.
+            # Create folders.
+            # Geopotential Height.
+            height_folder = folder+"geopotential_height/"
+            create_folder(height_folder)
+            height_df.to_csv(height_folder+date.strftime("%Y-%m-%d")+".csv")
+            # Geostrophic Wind.
+            # Zonal Wind.
+            u_folder = folder+"zonal_wind/"
+            create_folder(u_folder)
+            u_df.to_csv(u_folder+date.strftime("%Y-%m-%d")+".csv")
+            # Meridional Wind.
+            v_folder = folder+"meridional_wind/"
+            create_folder(v_folder)
+            v_df.to_csv(v_folder+date.strftime("%Y-%m-%d")+".csv")
+            # Temperature.
+            # Air Temperature.
+            temp_folder = folder+"temperature/"
+            create_folder(temp_folder)
+            temp_df.to_csv(temp_folder+date.strftime("%Y-%m-%d")+".csv")
+            # Virtual Temperature
+            tempv_folder = folder+"virtual_temperature/"
+            create_folder(tempv_folder)
+            tempv_df.to_csv(tempv_folder+date.strftime("%Y-%m-%d")+".csv")
+            # Relative Humidity.
+            rh_folder = folder+"relative_humidity/"
+            create_folder(rh_folder)
+            rh_df.to_csv(rh_folder+date.strftime("%Y-%m-%d")+".csv") 
         
         print(date)
         # Add 6 hours onto time.
