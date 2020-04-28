@@ -215,7 +215,7 @@ def benchmarking():
             rh = rh[:, ::(30*6), :, :, :]
 
             # Get mean forecast if EFS is enabled.
-            if len(height.shape) == 5:
+            if num != 0:
                 # Geopotential Height.
                 height = np.mean(height, axis=0)
                 # Geostrophic Wind.
