@@ -284,11 +284,11 @@ cdef class RNN(Wind):
 
         # Prediction.
         # Set up inputs.
-        predict_temp_input = temperature[-past_history]
+        predict_temp_input = temperature[-past_history:, :]
         predict_temp_input = predict_temp_input.reshape(
             1, predict_temp_input.shape[0], predict_temp_input.shape[1]
         )
-        predict_rh_input = relative_humidity[-past_history]
+        predict_rh_input = relative_humidity[-past_history:, :]
         predict_rh_input = predict_rh_input.reshape(
             1, predict_rh_input.shape[0], predict_rh_input.shape[1]
         )

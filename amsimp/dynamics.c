@@ -5982,13 +5982,24 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   /* "amsimp/dynamics.pyx":287
  *         # Prediction.
  *         # Set up inputs.
- *         predict_temp_input = temperature[-past_history]             # <<<<<<<<<<<<<<
+ *         predict_temp_input = temperature[-past_history:, :]             # <<<<<<<<<<<<<<
  *         predict_temp_input = predict_temp_input.reshape(
  *             1, predict_temp_input.shape[0], predict_temp_input.shape[1]
  */
   __Pyx_TraceLine(287,0,__PYX_ERR(0, 287, __pyx_L1_error))
   __pyx_t_4 = PyNumber_Negative(__pyx_v_past_history); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 287, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_1 = PySlice_New(__pyx_t_4, Py_None, Py_None); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 287, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 287, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_1);
+  __Pyx_INCREF(__pyx_slice__6);
+  __Pyx_GIVEREF(__pyx_slice__6);
+  PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_slice__6);
+  __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_temperature, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 287, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -5997,7 +6008,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
 
   /* "amsimp/dynamics.pyx":288
  *         # Set up inputs.
- *         predict_temp_input = temperature[-past_history]
+ *         predict_temp_input = temperature[-past_history:, :]
  *         predict_temp_input = predict_temp_input.reshape(             # <<<<<<<<<<<<<<
  *             1, predict_temp_input.shape[0], predict_temp_input.shape[1]
  *         )
@@ -6007,11 +6018,11 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __Pyx_GOTREF(__pyx_t_4);
 
   /* "amsimp/dynamics.pyx":289
- *         predict_temp_input = temperature[-past_history]
+ *         predict_temp_input = temperature[-past_history:, :]
  *         predict_temp_input = predict_temp_input.reshape(
  *             1, predict_temp_input.shape[0], predict_temp_input.shape[1]             # <<<<<<<<<<<<<<
  *         )
- *         predict_rh_input = relative_humidity[-past_history]
+ *         predict_rh_input = relative_humidity[-past_history:, :]
  */
   __Pyx_TraceLine(289,0,__PYX_ERR(0, 289, __pyx_L1_error))
   __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_predict_temp_input, __pyx_n_s_shape); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 289, __pyx_L1_error)
@@ -6082,13 +6093,24 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   /* "amsimp/dynamics.pyx":291
  *             1, predict_temp_input.shape[0], predict_temp_input.shape[1]
  *         )
- *         predict_rh_input = relative_humidity[-past_history]             # <<<<<<<<<<<<<<
+ *         predict_rh_input = relative_humidity[-past_history:, :]             # <<<<<<<<<<<<<<
  *         predict_rh_input = predict_rh_input.reshape(
  *             1, predict_rh_input.shape[0], predict_rh_input.shape[1]
  */
   __Pyx_TraceLine(291,0,__PYX_ERR(0, 291, __pyx_L1_error))
   __pyx_t_1 = PyNumber_Negative(__pyx_v_past_history); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 291, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_4 = PySlice_New(__pyx_t_1, Py_None, Py_None); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 291, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 291, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_4);
+  __Pyx_INCREF(__pyx_slice__6);
+  __Pyx_GIVEREF(__pyx_slice__6);
+  PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_slice__6);
+  __pyx_t_4 = 0;
   __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_relative_humidity, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 291, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -6097,7 +6119,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
 
   /* "amsimp/dynamics.pyx":292
  *         )
- *         predict_rh_input = relative_humidity[-past_history]
+ *         predict_rh_input = relative_humidity[-past_history:, :]
  *         predict_rh_input = predict_rh_input.reshape(             # <<<<<<<<<<<<<<
  *             1, predict_rh_input.shape[0], predict_rh_input.shape[1]
  *         )
@@ -6107,7 +6129,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __Pyx_GOTREF(__pyx_t_1);
 
   /* "amsimp/dynamics.pyx":293
- *         predict_rh_input = relative_humidity[-past_history]
+ *         predict_rh_input = relative_humidity[-past_history:, :]
  *         predict_rh_input = predict_rh_input.reshape(
  *             1, predict_rh_input.shape[0], predict_rh_input.shape[1]             # <<<<<<<<<<<<<<
  *         )
