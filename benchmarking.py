@@ -182,7 +182,13 @@ def benchmarking():
             # Start timer.
             start = time.time()
 
-            output = detail.atmospheric_prognostic_method()
+            while True:
+                try:
+                    output = detail.atmospheric_prognostic_method()
+                except:
+                    print("Failed, retrying ("+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+").")
+                else:
+                    break
 
             # Indices for DataFrame.
             indices = detail.forecast_period()[0].value[::(30*6)]
