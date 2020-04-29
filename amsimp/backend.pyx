@@ -159,13 +159,12 @@ cdef class Backend:
         # The date at which the initial conditions was gathered (i.e. how
         # recent the data is).
         if self.input_date == None:
-            data_date = np.load(
-                wget.download(
-                    "https://github.com/amsimp/initial-conditions/raw/master/date.npy", 
-                    bar=None,
-                )
+            data_date_file = wget.download(
+                "https://github.com/amsimp/initial-conditions/raw/master/date.npy", 
+                bar=None,
             )
-            os.remove('date.npy')
+            data_date = np.load(data_date_file)
+            os.remove(data_date_file)
             date = datetime(
                 int(data_date[2]),
                 int(data_date[1]),
