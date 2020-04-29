@@ -588,8 +588,15 @@ cdef class Dynamics(RNN):
         if self.ai:
             prediction_ai = self.model_prediction()
             prediction_ai_temp = prediction_ai[0] * self.units.K
-            prediction_ai_height = prediction_ai[1] * self.units.m
-            prediction_ai_rh = prediction_ai[2] * self.units.percent
+            prediction_ai_temp = smooth_gaussian(
+                scalar_grid=prediction_ai_temp.value,
+                n=3,
+            ).magnitude * prediction_ai_temp.unit
+            prediction_ai_rh = prediction_ai[1] * self.units.percent
+            rh = smooth_gaussian(
+                scalar_grid=rh.value,
+                n=3,
+            ).magnitude * rh.unit
             iterator_ai = 0
 
         # Define variable types.
@@ -862,8 +869,16 @@ cdef class Dynamics(RNN):
                     if t != 0 and t % 21600 == 0:
                         # Temperature. 
                         T = (T + prediction_ai_temp) / 2
+                        T = smooth_gaussian(
+                            scalar_grid=T.value,
+                            n=3,
+                        ).magnitude * T.unit
                         # Relative Humidity.
                         rh = (rh + prediction_ai_rh) / 2
+                        rh = smooth_gaussian(
+                            scalar_grid=rh.value,
+                            n=3,
+                        ).magnitude * rh.unit
                 
                 # Configure the Wind class, so, that it aligns with the
                 # paramaters defined by the user.
@@ -883,6 +898,10 @@ cdef class Dynamics(RNN):
                     if t != 0 and t % 21600 == 0:
                         # Virtual Temperature.
                         T_v = self.virtual_temperature()
+                        T_v = smooth_gaussian(
+                            scalar_grid=T_v.value,
+                            n=3,
+                        ).magnitude * T_v.unit
 
                 # Geostrophic Wind.
                 # Zonal Wind.
@@ -945,15 +964,31 @@ cdef class Dynamics(RNN):
             # Randomise the initial conditions.
             randomise = (2 * random_sample(np.shape(geo_i)) - 1)
             randomise /= 4
+            randomise = smooth_gaussian(
+                scalar_grid=randomise,
+                n=8,
+            ).magnitude
             # Geopotential Height.
             geo_rand = randomise * geo_dev
             geo_i = geo_initial + geo_rand
+            geo_i = smooth_gaussian(
+                scalar_grid=geo_i.value,
+                n=2,
+            ).magnitude * geo_i.unit
             # Temperature.
             T_rand = randomise * T_dev
             T_i = T_initial + T_rand
+            T_i = smooth_gaussian(
+                scalar_grid=T_i.value,
+                n=2,
+            ).magnitude * T_i.unit
             # Virtual Temperature.
             Tv_rand = randomise * Tv_dev
             Tv_i = Tv_initial + Tv_rand
+            Tv_i = smooth_gaussian(
+                scalar_grid=Tv_i.value,
+                n=2,
+            ).magnitude * Tv_i.unit
 
             # Redefine the otherr output variables in
             # accordance with these newly defined initial

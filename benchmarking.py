@@ -235,7 +235,7 @@ def benchmarking():
                 # Virtual Temperature.
                 temp_v = np.mean(temp_v, axis=0)
                 # Relative Humidity.
-                rh = np.mean(rh)
+                rh = np.mean(rh, axis=0)
             else:
                 # Geopotential Height.
                 height = height[0]
