@@ -124,11 +124,14 @@ def benchmarking():
     # Historical Dataset.
     # Geopotential Height.
     geopotential_height = reshape(historical_data[1])
+    print(geopotential_height.shape)
     # Temperature.
     # Air Temperature.
     temperature = reshape(historical_data[0])
+    print(temperature.shape)
     # Relative Humidity.
     relative_humidity = reshape(historical_data[1])
+    print(relative_humidity.shape)
     
     # Loop through days.
     n = 0
@@ -239,7 +242,6 @@ def benchmarking():
             else:
                 # Geopotential Height.
                 height = height[0]
-                print(np.shape(height))
                 # Geostrophic Wind.
                 # Zonal Wind.
                 u = u[0]
