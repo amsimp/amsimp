@@ -150,8 +150,7 @@ def benchmarking():
 
     # Historical Dataset.
     # Geopotential Height.
-    geopotential_height = reshape(historical_data[1])
-    print(geopotential_height)
+    geopotential_height = reshape(historical_data[2])
     # Temperature.
     # Air Temperature.
     temperature = reshape(historical_data[0])

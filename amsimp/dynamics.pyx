@@ -113,6 +113,8 @@ cdef class RNN(Wind):
             # Convert data to NumPy arrays
             # Temperature.
             T = np.asarray(data[0].data)
+            # Geopotential Height.
+            geo = np.asarray(data[1].data)
             # Relative Humidity.
             rh = np.asarray(data[2].data)
 
@@ -123,12 +125,15 @@ cdef class RNN(Wind):
                 delta_longitude=self.delta_longitude,
                 remove_files=self.remove_files,
                 input_data=True, 
-                geo=self.geopotential_height(), 
+                geo=geo, 
                 temp=T, 
                 rh=rh, 
             )
 
             # Redefine NumPy arrays.
+            # Geopotential Height.
+            geo = config.geopotential_height().value
+            geo = geo.flatten()
             # Temperature.
             T = config.temperature().value
             T = T.flatten()
@@ -137,6 +142,8 @@ cdef class RNN(Wind):
             rh = rh.flatten()
 
             # Append to list.
+            # Geopotential Height.
+            geo_list.append(geo)
             # Temperature.
             T_list.append(T)
             # Relative Humidity.
@@ -152,6 +159,8 @@ cdef class RNN(Wind):
             bar.next()
 
         # Convert lists to NumPy arrays.
+        # Geopotential Height.
+        geopotential_height = np.asarray(geo_list)
         # Temperature.
         temperature = np.asarray(T_list)
         # Relative Humidity.
@@ -161,7 +170,7 @@ cdef class RNN(Wind):
         bar.finish()
 
         # Output.s
-        output = (temperature, relative_humidity)
+        output = (temperature, relative_humidity, geopotential_height)
         return output        
 
     def standardise_data(self):
