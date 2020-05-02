@@ -71,6 +71,29 @@ def mse(prediction, actual):
 def rmse(prediction, actual):
     return np.sqrt(mse(prediction, actual))
 
+# Mean Absolute Percentage Error.
+def mape(prediction, actual):
+    output = []
+    len_prediction = len(prediction)
+    for i in range(len_prediction):
+        mape = np.mean(
+            np.abs(
+                forecast_error(prediction[i], actual[i])
+            ) / np.abs(
+                actual[i]
+            )
+        )
+        output.append(mape)
+    return np.asarray(output)
+
+# Mean Absolute Scaled Error.
+def mase(prediction, actual):
+    mae_predict = mae(prediction, actual)
+    naive_predict = np.zeros(prediction.shape) + actual[0]
+    mae_naive = mae(naive_predict, actual)
+    output = mae_predict / mae_naive
+    return output
+
 # Combine accuracy benchmarks into a single function.
 def accuracy_benchmark(prediction, actual):
     output = []
@@ -79,11 +102,15 @@ def accuracy_benchmark(prediction, actual):
     mae_value = mae(prediction, actual)
     mse_value = mse(prediction, actual)
     rmse_value = rmse(prediction, actual)
+    mape_value = mape(prediction, actual)
+    mase_value = mase(prediction, actual)
 
     output.append(forecast_bias_value)
     output.append(mae_value)
     output.append(mse_value)
     output.append(rmse_value)
+    output.append(mape_value)
+    output.append(mase_value)
 
     return np.asarray(output)
 
@@ -196,7 +223,9 @@ def benchmarking():
             # Indices for DataFrame.
             indices = detail.forecast_period()[0].value[::(30*6)]
             # Columns for DataFrame.
-            measures_of_error = np.array(['forecast_bias', 'mae', 'mse', 'rmse'])
+            measures_of_error = np.array(
+                ['forecast_bias', 'mae', 'mse', 'rmse', 'mape', 'mase']
+            )
 
             detail.remove_all_files()
 
@@ -242,7 +271,6 @@ def benchmarking():
             else:
                 # Geopotential Height.
                 height = height[0]
-                print(height.shape)
                 # Geostrophic Wind.
                 # Zonal Wind.
                 u = u[0]
@@ -281,11 +309,13 @@ def benchmarking():
             actual_rh = relative_humidity[i:len_forecast, :, :, :]
             
             # Geopotential Height.
+            print(height.shape, actual_height.shape)
             height_error = accuracy_benchmark(height, actual_height)
             height_error = np.transpose(height_error)
             height_df = pd.DataFrame(
                 data=height_error, index=indices, columns=measures_of_error
             )
+            height_df.index.name = "forecast_period"
             # Geostrophic Wind.
             # Zonal Wind.
             u_error = accuracy_benchmark(u, actual_u)
@@ -293,12 +323,14 @@ def benchmarking():
             u_df = pd.DataFrame(
                 data=u_error, index=indices, columns=measures_of_error
             )
+            u_df.index.name = "forecast_period"
             # Meridional Wind.
             v_error = accuracy_benchmark(v, actual_v)
             v_error = np.transpose(v_error)
             v_df = pd.DataFrame(
                 data=v_error, index=indices, columns=measures_of_error
             )
+            v_df.index.name = "forecast_period"
             # Temperature.
             # Air Temperature.
             temp_error = accuracy_benchmark(temp, actual_temp)
@@ -306,18 +338,21 @@ def benchmarking():
             temp_df = pd.DataFrame(
                 data=temp_error, index=indices, columns=measures_of_error
             )
+            temp_df.index.name = "forecast_period"
             # Virtual Temperature.
             tempv_error = accuracy_benchmark(temp_v, actual_tempv)
             tempv_error = np.transpose(tempv_error)
             tempv_df = pd.DataFrame(
                 data=tempv_error, index=indices, columns=measures_of_error
             )
+            tempv_df.index.name = "forecast_period"
             # Relative Humidity.
             rh_error = accuracy_benchmark(rh, actual_rh)
             rh_error = np.transpose(rh_error)
             rh_df = pd.DataFrame(
                 data=rh_error, index=indices, columns=measures_of_error
             )
+            rh_df.index.name = "forecast_period"
 
             # Output folder and file name.
             folder = "benchmarking/accuracy/amsimp/"+label+"/"
