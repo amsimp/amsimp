@@ -239,9 +239,11 @@ def benchmarking():
             else:
                 # Geopotential Height.
                 height = height[0]
+                print(np.shape(height))
                 # Geostrophic Wind.
                 # Zonal Wind.
                 u = u[0]
+                print(np.shape(u))
                 # Meridional Wind.
                 v = v[0]
                 # Temperature.
