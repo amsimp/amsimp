@@ -151,6 +151,7 @@ def benchmarking():
     # Historical Dataset.
     # Geopotential Height.
     geopotential_height = reshape(historical_data[1])
+    print(geopotential_height)
     # Temperature.
     # Air Temperature.
     temperature = reshape(historical_data[0])
@@ -306,7 +307,6 @@ def benchmarking():
             actual_rh = relative_humidity[i:len_forecast, :, :, :]
             
             # Geopotential Height.
-            print(height.shape, actual_height.shape)
             height_error = accuracy_benchmark(height, actual_height)
             height_error = np.transpose(height_error)
             height_df = pd.DataFrame(
