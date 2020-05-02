@@ -646,7 +646,7 @@ cdef class Dynamics(RNN):
             # Define lists for ouputs.
             # Geopotential Height.
             geopotential_height = []
-            geopotential_height.append(geo_i.value)
+            geopotential_height.append(height.value)
             # Temperature.
             # Air Temperature.
             temperature = []

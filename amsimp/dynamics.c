@@ -10732,7 +10732,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
  *             # Define lists for ouputs.
  *             # Geopotential Height.
  *             geopotential_height = []             # <<<<<<<<<<<<<<
- *             geopotential_height.append(geo_i.value)
+ *             geopotential_height.append(height.value)
  *             # Temperature.
  */
     __Pyx_TraceLine(648,0,__PYX_ERR(0, 648, __pyx_L1_error))
@@ -10744,12 +10744,12 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
     /* "amsimp/dynamics.pyx":649
  *             # Geopotential Height.
  *             geopotential_height = []
- *             geopotential_height.append(geo_i.value)             # <<<<<<<<<<<<<<
+ *             geopotential_height.append(height.value)             # <<<<<<<<<<<<<<
  *             # Temperature.
  *             # Air Temperature.
  */
     __Pyx_TraceLine(649,0,__PYX_ERR(0, 649, __pyx_L1_error))
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_geo_i), __pyx_n_s_value); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 649, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_height), __pyx_n_s_value); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 649, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_geopotential_height, __pyx_t_6); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 649, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
