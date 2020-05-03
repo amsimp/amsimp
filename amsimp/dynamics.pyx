@@ -307,6 +307,7 @@ cdef class RNN(Wind):
 
         # Invert normalisation.
         predict_temp = self.sc.inverse_transform(predict_temp)
+        print(predict_temp.shape)
         predict_rh = self.sc.inverse_transform(predict_rh)
 
         # Reshape into 3d arrays.
