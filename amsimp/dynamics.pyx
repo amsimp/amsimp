@@ -303,8 +303,9 @@ cdef class RNN(Wind):
         )
         # Make predictions.
         predict_temp = temp_model.predict(predict_temp_input)
-        print(predict_temp.shape, predict_temp_input.shape)
+        predict_temp = predict_temp[0]
         predict_rh = rh_model.predict(predict_rh_input)
+        predict_rh = predict_rh[0]
 
         # Invert normalisation.
         predict_temp = self.sc.inverse_transform(predict_temp)
