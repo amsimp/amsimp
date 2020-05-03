@@ -8561,7 +8561,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   int __pyx_v_m;
   PyArrayObject *__pyx_v_prediction_ai_temp = 0;
   PyArrayObject *__pyx_v_prediction_ai_rh = 0;
-  CYTHON_UNUSED int __pyx_v_iterator_ai;
+  int __pyx_v_iterator_ai;
   PyObject *__pyx_v_prediction_ai = NULL;
   PyArrayObject *__pyx_v_geo_0 = 0;
   PyArrayObject *__pyx_v_geo_n = 0;
@@ -13006,7 +13006,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
  *                     # Apply predictions every six hours.
  *                     if t != 0 and t % 21600 == 0:             # <<<<<<<<<<<<<<
  *                         # Temperature.
- *                         T = (T + prediction_ai_temp) / 2
+ *                         T = (T + prediction_ai_temp[iterator_ai]) / 2
  */
         __Pyx_TraceLine(880,0,__PYX_ERR(0, 880, __pyx_L1_error))
         __pyx_t_7 = ((__pyx_v_t != 0) != 0);
@@ -13023,167 +13023,183 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
           /* "amsimp/dynamics.pyx":882
  *                     if t != 0 and t % 21600 == 0:
  *                         # Temperature.
- *                         T = (T + prediction_ai_temp) / 2             # <<<<<<<<<<<<<<
+ *                         T = (T + prediction_ai_temp[iterator_ai]) / 2             # <<<<<<<<<<<<<<
  *                         T = smooth_gaussian(
  *                             scalar_grid=T.value,
  */
           __Pyx_TraceLine(882,0,__PYX_ERR(0, 882, __pyx_L1_error))
           if (unlikely(!__pyx_v_prediction_ai_temp)) { __Pyx_RaiseUnboundLocalError("prediction_ai_temp"); __PYX_ERR(0, 882, __pyx_L1_error) }
-          __pyx_t_4 = PyNumber_Add(((PyObject *)__pyx_v_T), ((PyObject *)__pyx_v_prediction_ai_temp)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 882, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_GetItemInt(((PyObject *)__pyx_v_prediction_ai_temp), __pyx_v_iterator_ai, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 882, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_4);
-          __pyx_t_2 = __Pyx_PyInt_TrueDivideObjC(__pyx_t_4, __pyx_int_2, 2, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 882, __pyx_L1_error)
+          __pyx_t_2 = PyNumber_Add(((PyObject *)__pyx_v_T), __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 882, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-          if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 882, __pyx_L1_error)
-          __Pyx_DECREF_SET(__pyx_v_T, ((PyArrayObject *)__pyx_t_2));
-          __pyx_t_2 = 0;
+          __pyx_t_4 = __Pyx_PyInt_TrueDivideObjC(__pyx_t_2, __pyx_int_2, 2, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 882, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_4);
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+          if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 882, __pyx_L1_error)
+          __Pyx_DECREF_SET(__pyx_v_T, ((PyArrayObject *)__pyx_t_4));
+          __pyx_t_4 = 0;
 
           /* "amsimp/dynamics.pyx":883
  *                         # Temperature.
- *                         T = (T + prediction_ai_temp) / 2
+ *                         T = (T + prediction_ai_temp[iterator_ai]) / 2
  *                         T = smooth_gaussian(             # <<<<<<<<<<<<<<
  *                             scalar_grid=T.value,
  *                             n=3,
  */
           __Pyx_TraceLine(883,0,__PYX_ERR(0, 883, __pyx_L1_error))
-          __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_smooth_gaussian); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 883, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_2);
+          __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_smooth_gaussian); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 883, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_4);
 
           /* "amsimp/dynamics.pyx":884
- *                         T = (T + prediction_ai_temp) / 2
+ *                         T = (T + prediction_ai_temp[iterator_ai]) / 2
  *                         T = smooth_gaussian(
  *                             scalar_grid=T.value,             # <<<<<<<<<<<<<<
  *                             n=3,
  *                         ).magnitude * T.unit
  */
           __Pyx_TraceLine(884,0,__PYX_ERR(0, 884, __pyx_L1_error))
-          __pyx_t_4 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 884, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_4);
+          __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 884, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_2);
           __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T), __pyx_n_s_value); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 884, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_6);
-          if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_scalar_grid, __pyx_t_6) < 0) __PYX_ERR(0, 884, __pyx_L1_error)
+          if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_scalar_grid, __pyx_t_6) < 0) __PYX_ERR(0, 884, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-          if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_n, __pyx_int_3) < 0) __PYX_ERR(0, 884, __pyx_L1_error)
+          if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_n, __pyx_int_3) < 0) __PYX_ERR(0, 884, __pyx_L1_error)
 
           /* "amsimp/dynamics.pyx":883
  *                         # Temperature.
- *                         T = (T + prediction_ai_temp) / 2
+ *                         T = (T + prediction_ai_temp[iterator_ai]) / 2
  *                         T = smooth_gaussian(             # <<<<<<<<<<<<<<
  *                             scalar_grid=T.value,
  *                             n=3,
  */
           __Pyx_TraceLine(883,0,__PYX_ERR(0, 883, __pyx_L1_error))
-          __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 883, __pyx_L1_error)
+          __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 883, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_6);
-          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
           /* "amsimp/dynamics.pyx":886
  *                             scalar_grid=T.value,
  *                             n=3,
  *                         ).magnitude * T.unit             # <<<<<<<<<<<<<<
  *                         # Relative Humidity.
- *                         rh = (rh + prediction_ai_rh) / 2
+ *                         rh = (rh + prediction_ai_rh[iterator_ai]) / 2
  */
           __Pyx_TraceLine(886,0,__PYX_ERR(0, 886, __pyx_L1_error))
-          __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_magnitude); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 886, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_4);
+          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_magnitude); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 886, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
           __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T), __pyx_n_s_unit); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 886, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_6);
-          __pyx_t_2 = PyNumber_Multiply(__pyx_t_4, __pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 886, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_2);
-          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __pyx_t_4 = PyNumber_Multiply(__pyx_t_2, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 886, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_4);
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-          if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 886, __pyx_L1_error)
-          __Pyx_DECREF_SET(__pyx_v_T, ((PyArrayObject *)__pyx_t_2));
-          __pyx_t_2 = 0;
+          if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 886, __pyx_L1_error)
+          __Pyx_DECREF_SET(__pyx_v_T, ((PyArrayObject *)__pyx_t_4));
+          __pyx_t_4 = 0;
 
           /* "amsimp/dynamics.pyx":888
  *                         ).magnitude * T.unit
  *                         # Relative Humidity.
- *                         rh = (rh + prediction_ai_rh) / 2             # <<<<<<<<<<<<<<
+ *                         rh = (rh + prediction_ai_rh[iterator_ai]) / 2             # <<<<<<<<<<<<<<
  *                         rh = smooth_gaussian(
  *                             scalar_grid=rh.value,
  */
           __Pyx_TraceLine(888,0,__PYX_ERR(0, 888, __pyx_L1_error))
           if (unlikely(!__pyx_v_prediction_ai_rh)) { __Pyx_RaiseUnboundLocalError("prediction_ai_rh"); __PYX_ERR(0, 888, __pyx_L1_error) }
-          __pyx_t_2 = PyNumber_Add(((PyObject *)__pyx_v_rh), ((PyObject *)__pyx_v_prediction_ai_rh)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 888, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_2);
-          __pyx_t_6 = __Pyx_PyInt_TrueDivideObjC(__pyx_t_2, __pyx_int_2, 2, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 888, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_GetItemInt(((PyObject *)__pyx_v_prediction_ai_rh), __pyx_v_iterator_ai, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 888, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_4);
+          __pyx_t_6 = PyNumber_Add(((PyObject *)__pyx_v_rh), __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 888, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_6);
-          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-          if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 888, __pyx_L1_error)
-          __Pyx_DECREF_SET(__pyx_v_rh, ((PyArrayObject *)__pyx_t_6));
-          __pyx_t_6 = 0;
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __pyx_t_4 = __Pyx_PyInt_TrueDivideObjC(__pyx_t_6, __pyx_int_2, 2, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 888, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_4);
+          __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+          if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 888, __pyx_L1_error)
+          __Pyx_DECREF_SET(__pyx_v_rh, ((PyArrayObject *)__pyx_t_4));
+          __pyx_t_4 = 0;
 
           /* "amsimp/dynamics.pyx":889
  *                         # Relative Humidity.
- *                         rh = (rh + prediction_ai_rh) / 2
+ *                         rh = (rh + prediction_ai_rh[iterator_ai]) / 2
  *                         rh = smooth_gaussian(             # <<<<<<<<<<<<<<
  *                             scalar_grid=rh.value,
  *                             n=3,
  */
           __Pyx_TraceLine(889,0,__PYX_ERR(0, 889, __pyx_L1_error))
-          __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_smooth_gaussian); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 889, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_6);
+          __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_smooth_gaussian); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 889, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_4);
 
           /* "amsimp/dynamics.pyx":890
- *                         rh = (rh + prediction_ai_rh) / 2
+ *                         rh = (rh + prediction_ai_rh[iterator_ai]) / 2
  *                         rh = smooth_gaussian(
  *                             scalar_grid=rh.value,             # <<<<<<<<<<<<<<
  *                             n=3,
  *                         ).magnitude * rh.unit
  */
           __Pyx_TraceLine(890,0,__PYX_ERR(0, 890, __pyx_L1_error))
-          __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 890, __pyx_L1_error)
+          __pyx_t_6 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 890, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_6);
+          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_rh), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 890, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
-          __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_rh), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 890, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_4);
-          if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_scalar_grid, __pyx_t_4) < 0) __PYX_ERR(0, 890, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-          if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_n, __pyx_int_3) < 0) __PYX_ERR(0, 890, __pyx_L1_error)
+          if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_scalar_grid, __pyx_t_2) < 0) __PYX_ERR(0, 890, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+          if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_n, __pyx_int_3) < 0) __PYX_ERR(0, 890, __pyx_L1_error)
 
           /* "amsimp/dynamics.pyx":889
  *                         # Relative Humidity.
- *                         rh = (rh + prediction_ai_rh) / 2
+ *                         rh = (rh + prediction_ai_rh[iterator_ai]) / 2
  *                         rh = smooth_gaussian(             # <<<<<<<<<<<<<<
  *                             scalar_grid=rh.value,
  *                             n=3,
  */
           __Pyx_TraceLine(889,0,__PYX_ERR(0, 889, __pyx_L1_error))
-          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 889, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_4);
+          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 889, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_2);
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
           /* "amsimp/dynamics.pyx":892
  *                             scalar_grid=rh.value,
  *                             n=3,
  *                         ).magnitude * rh.unit             # <<<<<<<<<<<<<<
+ *                         # Iterator.
+ *                         iterator_ai += 1
+ */
+          __Pyx_TraceLine(892,0,__PYX_ERR(0, 892, __pyx_L1_error))
+          __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_magnitude); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 892, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_6);
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_rh), __pyx_n_s_unit); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 892, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_2);
+          __pyx_t_4 = PyNumber_Multiply(__pyx_t_6, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 892, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_4);
+          __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+          if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 892, __pyx_L1_error)
+          __Pyx_DECREF_SET(__pyx_v_rh, ((PyArrayObject *)__pyx_t_4));
+          __pyx_t_4 = 0;
+
+          /* "amsimp/dynamics.pyx":894
+ *                         ).magnitude * rh.unit
+ *                         # Iterator.
+ *                         iterator_ai += 1             # <<<<<<<<<<<<<<
  * 
  *                 # Configure the Wind class, so, that it aligns with the
  */
-          __Pyx_TraceLine(892,0,__PYX_ERR(0, 892, __pyx_L1_error))
-          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_magnitude); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 892, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_2);
-          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-          __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_rh), __pyx_n_s_unit); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 892, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_4);
-          __pyx_t_6 = PyNumber_Multiply(__pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 892, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_6);
-          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-          if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 892, __pyx_L1_error)
-          __Pyx_DECREF_SET(__pyx_v_rh, ((PyArrayObject *)__pyx_t_6));
-          __pyx_t_6 = 0;
+          __Pyx_TraceLine(894,0,__PYX_ERR(0, 894, __pyx_L1_error))
+          __pyx_v_iterator_ai = (__pyx_v_iterator_ai + 1);
 
           /* "amsimp/dynamics.pyx":880
  *                 if self.ai:
  *                     # Apply predictions every six hours.
  *                     if t != 0 and t % 21600 == 0:             # <<<<<<<<<<<<<<
  *                         # Temperature.
- *                         T = (T + prediction_ai_temp) / 2
+ *                         T = (T + prediction_ai_temp[iterator_ai]) / 2
  */
         }
 
@@ -13196,117 +13212,117 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
  */
       }
 
-      /* "amsimp/dynamics.pyx":897
+      /* "amsimp/dynamics.pyx":899
  *                 # paramaters defined by the user.
  *                 config = Wind(
  *                     delta_latitude=self.delta_latitude,             # <<<<<<<<<<<<<<
  *                     delta_longitude=self.delta_longitude,
  *                     remove_files=self.remove_files,
  */
-      __Pyx_TraceLine(897,0,__PYX_ERR(0, 897, __pyx_L1_error))
-      __pyx_t_6 = __Pyx_PyDict_NewPresized(7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 897, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.delta_latitude); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 897, __pyx_L1_error)
+      __Pyx_TraceLine(899,0,__PYX_ERR(0, 899, __pyx_L1_error))
+      __pyx_t_4 = __Pyx_PyDict_NewPresized(7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 899, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_delta_latitude, __pyx_t_4) < 0) __PYX_ERR(0, 897, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.delta_latitude); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 899, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_delta_latitude, __pyx_t_2) < 0) __PYX_ERR(0, 899, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "amsimp/dynamics.pyx":898
+      /* "amsimp/dynamics.pyx":900
  *                 config = Wind(
  *                     delta_latitude=self.delta_latitude,
  *                     delta_longitude=self.delta_longitude,             # <<<<<<<<<<<<<<
  *                     remove_files=self.remove_files,
  *                     input_data=True,
  */
-      __Pyx_TraceLine(898,0,__PYX_ERR(0, 898, __pyx_L1_error))
-      __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.delta_longitude); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 898, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_delta_longitude, __pyx_t_4) < 0) __PYX_ERR(0, 897, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_TraceLine(900,0,__PYX_ERR(0, 900, __pyx_L1_error))
+      __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.delta_longitude); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 900, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_delta_longitude, __pyx_t_2) < 0) __PYX_ERR(0, 899, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "amsimp/dynamics.pyx":899
+      /* "amsimp/dynamics.pyx":901
  *                     delta_latitude=self.delta_latitude,
  *                     delta_longitude=self.delta_longitude,
  *                     remove_files=self.remove_files,             # <<<<<<<<<<<<<<
  *                     input_data=True,
  *                     geo=height,
  */
-      __Pyx_TraceLine(899,0,__PYX_ERR(0, 899, __pyx_L1_error))
-      if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_remove_files, ((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.remove_files)) < 0) __PYX_ERR(0, 897, __pyx_L1_error)
+      __Pyx_TraceLine(901,0,__PYX_ERR(0, 901, __pyx_L1_error))
+      if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_remove_files, ((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.remove_files)) < 0) __PYX_ERR(0, 899, __pyx_L1_error)
 
-      /* "amsimp/dynamics.pyx":900
+      /* "amsimp/dynamics.pyx":902
  *                     delta_longitude=self.delta_longitude,
  *                     remove_files=self.remove_files,
  *                     input_data=True,             # <<<<<<<<<<<<<<
  *                     geo=height,
  *                     temp=T,
  */
-      __Pyx_TraceLine(900,0,__PYX_ERR(0, 900, __pyx_L1_error))
-      if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_input_data, Py_True) < 0) __PYX_ERR(0, 897, __pyx_L1_error)
+      __Pyx_TraceLine(902,0,__PYX_ERR(0, 902, __pyx_L1_error))
+      if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_input_data, Py_True) < 0) __PYX_ERR(0, 899, __pyx_L1_error)
 
-      /* "amsimp/dynamics.pyx":901
+      /* "amsimp/dynamics.pyx":903
  *                     remove_files=self.remove_files,
  *                     input_data=True,
  *                     geo=height,             # <<<<<<<<<<<<<<
  *                     temp=T,
  *                     rh=rh,
  */
-      __Pyx_TraceLine(901,0,__PYX_ERR(0, 901, __pyx_L1_error))
-      if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_geo, ((PyObject *)__pyx_v_height)) < 0) __PYX_ERR(0, 897, __pyx_L1_error)
+      __Pyx_TraceLine(903,0,__PYX_ERR(0, 903, __pyx_L1_error))
+      if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_geo, ((PyObject *)__pyx_v_height)) < 0) __PYX_ERR(0, 899, __pyx_L1_error)
 
-      /* "amsimp/dynamics.pyx":902
+      /* "amsimp/dynamics.pyx":904
  *                     input_data=True,
  *                     geo=height,
  *                     temp=T,             # <<<<<<<<<<<<<<
  *                     rh=rh,
  *                 )
  */
-      __Pyx_TraceLine(902,0,__PYX_ERR(0, 902, __pyx_L1_error))
-      if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_temp, ((PyObject *)__pyx_v_T)) < 0) __PYX_ERR(0, 897, __pyx_L1_error)
+      __Pyx_TraceLine(904,0,__PYX_ERR(0, 904, __pyx_L1_error))
+      if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_temp, ((PyObject *)__pyx_v_T)) < 0) __PYX_ERR(0, 899, __pyx_L1_error)
 
-      /* "amsimp/dynamics.pyx":903
+      /* "amsimp/dynamics.pyx":905
  *                     geo=height,
  *                     temp=T,
  *                     rh=rh,             # <<<<<<<<<<<<<<
  *                 )
  * 
  */
-      __Pyx_TraceLine(903,0,__PYX_ERR(0, 903, __pyx_L1_error))
-      if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_rh, ((PyObject *)__pyx_v_rh)) < 0) __PYX_ERR(0, 897, __pyx_L1_error)
+      __Pyx_TraceLine(905,0,__PYX_ERR(0, 905, __pyx_L1_error))
+      if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_rh, ((PyObject *)__pyx_v_rh)) < 0) __PYX_ERR(0, 899, __pyx_L1_error)
 
-      /* "amsimp/dynamics.pyx":896
+      /* "amsimp/dynamics.pyx":898
  *                 # Configure the Wind class, so, that it aligns with the
  *                 # paramaters defined by the user.
  *                 config = Wind(             # <<<<<<<<<<<<<<
  *                     delta_latitude=self.delta_latitude,
  *                     delta_longitude=self.delta_longitude,
  */
-      __Pyx_TraceLine(896,0,__PYX_ERR(0, 896, __pyx_L1_error))
-      __pyx_t_4 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_6amsimp_4wind_Wind), __pyx_empty_tuple, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 896, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __Pyx_XDECREF_SET(__pyx_v_config, ((struct __pyx_obj_6amsimp_4wind_Wind *)__pyx_t_4));
-      __pyx_t_4 = 0;
+      __Pyx_TraceLine(898,0,__PYX_ERR(0, 898, __pyx_L1_error))
+      __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_6amsimp_4wind_Wind), __pyx_empty_tuple, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 898, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_XDECREF_SET(__pyx_v_config, ((struct __pyx_obj_6amsimp_4wind_Wind *)__pyx_t_2));
+      __pyx_t_2 = 0;
 
-      /* "amsimp/dynamics.pyx":907
+      /* "amsimp/dynamics.pyx":909
  * 
  *                 # Recurrent Neural Network.
  *                 if self.ai:             # <<<<<<<<<<<<<<
  *                     # Apply predictions every six hours.
  *                     if t != 0 and t % 21600 == 0:
  */
-      __Pyx_TraceLine(907,0,__PYX_ERR(0, 907, __pyx_L1_error))
-      __pyx_t_8 = __Pyx_PyObject_IsTrue(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.ai)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 907, __pyx_L1_error)
+      __Pyx_TraceLine(909,0,__PYX_ERR(0, 909, __pyx_L1_error))
+      __pyx_t_8 = __Pyx_PyObject_IsTrue(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.ai)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 909, __pyx_L1_error)
       if (__pyx_t_8) {
 
-        /* "amsimp/dynamics.pyx":909
+        /* "amsimp/dynamics.pyx":911
  *                 if self.ai:
  *                     # Apply predictions every six hours.
  *                     if t != 0 and t % 21600 == 0:             # <<<<<<<<<<<<<<
  *                         # Virtual Temperature.
  *                         T_v = self.virtual_temperature()
  */
-        __Pyx_TraceLine(909,0,__PYX_ERR(0, 909, __pyx_L1_error))
+        __Pyx_TraceLine(911,0,__PYX_ERR(0, 911, __pyx_L1_error))
         __pyx_t_7 = ((__pyx_v_t != 0) != 0);
         if (__pyx_t_7) {
         } else {
@@ -13318,81 +13334,81 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
         __pyx_L24_bool_binop_done:;
         if (__pyx_t_8) {
 
-          /* "amsimp/dynamics.pyx":911
+          /* "amsimp/dynamics.pyx":913
  *                     if t != 0 and t % 21600 == 0:
  *                         # Virtual Temperature.
  *                         T_v = self.virtual_temperature()             # <<<<<<<<<<<<<<
  *                         T_v = smooth_gaussian(
  *                             scalar_grid=T_v.value,
  */
-          __Pyx_TraceLine(911,0,__PYX_ERR(0, 911, __pyx_L1_error))
-          __pyx_t_4 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.virtual_temperature(((struct __pyx_obj_6amsimp_5moist_Moist *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 911, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_4);
-          __Pyx_DECREF_SET(__pyx_v_T_v, ((PyArrayObject *)__pyx_t_4));
-          __pyx_t_4 = 0;
+          __Pyx_TraceLine(913,0,__PYX_ERR(0, 913, __pyx_L1_error))
+          __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.virtual_temperature(((struct __pyx_obj_6amsimp_5moist_Moist *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 913, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_2);
+          __Pyx_DECREF_SET(__pyx_v_T_v, ((PyArrayObject *)__pyx_t_2));
+          __pyx_t_2 = 0;
 
-          /* "amsimp/dynamics.pyx":912
+          /* "amsimp/dynamics.pyx":914
  *                         # Virtual Temperature.
  *                         T_v = self.virtual_temperature()
  *                         T_v = smooth_gaussian(             # <<<<<<<<<<<<<<
  *                             scalar_grid=T_v.value,
  *                             n=3,
  */
-          __Pyx_TraceLine(912,0,__PYX_ERR(0, 912, __pyx_L1_error))
-          __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_smooth_gaussian); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 912, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_4);
+          __Pyx_TraceLine(914,0,__PYX_ERR(0, 914, __pyx_L1_error))
+          __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_smooth_gaussian); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 914, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_2);
 
-          /* "amsimp/dynamics.pyx":913
+          /* "amsimp/dynamics.pyx":915
  *                         T_v = self.virtual_temperature()
  *                         T_v = smooth_gaussian(
  *                             scalar_grid=T_v.value,             # <<<<<<<<<<<<<<
  *                             n=3,
  *                         ).magnitude * T_v.unit
  */
-          __Pyx_TraceLine(913,0,__PYX_ERR(0, 913, __pyx_L1_error))
-          __pyx_t_6 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 913, __pyx_L1_error)
+          __Pyx_TraceLine(915,0,__PYX_ERR(0, 915, __pyx_L1_error))
+          __pyx_t_4 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 915, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_4);
+          __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T_v), __pyx_n_s_value); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 915, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_6);
-          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T_v), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 913, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_2);
-          if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_scalar_grid, __pyx_t_2) < 0) __PYX_ERR(0, 913, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-          if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_n, __pyx_int_3) < 0) __PYX_ERR(0, 913, __pyx_L1_error)
+          if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_scalar_grid, __pyx_t_6) < 0) __PYX_ERR(0, 915, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+          if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_n, __pyx_int_3) < 0) __PYX_ERR(0, 915, __pyx_L1_error)
 
-          /* "amsimp/dynamics.pyx":912
+          /* "amsimp/dynamics.pyx":914
  *                         # Virtual Temperature.
  *                         T_v = self.virtual_temperature()
  *                         T_v = smooth_gaussian(             # <<<<<<<<<<<<<<
  *                             scalar_grid=T_v.value,
  *                             n=3,
  */
-          __Pyx_TraceLine(912,0,__PYX_ERR(0, 912, __pyx_L1_error))
-          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 912, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_2);
+          __Pyx_TraceLine(914,0,__PYX_ERR(0, 914, __pyx_L1_error))
+          __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 914, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_6);
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-          __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-          /* "amsimp/dynamics.pyx":915
+          /* "amsimp/dynamics.pyx":917
  *                             scalar_grid=T_v.value,
  *                             n=3,
  *                         ).magnitude * T_v.unit             # <<<<<<<<<<<<<<
  * 
  *                 # Geostrophic Wind.
  */
-          __Pyx_TraceLine(915,0,__PYX_ERR(0, 915, __pyx_L1_error))
-          __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_magnitude); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 915, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_6);
-          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T_v), __pyx_n_s_unit); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 915, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_2);
-          __pyx_t_4 = PyNumber_Multiply(__pyx_t_6, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 915, __pyx_L1_error)
+          __Pyx_TraceLine(917,0,__PYX_ERR(0, 917, __pyx_L1_error))
+          __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_magnitude); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 917, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-          if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 915, __pyx_L1_error)
-          __Pyx_DECREF_SET(__pyx_v_T_v, ((PyArrayObject *)__pyx_t_4));
-          __pyx_t_4 = 0;
+          __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T_v), __pyx_n_s_unit); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 917, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_6);
+          __pyx_t_2 = PyNumber_Multiply(__pyx_t_4, __pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 917, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_2);
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+          if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 917, __pyx_L1_error)
+          __Pyx_DECREF_SET(__pyx_v_T_v, ((PyArrayObject *)__pyx_t_2));
+          __pyx_t_2 = 0;
 
-          /* "amsimp/dynamics.pyx":909
+          /* "amsimp/dynamics.pyx":911
  *                 if self.ai:
  *                     # Apply predictions every six hours.
  *                     if t != 0 and t % 21600 == 0:             # <<<<<<<<<<<<<<
@@ -13401,7 +13417,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
  */
         }
 
-        /* "amsimp/dynamics.pyx":907
+        /* "amsimp/dynamics.pyx":909
  * 
  *                 # Recurrent Neural Network.
  *                 if self.ai:             # <<<<<<<<<<<<<<
@@ -13410,260 +13426,260 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
  */
       }
 
-      /* "amsimp/dynamics.pyx":919
+      /* "amsimp/dynamics.pyx":921
  *                 # Geostrophic Wind.
  *                 # Zonal Wind.
  *                 u_g = config.zonal_wind()             # <<<<<<<<<<<<<<
  *                 # Meridional Wind.
  *                 v_g = config.meridional_wind()
  */
-      __Pyx_TraceLine(919,0,__PYX_ERR(0, 919, __pyx_L1_error))
-      __pyx_t_4 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->zonal_wind(__pyx_v_config, 0)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 919, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF_SET(__pyx_v_u_g, ((PyArrayObject *)__pyx_t_4));
-      __pyx_t_4 = 0;
+      __Pyx_TraceLine(921,0,__PYX_ERR(0, 921, __pyx_L1_error))
+      __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->zonal_wind(__pyx_v_config, 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 921, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF_SET(__pyx_v_u_g, ((PyArrayObject *)__pyx_t_2));
+      __pyx_t_2 = 0;
 
-      /* "amsimp/dynamics.pyx":921
+      /* "amsimp/dynamics.pyx":923
  *                 u_g = config.zonal_wind()
  *                 # Meridional Wind.
  *                 v_g = config.meridional_wind()             # <<<<<<<<<<<<<<
  * 
  *                 # Vertical Motion.
  */
-      __Pyx_TraceLine(921,0,__PYX_ERR(0, 921, __pyx_L1_error))
-      __pyx_t_4 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->meridional_wind(__pyx_v_config, 0)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 921, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF_SET(__pyx_v_v_g, ((PyArrayObject *)__pyx_t_4));
-      __pyx_t_4 = 0;
+      __Pyx_TraceLine(923,0,__PYX_ERR(0, 923, __pyx_L1_error))
+      __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->meridional_wind(__pyx_v_config, 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 923, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF_SET(__pyx_v_v_g, ((PyArrayObject *)__pyx_t_2));
+      __pyx_t_2 = 0;
 
-      /* "amsimp/dynamics.pyx":924
+      /* "amsimp/dynamics.pyx":926
  * 
  *                 # Vertical Motion.
  *                 omega = config.vertical_motion()             # <<<<<<<<<<<<<<
  * 
  *                 # Static Stability.
  */
-      __Pyx_TraceLine(924,0,__PYX_ERR(0, 924, __pyx_L1_error))
-      __pyx_t_4 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->vertical_motion(__pyx_v_config, 0)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 924, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF_SET(__pyx_v_omega, ((PyArrayObject *)__pyx_t_4));
-      __pyx_t_4 = 0;
+      __Pyx_TraceLine(926,0,__PYX_ERR(0, 926, __pyx_L1_error))
+      __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->vertical_motion(__pyx_v_config, 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 926, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF_SET(__pyx_v_omega, ((PyArrayObject *)__pyx_t_2));
+      __pyx_t_2 = 0;
 
-      /* "amsimp/dynamics.pyx":927
+      /* "amsimp/dynamics.pyx":929
  * 
  *                 # Static Stability.
  *                 sigma = config.static_stability()             # <<<<<<<<<<<<<<
  * 
  *                 # Precipitable Water.
  */
-      __Pyx_TraceLine(927,0,__PYX_ERR(0, 927, __pyx_L1_error))
-      __pyx_t_4 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->static_stability(__pyx_v_config, 0)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 927, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF_SET(__pyx_v_sigma, ((PyArrayObject *)__pyx_t_4));
-      __pyx_t_4 = 0;
+      __Pyx_TraceLine(929,0,__PYX_ERR(0, 929, __pyx_L1_error))
+      __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->static_stability(__pyx_v_config, 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 929, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF_SET(__pyx_v_sigma, ((PyArrayObject *)__pyx_t_2));
+      __pyx_t_2 = 0;
 
-      /* "amsimp/dynamics.pyx":930
+      /* "amsimp/dynamics.pyx":932
  * 
  *                 # Precipitable Water.
  *                 pwv = config.precipitable_water()             # <<<<<<<<<<<<<<
  * 
  *                 # Append predictions to list.
  */
-      __Pyx_TraceLine(930,0,__PYX_ERR(0, 930, __pyx_L1_error))
-      __pyx_t_4 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.precipitable_water(((struct __pyx_obj_6amsimp_5moist_Moist *)__pyx_v_config), 0)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 930, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF_SET(__pyx_v_pwv, ((PyArrayObject *)__pyx_t_4));
-      __pyx_t_4 = 0;
+      __Pyx_TraceLine(932,0,__PYX_ERR(0, 932, __pyx_L1_error))
+      __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.precipitable_water(((struct __pyx_obj_6amsimp_5moist_Moist *)__pyx_v_config), 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 932, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF_SET(__pyx_v_pwv, ((PyArrayObject *)__pyx_t_2));
+      __pyx_t_2 = 0;
 
-      /* "amsimp/dynamics.pyx":933
+      /* "amsimp/dynamics.pyx":935
  * 
  *                 # Append predictions to list.
  *                 if n > 1:             # <<<<<<<<<<<<<<
  *                     # Geopotential Height.
  *                     geopotential_height.append(height.value)
  */
-      __Pyx_TraceLine(933,0,__PYX_ERR(0, 933, __pyx_L1_error))
+      __Pyx_TraceLine(935,0,__PYX_ERR(0, 935, __pyx_L1_error))
       __pyx_t_8 = ((__pyx_v_n > 1) != 0);
       if (__pyx_t_8) {
 
-        /* "amsimp/dynamics.pyx":935
+        /* "amsimp/dynamics.pyx":937
  *                 if n > 1:
  *                     # Geopotential Height.
  *                     geopotential_height.append(height.value)             # <<<<<<<<<<<<<<
  *                     # Geostrophic Wind.
  *                     # Zonal Wind.
  */
-        __Pyx_TraceLine(935,0,__PYX_ERR(0, 935, __pyx_L1_error))
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_height), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 935, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_geopotential_height, __pyx_t_4); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 935, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_TraceLine(937,0,__PYX_ERR(0, 937, __pyx_L1_error))
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_height), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 937, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_geopotential_height, __pyx_t_2); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 937, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "amsimp/dynamics.pyx":938
+        /* "amsimp/dynamics.pyx":940
  *                     # Geostrophic Wind.
  *                     # Zonal Wind.
  *                     zonal_wind.append(u_g.value)             # <<<<<<<<<<<<<<
  *                     # Meridional Wind.
  *                     meridional_wind.append(v_g.value)
  */
-        __Pyx_TraceLine(938,0,__PYX_ERR(0, 938, __pyx_L1_error))
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_u_g), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 938, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_zonal_wind, __pyx_t_4); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 938, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_TraceLine(940,0,__PYX_ERR(0, 940, __pyx_L1_error))
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_u_g), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 940, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_zonal_wind, __pyx_t_2); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 940, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "amsimp/dynamics.pyx":940
+        /* "amsimp/dynamics.pyx":942
  *                     zonal_wind.append(u_g.value)
  *                     # Meridional Wind.
  *                     meridional_wind.append(v_g.value)             # <<<<<<<<<<<<<<
  *                     # Vertical Motion.
  *                     vertical_motion.append(omega.value)
  */
-        __Pyx_TraceLine(940,0,__PYX_ERR(0, 940, __pyx_L1_error))
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_v_g), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 940, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_meridional_wind, __pyx_t_4); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 940, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_TraceLine(942,0,__PYX_ERR(0, 942, __pyx_L1_error))
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_v_g), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 942, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_meridional_wind, __pyx_t_2); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 942, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "amsimp/dynamics.pyx":942
+        /* "amsimp/dynamics.pyx":944
  *                     meridional_wind.append(v_g.value)
  *                     # Vertical Motion.
  *                     vertical_motion.append(omega.value)             # <<<<<<<<<<<<<<
  *                     # Static Stability
  *                     static_stability.append(sigma.value)
  */
-        __Pyx_TraceLine(942,0,__PYX_ERR(0, 942, __pyx_L1_error))
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_omega), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 942, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_vertical_motion, __pyx_t_4); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 942, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_TraceLine(944,0,__PYX_ERR(0, 944, __pyx_L1_error))
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_omega), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 944, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_vertical_motion, __pyx_t_2); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 944, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "amsimp/dynamics.pyx":944
+        /* "amsimp/dynamics.pyx":946
  *                     vertical_motion.append(omega.value)
  *                     # Static Stability
  *                     static_stability.append(sigma.value)             # <<<<<<<<<<<<<<
  *                     # Temperature.
  *                     # Air Temperature.
  */
-        __Pyx_TraceLine(944,0,__PYX_ERR(0, 944, __pyx_L1_error))
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_sigma), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 944, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_static_stability, __pyx_t_4); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 944, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_TraceLine(946,0,__PYX_ERR(0, 946, __pyx_L1_error))
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_sigma), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 946, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_static_stability, __pyx_t_2); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 946, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "amsimp/dynamics.pyx":947
+        /* "amsimp/dynamics.pyx":949
  *                     # Temperature.
  *                     # Air Temperature.
  *                     temperature.append(T.value)             # <<<<<<<<<<<<<<
  *                     # Virtual Temperature.
  *                     virtual_temperature.append(T_v.value)
  */
-        __Pyx_TraceLine(947,0,__PYX_ERR(0, 947, __pyx_L1_error))
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 947, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_temperature, __pyx_t_4); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 947, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_TraceLine(949,0,__PYX_ERR(0, 949, __pyx_L1_error))
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 949, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_temperature, __pyx_t_2); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 949, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "amsimp/dynamics.pyx":949
+        /* "amsimp/dynamics.pyx":951
  *                     temperature.append(T.value)
  *                     # Virtual Temperature.
  *                     virtual_temperature.append(T_v.value)             # <<<<<<<<<<<<<<
  *                     # Relative Humidity.
  *                     relative_humidity.append(rh.value)
  */
-        __Pyx_TraceLine(949,0,__PYX_ERR(0, 949, __pyx_L1_error))
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T_v), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 949, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_virtual_temperature, __pyx_t_4); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 949, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_TraceLine(951,0,__PYX_ERR(0, 951, __pyx_L1_error))
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T_v), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 951, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_virtual_temperature, __pyx_t_2); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 951, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "amsimp/dynamics.pyx":951
+        /* "amsimp/dynamics.pyx":953
  *                     virtual_temperature.append(T_v.value)
  *                     # Relative Humidity.
  *                     relative_humidity.append(rh.value)             # <<<<<<<<<<<<<<
  *                     # Thickness.
  *                     pressure_thickness.append(thickness.value)
  */
-        __Pyx_TraceLine(951,0,__PYX_ERR(0, 951, __pyx_L1_error))
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_rh), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 951, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_relative_humidity, __pyx_t_4); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 951, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_TraceLine(953,0,__PYX_ERR(0, 953, __pyx_L1_error))
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_rh), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 953, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_relative_humidity, __pyx_t_2); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 953, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "amsimp/dynamics.pyx":953
+        /* "amsimp/dynamics.pyx":955
  *                     relative_humidity.append(rh.value)
  *                     # Thickness.
  *                     pressure_thickness.append(thickness.value)             # <<<<<<<<<<<<<<
  *                     # Precipitable Water.
  *                     precipitable_water.append(pwv.value)
  */
-        __Pyx_TraceLine(953,0,__PYX_ERR(0, 953, __pyx_L1_error))
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_thickness), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 953, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_pressure_thickness, __pyx_t_4); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 953, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_TraceLine(955,0,__PYX_ERR(0, 955, __pyx_L1_error))
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_thickness), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 955, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_pressure_thickness, __pyx_t_2); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 955, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "amsimp/dynamics.pyx":955
+        /* "amsimp/dynamics.pyx":957
  *                     pressure_thickness.append(thickness.value)
  *                     # Precipitable Water.
  *                     precipitable_water.append(pwv.value)             # <<<<<<<<<<<<<<
  * 
  *                     # Add time step.
  */
-        __Pyx_TraceLine(955,0,__PYX_ERR(0, 955, __pyx_L1_error))
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_pwv), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 955, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_precipitable_water, __pyx_t_4); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 955, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_TraceLine(957,0,__PYX_ERR(0, 957, __pyx_L1_error))
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_pwv), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 957, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_precipitable_water, __pyx_t_2); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 957, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "amsimp/dynamics.pyx":958
+        /* "amsimp/dynamics.pyx":960
  * 
  *                     # Add time step.
  *                     t += delta_t.value             # <<<<<<<<<<<<<<
  *                     bar.next()
  * 
  */
-        __Pyx_TraceLine(958,0,__PYX_ERR(0, 958, __pyx_L1_error))
-        __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_t); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 958, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_delta_t, __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 958, __pyx_L1_error)
+        __Pyx_TraceLine(960,0,__PYX_ERR(0, 960, __pyx_L1_error))
+        __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_t); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 960, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_6 = PyNumber_InPlaceAdd(__pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 958, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_delta_t, __pyx_n_s_value); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 960, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __pyx_t_4 = PyNumber_InPlaceAdd(__pyx_t_2, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 960, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_6); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 958, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_4); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 960, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         __pyx_v_t = __pyx_t_5;
 
-        /* "amsimp/dynamics.pyx":959
+        /* "amsimp/dynamics.pyx":961
  *                     # Add time step.
  *                     t += delta_t.value
  *                     bar.next()             # <<<<<<<<<<<<<<
  * 
  *                 n += 1
  */
-        __Pyx_TraceLine(959,0,__PYX_ERR(0, 959, __pyx_L1_error))
-        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_bar, __pyx_n_s_next); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 959, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_4 = NULL;
-        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-          __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-          if (likely(__pyx_t_4)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-            __Pyx_INCREF(__pyx_t_4);
+        __Pyx_TraceLine(961,0,__PYX_ERR(0, 961, __pyx_L1_error))
+        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_bar, __pyx_n_s_next); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 961, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_6);
+        __pyx_t_2 = NULL;
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
+          __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_6);
+          if (likely(__pyx_t_2)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+            __Pyx_INCREF(__pyx_t_2);
             __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_2, function);
+            __Pyx_DECREF_SET(__pyx_t_6, function);
           }
         }
-        __pyx_t_6 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 959, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_6);
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __pyx_t_4 = (__pyx_t_2) ? __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_2) : __Pyx_PyObject_CallNoArg(__pyx_t_6);
+        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 961, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "amsimp/dynamics.pyx":933
+        /* "amsimp/dynamics.pyx":935
  * 
  *                 # Append predictions to list.
  *                 if n > 1:             # <<<<<<<<<<<<<<
@@ -13672,130 +13688,130 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
  */
       }
 
-      /* "amsimp/dynamics.pyx":961
+      /* "amsimp/dynamics.pyx":963
  *                     bar.next()
  * 
  *                 n += 1             # <<<<<<<<<<<<<<
  * 
  *             # Append model lists to the relevant EFS list.
  */
-      __Pyx_TraceLine(961,0,__PYX_ERR(0, 961, __pyx_L1_error))
+      __Pyx_TraceLine(963,0,__PYX_ERR(0, 963, __pyx_L1_error))
       __pyx_v_n = (__pyx_v_n + 1);
     }
 
-    /* "amsimp/dynamics.pyx":964
+    /* "amsimp/dynamics.pyx":966
  * 
  *             # Append model lists to the relevant EFS list.
  *             HeightList.append(geopotential_height)             # <<<<<<<<<<<<<<
  *             ZonalList.append(zonal_wind)
  *             MeridionalList.append(meridional_wind)
  */
-    __Pyx_TraceLine(964,0,__PYX_ERR(0, 964, __pyx_L1_error))
-    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_HeightList, __pyx_v_geopotential_height); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 964, __pyx_L1_error)
+    __Pyx_TraceLine(966,0,__PYX_ERR(0, 966, __pyx_L1_error))
+    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_HeightList, __pyx_v_geopotential_height); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 966, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":965
+    /* "amsimp/dynamics.pyx":967
  *             # Append model lists to the relevant EFS list.
  *             HeightList.append(geopotential_height)
  *             ZonalList.append(zonal_wind)             # <<<<<<<<<<<<<<
  *             MeridionalList.append(meridional_wind)
  *             VerticalList.append(vertical_motion)
  */
-    __Pyx_TraceLine(965,0,__PYX_ERR(0, 965, __pyx_L1_error))
-    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_ZonalList, __pyx_v_zonal_wind); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 965, __pyx_L1_error)
+    __Pyx_TraceLine(967,0,__PYX_ERR(0, 967, __pyx_L1_error))
+    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_ZonalList, __pyx_v_zonal_wind); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 967, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":966
+    /* "amsimp/dynamics.pyx":968
  *             HeightList.append(geopotential_height)
  *             ZonalList.append(zonal_wind)
  *             MeridionalList.append(meridional_wind)             # <<<<<<<<<<<<<<
  *             VerticalList.append(vertical_motion)
  *             StabilityList.append(static_stability)
  */
-    __Pyx_TraceLine(966,0,__PYX_ERR(0, 966, __pyx_L1_error))
-    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_MeridionalList, __pyx_v_meridional_wind); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 966, __pyx_L1_error)
+    __Pyx_TraceLine(968,0,__PYX_ERR(0, 968, __pyx_L1_error))
+    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_MeridionalList, __pyx_v_meridional_wind); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 968, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":967
+    /* "amsimp/dynamics.pyx":969
  *             ZonalList.append(zonal_wind)
  *             MeridionalList.append(meridional_wind)
  *             VerticalList.append(vertical_motion)             # <<<<<<<<<<<<<<
  *             StabilityList.append(static_stability)
  *             TemperatureList.append(temperature)
  */
-    __Pyx_TraceLine(967,0,__PYX_ERR(0, 967, __pyx_L1_error))
-    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_VerticalList, __pyx_v_vertical_motion); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 967, __pyx_L1_error)
+    __Pyx_TraceLine(969,0,__PYX_ERR(0, 969, __pyx_L1_error))
+    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_VerticalList, __pyx_v_vertical_motion); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 969, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":968
+    /* "amsimp/dynamics.pyx":970
  *             MeridionalList.append(meridional_wind)
  *             VerticalList.append(vertical_motion)
  *             StabilityList.append(static_stability)             # <<<<<<<<<<<<<<
  *             TemperatureList.append(temperature)
  *             VirtualList.append(virtual_temperature)
  */
-    __Pyx_TraceLine(968,0,__PYX_ERR(0, 968, __pyx_L1_error))
-    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_StabilityList, __pyx_v_static_stability); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 968, __pyx_L1_error)
+    __Pyx_TraceLine(970,0,__PYX_ERR(0, 970, __pyx_L1_error))
+    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_StabilityList, __pyx_v_static_stability); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 970, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":969
+    /* "amsimp/dynamics.pyx":971
  *             VerticalList.append(vertical_motion)
  *             StabilityList.append(static_stability)
  *             TemperatureList.append(temperature)             # <<<<<<<<<<<<<<
  *             VirtualList.append(virtual_temperature)
  *             HumidityList.append(relative_humidity)
  */
-    __Pyx_TraceLine(969,0,__PYX_ERR(0, 969, __pyx_L1_error))
-    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_TemperatureList, __pyx_v_temperature); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 969, __pyx_L1_error)
+    __Pyx_TraceLine(971,0,__PYX_ERR(0, 971, __pyx_L1_error))
+    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_TemperatureList, __pyx_v_temperature); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 971, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":970
+    /* "amsimp/dynamics.pyx":972
  *             StabilityList.append(static_stability)
  *             TemperatureList.append(temperature)
  *             VirtualList.append(virtual_temperature)             # <<<<<<<<<<<<<<
  *             HumidityList.append(relative_humidity)
  *             ThicknessList.append(pressure_thickness)
  */
-    __Pyx_TraceLine(970,0,__PYX_ERR(0, 970, __pyx_L1_error))
-    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_VirtualList, __pyx_v_virtual_temperature); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 970, __pyx_L1_error)
+    __Pyx_TraceLine(972,0,__PYX_ERR(0, 972, __pyx_L1_error))
+    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_VirtualList, __pyx_v_virtual_temperature); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 972, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":971
+    /* "amsimp/dynamics.pyx":973
  *             TemperatureList.append(temperature)
  *             VirtualList.append(virtual_temperature)
  *             HumidityList.append(relative_humidity)             # <<<<<<<<<<<<<<
  *             ThicknessList.append(pressure_thickness)
  *             WaterList.append(precipitable_water)
  */
-    __Pyx_TraceLine(971,0,__PYX_ERR(0, 971, __pyx_L1_error))
-    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_HumidityList, __pyx_v_relative_humidity); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 971, __pyx_L1_error)
+    __Pyx_TraceLine(973,0,__PYX_ERR(0, 973, __pyx_L1_error))
+    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_HumidityList, __pyx_v_relative_humidity); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 973, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":972
+    /* "amsimp/dynamics.pyx":974
  *             VirtualList.append(virtual_temperature)
  *             HumidityList.append(relative_humidity)
  *             ThicknessList.append(pressure_thickness)             # <<<<<<<<<<<<<<
  *             WaterList.append(precipitable_water)
  * 
  */
-    __Pyx_TraceLine(972,0,__PYX_ERR(0, 972, __pyx_L1_error))
-    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_ThicknessList, __pyx_v_pressure_thickness); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 972, __pyx_L1_error)
+    __Pyx_TraceLine(974,0,__PYX_ERR(0, 974, __pyx_L1_error))
+    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_ThicknessList, __pyx_v_pressure_thickness); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 974, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":973
+    /* "amsimp/dynamics.pyx":975
  *             HumidityList.append(relative_humidity)
  *             ThicknessList.append(pressure_thickness)
  *             WaterList.append(precipitable_water)             # <<<<<<<<<<<<<<
  * 
  *             # Randomise the initial conditions.
  */
-    __Pyx_TraceLine(973,0,__PYX_ERR(0, 973, __pyx_L1_error))
-    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_WaterList, __pyx_v_precipitable_water); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 973, __pyx_L1_error)
+    __Pyx_TraceLine(975,0,__PYX_ERR(0, 975, __pyx_L1_error))
+    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_WaterList, __pyx_v_precipitable_water); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 975, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":976
+    /* "amsimp/dynamics.pyx":978
  * 
  *             # Randomise the initial conditions.
  *             randomise = (2 * random_sample(np.shape(geo_i)) - 1)             # <<<<<<<<<<<<<<
  *             randomise /= 4
  *             randomise = smooth_gaussian(
  */
-    __Pyx_TraceLine(976,0,__PYX_ERR(0, 976, __pyx_L1_error))
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_random_sample); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 976, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 976, __pyx_L1_error)
+    __Pyx_TraceLine(978,0,__PYX_ERR(0, 978, __pyx_L1_error))
+    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_random_sample); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 978, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 978, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 976, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 978, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_3 = NULL;
@@ -13808,13 +13824,565 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
         __Pyx_DECREF_SET(__pyx_t_1, function);
       }
     }
-    __pyx_t_4 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_3, ((PyObject *)__pyx_v_geo_i)) : __Pyx_PyObject_CallOneArg(__pyx_t_1, ((PyObject *)__pyx_v_geo_i));
+    __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_3, ((PyObject *)__pyx_v_geo_i)) : __Pyx_PyObject_CallOneArg(__pyx_t_1, ((PyObject *)__pyx_v_geo_i));
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 976, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 978, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_1 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
+    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
+      __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_6);
+      if (likely(__pyx_t_1)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+        __Pyx_INCREF(__pyx_t_1);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_6, function);
+      }
+    }
+    __pyx_t_4 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_1, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_2);
+    __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 978, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __pyx_t_6 = PyNumber_Multiply(__pyx_int_2, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 978, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = __Pyx_PyInt_SubtractObjC(__pyx_t_6, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 978, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 978, __pyx_L1_error)
+    __Pyx_XDECREF_SET(__pyx_v_randomise, ((PyArrayObject *)__pyx_t_4));
+    __pyx_t_4 = 0;
+
+    /* "amsimp/dynamics.pyx":979
+ *             # Randomise the initial conditions.
+ *             randomise = (2 * random_sample(np.shape(geo_i)) - 1)
+ *             randomise /= 4             # <<<<<<<<<<<<<<
+ *             randomise = smooth_gaussian(
+ *                 scalar_grid=randomise,
+ */
+    __Pyx_TraceLine(979,0,__PYX_ERR(0, 979, __pyx_L1_error))
+    __pyx_t_4 = __Pyx_PyNumber_InPlaceDivide(((PyObject *)__pyx_v_randomise), __pyx_int_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 979, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 979, __pyx_L1_error)
+    __Pyx_DECREF_SET(__pyx_v_randomise, ((PyArrayObject *)__pyx_t_4));
+    __pyx_t_4 = 0;
+
+    /* "amsimp/dynamics.pyx":980
+ *             randomise = (2 * random_sample(np.shape(geo_i)) - 1)
+ *             randomise /= 4
+ *             randomise = smooth_gaussian(             # <<<<<<<<<<<<<<
+ *                 scalar_grid=randomise,
+ *                 n=8,
+ */
+    __Pyx_TraceLine(980,0,__PYX_ERR(0, 980, __pyx_L1_error))
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_smooth_gaussian); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 980, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+
+    /* "amsimp/dynamics.pyx":981
+ *             randomise /= 4
+ *             randomise = smooth_gaussian(
+ *                 scalar_grid=randomise,             # <<<<<<<<<<<<<<
+ *                 n=8,
+ *             ).magnitude
+ */
+    __Pyx_TraceLine(981,0,__PYX_ERR(0, 981, __pyx_L1_error))
+    __pyx_t_6 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 981, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_scalar_grid, ((PyObject *)__pyx_v_randomise)) < 0) __PYX_ERR(0, 981, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_n, __pyx_int_8) < 0) __PYX_ERR(0, 981, __pyx_L1_error)
+
+    /* "amsimp/dynamics.pyx":980
+ *             randomise = (2 * random_sample(np.shape(geo_i)) - 1)
+ *             randomise /= 4
+ *             randomise = smooth_gaussian(             # <<<<<<<<<<<<<<
+ *                 scalar_grid=randomise,
+ *                 n=8,
+ */
+    __Pyx_TraceLine(980,0,__PYX_ERR(0, 980, __pyx_L1_error))
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 980, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+
+    /* "amsimp/dynamics.pyx":983
+ *                 scalar_grid=randomise,
+ *                 n=8,
+ *             ).magnitude             # <<<<<<<<<<<<<<
+ *             # Geopotential Height.
+ *             geo_rand = randomise * geo_dev
+ */
+    __Pyx_TraceLine(983,0,__PYX_ERR(0, 983, __pyx_L1_error))
+    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_magnitude); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 983, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 983, __pyx_L1_error)
+    __Pyx_DECREF_SET(__pyx_v_randomise, ((PyArrayObject *)__pyx_t_6));
+    __pyx_t_6 = 0;
+
+    /* "amsimp/dynamics.pyx":985
+ *             ).magnitude
+ *             # Geopotential Height.
+ *             geo_rand = randomise * geo_dev             # <<<<<<<<<<<<<<
+ *             geo_i = geo_initial + geo_rand
+ *             geo_i = smooth_gaussian(
+ */
+    __Pyx_TraceLine(985,0,__PYX_ERR(0, 985, __pyx_L1_error))
+    __pyx_t_6 = PyNumber_Multiply(((PyObject *)__pyx_v_randomise), ((PyObject *)__pyx_v_geo_dev)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 985, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 985, __pyx_L1_error)
+    __Pyx_XDECREF_SET(__pyx_v_geo_rand, ((PyArrayObject *)__pyx_t_6));
+    __pyx_t_6 = 0;
+
+    /* "amsimp/dynamics.pyx":986
+ *             # Geopotential Height.
+ *             geo_rand = randomise * geo_dev
+ *             geo_i = geo_initial + geo_rand             # <<<<<<<<<<<<<<
+ *             geo_i = smooth_gaussian(
+ *                 scalar_grid=geo_i.value,
+ */
+    __Pyx_TraceLine(986,0,__PYX_ERR(0, 986, __pyx_L1_error))
+    __pyx_t_6 = PyNumber_Add(((PyObject *)__pyx_v_geo_initial), ((PyObject *)__pyx_v_geo_rand)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 986, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 986, __pyx_L1_error)
+    __Pyx_DECREF_SET(__pyx_v_geo_i, ((PyArrayObject *)__pyx_t_6));
+    __pyx_t_6 = 0;
+
+    /* "amsimp/dynamics.pyx":987
+ *             geo_rand = randomise * geo_dev
+ *             geo_i = geo_initial + geo_rand
+ *             geo_i = smooth_gaussian(             # <<<<<<<<<<<<<<
+ *                 scalar_grid=geo_i.value,
+ *                 n=2,
+ */
+    __Pyx_TraceLine(987,0,__PYX_ERR(0, 987, __pyx_L1_error))
+    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_smooth_gaussian); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 987, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+
+    /* "amsimp/dynamics.pyx":988
+ *             geo_i = geo_initial + geo_rand
+ *             geo_i = smooth_gaussian(
+ *                 scalar_grid=geo_i.value,             # <<<<<<<<<<<<<<
+ *                 n=2,
+ *             ).magnitude * geo_i.unit
+ */
+    __Pyx_TraceLine(988,0,__PYX_ERR(0, 988, __pyx_L1_error))
+    __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 988, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_geo_i), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 988, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_scalar_grid, __pyx_t_4) < 0) __PYX_ERR(0, 988, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_n, __pyx_int_2) < 0) __PYX_ERR(0, 988, __pyx_L1_error)
+
+    /* "amsimp/dynamics.pyx":987
+ *             geo_rand = randomise * geo_dev
+ *             geo_i = geo_initial + geo_rand
+ *             geo_i = smooth_gaussian(             # <<<<<<<<<<<<<<
+ *                 scalar_grid=geo_i.value,
+ *                 n=2,
+ */
+    __Pyx_TraceLine(987,0,__PYX_ERR(0, 987, __pyx_L1_error))
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 987, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+    /* "amsimp/dynamics.pyx":990
+ *                 scalar_grid=geo_i.value,
+ *                 n=2,
+ *             ).magnitude * geo_i.unit             # <<<<<<<<<<<<<<
+ *             # Temperature.
+ *             T_rand = randomise * T_dev
+ */
+    __Pyx_TraceLine(990,0,__PYX_ERR(0, 990, __pyx_L1_error))
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_magnitude); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 990, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_geo_i), __pyx_n_s_unit); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 990, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_6 = PyNumber_Multiply(__pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 990, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 990, __pyx_L1_error)
+    __Pyx_DECREF_SET(__pyx_v_geo_i, ((PyArrayObject *)__pyx_t_6));
+    __pyx_t_6 = 0;
+
+    /* "amsimp/dynamics.pyx":992
+ *             ).magnitude * geo_i.unit
+ *             # Temperature.
+ *             T_rand = randomise * T_dev             # <<<<<<<<<<<<<<
+ *             T_i = T_initial + T_rand
+ *             T_i = smooth_gaussian(
+ */
+    __Pyx_TraceLine(992,0,__PYX_ERR(0, 992, __pyx_L1_error))
+    __pyx_t_6 = PyNumber_Multiply(((PyObject *)__pyx_v_randomise), ((PyObject *)__pyx_v_T_dev)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 992, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 992, __pyx_L1_error)
+    __Pyx_XDECREF_SET(__pyx_v_T_rand, ((PyArrayObject *)__pyx_t_6));
+    __pyx_t_6 = 0;
+
+    /* "amsimp/dynamics.pyx":993
+ *             # Temperature.
+ *             T_rand = randomise * T_dev
+ *             T_i = T_initial + T_rand             # <<<<<<<<<<<<<<
+ *             T_i = smooth_gaussian(
+ *                 scalar_grid=T_i.value,
+ */
+    __Pyx_TraceLine(993,0,__PYX_ERR(0, 993, __pyx_L1_error))
+    __pyx_t_6 = PyNumber_Add(((PyObject *)__pyx_v_T_initial), ((PyObject *)__pyx_v_T_rand)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 993, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 993, __pyx_L1_error)
+    __Pyx_DECREF_SET(__pyx_v_T_i, ((PyArrayObject *)__pyx_t_6));
+    __pyx_t_6 = 0;
+
+    /* "amsimp/dynamics.pyx":994
+ *             T_rand = randomise * T_dev
+ *             T_i = T_initial + T_rand
+ *             T_i = smooth_gaussian(             # <<<<<<<<<<<<<<
+ *                 scalar_grid=T_i.value,
+ *                 n=2,
+ */
+    __Pyx_TraceLine(994,0,__PYX_ERR(0, 994, __pyx_L1_error))
+    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_smooth_gaussian); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 994, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+
+    /* "amsimp/dynamics.pyx":995
+ *             T_i = T_initial + T_rand
+ *             T_i = smooth_gaussian(
+ *                 scalar_grid=T_i.value,             # <<<<<<<<<<<<<<
+ *                 n=2,
+ *             ).magnitude * T_i.unit
+ */
+    __Pyx_TraceLine(995,0,__PYX_ERR(0, 995, __pyx_L1_error))
+    __pyx_t_4 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 995, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T_i), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 995, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_scalar_grid, __pyx_t_2) < 0) __PYX_ERR(0, 995, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_n, __pyx_int_2) < 0) __PYX_ERR(0, 995, __pyx_L1_error)
+
+    /* "amsimp/dynamics.pyx":994
+ *             T_rand = randomise * T_dev
+ *             T_i = T_initial + T_rand
+ *             T_i = smooth_gaussian(             # <<<<<<<<<<<<<<
+ *                 scalar_grid=T_i.value,
+ *                 n=2,
+ */
+    __Pyx_TraceLine(994,0,__PYX_ERR(0, 994, __pyx_L1_error))
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_empty_tuple, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 994, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+    /* "amsimp/dynamics.pyx":997
+ *                 scalar_grid=T_i.value,
+ *                 n=2,
+ *             ).magnitude * T_i.unit             # <<<<<<<<<<<<<<
+ *             # Virtual Temperature.
+ *             Tv_rand = randomise * Tv_dev
+ */
+    __Pyx_TraceLine(997,0,__PYX_ERR(0, 997, __pyx_L1_error))
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_magnitude); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 997, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T_i), __pyx_n_s_unit); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 997, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_6 = PyNumber_Multiply(__pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 997, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 997, __pyx_L1_error)
+    __Pyx_DECREF_SET(__pyx_v_T_i, ((PyArrayObject *)__pyx_t_6));
+    __pyx_t_6 = 0;
+
+    /* "amsimp/dynamics.pyx":999
+ *             ).magnitude * T_i.unit
+ *             # Virtual Temperature.
+ *             Tv_rand = randomise * Tv_dev             # <<<<<<<<<<<<<<
+ *             Tv_i = Tv_initial + Tv_rand
+ *             Tv_i = smooth_gaussian(
+ */
+    __Pyx_TraceLine(999,0,__PYX_ERR(0, 999, __pyx_L1_error))
+    __pyx_t_6 = PyNumber_Multiply(((PyObject *)__pyx_v_randomise), ((PyObject *)__pyx_v_Tv_dev)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 999, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 999, __pyx_L1_error)
+    __Pyx_XDECREF_SET(__pyx_v_Tv_rand, ((PyArrayObject *)__pyx_t_6));
+    __pyx_t_6 = 0;
+
+    /* "amsimp/dynamics.pyx":1000
+ *             # Virtual Temperature.
+ *             Tv_rand = randomise * Tv_dev
+ *             Tv_i = Tv_initial + Tv_rand             # <<<<<<<<<<<<<<
+ *             Tv_i = smooth_gaussian(
+ *                 scalar_grid=Tv_i.value,
+ */
+    __Pyx_TraceLine(1000,0,__PYX_ERR(0, 1000, __pyx_L1_error))
+    __pyx_t_6 = PyNumber_Add(((PyObject *)__pyx_v_Tv_initial), ((PyObject *)__pyx_v_Tv_rand)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1000, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1000, __pyx_L1_error)
+    __Pyx_DECREF_SET(__pyx_v_Tv_i, ((PyArrayObject *)__pyx_t_6));
+    __pyx_t_6 = 0;
+
+    /* "amsimp/dynamics.pyx":1001
+ *             Tv_rand = randomise * Tv_dev
+ *             Tv_i = Tv_initial + Tv_rand
+ *             Tv_i = smooth_gaussian(             # <<<<<<<<<<<<<<
+ *                 scalar_grid=Tv_i.value,
+ *                 n=2,
+ */
+    __Pyx_TraceLine(1001,0,__PYX_ERR(0, 1001, __pyx_L1_error))
+    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_smooth_gaussian); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1001, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+
+    /* "amsimp/dynamics.pyx":1002
+ *             Tv_i = Tv_initial + Tv_rand
+ *             Tv_i = smooth_gaussian(
+ *                 scalar_grid=Tv_i.value,             # <<<<<<<<<<<<<<
+ *                 n=2,
+ *             ).magnitude * Tv_i.unit
+ */
+    __Pyx_TraceLine(1002,0,__PYX_ERR(0, 1002, __pyx_L1_error))
+    __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1002, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_Tv_i), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1002, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_scalar_grid, __pyx_t_4) < 0) __PYX_ERR(0, 1002, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_n, __pyx_int_2) < 0) __PYX_ERR(0, 1002, __pyx_L1_error)
+
+    /* "amsimp/dynamics.pyx":1001
+ *             Tv_rand = randomise * Tv_dev
+ *             Tv_i = Tv_initial + Tv_rand
+ *             Tv_i = smooth_gaussian(             # <<<<<<<<<<<<<<
+ *                 scalar_grid=Tv_i.value,
+ *                 n=2,
+ */
+    __Pyx_TraceLine(1001,0,__PYX_ERR(0, 1001, __pyx_L1_error))
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1001, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+    /* "amsimp/dynamics.pyx":1004
+ *                 scalar_grid=Tv_i.value,
+ *                 n=2,
+ *             ).magnitude * Tv_i.unit             # <<<<<<<<<<<<<<
+ * 
+ *             # Redefine the otherr output variables in
+ */
+    __Pyx_TraceLine(1004,0,__PYX_ERR(0, 1004, __pyx_L1_error))
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_magnitude); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1004, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_Tv_i), __pyx_n_s_unit); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1004, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_6 = PyNumber_Multiply(__pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1004, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1004, __pyx_L1_error)
+    __Pyx_DECREF_SET(__pyx_v_Tv_i, ((PyArrayObject *)__pyx_t_6));
+    __pyx_t_6 = 0;
+
+    /* "amsimp/dynamics.pyx":1010
+ *             # conditions.
+ *             # Geopotential Height.
+ *             height = geo_i / g             # <<<<<<<<<<<<<<
+ *             # Relative Humidity.
+ *             # Vapor pressure.
+ */
+    __Pyx_TraceLine(1010,0,__PYX_ERR(0, 1010, __pyx_L1_error))
+    __pyx_t_6 = __Pyx_PyNumber_Divide(((PyObject *)__pyx_v_geo_i), ((PyObject *)__pyx_v_g)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1010, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1010, __pyx_L1_error)
+    __Pyx_DECREF_SET(__pyx_v_height, ((PyArrayObject *)__pyx_t_6));
+    __pyx_t_6 = 0;
+
+    /* "amsimp/dynamics.pyx":1015
+ *             e = (
+ *                 (
+ *                     (pressure_3d) / (1 - 0.622)             # <<<<<<<<<<<<<<
+ *                 ) - (
+ *                     (pressure_3d * T_i) / (Tv_i * (1 - 0.622))
+ */
+    __Pyx_TraceLine(1015,0,__PYX_ERR(0, 1015, __pyx_L1_error))
+    __pyx_t_6 = PyFloat_FromDouble((1.0 - 0.622)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1015, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_4 = __Pyx_PyNumber_Divide(((PyObject *)__pyx_v_pressure_3d), __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1015, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+
+    /* "amsimp/dynamics.pyx":1017
+ *                     (pressure_3d) / (1 - 0.622)
+ *                 ) - (
+ *                     (pressure_3d * T_i) / (Tv_i * (1 - 0.622))             # <<<<<<<<<<<<<<
+ *                 )
+ *             )
+ */
+    __Pyx_TraceLine(1017,0,__PYX_ERR(0, 1017, __pyx_L1_error))
+    __pyx_t_6 = PyNumber_Multiply(((PyObject *)__pyx_v_pressure_3d), ((PyObject *)__pyx_v_T_i)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1017, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_2 = PyFloat_FromDouble((1.0 - 0.622)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1017, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_1 = PyNumber_Multiply(((PyObject *)__pyx_v_Tv_i), __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1017, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_t_2 = __Pyx_PyNumber_Divide(__pyx_t_6, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1017, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "amsimp/dynamics.pyx":1016
+ *                 (
+ *                     (pressure_3d) / (1 - 0.622)
+ *                 ) - (             # <<<<<<<<<<<<<<
+ *                     (pressure_3d * T_i) / (Tv_i * (1 - 0.622))
+ *                 )
+ */
+    __Pyx_TraceLine(1016,0,__PYX_ERR(0, 1016, __pyx_L1_error))
+    __pyx_t_1 = PyNumber_Subtract(__pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1016, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1016, __pyx_L1_error)
+    __Pyx_XDECREF_SET(__pyx_v_e, ((PyArrayObject *)__pyx_t_1));
+    __pyx_t_1 = 0;
+
+    /* "amsimp/dynamics.pyx":1021
+ *             )
+ *             # Convert temperature in Kelvin to degrees centigrade.
+ *             T_c = T_i.value - 273.15             # <<<<<<<<<<<<<<
+ *             # Saturated vapor pressure.
+ *             sat_vapor_pressure = 0.61121 * np.exp(
+ */
+    __Pyx_TraceLine(1021,0,__PYX_ERR(0, 1021, __pyx_L1_error))
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T_i), __pyx_n_s_value); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1021, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_2 = __Pyx_PyFloat_SubtractObjC(__pyx_t_1, __pyx_float_273_15, 273.15, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1021, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1021, __pyx_L1_error)
+    __Pyx_XDECREF_SET(__pyx_v_T_c, ((PyArrayObject *)__pyx_t_2));
+    __pyx_t_2 = 0;
+
+    /* "amsimp/dynamics.pyx":1023
+ *             T_c = T_i.value - 273.15
+ *             # Saturated vapor pressure.
+ *             sat_vapor_pressure = 0.61121 * np.exp(             # <<<<<<<<<<<<<<
+ *                 (
+ *                     18.678 - (T_c / 234.5)
+ */
+    __Pyx_TraceLine(1023,0,__PYX_ERR(0, 1023, __pyx_L1_error))
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1023, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_exp); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1023, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "amsimp/dynamics.pyx":1025
+ *             sat_vapor_pressure = 0.61121 * np.exp(
+ *                 (
+ *                     18.678 - (T_c / 234.5)             # <<<<<<<<<<<<<<
+ *                 ) * (T_c / (257.14 + T_c)
+ *                 )
+ */
+    __Pyx_TraceLine(1025,0,__PYX_ERR(0, 1025, __pyx_L1_error))
+    __pyx_t_1 = __Pyx_PyNumber_Divide(((PyObject *)__pyx_v_T_c), __pyx_float_234_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1025, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_6 = __Pyx_PyFloat_SubtractCObj(__pyx_float_18_678, __pyx_t_1, 18.678, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1025, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "amsimp/dynamics.pyx":1026
+ *                 (
+ *                     18.678 - (T_c / 234.5)
+ *                 ) * (T_c / (257.14 + T_c)             # <<<<<<<<<<<<<<
+ *                 )
+ *             )
+ */
+    __Pyx_TraceLine(1026,0,__PYX_ERR(0, 1026, __pyx_L1_error))
+    __pyx_t_1 = PyNumber_Add(__pyx_float_257_14, ((PyObject *)__pyx_v_T_c)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1026, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_3 = __Pyx_PyNumber_Divide(((PyObject *)__pyx_v_T_c), __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1026, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_1 = PyNumber_Multiply(__pyx_t_6, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1026, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_4);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_4, function);
+      }
+    }
+    __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_3, __pyx_t_1) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_1);
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1023, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+    /* "amsimp/dynamics.pyx":1023
+ *             T_c = T_i.value - 273.15
+ *             # Saturated vapor pressure.
+ *             sat_vapor_pressure = 0.61121 * np.exp(             # <<<<<<<<<<<<<<
+ *                 (
+ *                     18.678 - (T_c / 234.5)
+ */
+    __Pyx_TraceLine(1023,0,__PYX_ERR(0, 1023, __pyx_L1_error))
+    __pyx_t_4 = PyNumber_Multiply(__pyx_float_0_61121, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1023, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1023, __pyx_L1_error)
+    __Pyx_XDECREF_SET(__pyx_v_sat_vapor_pressure, ((PyArrayObject *)__pyx_t_4));
+    __pyx_t_4 = 0;
+
+    /* "amsimp/dynamics.pyx":1030
+ *             )
+ *             # Add units of measurement.
+ *             sat_vapor_pressure *= self.units.kPa             # <<<<<<<<<<<<<<
+ *             sat_vapor_pressure = sat_vapor_pressure.to(self.units.hPa)
+ *             # Determine relative humidity.
+ */
+    __Pyx_TraceLine(1030,0,__PYX_ERR(0, 1030, __pyx_L1_error))
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1030, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_kPa); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1030, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_InPlaceMultiply(((PyObject *)__pyx_v_sat_vapor_pressure), __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1030, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1030, __pyx_L1_error)
+    __Pyx_DECREF_SET(__pyx_v_sat_vapor_pressure, ((PyArrayObject *)__pyx_t_4));
+    __pyx_t_4 = 0;
+
+    /* "amsimp/dynamics.pyx":1031
+ *             # Add units of measurement.
+ *             sat_vapor_pressure *= self.units.kPa
+ *             sat_vapor_pressure = sat_vapor_pressure.to(self.units.hPa)             # <<<<<<<<<<<<<<
+ *             # Determine relative humidity.
+ *             rh = (e.value / sat_vapor_pressure.value) * 100
+ */
+    __Pyx_TraceLine(1031,0,__PYX_ERR(0, 1031, __pyx_L1_error))
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_sat_vapor_pressure), __pyx_n_s_to); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1031, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1031, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_hPa); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1031, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_1 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
       __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_2);
       if (likely(__pyx_t_1)) {
         PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
@@ -13823,1096 +14391,924 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
         __Pyx_DECREF_SET(__pyx_t_2, function);
       }
     }
-    __pyx_t_6 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_1, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4);
+    __pyx_t_4 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_1, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 976, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = PyNumber_Multiply(__pyx_int_2, __pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 976, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = __Pyx_PyInt_SubtractObjC(__pyx_t_2, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 976, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 976, __pyx_L1_error)
-    __Pyx_XDECREF_SET(__pyx_v_randomise, ((PyArrayObject *)__pyx_t_6));
-    __pyx_t_6 = 0;
-
-    /* "amsimp/dynamics.pyx":977
- *             # Randomise the initial conditions.
- *             randomise = (2 * random_sample(np.shape(geo_i)) - 1)
- *             randomise /= 4             # <<<<<<<<<<<<<<
- *             randomise = smooth_gaussian(
- *                 scalar_grid=randomise,
- */
-    __Pyx_TraceLine(977,0,__PYX_ERR(0, 977, __pyx_L1_error))
-    __pyx_t_6 = __Pyx_PyNumber_InPlaceDivide(((PyObject *)__pyx_v_randomise), __pyx_int_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 977, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 977, __pyx_L1_error)
-    __Pyx_DECREF_SET(__pyx_v_randomise, ((PyArrayObject *)__pyx_t_6));
-    __pyx_t_6 = 0;
-
-    /* "amsimp/dynamics.pyx":978
- *             randomise = (2 * random_sample(np.shape(geo_i)) - 1)
- *             randomise /= 4
- *             randomise = smooth_gaussian(             # <<<<<<<<<<<<<<
- *                 scalar_grid=randomise,
- *                 n=8,
- */
-    __Pyx_TraceLine(978,0,__PYX_ERR(0, 978, __pyx_L1_error))
-    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_smooth_gaussian); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 978, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-
-    /* "amsimp/dynamics.pyx":979
- *             randomise /= 4
- *             randomise = smooth_gaussian(
- *                 scalar_grid=randomise,             # <<<<<<<<<<<<<<
- *                 n=8,
- *             ).magnitude
- */
-    __Pyx_TraceLine(979,0,__PYX_ERR(0, 979, __pyx_L1_error))
-    __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 979, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_scalar_grid, ((PyObject *)__pyx_v_randomise)) < 0) __PYX_ERR(0, 979, __pyx_L1_error)
-    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_n, __pyx_int_8) < 0) __PYX_ERR(0, 979, __pyx_L1_error)
-
-    /* "amsimp/dynamics.pyx":978
- *             randomise = (2 * random_sample(np.shape(geo_i)) - 1)
- *             randomise /= 4
- *             randomise = smooth_gaussian(             # <<<<<<<<<<<<<<
- *                 scalar_grid=randomise,
- *                 n=8,
- */
-    __Pyx_TraceLine(978,0,__PYX_ERR(0, 978, __pyx_L1_error))
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 978, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-    /* "amsimp/dynamics.pyx":981
- *                 scalar_grid=randomise,
- *                 n=8,
- *             ).magnitude             # <<<<<<<<<<<<<<
- *             # Geopotential Height.
- *             geo_rand = randomise * geo_dev
- */
-    __Pyx_TraceLine(981,0,__PYX_ERR(0, 981, __pyx_L1_error))
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_magnitude); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 981, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 981, __pyx_L1_error)
-    __Pyx_DECREF_SET(__pyx_v_randomise, ((PyArrayObject *)__pyx_t_2));
-    __pyx_t_2 = 0;
-
-    /* "amsimp/dynamics.pyx":983
- *             ).magnitude
- *             # Geopotential Height.
- *             geo_rand = randomise * geo_dev             # <<<<<<<<<<<<<<
- *             geo_i = geo_initial + geo_rand
- *             geo_i = smooth_gaussian(
- */
-    __Pyx_TraceLine(983,0,__PYX_ERR(0, 983, __pyx_L1_error))
-    __pyx_t_2 = PyNumber_Multiply(((PyObject *)__pyx_v_randomise), ((PyObject *)__pyx_v_geo_dev)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 983, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 983, __pyx_L1_error)
-    __Pyx_XDECREF_SET(__pyx_v_geo_rand, ((PyArrayObject *)__pyx_t_2));
-    __pyx_t_2 = 0;
-
-    /* "amsimp/dynamics.pyx":984
- *             # Geopotential Height.
- *             geo_rand = randomise * geo_dev
- *             geo_i = geo_initial + geo_rand             # <<<<<<<<<<<<<<
- *             geo_i = smooth_gaussian(
- *                 scalar_grid=geo_i.value,
- */
-    __Pyx_TraceLine(984,0,__PYX_ERR(0, 984, __pyx_L1_error))
-    __pyx_t_2 = PyNumber_Add(((PyObject *)__pyx_v_geo_initial), ((PyObject *)__pyx_v_geo_rand)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 984, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 984, __pyx_L1_error)
-    __Pyx_DECREF_SET(__pyx_v_geo_i, ((PyArrayObject *)__pyx_t_2));
-    __pyx_t_2 = 0;
-
-    /* "amsimp/dynamics.pyx":985
- *             geo_rand = randomise * geo_dev
- *             geo_i = geo_initial + geo_rand
- *             geo_i = smooth_gaussian(             # <<<<<<<<<<<<<<
- *                 scalar_grid=geo_i.value,
- *                 n=2,
- */
-    __Pyx_TraceLine(985,0,__PYX_ERR(0, 985, __pyx_L1_error))
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_smooth_gaussian); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 985, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-
-    /* "amsimp/dynamics.pyx":986
- *             geo_i = geo_initial + geo_rand
- *             geo_i = smooth_gaussian(
- *                 scalar_grid=geo_i.value,             # <<<<<<<<<<<<<<
- *                 n=2,
- *             ).magnitude * geo_i.unit
- */
-    __Pyx_TraceLine(986,0,__PYX_ERR(0, 986, __pyx_L1_error))
-    __pyx_t_4 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 986, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_geo_i), __pyx_n_s_value); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 986, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_scalar_grid, __pyx_t_6) < 0) __PYX_ERR(0, 986, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_n, __pyx_int_2) < 0) __PYX_ERR(0, 986, __pyx_L1_error)
-
-    /* "amsimp/dynamics.pyx":985
- *             geo_rand = randomise * geo_dev
- *             geo_i = geo_initial + geo_rand
- *             geo_i = smooth_gaussian(             # <<<<<<<<<<<<<<
- *                 scalar_grid=geo_i.value,
- *                 n=2,
- */
-    __Pyx_TraceLine(985,0,__PYX_ERR(0, 985, __pyx_L1_error))
-    __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 985, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-    /* "amsimp/dynamics.pyx":988
- *                 scalar_grid=geo_i.value,
- *                 n=2,
- *             ).magnitude * geo_i.unit             # <<<<<<<<<<<<<<
- *             # Temperature.
- *             T_rand = randomise * T_dev
- */
-    __Pyx_TraceLine(988,0,__PYX_ERR(0, 988, __pyx_L1_error))
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_magnitude); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 988, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_geo_i), __pyx_n_s_unit); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 988, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_2 = PyNumber_Multiply(__pyx_t_4, __pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 988, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 988, __pyx_L1_error)
-    __Pyx_DECREF_SET(__pyx_v_geo_i, ((PyArrayObject *)__pyx_t_2));
-    __pyx_t_2 = 0;
-
-    /* "amsimp/dynamics.pyx":990
- *             ).magnitude * geo_i.unit
- *             # Temperature.
- *             T_rand = randomise * T_dev             # <<<<<<<<<<<<<<
- *             T_i = T_initial + T_rand
- *             T_i = smooth_gaussian(
- */
-    __Pyx_TraceLine(990,0,__PYX_ERR(0, 990, __pyx_L1_error))
-    __pyx_t_2 = PyNumber_Multiply(((PyObject *)__pyx_v_randomise), ((PyObject *)__pyx_v_T_dev)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 990, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 990, __pyx_L1_error)
-    __Pyx_XDECREF_SET(__pyx_v_T_rand, ((PyArrayObject *)__pyx_t_2));
-    __pyx_t_2 = 0;
-
-    /* "amsimp/dynamics.pyx":991
- *             # Temperature.
- *             T_rand = randomise * T_dev
- *             T_i = T_initial + T_rand             # <<<<<<<<<<<<<<
- *             T_i = smooth_gaussian(
- *                 scalar_grid=T_i.value,
- */
-    __Pyx_TraceLine(991,0,__PYX_ERR(0, 991, __pyx_L1_error))
-    __pyx_t_2 = PyNumber_Add(((PyObject *)__pyx_v_T_initial), ((PyObject *)__pyx_v_T_rand)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 991, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 991, __pyx_L1_error)
-    __Pyx_DECREF_SET(__pyx_v_T_i, ((PyArrayObject *)__pyx_t_2));
-    __pyx_t_2 = 0;
-
-    /* "amsimp/dynamics.pyx":992
- *             T_rand = randomise * T_dev
- *             T_i = T_initial + T_rand
- *             T_i = smooth_gaussian(             # <<<<<<<<<<<<<<
- *                 scalar_grid=T_i.value,
- *                 n=2,
- */
-    __Pyx_TraceLine(992,0,__PYX_ERR(0, 992, __pyx_L1_error))
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_smooth_gaussian); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 992, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-
-    /* "amsimp/dynamics.pyx":993
- *             T_i = T_initial + T_rand
- *             T_i = smooth_gaussian(
- *                 scalar_grid=T_i.value,             # <<<<<<<<<<<<<<
- *                 n=2,
- *             ).magnitude * T_i.unit
- */
-    __Pyx_TraceLine(993,0,__PYX_ERR(0, 993, __pyx_L1_error))
-    __pyx_t_6 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 993, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T_i), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 993, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_scalar_grid, __pyx_t_4) < 0) __PYX_ERR(0, 993, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_n, __pyx_int_2) < 0) __PYX_ERR(0, 993, __pyx_L1_error)
-
-    /* "amsimp/dynamics.pyx":992
- *             T_rand = randomise * T_dev
- *             T_i = T_initial + T_rand
- *             T_i = smooth_gaussian(             # <<<<<<<<<<<<<<
- *                 scalar_grid=T_i.value,
- *                 n=2,
- */
-    __Pyx_TraceLine(992,0,__PYX_ERR(0, 992, __pyx_L1_error))
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 992, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1031, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-
-    /* "amsimp/dynamics.pyx":995
- *                 scalar_grid=T_i.value,
- *                 n=2,
- *             ).magnitude * T_i.unit             # <<<<<<<<<<<<<<
- *             # Virtual Temperature.
- *             Tv_rand = randomise * Tv_dev
- */
-    __Pyx_TraceLine(995,0,__PYX_ERR(0, 995, __pyx_L1_error))
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_magnitude); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 995, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T_i), __pyx_n_s_unit); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 995, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_2 = PyNumber_Multiply(__pyx_t_6, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 995, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 995, __pyx_L1_error)
-    __Pyx_DECREF_SET(__pyx_v_T_i, ((PyArrayObject *)__pyx_t_2));
-    __pyx_t_2 = 0;
-
-    /* "amsimp/dynamics.pyx":997
- *             ).magnitude * T_i.unit
- *             # Virtual Temperature.
- *             Tv_rand = randomise * Tv_dev             # <<<<<<<<<<<<<<
- *             Tv_i = Tv_initial + Tv_rand
- *             Tv_i = smooth_gaussian(
- */
-    __Pyx_TraceLine(997,0,__PYX_ERR(0, 997, __pyx_L1_error))
-    __pyx_t_2 = PyNumber_Multiply(((PyObject *)__pyx_v_randomise), ((PyObject *)__pyx_v_Tv_dev)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 997, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 997, __pyx_L1_error)
-    __Pyx_XDECREF_SET(__pyx_v_Tv_rand, ((PyArrayObject *)__pyx_t_2));
-    __pyx_t_2 = 0;
-
-    /* "amsimp/dynamics.pyx":998
- *             # Virtual Temperature.
- *             Tv_rand = randomise * Tv_dev
- *             Tv_i = Tv_initial + Tv_rand             # <<<<<<<<<<<<<<
- *             Tv_i = smooth_gaussian(
- *                 scalar_grid=Tv_i.value,
- */
-    __Pyx_TraceLine(998,0,__PYX_ERR(0, 998, __pyx_L1_error))
-    __pyx_t_2 = PyNumber_Add(((PyObject *)__pyx_v_Tv_initial), ((PyObject *)__pyx_v_Tv_rand)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 998, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 998, __pyx_L1_error)
-    __Pyx_DECREF_SET(__pyx_v_Tv_i, ((PyArrayObject *)__pyx_t_2));
-    __pyx_t_2 = 0;
-
-    /* "amsimp/dynamics.pyx":999
- *             Tv_rand = randomise * Tv_dev
- *             Tv_i = Tv_initial + Tv_rand
- *             Tv_i = smooth_gaussian(             # <<<<<<<<<<<<<<
- *                 scalar_grid=Tv_i.value,
- *                 n=2,
- */
-    __Pyx_TraceLine(999,0,__PYX_ERR(0, 999, __pyx_L1_error))
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_smooth_gaussian); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 999, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-
-    /* "amsimp/dynamics.pyx":1000
- *             Tv_i = Tv_initial + Tv_rand
- *             Tv_i = smooth_gaussian(
- *                 scalar_grid=Tv_i.value,             # <<<<<<<<<<<<<<
- *                 n=2,
- *             ).magnitude * Tv_i.unit
- */
-    __Pyx_TraceLine(1000,0,__PYX_ERR(0, 1000, __pyx_L1_error))
-    __pyx_t_4 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1000, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_Tv_i), __pyx_n_s_value); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1000, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_scalar_grid, __pyx_t_6) < 0) __PYX_ERR(0, 1000, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_n, __pyx_int_2) < 0) __PYX_ERR(0, 1000, __pyx_L1_error)
-
-    /* "amsimp/dynamics.pyx":999
- *             Tv_rand = randomise * Tv_dev
- *             Tv_i = Tv_initial + Tv_rand
- *             Tv_i = smooth_gaussian(             # <<<<<<<<<<<<<<
- *                 scalar_grid=Tv_i.value,
- *                 n=2,
- */
-    __Pyx_TraceLine(999,0,__PYX_ERR(0, 999, __pyx_L1_error))
-    __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 999, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-    /* "amsimp/dynamics.pyx":1002
- *                 scalar_grid=Tv_i.value,
- *                 n=2,
- *             ).magnitude * Tv_i.unit             # <<<<<<<<<<<<<<
- * 
- *             # Redefine the otherr output variables in
- */
-    __Pyx_TraceLine(1002,0,__PYX_ERR(0, 1002, __pyx_L1_error))
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_magnitude); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1002, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_Tv_i), __pyx_n_s_unit); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1002, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_2 = PyNumber_Multiply(__pyx_t_4, __pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1002, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1002, __pyx_L1_error)
-    __Pyx_DECREF_SET(__pyx_v_Tv_i, ((PyArrayObject *)__pyx_t_2));
-    __pyx_t_2 = 0;
-
-    /* "amsimp/dynamics.pyx":1008
- *             # conditions.
- *             # Geopotential Height.
- *             height = geo_i / g             # <<<<<<<<<<<<<<
- *             # Relative Humidity.
- *             # Vapor pressure.
- */
-    __Pyx_TraceLine(1008,0,__PYX_ERR(0, 1008, __pyx_L1_error))
-    __pyx_t_2 = __Pyx_PyNumber_Divide(((PyObject *)__pyx_v_geo_i), ((PyObject *)__pyx_v_g)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1008, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1008, __pyx_L1_error)
-    __Pyx_DECREF_SET(__pyx_v_height, ((PyArrayObject *)__pyx_t_2));
-    __pyx_t_2 = 0;
-
-    /* "amsimp/dynamics.pyx":1013
- *             e = (
- *                 (
- *                     (pressure_3d) / (1 - 0.622)             # <<<<<<<<<<<<<<
- *                 ) - (
- *                     (pressure_3d * T_i) / (Tv_i * (1 - 0.622))
- */
-    __Pyx_TraceLine(1013,0,__PYX_ERR(0, 1013, __pyx_L1_error))
-    __pyx_t_2 = PyFloat_FromDouble((1.0 - 0.622)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1013, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_6 = __Pyx_PyNumber_Divide(((PyObject *)__pyx_v_pressure_3d), __pyx_t_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1013, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-    /* "amsimp/dynamics.pyx":1015
- *                     (pressure_3d) / (1 - 0.622)
- *                 ) - (
- *                     (pressure_3d * T_i) / (Tv_i * (1 - 0.622))             # <<<<<<<<<<<<<<
- *                 )
- *             )
- */
-    __Pyx_TraceLine(1015,0,__PYX_ERR(0, 1015, __pyx_L1_error))
-    __pyx_t_2 = PyNumber_Multiply(((PyObject *)__pyx_v_pressure_3d), ((PyObject *)__pyx_v_T_i)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1015, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = PyFloat_FromDouble((1.0 - 0.622)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1015, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_1 = PyNumber_Multiply(((PyObject *)__pyx_v_Tv_i), __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1015, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyNumber_Divide(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1015, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "amsimp/dynamics.pyx":1014
- *                 (
- *                     (pressure_3d) / (1 - 0.622)
- *                 ) - (             # <<<<<<<<<<<<<<
- *                     (pressure_3d * T_i) / (Tv_i * (1 - 0.622))
- *                 )
- */
-    __Pyx_TraceLine(1014,0,__PYX_ERR(0, 1014, __pyx_L1_error))
-    __pyx_t_1 = PyNumber_Subtract(__pyx_t_6, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1014, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1014, __pyx_L1_error)
-    __Pyx_XDECREF_SET(__pyx_v_e, ((PyArrayObject *)__pyx_t_1));
-    __pyx_t_1 = 0;
-
-    /* "amsimp/dynamics.pyx":1019
- *             )
- *             # Convert temperature in Kelvin to degrees centigrade.
- *             T_c = T_i.value - 273.15             # <<<<<<<<<<<<<<
- *             # Saturated vapor pressure.
- *             sat_vapor_pressure = 0.61121 * np.exp(
- */
-    __Pyx_TraceLine(1019,0,__PYX_ERR(0, 1019, __pyx_L1_error))
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_T_i), __pyx_n_s_value); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1019, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_4 = __Pyx_PyFloat_SubtractObjC(__pyx_t_1, __pyx_float_273_15, 273.15, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1019, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1019, __pyx_L1_error)
-    __Pyx_XDECREF_SET(__pyx_v_T_c, ((PyArrayObject *)__pyx_t_4));
+    if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1031, __pyx_L1_error)
+    __Pyx_DECREF_SET(__pyx_v_sat_vapor_pressure, ((PyArrayObject *)__pyx_t_4));
     __pyx_t_4 = 0;
 
-    /* "amsimp/dynamics.pyx":1021
- *             T_c = T_i.value - 273.15
- *             # Saturated vapor pressure.
- *             sat_vapor_pressure = 0.61121 * np.exp(             # <<<<<<<<<<<<<<
- *                 (
- *                     18.678 - (T_c / 234.5)
- */
-    __Pyx_TraceLine(1021,0,__PYX_ERR(0, 1021, __pyx_L1_error))
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1021, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_exp); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1021, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "amsimp/dynamics.pyx":1023
- *             sat_vapor_pressure = 0.61121 * np.exp(
- *                 (
- *                     18.678 - (T_c / 234.5)             # <<<<<<<<<<<<<<
- *                 ) * (T_c / (257.14 + T_c)
- *                 )
- */
-    __Pyx_TraceLine(1023,0,__PYX_ERR(0, 1023, __pyx_L1_error))
-    __pyx_t_1 = __Pyx_PyNumber_Divide(((PyObject *)__pyx_v_T_c), __pyx_float_234_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1023, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyFloat_SubtractCObj(__pyx_float_18_678, __pyx_t_1, 18.678, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1023, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "amsimp/dynamics.pyx":1024
- *                 (
- *                     18.678 - (T_c / 234.5)
- *                 ) * (T_c / (257.14 + T_c)             # <<<<<<<<<<<<<<
- *                 )
- *             )
- */
-    __Pyx_TraceLine(1024,0,__PYX_ERR(0, 1024, __pyx_L1_error))
-    __pyx_t_1 = PyNumber_Add(__pyx_float_257_14, ((PyObject *)__pyx_v_T_c)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1024, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyNumber_Divide(((PyObject *)__pyx_v_T_c), __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1024, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyNumber_Multiply(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1024, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
-      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_6);
-      if (likely(__pyx_t_3)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-        __Pyx_INCREF(__pyx_t_3);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_6, function);
-      }
-    }
-    __pyx_t_4 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_3, __pyx_t_1) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_1);
-    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1021, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-
-    /* "amsimp/dynamics.pyx":1021
- *             T_c = T_i.value - 273.15
- *             # Saturated vapor pressure.
- *             sat_vapor_pressure = 0.61121 * np.exp(             # <<<<<<<<<<<<<<
- *                 (
- *                     18.678 - (T_c / 234.5)
- */
-    __Pyx_TraceLine(1021,0,__PYX_ERR(0, 1021, __pyx_L1_error))
-    __pyx_t_6 = PyNumber_Multiply(__pyx_float_0_61121, __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1021, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1021, __pyx_L1_error)
-    __Pyx_XDECREF_SET(__pyx_v_sat_vapor_pressure, ((PyArrayObject *)__pyx_t_6));
-    __pyx_t_6 = 0;
-
-    /* "amsimp/dynamics.pyx":1028
- *             )
- *             # Add units of measurement.
- *             sat_vapor_pressure *= self.units.kPa             # <<<<<<<<<<<<<<
- *             sat_vapor_pressure = sat_vapor_pressure.to(self.units.hPa)
- *             # Determine relative humidity.
- */
-    __Pyx_TraceLine(1028,0,__PYX_ERR(0, 1028, __pyx_L1_error))
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1028, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_kPa); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1028, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = PyNumber_InPlaceMultiply(((PyObject *)__pyx_v_sat_vapor_pressure), __pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1028, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1028, __pyx_L1_error)
-    __Pyx_DECREF_SET(__pyx_v_sat_vapor_pressure, ((PyArrayObject *)__pyx_t_6));
-    __pyx_t_6 = 0;
-
-    /* "amsimp/dynamics.pyx":1029
- *             # Add units of measurement.
- *             sat_vapor_pressure *= self.units.kPa
- *             sat_vapor_pressure = sat_vapor_pressure.to(self.units.hPa)             # <<<<<<<<<<<<<<
- *             # Determine relative humidity.
- *             rh = (e.value / sat_vapor_pressure.value) * 100
- */
-    __Pyx_TraceLine(1029,0,__PYX_ERR(0, 1029, __pyx_L1_error))
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_sat_vapor_pressure), __pyx_n_s_to); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1029, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1029, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_hPa); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1029, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
-      __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_4);
-      if (likely(__pyx_t_1)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-        __Pyx_INCREF(__pyx_t_1);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_4, function);
-      }
-    }
-    __pyx_t_6 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_1, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3);
-    __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1029, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1029, __pyx_L1_error)
-    __Pyx_DECREF_SET(__pyx_v_sat_vapor_pressure, ((PyArrayObject *)__pyx_t_6));
-    __pyx_t_6 = 0;
-
-    /* "amsimp/dynamics.pyx":1031
+    /* "amsimp/dynamics.pyx":1033
  *             sat_vapor_pressure = sat_vapor_pressure.to(self.units.hPa)
  *             # Determine relative humidity.
  *             rh = (e.value / sat_vapor_pressure.value) * 100             # <<<<<<<<<<<<<<
  *             rh[rh > 100] = 100
  *             rh[rh < 0] = 0
  */
-    __Pyx_TraceLine(1031,0,__PYX_ERR(0, 1031, __pyx_L1_error))
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_e), __pyx_n_s_value); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1031, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_sat_vapor_pressure), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1031, __pyx_L1_error)
+    __Pyx_TraceLine(1033,0,__PYX_ERR(0, 1033, __pyx_L1_error))
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_e), __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1033, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_6, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1031, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_sat_vapor_pressure), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1033, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1033, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_int_100); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1031, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_t_2 = PyNumber_Multiply(__pyx_t_3, __pyx_int_100); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1033, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1031, __pyx_L1_error)
-    __Pyx_DECREF_SET(__pyx_v_rh, ((PyArrayObject *)__pyx_t_4));
-    __pyx_t_4 = 0;
+    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1033, __pyx_L1_error)
+    __Pyx_DECREF_SET(__pyx_v_rh, ((PyArrayObject *)__pyx_t_2));
+    __pyx_t_2 = 0;
 
-    /* "amsimp/dynamics.pyx":1032
+    /* "amsimp/dynamics.pyx":1034
  *             # Determine relative humidity.
  *             rh = (e.value / sat_vapor_pressure.value) * 100
  *             rh[rh > 100] = 100             # <<<<<<<<<<<<<<
  *             rh[rh < 0] = 0
  *             rh *= self.units.percent
  */
-    __Pyx_TraceLine(1032,0,__PYX_ERR(0, 1032, __pyx_L1_error))
-    __pyx_t_4 = PyObject_RichCompare(((PyObject *)__pyx_v_rh), __pyx_int_100, Py_GT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1032, __pyx_L1_error)
-    if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_rh), __pyx_t_4, __pyx_int_100) < 0)) __PYX_ERR(0, 1032, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_TraceLine(1034,0,__PYX_ERR(0, 1034, __pyx_L1_error))
+    __pyx_t_2 = PyObject_RichCompare(((PyObject *)__pyx_v_rh), __pyx_int_100, Py_GT); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1034, __pyx_L1_error)
+    if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_rh), __pyx_t_2, __pyx_int_100) < 0)) __PYX_ERR(0, 1034, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "amsimp/dynamics.pyx":1033
+    /* "amsimp/dynamics.pyx":1035
  *             rh = (e.value / sat_vapor_pressure.value) * 100
  *             rh[rh > 100] = 100
  *             rh[rh < 0] = 0             # <<<<<<<<<<<<<<
  *             rh *= self.units.percent
  *             # Configure the Wind class, so, that it aligns with the
  */
-    __Pyx_TraceLine(1033,0,__PYX_ERR(0, 1033, __pyx_L1_error))
-    __pyx_t_4 = PyObject_RichCompare(((PyObject *)__pyx_v_rh), __pyx_int_0, Py_LT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1033, __pyx_L1_error)
-    if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_rh), __pyx_t_4, __pyx_int_0) < 0)) __PYX_ERR(0, 1033, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_TraceLine(1035,0,__PYX_ERR(0, 1035, __pyx_L1_error))
+    __pyx_t_2 = PyObject_RichCompare(((PyObject *)__pyx_v_rh), __pyx_int_0, Py_LT); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1035, __pyx_L1_error)
+    if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_rh), __pyx_t_2, __pyx_int_0) < 0)) __PYX_ERR(0, 1035, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "amsimp/dynamics.pyx":1034
+    /* "amsimp/dynamics.pyx":1036
  *             rh[rh > 100] = 100
  *             rh[rh < 0] = 0
  *             rh *= self.units.percent             # <<<<<<<<<<<<<<
  *             # Configure the Wind class, so, that it aligns with the
  *             # paramaters defined by the user.
  */
-    __Pyx_TraceLine(1034,0,__PYX_ERR(0, 1034, __pyx_L1_error))
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1034, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_percent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1034, __pyx_L1_error)
+    __Pyx_TraceLine(1036,0,__PYX_ERR(0, 1036, __pyx_L1_error))
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1036, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_percent); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1036, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_InPlaceMultiply(((PyObject *)__pyx_v_rh), __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1034, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_t_2 = PyNumber_InPlaceMultiply(((PyObject *)__pyx_v_rh), __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1036, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1034, __pyx_L1_error)
-    __Pyx_DECREF_SET(__pyx_v_rh, ((PyArrayObject *)__pyx_t_4));
-    __pyx_t_4 = 0;
+    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1036, __pyx_L1_error)
+    __Pyx_DECREF_SET(__pyx_v_rh, ((PyArrayObject *)__pyx_t_2));
+    __pyx_t_2 = 0;
 
-    /* "amsimp/dynamics.pyx":1038
+    /* "amsimp/dynamics.pyx":1040
  *             # paramaters defined by the user.
  *             config = Wind(
  *                 delta_latitude=self.delta_latitude,             # <<<<<<<<<<<<<<
  *                 delta_longitude=self.delta_longitude,
  *                 remove_files=self.remove_files,
  */
-    __Pyx_TraceLine(1038,0,__PYX_ERR(0, 1038, __pyx_L1_error))
-    __pyx_t_4 = __Pyx_PyDict_NewPresized(7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1038, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.delta_latitude); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1038, __pyx_L1_error)
+    __Pyx_TraceLine(1040,0,__PYX_ERR(0, 1040, __pyx_L1_error))
+    __pyx_t_2 = __Pyx_PyDict_NewPresized(7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1040, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.delta_latitude); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1040, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_delta_latitude, __pyx_t_3) < 0) __PYX_ERR(0, 1038, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_delta_latitude, __pyx_t_3) < 0) __PYX_ERR(0, 1040, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "amsimp/dynamics.pyx":1039
+    /* "amsimp/dynamics.pyx":1041
  *             config = Wind(
  *                 delta_latitude=self.delta_latitude,
  *                 delta_longitude=self.delta_longitude,             # <<<<<<<<<<<<<<
  *                 remove_files=self.remove_files,
  *                 input_data=True,
  */
-    __Pyx_TraceLine(1039,0,__PYX_ERR(0, 1039, __pyx_L1_error))
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.delta_longitude); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1039, __pyx_L1_error)
+    __Pyx_TraceLine(1041,0,__PYX_ERR(0, 1041, __pyx_L1_error))
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.delta_longitude); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1041, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_delta_longitude, __pyx_t_3) < 0) __PYX_ERR(0, 1038, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_delta_longitude, __pyx_t_3) < 0) __PYX_ERR(0, 1040, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "amsimp/dynamics.pyx":1040
+    /* "amsimp/dynamics.pyx":1042
  *                 delta_latitude=self.delta_latitude,
  *                 delta_longitude=self.delta_longitude,
  *                 remove_files=self.remove_files,             # <<<<<<<<<<<<<<
  *                 input_data=True,
  *                 geo=height,
  */
-    __Pyx_TraceLine(1040,0,__PYX_ERR(0, 1040, __pyx_L1_error))
-    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_remove_files, ((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.remove_files)) < 0) __PYX_ERR(0, 1038, __pyx_L1_error)
+    __Pyx_TraceLine(1042,0,__PYX_ERR(0, 1042, __pyx_L1_error))
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_remove_files, ((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.remove_files)) < 0) __PYX_ERR(0, 1040, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":1041
+    /* "amsimp/dynamics.pyx":1043
  *                 delta_longitude=self.delta_longitude,
  *                 remove_files=self.remove_files,
  *                 input_data=True,             # <<<<<<<<<<<<<<
  *                 geo=height,
  *                 temp=T_i,
  */
-    __Pyx_TraceLine(1041,0,__PYX_ERR(0, 1041, __pyx_L1_error))
-    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_input_data, Py_True) < 0) __PYX_ERR(0, 1038, __pyx_L1_error)
+    __Pyx_TraceLine(1043,0,__PYX_ERR(0, 1043, __pyx_L1_error))
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_input_data, Py_True) < 0) __PYX_ERR(0, 1040, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":1042
+    /* "amsimp/dynamics.pyx":1044
  *                 remove_files=self.remove_files,
  *                 input_data=True,
  *                 geo=height,             # <<<<<<<<<<<<<<
  *                 temp=T_i,
  *                 rh=rh,
  */
-    __Pyx_TraceLine(1042,0,__PYX_ERR(0, 1042, __pyx_L1_error))
-    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_geo, ((PyObject *)__pyx_v_height)) < 0) __PYX_ERR(0, 1038, __pyx_L1_error)
+    __Pyx_TraceLine(1044,0,__PYX_ERR(0, 1044, __pyx_L1_error))
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_geo, ((PyObject *)__pyx_v_height)) < 0) __PYX_ERR(0, 1040, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":1043
+    /* "amsimp/dynamics.pyx":1045
  *                 input_data=True,
  *                 geo=height,
  *                 temp=T_i,             # <<<<<<<<<<<<<<
  *                 rh=rh,
  *             )
  */
-    __Pyx_TraceLine(1043,0,__PYX_ERR(0, 1043, __pyx_L1_error))
-    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_temp, ((PyObject *)__pyx_v_T_i)) < 0) __PYX_ERR(0, 1038, __pyx_L1_error)
+    __Pyx_TraceLine(1045,0,__PYX_ERR(0, 1045, __pyx_L1_error))
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_temp, ((PyObject *)__pyx_v_T_i)) < 0) __PYX_ERR(0, 1040, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":1044
+    /* "amsimp/dynamics.pyx":1046
  *                 geo=height,
  *                 temp=T_i,
  *                 rh=rh,             # <<<<<<<<<<<<<<
  *             )
  *             # Geostrophic Wind.
  */
-    __Pyx_TraceLine(1044,0,__PYX_ERR(0, 1044, __pyx_L1_error))
-    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_rh, ((PyObject *)__pyx_v_rh)) < 0) __PYX_ERR(0, 1038, __pyx_L1_error)
+    __Pyx_TraceLine(1046,0,__PYX_ERR(0, 1046, __pyx_L1_error))
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_rh, ((PyObject *)__pyx_v_rh)) < 0) __PYX_ERR(0, 1040, __pyx_L1_error)
 
-    /* "amsimp/dynamics.pyx":1037
+    /* "amsimp/dynamics.pyx":1039
  *             # Configure the Wind class, so, that it aligns with the
  *             # paramaters defined by the user.
  *             config = Wind(             # <<<<<<<<<<<<<<
  *                 delta_latitude=self.delta_latitude,
  *                 delta_longitude=self.delta_longitude,
  */
-    __Pyx_TraceLine(1037,0,__PYX_ERR(0, 1037, __pyx_L1_error))
-    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_6amsimp_4wind_Wind), __pyx_empty_tuple, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1037, __pyx_L1_error)
+    __Pyx_TraceLine(1039,0,__PYX_ERR(0, 1039, __pyx_L1_error))
+    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_6amsimp_4wind_Wind), __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1039, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_XDECREF_SET(__pyx_v_config, ((struct __pyx_obj_6amsimp_4wind_Wind *)__pyx_t_3));
     __pyx_t_3 = 0;
 
-    /* "amsimp/dynamics.pyx":1048
+    /* "amsimp/dynamics.pyx":1050
  *             # Geostrophic Wind.
  *             # Zonal Wind.
  *             u_g = config.zonal_wind()             # <<<<<<<<<<<<<<
  *             # Meridional Wind.
  *             v_g = config.meridional_wind()
  */
-    __Pyx_TraceLine(1048,0,__PYX_ERR(0, 1048, __pyx_L1_error))
-    __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->zonal_wind(__pyx_v_config, 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1048, __pyx_L1_error)
+    __Pyx_TraceLine(1050,0,__PYX_ERR(0, 1050, __pyx_L1_error))
+    __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->zonal_wind(__pyx_v_config, 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1050, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF_SET(__pyx_v_u_g, ((PyArrayObject *)__pyx_t_3));
     __pyx_t_3 = 0;
 
-    /* "amsimp/dynamics.pyx":1050
+    /* "amsimp/dynamics.pyx":1052
  *             u_g = config.zonal_wind()
  *             # Meridional Wind.
  *             v_g = config.meridional_wind()             # <<<<<<<<<<<<<<
  *             # Vertical Motion.
  *             omega = config.vertical_motion()
  */
-    __Pyx_TraceLine(1050,0,__PYX_ERR(0, 1050, __pyx_L1_error))
-    __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->meridional_wind(__pyx_v_config, 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1050, __pyx_L1_error)
+    __Pyx_TraceLine(1052,0,__PYX_ERR(0, 1052, __pyx_L1_error))
+    __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->meridional_wind(__pyx_v_config, 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1052, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF_SET(__pyx_v_v_g, ((PyArrayObject *)__pyx_t_3));
     __pyx_t_3 = 0;
 
-    /* "amsimp/dynamics.pyx":1052
+    /* "amsimp/dynamics.pyx":1054
  *             v_g = config.meridional_wind()
  *             # Vertical Motion.
  *             omega = config.vertical_motion()             # <<<<<<<<<<<<<<
  *             # Static Stability.
  *             sigma = config.static_stability()
  */
-    __Pyx_TraceLine(1052,0,__PYX_ERR(0, 1052, __pyx_L1_error))
-    __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->vertical_motion(__pyx_v_config, 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1052, __pyx_L1_error)
+    __Pyx_TraceLine(1054,0,__PYX_ERR(0, 1054, __pyx_L1_error))
+    __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->vertical_motion(__pyx_v_config, 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1054, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF_SET(__pyx_v_omega, ((PyArrayObject *)__pyx_t_3));
     __pyx_t_3 = 0;
 
-    /* "amsimp/dynamics.pyx":1054
+    /* "amsimp/dynamics.pyx":1056
  *             omega = config.vertical_motion()
  *             # Static Stability.
  *             sigma = config.static_stability()             # <<<<<<<<<<<<<<
  *             # Precipitable Water.
  *             pwv = config.precipitable_water()
  */
-    __Pyx_TraceLine(1054,0,__PYX_ERR(0, 1054, __pyx_L1_error))
-    __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->static_stability(__pyx_v_config, 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1054, __pyx_L1_error)
+    __Pyx_TraceLine(1056,0,__PYX_ERR(0, 1056, __pyx_L1_error))
+    __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->static_stability(__pyx_v_config, 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1056, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF_SET(__pyx_v_sigma, ((PyArrayObject *)__pyx_t_3));
     __pyx_t_3 = 0;
 
-    /* "amsimp/dynamics.pyx":1056
+    /* "amsimp/dynamics.pyx":1058
  *             sigma = config.static_stability()
  *             # Precipitable Water.
  *             pwv = config.precipitable_water()             # <<<<<<<<<<<<<<
  * 
  *             m += 1
  */
-    __Pyx_TraceLine(1056,0,__PYX_ERR(0, 1056, __pyx_L1_error))
-    __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.precipitable_water(((struct __pyx_obj_6amsimp_5moist_Moist *)__pyx_v_config), 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1056, __pyx_L1_error)
+    __Pyx_TraceLine(1058,0,__PYX_ERR(0, 1058, __pyx_L1_error))
+    __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_config->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.precipitable_water(((struct __pyx_obj_6amsimp_5moist_Moist *)__pyx_v_config), 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1058, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF_SET(__pyx_v_pwv, ((PyArrayObject *)__pyx_t_3));
     __pyx_t_3 = 0;
 
-    /* "amsimp/dynamics.pyx":1058
+    /* "amsimp/dynamics.pyx":1060
  *             pwv = config.precipitable_water()
  * 
  *             m += 1             # <<<<<<<<<<<<<<
  * 
  *         # Convert lists to arrays.
  */
-    __Pyx_TraceLine(1058,0,__PYX_ERR(0, 1058, __pyx_L1_error))
+    __Pyx_TraceLine(1060,0,__PYX_ERR(0, 1060, __pyx_L1_error))
     __pyx_v_m = (__pyx_v_m + 1);
   }
 
-  /* "amsimp/dynamics.pyx":1062
+  /* "amsimp/dynamics.pyx":1064
  *         # Convert lists to arrays.
  *         # Geopotential Height.
  *         GeopotentialHeight = np.asarray(HeightList)             # <<<<<<<<<<<<<<
  *         # Zonal Wind.
  *         ZonalWind = np.asarray(ZonalList)
  */
-  __Pyx_TraceLine(1062,0,__PYX_ERR(0, 1062, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1062, __pyx_L1_error)
+  __Pyx_TraceLine(1064,0,__PYX_ERR(0, 1064, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1064, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_asarray); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1064, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_asarray); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1062, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_6);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-      __Pyx_INCREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_2);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
     }
   }
-  __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_4, __pyx_v_HeightList) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_HeightList);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1062, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_2, __pyx_v_HeightList) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_HeightList);
+  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1064, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_GeopotentialHeight = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1064
+  /* "amsimp/dynamics.pyx":1066
  *         GeopotentialHeight = np.asarray(HeightList)
  *         # Zonal Wind.
  *         ZonalWind = np.asarray(ZonalList)             # <<<<<<<<<<<<<<
  *         # Meridional Wind.
  *         MeridionalWind = np.asarray(MeridionalList)
  */
-  __Pyx_TraceLine(1064,0,__PYX_ERR(0, 1064, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1064, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_asarray); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1064, __pyx_L1_error)
+  __Pyx_TraceLine(1066,0,__PYX_ERR(0, 1066, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1066, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-      __Pyx_INCREF(__pyx_t_6);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_asarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1066, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_4, function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
     }
   }
-  __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_v_ZonalList) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_ZonalList);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1064, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_v_ZonalList) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_ZonalList);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1066, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_ZonalWind = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1066
+  /* "amsimp/dynamics.pyx":1068
  *         ZonalWind = np.asarray(ZonalList)
  *         # Meridional Wind.
  *         MeridionalWind = np.asarray(MeridionalList)             # <<<<<<<<<<<<<<
  *         # Vertical Motion.
  *         VerticalMotion = np.asarray(VerticalList)
  */
-  __Pyx_TraceLine(1066,0,__PYX_ERR(0, 1066, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1066, __pyx_L1_error)
+  __Pyx_TraceLine(1068,0,__PYX_ERR(0, 1068, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1068, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_asarray); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1068, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_asarray); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1066, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_6);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-      __Pyx_INCREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_2);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
     }
   }
-  __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_4, __pyx_v_MeridionalList) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_MeridionalList);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1066, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_2, __pyx_v_MeridionalList) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_MeridionalList);
+  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1068, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_MeridionalWind = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1068
+  /* "amsimp/dynamics.pyx":1070
  *         MeridionalWind = np.asarray(MeridionalList)
  *         # Vertical Motion.
  *         VerticalMotion = np.asarray(VerticalList)             # <<<<<<<<<<<<<<
  *         # Static Stability.
  *         StaticStability = np.asarray(StabilityList)
  */
-  __Pyx_TraceLine(1068,0,__PYX_ERR(0, 1068, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1068, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_asarray); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1068, __pyx_L1_error)
+  __Pyx_TraceLine(1070,0,__PYX_ERR(0, 1070, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1070, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-      __Pyx_INCREF(__pyx_t_6);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_asarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1070, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_4, function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
     }
   }
-  __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_v_VerticalList) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_VerticalList);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1068, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_v_VerticalList) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_VerticalList);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1070, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_VerticalMotion = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1070
+  /* "amsimp/dynamics.pyx":1072
  *         VerticalMotion = np.asarray(VerticalList)
  *         # Static Stability.
  *         StaticStability = np.asarray(StabilityList)             # <<<<<<<<<<<<<<
  *         # Air Temperature.
  *         AirTemperature = np.asarray(TemperatureList)
  */
-  __Pyx_TraceLine(1070,0,__PYX_ERR(0, 1070, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1070, __pyx_L1_error)
+  __Pyx_TraceLine(1072,0,__PYX_ERR(0, 1072, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1072, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_asarray); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1072, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_asarray); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1070, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_6);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-      __Pyx_INCREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_2);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
     }
   }
-  __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_4, __pyx_v_StabilityList) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_StabilityList);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1070, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_2, __pyx_v_StabilityList) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_StabilityList);
+  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1072, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_StaticStability = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1072
+  /* "amsimp/dynamics.pyx":1074
  *         StaticStability = np.asarray(StabilityList)
  *         # Air Temperature.
  *         AirTemperature = np.asarray(TemperatureList)             # <<<<<<<<<<<<<<
  *         # Virtual Temperature.
  *         VirtualTemperature = np.asarray(VirtualList)
  */
-  __Pyx_TraceLine(1072,0,__PYX_ERR(0, 1072, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1072, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_asarray); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1072, __pyx_L1_error)
+  __Pyx_TraceLine(1074,0,__PYX_ERR(0, 1074, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1074, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-      __Pyx_INCREF(__pyx_t_6);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_asarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1074, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_4, function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
     }
   }
-  __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_v_TemperatureList) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_TemperatureList);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1072, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_v_TemperatureList) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_TemperatureList);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1074, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_AirTemperature = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1074
+  /* "amsimp/dynamics.pyx":1076
  *         AirTemperature = np.asarray(TemperatureList)
  *         # Virtual Temperature.
  *         VirtualTemperature = np.asarray(VirtualList)             # <<<<<<<<<<<<<<
  *         # Relative Humidity.
  *         RelativeHumidity = np.asarray(HumidityList)
  */
-  __Pyx_TraceLine(1074,0,__PYX_ERR(0, 1074, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1074, __pyx_L1_error)
+  __Pyx_TraceLine(1076,0,__PYX_ERR(0, 1076, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1076, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_asarray); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1076, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_asarray); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1074, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_6);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-      __Pyx_INCREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_2);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
     }
   }
-  __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_4, __pyx_v_VirtualList) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_VirtualList);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1074, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_2, __pyx_v_VirtualList) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_VirtualList);
+  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1076, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_VirtualTemperature = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1076
+  /* "amsimp/dynamics.pyx":1078
  *         VirtualTemperature = np.asarray(VirtualList)
  *         # Relative Humidity.
  *         RelativeHumidity = np.asarray(HumidityList)             # <<<<<<<<<<<<<<
  *         # Pressure Thickness.
  *         Thickness = np.asarray(ThicknessList)
  */
-  __Pyx_TraceLine(1076,0,__PYX_ERR(0, 1076, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1076, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_asarray); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1076, __pyx_L1_error)
+  __Pyx_TraceLine(1078,0,__PYX_ERR(0, 1078, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1078, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-      __Pyx_INCREF(__pyx_t_6);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_asarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1078, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_4, function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
     }
   }
-  __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_v_HumidityList) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_HumidityList);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1076, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_v_HumidityList) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_HumidityList);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1078, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_RelativeHumidity = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1078
+  /* "amsimp/dynamics.pyx":1080
  *         RelativeHumidity = np.asarray(HumidityList)
  *         # Pressure Thickness.
  *         Thickness = np.asarray(ThicknessList)             # <<<<<<<<<<<<<<
  *         # Precipitable Water.
  *         PrecipitableWater = np.asarray(WaterList)
  */
-  __Pyx_TraceLine(1078,0,__PYX_ERR(0, 1078, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1078, __pyx_L1_error)
+  __Pyx_TraceLine(1080,0,__PYX_ERR(0, 1080, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1080, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_asarray); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1080, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_asarray); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1078, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_6);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-      __Pyx_INCREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_2)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_2);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
     }
   }
-  __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_4, __pyx_v_ThicknessList) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_ThicknessList);
-  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1078, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_2, __pyx_v_ThicknessList) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_ThicknessList);
+  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1080, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_Thickness = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1080
+  /* "amsimp/dynamics.pyx":1082
  *         Thickness = np.asarray(ThicknessList)
  *         # Precipitable Water.
  *         PrecipitableWater = np.asarray(WaterList)             # <<<<<<<<<<<<<<
  * 
  *         # Finish progress bar.
  */
-  __Pyx_TraceLine(1080,0,__PYX_ERR(0, 1080, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1080, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_asarray); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1080, __pyx_L1_error)
+  __Pyx_TraceLine(1082,0,__PYX_ERR(0, 1082, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1082, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_asarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1082, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_v_WaterList) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_WaterList);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1082, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_v_PrecipitableWater = __pyx_t_3;
+  __pyx_t_3 = 0;
+
+  /* "amsimp/dynamics.pyx":1085
+ * 
+ *         # Finish progress bar.
+ *         bar.finish()             # <<<<<<<<<<<<<<
+ * 
+ *         # Define the coordinates for the cube.
+ */
+  __Pyx_TraceLine(1085,0,__PYX_ERR(0, 1085, __pyx_L1_error))
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_bar, __pyx_n_s_finish); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1085, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_4)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_4);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1085, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+  /* "amsimp/dynamics.pyx":1089
+ *         # Define the coordinates for the cube.
+ *         # Latitude.
+ *         lat = DimCoord(             # <<<<<<<<<<<<<<
+ *             self.latitude_lines(),
+ *             standard_name='latitude',
+ */
+  __Pyx_TraceLine(1089,0,__PYX_ERR(0, 1089, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_DimCoord); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1089, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+
+  /* "amsimp/dynamics.pyx":1090
+ *         # Latitude.
+ *         lat = DimCoord(
+ *             self.latitude_lines(),             # <<<<<<<<<<<<<<
+ *             standard_name='latitude',
+ *             units='degrees'
+ */
+  __Pyx_TraceLine(1090,0,__PYX_ERR(0, 1090, __pyx_L1_error))
+  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, NULL)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1090, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+
+  /* "amsimp/dynamics.pyx":1089
+ *         # Define the coordinates for the cube.
+ *         # Latitude.
+ *         lat = DimCoord(             # <<<<<<<<<<<<<<
+ *             self.latitude_lines(),
+ *             standard_name='latitude',
+ */
+  __Pyx_TraceLine(1089,0,__PYX_ERR(0, 1089, __pyx_L1_error))
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1089, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_GIVEREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
+  __pyx_t_2 = 0;
+
+  /* "amsimp/dynamics.pyx":1091
+ *         lat = DimCoord(
+ *             self.latitude_lines(),
+ *             standard_name='latitude',             # <<<<<<<<<<<<<<
+ *             units='degrees'
+ *         )
+ */
+  __Pyx_TraceLine(1091,0,__PYX_ERR(0, 1091, __pyx_L1_error))
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1091, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_standard_name, __pyx_n_u_latitude) < 0) __PYX_ERR(0, 1091, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_units, __pyx_n_u_degrees) < 0) __PYX_ERR(0, 1091, __pyx_L1_error)
+
+  /* "amsimp/dynamics.pyx":1089
+ *         # Define the coordinates for the cube.
+ *         # Latitude.
+ *         lat = DimCoord(             # <<<<<<<<<<<<<<
+ *             self.latitude_lines(),
+ *             standard_name='latitude',
+ */
+  __Pyx_TraceLine(1089,0,__PYX_ERR(0, 1089, __pyx_L1_error))
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1089, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF_SET(__pyx_v_lat, __pyx_t_1);
+  __pyx_t_1 = 0;
+
+  /* "amsimp/dynamics.pyx":1095
+ *         )
+ *         # Longitude
+ *         lon = DimCoord(             # <<<<<<<<<<<<<<
+ *             self.longitude_lines(),
+ *             standard_name='longitude',
+ */
+  __Pyx_TraceLine(1095,0,__PYX_ERR(0, 1095, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_DimCoord); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1095, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+
+  /* "amsimp/dynamics.pyx":1096
+ *         # Longitude
+ *         lon = DimCoord(
+ *             self.longitude_lines(),             # <<<<<<<<<<<<<<
+ *             standard_name='longitude',
+ *             units='degrees'
+ */
+  __Pyx_TraceLine(1096,0,__PYX_ERR(0, 1096, __pyx_L1_error))
+  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.__pyx_base.longitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1096, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+
+  /* "amsimp/dynamics.pyx":1095
+ *         )
+ *         # Longitude
+ *         lon = DimCoord(             # <<<<<<<<<<<<<<
+ *             self.longitude_lines(),
+ *             standard_name='longitude',
+ */
+  __Pyx_TraceLine(1095,0,__PYX_ERR(0, 1095, __pyx_L1_error))
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1095, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_GIVEREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
+  __pyx_t_2 = 0;
+
+  /* "amsimp/dynamics.pyx":1097
+ *         lon = DimCoord(
+ *             self.longitude_lines(),
+ *             standard_name='longitude',             # <<<<<<<<<<<<<<
+ *             units='degrees'
+ *         )
+ */
+  __Pyx_TraceLine(1097,0,__PYX_ERR(0, 1097, __pyx_L1_error))
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1097, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_standard_name, __pyx_n_u_longitude) < 0) __PYX_ERR(0, 1097, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_units, __pyx_n_u_degrees) < 0) __PYX_ERR(0, 1097, __pyx_L1_error)
+
+  /* "amsimp/dynamics.pyx":1095
+ *         )
+ *         # Longitude
+ *         lon = DimCoord(             # <<<<<<<<<<<<<<
+ *             self.longitude_lines(),
+ *             standard_name='longitude',
+ */
+  __Pyx_TraceLine(1095,0,__PYX_ERR(0, 1095, __pyx_L1_error))
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1095, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_v_lon = __pyx_t_3;
+  __pyx_t_3 = 0;
+
+  /* "amsimp/dynamics.pyx":1101
+ *         )
+ *         # Pressure Surfaces.
+ *         p = DimCoord(             # <<<<<<<<<<<<<<
+ *             pressure,
+ *             long_name='pressure',
+ */
+  __Pyx_TraceLine(1101,0,__PYX_ERR(0, 1101, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_DimCoord); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1101, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+
+  /* "amsimp/dynamics.pyx":1102
+ *         # Pressure Surfaces.
+ *         p = DimCoord(
+ *             pressure,             # <<<<<<<<<<<<<<
+ *             long_name='pressure',
+ *             units='hPa'
+ */
+  __Pyx_TraceLine(1102,0,__PYX_ERR(0, 1102, __pyx_L1_error))
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1101, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_INCREF(((PyObject *)__pyx_v_pressure));
+  __Pyx_GIVEREF(((PyObject *)__pyx_v_pressure));
+  PyTuple_SET_ITEM(__pyx_t_2, 0, ((PyObject *)__pyx_v_pressure));
+
+  /* "amsimp/dynamics.pyx":1103
+ *         p = DimCoord(
+ *             pressure,
+ *             long_name='pressure',             # <<<<<<<<<<<<<<
+ *             units='hPa'
+ *         )
+ */
+  __Pyx_TraceLine(1103,0,__PYX_ERR(0, 1103, __pyx_L1_error))
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1103, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_long_name, __pyx_n_u_pressure) < 0) __PYX_ERR(0, 1103, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_units, __pyx_n_u_hPa) < 0) __PYX_ERR(0, 1103, __pyx_L1_error)
+
+  /* "amsimp/dynamics.pyx":1101
+ *         )
+ *         # Pressure Surfaces.
+ *         p = DimCoord(             # <<<<<<<<<<<<<<
+ *             pressure,
+ *             long_name='pressure',
+ */
+  __Pyx_TraceLine(1101,0,__PYX_ERR(0, 1101, __pyx_L1_error))
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1101, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_v_p = __pyx_t_1;
+  __pyx_t_1 = 0;
+
+  /* "amsimp/dynamics.pyx":1107
+ *         )
+ *         # Time.
+ *         forecast_period = DimCoord(             # <<<<<<<<<<<<<<
+ *             time,
+ *             standard_name='forecast_period',
+ */
+  __Pyx_TraceLine(1107,0,__PYX_ERR(0, 1107, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_DimCoord); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1107, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+
+  /* "amsimp/dynamics.pyx":1108
+ *         # Time.
+ *         forecast_period = DimCoord(
+ *             time,             # <<<<<<<<<<<<<<
+ *             standard_name='forecast_period',
+ *             units='hours'
+ */
+  __Pyx_TraceLine(1108,0,__PYX_ERR(0, 1108, __pyx_L1_error))
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1107, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_INCREF(__pyx_v_time);
+  __Pyx_GIVEREF(__pyx_v_time);
+  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_time);
+
+  /* "amsimp/dynamics.pyx":1109
+ *         forecast_period = DimCoord(
+ *             time,
+ *             standard_name='forecast_period',             # <<<<<<<<<<<<<<
+ *             units='hours'
+ *         )
+ */
+  __Pyx_TraceLine(1109,0,__PYX_ERR(0, 1109, __pyx_L1_error))
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1109, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_standard_name, __pyx_n_u_forecast_period) < 0) __PYX_ERR(0, 1109, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_units, __pyx_n_u_hours) < 0) __PYX_ERR(0, 1109, __pyx_L1_error)
+
+  /* "amsimp/dynamics.pyx":1107
+ *         )
+ *         # Time.
+ *         forecast_period = DimCoord(             # <<<<<<<<<<<<<<
+ *             time,
+ *             standard_name='forecast_period',
+ */
+  __Pyx_TraceLine(1107,0,__PYX_ERR(0, 1107, __pyx_L1_error))
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1107, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_v_forecast_period = __pyx_t_3;
+  __pyx_t_3 = 0;
+
+  /* "amsimp/dynamics.pyx":1113
+ *         )
+ *         # Forecast reference time.
+ *         ref_time = AuxCoord(             # <<<<<<<<<<<<<<
+ *             self.date.strftime("%Y-%m-%d %H:%M:%S"),
+ *             standard_name='forecast_reference_time'
+ */
+  __Pyx_TraceLine(1113,0,__PYX_ERR(0, 1113, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_AuxCoord); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1113, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+
+  /* "amsimp/dynamics.pyx":1114
+ *         # Forecast reference time.
+ *         ref_time = AuxCoord(
+ *             self.date.strftime("%Y-%m-%d %H:%M:%S"),             # <<<<<<<<<<<<<<
+ *             standard_name='forecast_reference_time'
+ *         )
+ */
+  __Pyx_TraceLine(1114,0,__PYX_ERR(0, 1114, __pyx_L1_error))
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.date, __pyx_n_s_strftime); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1114, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_1 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_4);
+    if (likely(__pyx_t_1)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+      __Pyx_INCREF(__pyx_t_1);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
+    }
+  }
+  __pyx_t_2 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_1, __pyx_kp_u_Y_m_d_H_M_S) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_kp_u_Y_m_d_H_M_S);
+  __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1114, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+  /* "amsimp/dynamics.pyx":1113
+ *         )
+ *         # Forecast reference time.
+ *         ref_time = AuxCoord(             # <<<<<<<<<<<<<<
+ *             self.date.strftime("%Y-%m-%d %H:%M:%S"),
+ *             standard_name='forecast_reference_time'
+ */
+  __Pyx_TraceLine(1113,0,__PYX_ERR(0, 1113, __pyx_L1_error))
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1113, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_GIVEREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
+  __pyx_t_2 = 0;
+
+  /* "amsimp/dynamics.pyx":1115
+ *         ref_time = AuxCoord(
+ *             self.date.strftime("%Y-%m-%d %H:%M:%S"),
+ *             standard_name='forecast_reference_time'             # <<<<<<<<<<<<<<
+ *         )
+ * 
+ */
+  __Pyx_TraceLine(1115,0,__PYX_ERR(0, 1115, __pyx_L1_error))
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1115, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_standard_name, __pyx_n_u_forecast_reference_time) < 0) __PYX_ERR(0, 1115, __pyx_L1_error)
+
+  /* "amsimp/dynamics.pyx":1113
+ *         )
+ *         # Forecast reference time.
+ *         ref_time = AuxCoord(             # <<<<<<<<<<<<<<
+ *             self.date.strftime("%Y-%m-%d %H:%M:%S"),
+ *             standard_name='forecast_reference_time'
+ */
+  __Pyx_TraceLine(1113,0,__PYX_ERR(0, 1113, __pyx_L1_error))
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1113, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_v_ref_time = __pyx_t_1;
+  __pyx_t_1 = 0;
+
+  /* "amsimp/dynamics.pyx":1121
+ *         # Geopotential Height Cube.
+ *         # Model number.
+ *         model_runs = np.linspace(1, self.models, self.models)             # <<<<<<<<<<<<<<
+ *         model_runs = DimCoord(
+ *             model_runs,
+ */
+  __Pyx_TraceLine(1121,0,__PYX_ERR(0, 1121, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_linspace); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->models); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->models); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_6 = NULL;
+  __pyx_t_5 = 0;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
     __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
     if (likely(__pyx_t_6)) {
@@ -14920,523 +15316,143 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
       __Pyx_INCREF(__pyx_t_6);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_4, function);
-    }
-  }
-  __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_v_WaterList) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_WaterList);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1080, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_v_PrecipitableWater = __pyx_t_3;
-  __pyx_t_3 = 0;
-
-  /* "amsimp/dynamics.pyx":1083
- * 
- *         # Finish progress bar.
- *         bar.finish()             # <<<<<<<<<<<<<<
- * 
- *         # Define the coordinates for the cube.
- */
-  __Pyx_TraceLine(1083,0,__PYX_ERR(0, 1083, __pyx_L1_error))
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_bar, __pyx_n_s_finish); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1083, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_4);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_4, function);
-    }
-  }
-  __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1083, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-  /* "amsimp/dynamics.pyx":1087
- *         # Define the coordinates for the cube.
- *         # Latitude.
- *         lat = DimCoord(             # <<<<<<<<<<<<<<
- *             self.latitude_lines(),
- *             standard_name='latitude',
- */
-  __Pyx_TraceLine(1087,0,__PYX_ERR(0, 1087, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_DimCoord); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1087, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-
-  /* "amsimp/dynamics.pyx":1088
- *         # Latitude.
- *         lat = DimCoord(
- *             self.latitude_lines(),             # <<<<<<<<<<<<<<
- *             standard_name='latitude',
- *             units='degrees'
- */
-  __Pyx_TraceLine(1088,0,__PYX_ERR(0, 1088, __pyx_L1_error))
-  __pyx_t_4 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, NULL)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1088, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-
-  /* "amsimp/dynamics.pyx":1087
- *         # Define the coordinates for the cube.
- *         # Latitude.
- *         lat = DimCoord(             # <<<<<<<<<<<<<<
- *             self.latitude_lines(),
- *             standard_name='latitude',
- */
-  __Pyx_TraceLine(1087,0,__PYX_ERR(0, 1087, __pyx_L1_error))
-  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1087, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4);
-  __pyx_t_4 = 0;
-
-  /* "amsimp/dynamics.pyx":1089
- *         lat = DimCoord(
- *             self.latitude_lines(),
- *             standard_name='latitude',             # <<<<<<<<<<<<<<
- *             units='degrees'
- *         )
- */
-  __Pyx_TraceLine(1089,0,__PYX_ERR(0, 1089, __pyx_L1_error))
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1089, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_standard_name, __pyx_n_u_latitude) < 0) __PYX_ERR(0, 1089, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_units, __pyx_n_u_degrees) < 0) __PYX_ERR(0, 1089, __pyx_L1_error)
-
-  /* "amsimp/dynamics.pyx":1087
- *         # Define the coordinates for the cube.
- *         # Latitude.
- *         lat = DimCoord(             # <<<<<<<<<<<<<<
- *             self.latitude_lines(),
- *             standard_name='latitude',
- */
-  __Pyx_TraceLine(1087,0,__PYX_ERR(0, 1087, __pyx_L1_error))
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1087, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF_SET(__pyx_v_lat, __pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* "amsimp/dynamics.pyx":1093
- *         )
- *         # Longitude
- *         lon = DimCoord(             # <<<<<<<<<<<<<<
- *             self.longitude_lines(),
- *             standard_name='longitude',
- */
-  __Pyx_TraceLine(1093,0,__PYX_ERR(0, 1093, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_DimCoord); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1093, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-
-  /* "amsimp/dynamics.pyx":1094
- *         # Longitude
- *         lon = DimCoord(
- *             self.longitude_lines(),             # <<<<<<<<<<<<<<
- *             standard_name='longitude',
- *             units='degrees'
- */
-  __Pyx_TraceLine(1094,0,__PYX_ERR(0, 1094, __pyx_L1_error))
-  __pyx_t_4 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_8dynamics_Dynamics *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.__pyx_base.__pyx_base.longitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1094, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-
-  /* "amsimp/dynamics.pyx":1093
- *         )
- *         # Longitude
- *         lon = DimCoord(             # <<<<<<<<<<<<<<
- *             self.longitude_lines(),
- *             standard_name='longitude',
- */
-  __Pyx_TraceLine(1093,0,__PYX_ERR(0, 1093, __pyx_L1_error))
-  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1093, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4);
-  __pyx_t_4 = 0;
-
-  /* "amsimp/dynamics.pyx":1095
- *         lon = DimCoord(
- *             self.longitude_lines(),
- *             standard_name='longitude',             # <<<<<<<<<<<<<<
- *             units='degrees'
- *         )
- */
-  __Pyx_TraceLine(1095,0,__PYX_ERR(0, 1095, __pyx_L1_error))
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1095, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_standard_name, __pyx_n_u_longitude) < 0) __PYX_ERR(0, 1095, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_units, __pyx_n_u_degrees) < 0) __PYX_ERR(0, 1095, __pyx_L1_error)
-
-  /* "amsimp/dynamics.pyx":1093
- *         )
- *         # Longitude
- *         lon = DimCoord(             # <<<<<<<<<<<<<<
- *             self.longitude_lines(),
- *             standard_name='longitude',
- */
-  __Pyx_TraceLine(1093,0,__PYX_ERR(0, 1093, __pyx_L1_error))
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_6, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1093, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_v_lon = __pyx_t_3;
-  __pyx_t_3 = 0;
-
-  /* "amsimp/dynamics.pyx":1099
- *         )
- *         # Pressure Surfaces.
- *         p = DimCoord(             # <<<<<<<<<<<<<<
- *             pressure,
- *             long_name='pressure',
- */
-  __Pyx_TraceLine(1099,0,__PYX_ERR(0, 1099, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_DimCoord); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1099, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-
-  /* "amsimp/dynamics.pyx":1100
- *         # Pressure Surfaces.
- *         p = DimCoord(
- *             pressure,             # <<<<<<<<<<<<<<
- *             long_name='pressure',
- *             units='hPa'
- */
-  __Pyx_TraceLine(1100,0,__PYX_ERR(0, 1100, __pyx_L1_error))
-  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1099, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_INCREF(((PyObject *)__pyx_v_pressure));
-  __Pyx_GIVEREF(((PyObject *)__pyx_v_pressure));
-  PyTuple_SET_ITEM(__pyx_t_4, 0, ((PyObject *)__pyx_v_pressure));
-
-  /* "amsimp/dynamics.pyx":1101
- *         p = DimCoord(
- *             pressure,
- *             long_name='pressure',             # <<<<<<<<<<<<<<
- *             units='hPa'
- *         )
- */
-  __Pyx_TraceLine(1101,0,__PYX_ERR(0, 1101, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1101, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_long_name, __pyx_n_u_pressure) < 0) __PYX_ERR(0, 1101, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_units, __pyx_n_u_hPa) < 0) __PYX_ERR(0, 1101, __pyx_L1_error)
-
-  /* "amsimp/dynamics.pyx":1099
- *         )
- *         # Pressure Surfaces.
- *         p = DimCoord(             # <<<<<<<<<<<<<<
- *             pressure,
- *             long_name='pressure',
- */
-  __Pyx_TraceLine(1099,0,__PYX_ERR(0, 1099, __pyx_L1_error))
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1099, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_v_p = __pyx_t_1;
-  __pyx_t_1 = 0;
-
-  /* "amsimp/dynamics.pyx":1105
- *         )
- *         # Time.
- *         forecast_period = DimCoord(             # <<<<<<<<<<<<<<
- *             time,
- *             standard_name='forecast_period',
- */
-  __Pyx_TraceLine(1105,0,__PYX_ERR(0, 1105, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_DimCoord); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1105, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-
-  /* "amsimp/dynamics.pyx":1106
- *         # Time.
- *         forecast_period = DimCoord(
- *             time,             # <<<<<<<<<<<<<<
- *             standard_name='forecast_period',
- *             units='hours'
- */
-  __Pyx_TraceLine(1106,0,__PYX_ERR(0, 1106, __pyx_L1_error))
-  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1105, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_INCREF(__pyx_v_time);
-  __Pyx_GIVEREF(__pyx_v_time);
-  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_time);
-
-  /* "amsimp/dynamics.pyx":1107
- *         forecast_period = DimCoord(
- *             time,
- *             standard_name='forecast_period',             # <<<<<<<<<<<<<<
- *             units='hours'
- *         )
- */
-  __Pyx_TraceLine(1107,0,__PYX_ERR(0, 1107, __pyx_L1_error))
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1107, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_standard_name, __pyx_n_u_forecast_period) < 0) __PYX_ERR(0, 1107, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_units, __pyx_n_u_hours) < 0) __PYX_ERR(0, 1107, __pyx_L1_error)
-
-  /* "amsimp/dynamics.pyx":1105
- *         )
- *         # Time.
- *         forecast_period = DimCoord(             # <<<<<<<<<<<<<<
- *             time,
- *             standard_name='forecast_period',
- */
-  __Pyx_TraceLine(1105,0,__PYX_ERR(0, 1105, __pyx_L1_error))
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_6, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1105, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_v_forecast_period = __pyx_t_3;
-  __pyx_t_3 = 0;
-
-  /* "amsimp/dynamics.pyx":1111
- *         )
- *         # Forecast reference time.
- *         ref_time = AuxCoord(             # <<<<<<<<<<<<<<
- *             self.date.strftime("%Y-%m-%d %H:%M:%S"),
- *             standard_name='forecast_reference_time'
- */
-  __Pyx_TraceLine(1111,0,__PYX_ERR(0, 1111, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_AuxCoord); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1111, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-
-  /* "amsimp/dynamics.pyx":1112
- *         # Forecast reference time.
- *         ref_time = AuxCoord(
- *             self.date.strftime("%Y-%m-%d %H:%M:%S"),             # <<<<<<<<<<<<<<
- *             standard_name='forecast_reference_time'
- *         )
- */
-  __Pyx_TraceLine(1112,0,__PYX_ERR(0, 1112, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.date, __pyx_n_s_strftime); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1112, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_1 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_6);
-    if (likely(__pyx_t_1)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-      __Pyx_INCREF(__pyx_t_1);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_1, __pyx_kp_u_Y_m_d_H_M_S) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_kp_u_Y_m_d_H_M_S);
-  __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1112, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-
-  /* "amsimp/dynamics.pyx":1111
- *         )
- *         # Forecast reference time.
- *         ref_time = AuxCoord(             # <<<<<<<<<<<<<<
- *             self.date.strftime("%Y-%m-%d %H:%M:%S"),
- *             standard_name='forecast_reference_time'
- */
-  __Pyx_TraceLine(1111,0,__PYX_ERR(0, 1111, __pyx_L1_error))
-  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1111, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4);
-  __pyx_t_4 = 0;
-
-  /* "amsimp/dynamics.pyx":1113
- *         ref_time = AuxCoord(
- *             self.date.strftime("%Y-%m-%d %H:%M:%S"),
- *             standard_name='forecast_reference_time'             # <<<<<<<<<<<<<<
- *         )
- * 
- */
-  __Pyx_TraceLine(1113,0,__PYX_ERR(0, 1113, __pyx_L1_error))
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1113, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_standard_name, __pyx_n_u_forecast_reference_time) < 0) __PYX_ERR(0, 1113, __pyx_L1_error)
-
-  /* "amsimp/dynamics.pyx":1111
- *         )
- *         # Forecast reference time.
- *         ref_time = AuxCoord(             # <<<<<<<<<<<<<<
- *             self.date.strftime("%Y-%m-%d %H:%M:%S"),
- *             standard_name='forecast_reference_time'
- */
-  __Pyx_TraceLine(1111,0,__PYX_ERR(0, 1111, __pyx_L1_error))
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1111, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_v_ref_time = __pyx_t_1;
-  __pyx_t_1 = 0;
-
-  /* "amsimp/dynamics.pyx":1119
- *         # Geopotential Height Cube.
- *         # Model number.
- *         model_runs = np.linspace(1, self.models, self.models)             # <<<<<<<<<<<<<<
- *         model_runs = DimCoord(
- *             model_runs,
- */
-  __Pyx_TraceLine(1119,0,__PYX_ERR(0, 1119, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1119, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_linspace); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1119, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->models); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1119, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_self->models); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1119, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = NULL;
-  __pyx_t_5 = 0;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_6);
-    if (likely(__pyx_t_2)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-      __Pyx_INCREF(__pyx_t_2);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
       __pyx_t_5 = 1;
     }
   }
   #if CYTHON_FAST_PYCALL
-  if (PyFunction_Check(__pyx_t_6)) {
-    PyObject *__pyx_temp[4] = {__pyx_t_2, __pyx_int_1, __pyx_t_4, __pyx_t_3};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1119, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (PyFunction_Check(__pyx_t_4)) {
+    PyObject *__pyx_temp[4] = {__pyx_t_6, __pyx_int_1, __pyx_t_2, __pyx_t_3};
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1121, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else
   #endif
   #if CYTHON_FAST_PYCCALL
-  if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
-    PyObject *__pyx_temp[4] = {__pyx_t_2, __pyx_int_1, __pyx_t_4, __pyx_t_3};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1119, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
+    PyObject *__pyx_temp[4] = {__pyx_t_6, __pyx_int_1, __pyx_t_2, __pyx_t_3};
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1121, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else
   #endif
   {
-    __pyx_t_17 = PyTuple_New(3+__pyx_t_5); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1119, __pyx_L1_error)
+    __pyx_t_17 = PyTuple_New(3+__pyx_t_5); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1121, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_17);
-    if (__pyx_t_2) {
-      __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_t_2); __pyx_t_2 = NULL;
+    if (__pyx_t_6) {
+      __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_t_6); __pyx_t_6 = NULL;
     }
     __Pyx_INCREF(__pyx_int_1);
     __Pyx_GIVEREF(__pyx_int_1);
     PyTuple_SET_ITEM(__pyx_t_17, 0+__pyx_t_5, __pyx_int_1);
-    __Pyx_GIVEREF(__pyx_t_4);
-    PyTuple_SET_ITEM(__pyx_t_17, 1+__pyx_t_5, __pyx_t_4);
+    __Pyx_GIVEREF(__pyx_t_2);
+    PyTuple_SET_ITEM(__pyx_t_17, 1+__pyx_t_5, __pyx_t_2);
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_17, 2+__pyx_t_5, __pyx_t_3);
-    __pyx_t_4 = 0;
+    __pyx_t_2 = 0;
     __pyx_t_3 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_17, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1119, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_17, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1121, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   }
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_model_runs = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "amsimp/dynamics.pyx":1120
+  /* "amsimp/dynamics.pyx":1122
  *         # Model number.
  *         model_runs = np.linspace(1, self.models, self.models)
  *         model_runs = DimCoord(             # <<<<<<<<<<<<<<
  *             model_runs,
  *             long_name='efs_model',
  */
-  __Pyx_TraceLine(1120,0,__PYX_ERR(0, 1120, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_DimCoord); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1120, __pyx_L1_error)
+  __Pyx_TraceLine(1122,0,__PYX_ERR(0, 1122, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_DimCoord); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1122, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "amsimp/dynamics.pyx":1121
+  /* "amsimp/dynamics.pyx":1123
  *         model_runs = np.linspace(1, self.models, self.models)
  *         model_runs = DimCoord(
  *             model_runs,             # <<<<<<<<<<<<<<
  *             long_name='efs_model',
  *         )
  */
-  __Pyx_TraceLine(1121,0,__PYX_ERR(0, 1121, __pyx_L1_error))
-  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1120, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_TraceLine(1123,0,__PYX_ERR(0, 1123, __pyx_L1_error))
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1122, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(__pyx_v_model_runs);
   __Pyx_GIVEREF(__pyx_v_model_runs);
-  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_model_runs);
+  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_model_runs);
 
-  /* "amsimp/dynamics.pyx":1122
+  /* "amsimp/dynamics.pyx":1124
  *         model_runs = DimCoord(
  *             model_runs,
  *             long_name='efs_model',             # <<<<<<<<<<<<<<
  *         )
  *         height_cube = Cube(GeopotentialHeight,
  */
-  __Pyx_TraceLine(1122,0,__PYX_ERR(0, 1122, __pyx_L1_error))
-  __pyx_t_17 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1122, __pyx_L1_error)
+  __Pyx_TraceLine(1124,0,__PYX_ERR(0, 1124, __pyx_L1_error))
+  __pyx_t_17 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_long_name, __pyx_n_u_efs_model) < 0) __PYX_ERR(0, 1122, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_long_name, __pyx_n_u_efs_model) < 0) __PYX_ERR(0, 1124, __pyx_L1_error)
 
-  /* "amsimp/dynamics.pyx":1120
+  /* "amsimp/dynamics.pyx":1122
  *         # Model number.
  *         model_runs = np.linspace(1, self.models, self.models)
  *         model_runs = DimCoord(             # <<<<<<<<<<<<<<
  *             model_runs,
  *             long_name='efs_model',
  */
-  __Pyx_TraceLine(1120,0,__PYX_ERR(0, 1120, __pyx_L1_error))
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_6, __pyx_t_17); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1120, __pyx_L1_error)
+  __Pyx_TraceLine(1122,0,__PYX_ERR(0, 1122, __pyx_L1_error))
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_4, __pyx_t_17); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1122, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   __Pyx_DECREF_SET(__pyx_v_model_runs, __pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1124
+  /* "amsimp/dynamics.pyx":1126
  *             long_name='efs_model',
  *         )
  *         height_cube = Cube(GeopotentialHeight,             # <<<<<<<<<<<<<<
  *             standard_name='geopotential_height',
  *             units='m',
  */
-  __Pyx_TraceLine(1124,0,__PYX_ERR(0, 1124, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_Cube); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1124, __pyx_L1_error)
+  __Pyx_TraceLine(1126,0,__PYX_ERR(0, 1126, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_Cube); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1126, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_17 = PyTuple_New(1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1124, __pyx_L1_error)
+  __pyx_t_17 = PyTuple_New(1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1126, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
   __Pyx_INCREF(__pyx_v_GeopotentialHeight);
   __Pyx_GIVEREF(__pyx_v_GeopotentialHeight);
   PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_v_GeopotentialHeight);
 
-  /* "amsimp/dynamics.pyx":1125
+  /* "amsimp/dynamics.pyx":1127
  *         )
  *         height_cube = Cube(GeopotentialHeight,
  *             standard_name='geopotential_height',             # <<<<<<<<<<<<<<
  *             units='m',
  *             dim_coords_and_dims=[
  */
-  __Pyx_TraceLine(1125,0,__PYX_ERR(0, 1125, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1125, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_standard_name, __pyx_n_u_geopotential_height) < 0) __PYX_ERR(0, 1125, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_units, __pyx_n_u_m) < 0) __PYX_ERR(0, 1125, __pyx_L1_error)
+  __Pyx_TraceLine(1127,0,__PYX_ERR(0, 1127, __pyx_L1_error))
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1127, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_standard_name, __pyx_n_u_geopotential_height) < 0) __PYX_ERR(0, 1127, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_units, __pyx_n_u_m) < 0) __PYX_ERR(0, 1127, __pyx_L1_error)
 
-  /* "amsimp/dynamics.pyx":1128
+  /* "amsimp/dynamics.pyx":1130
  *             units='m',
  *             dim_coords_and_dims=[
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)             # <<<<<<<<<<<<<<
  *             ],
  *             attributes={
  */
-  __Pyx_TraceLine(1128,0,__PYX_ERR(0, 1128, __pyx_L1_error))
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1128, __pyx_L1_error)
+  __Pyx_TraceLine(1130,0,__PYX_ERR(0, 1130, __pyx_L1_error))
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1130, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_v_model_runs);
   __Pyx_GIVEREF(__pyx_v_model_runs);
@@ -15444,23 +15460,23 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_0);
   __Pyx_GIVEREF(__pyx_int_0);
   PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_int_0);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1128, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1130, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_forecast_period);
   __Pyx_GIVEREF(__pyx_v_forecast_period);
-  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_forecast_period);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_forecast_period);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
-  PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_1);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1128, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_1);
+  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1130, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_INCREF(__pyx_v_p);
   __Pyx_GIVEREF(__pyx_v_p);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_p);
+  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_p);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
-  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_2);
-  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1128, __pyx_L1_error)
+  PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_int_2);
+  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1130, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_INCREF(__pyx_v_lat);
   __Pyx_GIVEREF(__pyx_v_lat);
@@ -15468,7 +15484,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
   PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_int_3);
-  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1128, __pyx_L1_error)
+  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1130, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_19);
   __Pyx_INCREF(__pyx_v_lon);
   __Pyx_GIVEREF(__pyx_v_lon);
@@ -15477,129 +15493,129 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_GIVEREF(__pyx_int_4);
   PyTuple_SET_ITEM(__pyx_t_19, 1, __pyx_int_4);
 
-  /* "amsimp/dynamics.pyx":1127
+  /* "amsimp/dynamics.pyx":1129
  *             standard_name='geopotential_height',
  *             units='m',
  *             dim_coords_and_dims=[             # <<<<<<<<<<<<<<
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
  *             ],
  */
-  __Pyx_TraceLine(1127,0,__PYX_ERR(0, 1127, __pyx_L1_error))
-  __pyx_t_20 = PyList_New(5); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1127, __pyx_L1_error)
+  __Pyx_TraceLine(1129,0,__PYX_ERR(0, 1129, __pyx_L1_error))
+  __pyx_t_20 = PyList_New(5); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1129, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
   __Pyx_GIVEREF(__pyx_t_1);
   PyList_SET_ITEM(__pyx_t_20, 0, __pyx_t_1);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyList_SET_ITEM(__pyx_t_20, 1, __pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyList_SET_ITEM(__pyx_t_20, 2, __pyx_t_2);
+  PyList_SET_ITEM(__pyx_t_20, 1, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_6);
+  PyList_SET_ITEM(__pyx_t_20, 2, __pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_18);
   PyList_SET_ITEM(__pyx_t_20, 3, __pyx_t_18);
   __Pyx_GIVEREF(__pyx_t_19);
   PyList_SET_ITEM(__pyx_t_20, 4, __pyx_t_19);
   __pyx_t_1 = 0;
-  __pyx_t_4 = 0;
   __pyx_t_2 = 0;
+  __pyx_t_6 = 0;
   __pyx_t_18 = 0;
   __pyx_t_19 = 0;
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_dim_coords_and_dims, __pyx_t_20) < 0) __PYX_ERR(0, 1125, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dim_coords_and_dims, __pyx_t_20) < 0) __PYX_ERR(0, 1127, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1131
+  /* "amsimp/dynamics.pyx":1133
  *             ],
  *             attributes={
  *                 'source': 'Motus Aeris @ AMSIMP',             # <<<<<<<<<<<<<<
  *             }
  *         )
  */
-  __Pyx_TraceLine(1131,0,__PYX_ERR(0, 1131, __pyx_L1_error))
-  __pyx_t_20 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1131, __pyx_L1_error)
+  __Pyx_TraceLine(1133,0,__PYX_ERR(0, 1133, __pyx_L1_error))
+  __pyx_t_20 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1133, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
-  if (PyDict_SetItem(__pyx_t_20, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1131, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_attributes, __pyx_t_20) < 0) __PYX_ERR(0, 1125, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_20, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1133, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_attributes, __pyx_t_20) < 0) __PYX_ERR(0, 1127, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1124
+  /* "amsimp/dynamics.pyx":1126
  *             long_name='efs_model',
  *         )
  *         height_cube = Cube(GeopotentialHeight,             # <<<<<<<<<<<<<<
  *             standard_name='geopotential_height',
  *             units='m',
  */
-  __Pyx_TraceLine(1124,0,__PYX_ERR(0, 1124, __pyx_L1_error))
-  __pyx_t_20 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_17, __pyx_t_6); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1124, __pyx_L1_error)
+  __Pyx_TraceLine(1126,0,__PYX_ERR(0, 1126, __pyx_L1_error))
+  __pyx_t_20 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_17, __pyx_t_4); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1126, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_height_cube = __pyx_t_20;
   __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1134
+  /* "amsimp/dynamics.pyx":1136
  *             }
  *         )
  *         height_cube.add_aux_coord(ref_time)             # <<<<<<<<<<<<<<
  *         # Geostrophic Wind Cubes.
  *         # Zonal Wind Cube.
  */
-  __Pyx_TraceLine(1134,0,__PYX_ERR(0, 1134, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_height_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1134, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_TraceLine(1136,0,__PYX_ERR(0, 1136, __pyx_L1_error))
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_height_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1136, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_17 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_6);
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_4);
     if (likely(__pyx_t_17)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
       __Pyx_INCREF(__pyx_t_17);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
     }
   }
-  __pyx_t_20 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_17, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_ref_time);
+  __pyx_t_20 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_17, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_ref_time);
   __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
-  if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1134, __pyx_L1_error)
+  if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1136, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1137
+  /* "amsimp/dynamics.pyx":1139
  *         # Geostrophic Wind Cubes.
  *         # Zonal Wind Cube.
  *         u_cube = Cube(ZonalWind,             # <<<<<<<<<<<<<<
  *             standard_name='x_wind',
  *             units='m s-1',
  */
-  __Pyx_TraceLine(1137,0,__PYX_ERR(0, 1137, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_20, __pyx_n_s_Cube); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1137, __pyx_L1_error)
+  __Pyx_TraceLine(1139,0,__PYX_ERR(0, 1139, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_20, __pyx_n_s_Cube); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1139, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
-  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1137, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1139, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(__pyx_v_ZonalWind);
   __Pyx_GIVEREF(__pyx_v_ZonalWind);
-  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_ZonalWind);
+  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_ZonalWind);
 
-  /* "amsimp/dynamics.pyx":1138
+  /* "amsimp/dynamics.pyx":1140
  *         # Zonal Wind Cube.
  *         u_cube = Cube(ZonalWind,
  *             standard_name='x_wind',             # <<<<<<<<<<<<<<
  *             units='m s-1',
  *             dim_coords_and_dims=[
  */
-  __Pyx_TraceLine(1138,0,__PYX_ERR(0, 1138, __pyx_L1_error))
-  __pyx_t_17 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1138, __pyx_L1_error)
+  __Pyx_TraceLine(1140,0,__PYX_ERR(0, 1140, __pyx_L1_error))
+  __pyx_t_17 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1140, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_standard_name, __pyx_n_u_x_wind) < 0) __PYX_ERR(0, 1138, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_units, __pyx_kp_u_m_s_1) < 0) __PYX_ERR(0, 1138, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_standard_name, __pyx_n_u_x_wind) < 0) __PYX_ERR(0, 1140, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_units, __pyx_kp_u_m_s_1) < 0) __PYX_ERR(0, 1140, __pyx_L1_error)
 
-  /* "amsimp/dynamics.pyx":1141
+  /* "amsimp/dynamics.pyx":1143
  *             units='m s-1',
  *             dim_coords_and_dims=[
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)             # <<<<<<<<<<<<<<
  *             ],
  *             attributes={
  */
-  __Pyx_TraceLine(1141,0,__PYX_ERR(0, 1141, __pyx_L1_error))
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1141, __pyx_L1_error)
+  __Pyx_TraceLine(1143,0,__PYX_ERR(0, 1143, __pyx_L1_error))
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1143, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(__pyx_v_model_runs);
   __Pyx_GIVEREF(__pyx_v_model_runs);
@@ -15607,7 +15623,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_0);
   __Pyx_GIVEREF(__pyx_int_0);
   PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_int_0);
-  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1141, __pyx_L1_error)
+  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1143, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_19);
   __Pyx_INCREF(__pyx_v_forecast_period);
   __Pyx_GIVEREF(__pyx_v_forecast_period);
@@ -15615,7 +15631,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
   PyTuple_SET_ITEM(__pyx_t_19, 1, __pyx_int_1);
-  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1141, __pyx_L1_error)
+  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1143, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_INCREF(__pyx_v_p);
   __Pyx_GIVEREF(__pyx_v_p);
@@ -15623,32 +15639,32 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
   PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_int_2);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1141, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1143, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_INCREF(__pyx_v_lat);
   __Pyx_GIVEREF(__pyx_v_lat);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_lat);
+  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_lat);
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
-  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_3);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1141, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_int_3);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1143, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_lon);
   __Pyx_GIVEREF(__pyx_v_lon);
-  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_lon);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_lon);
   __Pyx_INCREF(__pyx_int_4);
   __Pyx_GIVEREF(__pyx_int_4);
-  PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_4);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_4);
 
-  /* "amsimp/dynamics.pyx":1140
+  /* "amsimp/dynamics.pyx":1142
  *             standard_name='x_wind',
  *             units='m s-1',
  *             dim_coords_and_dims=[             # <<<<<<<<<<<<<<
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
  *             ],
  */
-  __Pyx_TraceLine(1140,0,__PYX_ERR(0, 1140, __pyx_L1_error))
-  __pyx_t_1 = PyList_New(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1140, __pyx_L1_error)
+  __Pyx_TraceLine(1142,0,__PYX_ERR(0, 1142, __pyx_L1_error))
+  __pyx_t_1 = PyList_New(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1142, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_3);
   PyList_SET_ITEM(__pyx_t_1, 0, __pyx_t_3);
@@ -15656,113 +15672,113 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   PyList_SET_ITEM(__pyx_t_1, 1, __pyx_t_19);
   __Pyx_GIVEREF(__pyx_t_18);
   PyList_SET_ITEM(__pyx_t_1, 2, __pyx_t_18);
+  __Pyx_GIVEREF(__pyx_t_6);
+  PyList_SET_ITEM(__pyx_t_1, 3, __pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyList_SET_ITEM(__pyx_t_1, 3, __pyx_t_2);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyList_SET_ITEM(__pyx_t_1, 4, __pyx_t_4);
+  PyList_SET_ITEM(__pyx_t_1, 4, __pyx_t_2);
   __pyx_t_3 = 0;
   __pyx_t_19 = 0;
   __pyx_t_18 = 0;
+  __pyx_t_6 = 0;
   __pyx_t_2 = 0;
-  __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_dim_coords_and_dims, __pyx_t_1) < 0) __PYX_ERR(0, 1138, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_dim_coords_and_dims, __pyx_t_1) < 0) __PYX_ERR(0, 1140, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/dynamics.pyx":1144
+  /* "amsimp/dynamics.pyx":1146
  *             ],
  *             attributes={
  *                 'source': 'Motus Aeris @ AMSIMP',             # <<<<<<<<<<<<<<
  *             }
  *         )
  */
-  __Pyx_TraceLine(1144,0,__PYX_ERR(0, 1144, __pyx_L1_error))
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1144, __pyx_L1_error)
+  __Pyx_TraceLine(1146,0,__PYX_ERR(0, 1146, __pyx_L1_error))
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1146, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1144, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_attributes, __pyx_t_1) < 0) __PYX_ERR(0, 1138, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1146, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_attributes, __pyx_t_1) < 0) __PYX_ERR(0, 1140, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/dynamics.pyx":1137
+  /* "amsimp/dynamics.pyx":1139
  *         # Geostrophic Wind Cubes.
  *         # Zonal Wind Cube.
  *         u_cube = Cube(ZonalWind,             # <<<<<<<<<<<<<<
  *             standard_name='x_wind',
  *             units='m s-1',
  */
-  __Pyx_TraceLine(1137,0,__PYX_ERR(0, 1137, __pyx_L1_error))
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_20, __pyx_t_6, __pyx_t_17); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1137, __pyx_L1_error)
+  __Pyx_TraceLine(1139,0,__PYX_ERR(0, 1139, __pyx_L1_error))
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_20, __pyx_t_4, __pyx_t_17); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1139, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   __pyx_v_u_cube = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "amsimp/dynamics.pyx":1147
+  /* "amsimp/dynamics.pyx":1149
  *             }
  *         )
  *         u_cube.add_aux_coord(ref_time)             # <<<<<<<<<<<<<<
  *         # Meridional Wind Cube.
  *         v_cube = Cube(MeridionalWind,
  */
-  __Pyx_TraceLine(1147,0,__PYX_ERR(0, 1147, __pyx_L1_error))
-  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_v_u_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1147, __pyx_L1_error)
+  __Pyx_TraceLine(1149,0,__PYX_ERR(0, 1149, __pyx_L1_error))
+  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_v_u_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1149, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  __pyx_t_6 = NULL;
+  __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_17))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_17);
-    if (likely(__pyx_t_6)) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_17);
+    if (likely(__pyx_t_4)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
-      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(__pyx_t_4);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_17, function);
     }
   }
-  __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_6, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_v_ref_time);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1147, __pyx_L1_error)
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_4, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_v_ref_time);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1149, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/dynamics.pyx":1149
+  /* "amsimp/dynamics.pyx":1151
  *         u_cube.add_aux_coord(ref_time)
  *         # Meridional Wind Cube.
  *         v_cube = Cube(MeridionalWind,             # <<<<<<<<<<<<<<
  *             standard_name='y_wind',
  *             units='m s-1',
  */
-  __Pyx_TraceLine(1149,0,__PYX_ERR(0, 1149, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_Cube); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1149, __pyx_L1_error)
+  __Pyx_TraceLine(1151,0,__PYX_ERR(0, 1151, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_Cube); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1151, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_17 = PyTuple_New(1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1149, __pyx_L1_error)
+  __pyx_t_17 = PyTuple_New(1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1151, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
   __Pyx_INCREF(__pyx_v_MeridionalWind);
   __Pyx_GIVEREF(__pyx_v_MeridionalWind);
   PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_v_MeridionalWind);
 
-  /* "amsimp/dynamics.pyx":1150
+  /* "amsimp/dynamics.pyx":1152
  *         # Meridional Wind Cube.
  *         v_cube = Cube(MeridionalWind,
  *             standard_name='y_wind',             # <<<<<<<<<<<<<<
  *             units='m s-1',
  *             dim_coords_and_dims=[
  */
-  __Pyx_TraceLine(1150,0,__PYX_ERR(0, 1150, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1150, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_standard_name, __pyx_n_u_y_wind) < 0) __PYX_ERR(0, 1150, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_units, __pyx_kp_u_m_s_1) < 0) __PYX_ERR(0, 1150, __pyx_L1_error)
+  __Pyx_TraceLine(1152,0,__PYX_ERR(0, 1152, __pyx_L1_error))
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1152, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_standard_name, __pyx_n_u_y_wind) < 0) __PYX_ERR(0, 1152, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_units, __pyx_kp_u_m_s_1) < 0) __PYX_ERR(0, 1152, __pyx_L1_error)
 
-  /* "amsimp/dynamics.pyx":1153
+  /* "amsimp/dynamics.pyx":1155
  *             units='m s-1',
  *             dim_coords_and_dims=[
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)             # <<<<<<<<<<<<<<
  *             ],
  *             attributes={
  */
-  __Pyx_TraceLine(1153,0,__PYX_ERR(0, 1153, __pyx_L1_error))
-  __pyx_t_20 = PyTuple_New(2); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1153, __pyx_L1_error)
+  __Pyx_TraceLine(1155,0,__PYX_ERR(0, 1155, __pyx_L1_error))
+  __pyx_t_20 = PyTuple_New(2); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1155, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
   __Pyx_INCREF(__pyx_v_model_runs);
   __Pyx_GIVEREF(__pyx_v_model_runs);
@@ -15770,23 +15786,23 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_0);
   __Pyx_GIVEREF(__pyx_int_0);
   PyTuple_SET_ITEM(__pyx_t_20, 1, __pyx_int_0);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1153, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1155, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_forecast_period);
   __Pyx_GIVEREF(__pyx_v_forecast_period);
-  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_forecast_period);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_forecast_period);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
-  PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_1);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1153, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_1);
+  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1155, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_INCREF(__pyx_v_p);
   __Pyx_GIVEREF(__pyx_v_p);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_p);
+  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_p);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
-  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_2);
-  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1153, __pyx_L1_error)
+  PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_int_2);
+  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1155, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_INCREF(__pyx_v_lat);
   __Pyx_GIVEREF(__pyx_v_lat);
@@ -15794,7 +15810,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
   PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_int_3);
-  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1153, __pyx_L1_error)
+  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1155, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_19);
   __Pyx_INCREF(__pyx_v_lon);
   __Pyx_GIVEREF(__pyx_v_lon);
@@ -15803,129 +15819,129 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_GIVEREF(__pyx_int_4);
   PyTuple_SET_ITEM(__pyx_t_19, 1, __pyx_int_4);
 
-  /* "amsimp/dynamics.pyx":1152
+  /* "amsimp/dynamics.pyx":1154
  *             standard_name='y_wind',
  *             units='m s-1',
  *             dim_coords_and_dims=[             # <<<<<<<<<<<<<<
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
  *             ],
  */
-  __Pyx_TraceLine(1152,0,__PYX_ERR(0, 1152, __pyx_L1_error))
-  __pyx_t_3 = PyList_New(5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1152, __pyx_L1_error)
+  __Pyx_TraceLine(1154,0,__PYX_ERR(0, 1154, __pyx_L1_error))
+  __pyx_t_3 = PyList_New(5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1154, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_20);
   PyList_SET_ITEM(__pyx_t_3, 0, __pyx_t_20);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyList_SET_ITEM(__pyx_t_3, 1, __pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyList_SET_ITEM(__pyx_t_3, 2, __pyx_t_2);
+  PyList_SET_ITEM(__pyx_t_3, 1, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_6);
+  PyList_SET_ITEM(__pyx_t_3, 2, __pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_18);
   PyList_SET_ITEM(__pyx_t_3, 3, __pyx_t_18);
   __Pyx_GIVEREF(__pyx_t_19);
   PyList_SET_ITEM(__pyx_t_3, 4, __pyx_t_19);
   __pyx_t_20 = 0;
-  __pyx_t_4 = 0;
   __pyx_t_2 = 0;
+  __pyx_t_6 = 0;
   __pyx_t_18 = 0;
   __pyx_t_19 = 0;
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_dim_coords_and_dims, __pyx_t_3) < 0) __PYX_ERR(0, 1150, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dim_coords_and_dims, __pyx_t_3) < 0) __PYX_ERR(0, 1152, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1156
+  /* "amsimp/dynamics.pyx":1158
  *             ],
  *             attributes={
  *                 'source': 'Motus Aeris @ AMSIMP',             # <<<<<<<<<<<<<<
  *             }
  *         )
  */
-  __Pyx_TraceLine(1156,0,__PYX_ERR(0, 1156, __pyx_L1_error))
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1156, __pyx_L1_error)
+  __Pyx_TraceLine(1158,0,__PYX_ERR(0, 1158, __pyx_L1_error))
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1158, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1156, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_attributes, __pyx_t_3) < 0) __PYX_ERR(0, 1150, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1158, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_attributes, __pyx_t_3) < 0) __PYX_ERR(0, 1152, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1149
+  /* "amsimp/dynamics.pyx":1151
  *         u_cube.add_aux_coord(ref_time)
  *         # Meridional Wind Cube.
  *         v_cube = Cube(MeridionalWind,             # <<<<<<<<<<<<<<
  *             standard_name='y_wind',
  *             units='m s-1',
  */
-  __Pyx_TraceLine(1149,0,__PYX_ERR(0, 1149, __pyx_L1_error))
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_17, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1149, __pyx_L1_error)
+  __Pyx_TraceLine(1151,0,__PYX_ERR(0, 1151, __pyx_L1_error))
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_17, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1151, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_v_cube = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1159
+  /* "amsimp/dynamics.pyx":1161
  *             }
  *         )
  *         v_cube.add_aux_coord(ref_time)             # <<<<<<<<<<<<<<
  *         # Vertical Motion.
  *         omega_cube = Cube(VerticalMotion,
  */
-  __Pyx_TraceLine(1159,0,__PYX_ERR(0, 1159, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_v_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1159, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_TraceLine(1161,0,__PYX_ERR(0, 1161, __pyx_L1_error))
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_v_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1161, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_17 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_6);
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_4);
     if (likely(__pyx_t_17)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
       __Pyx_INCREF(__pyx_t_17);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
     }
   }
-  __pyx_t_3 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_17, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_ref_time);
+  __pyx_t_3 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_17, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_ref_time);
   __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1159, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1161, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1161
+  /* "amsimp/dynamics.pyx":1163
  *         v_cube.add_aux_coord(ref_time)
  *         # Vertical Motion.
  *         omega_cube = Cube(VerticalMotion,             # <<<<<<<<<<<<<<
  *             standard_name='lagrangian_tendency_of_air_pressure',
  *             units='hPa s-1',
  */
-  __Pyx_TraceLine(1161,0,__PYX_ERR(0, 1161, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_Cube); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1161, __pyx_L1_error)
+  __Pyx_TraceLine(1163,0,__PYX_ERR(0, 1163, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_Cube); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1163, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1161, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1163, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(__pyx_v_VerticalMotion);
   __Pyx_GIVEREF(__pyx_v_VerticalMotion);
-  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_VerticalMotion);
+  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_VerticalMotion);
 
-  /* "amsimp/dynamics.pyx":1162
+  /* "amsimp/dynamics.pyx":1164
  *         # Vertical Motion.
  *         omega_cube = Cube(VerticalMotion,
  *             standard_name='lagrangian_tendency_of_air_pressure',             # <<<<<<<<<<<<<<
  *             units='hPa s-1',
  *             dim_coords_and_dims=[
  */
-  __Pyx_TraceLine(1162,0,__PYX_ERR(0, 1162, __pyx_L1_error))
-  __pyx_t_17 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1162, __pyx_L1_error)
+  __Pyx_TraceLine(1164,0,__PYX_ERR(0, 1164, __pyx_L1_error))
+  __pyx_t_17 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1164, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_standard_name, __pyx_n_u_lagrangian_tendency_of_air_press) < 0) __PYX_ERR(0, 1162, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_units, __pyx_kp_u_hPa_s_1) < 0) __PYX_ERR(0, 1162, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_standard_name, __pyx_n_u_lagrangian_tendency_of_air_press) < 0) __PYX_ERR(0, 1164, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_units, __pyx_kp_u_hPa_s_1) < 0) __PYX_ERR(0, 1164, __pyx_L1_error)
 
-  /* "amsimp/dynamics.pyx":1165
+  /* "amsimp/dynamics.pyx":1167
  *             units='hPa s-1',
  *             dim_coords_and_dims=[
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)             # <<<<<<<<<<<<<<
  *             ],
  *             attributes={
  */
-  __Pyx_TraceLine(1165,0,__PYX_ERR(0, 1165, __pyx_L1_error))
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1165, __pyx_L1_error)
+  __Pyx_TraceLine(1167,0,__PYX_ERR(0, 1167, __pyx_L1_error))
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1167, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_v_model_runs);
   __Pyx_GIVEREF(__pyx_v_model_runs);
@@ -15933,7 +15949,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_0);
   __Pyx_GIVEREF(__pyx_int_0);
   PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_int_0);
-  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1165, __pyx_L1_error)
+  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1167, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_19);
   __Pyx_INCREF(__pyx_v_forecast_period);
   __Pyx_GIVEREF(__pyx_v_forecast_period);
@@ -15941,7 +15957,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
   PyTuple_SET_ITEM(__pyx_t_19, 1, __pyx_int_1);
-  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1165, __pyx_L1_error)
+  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1167, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_INCREF(__pyx_v_p);
   __Pyx_GIVEREF(__pyx_v_p);
@@ -15949,32 +15965,32 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
   PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_int_2);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1165, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1167, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_INCREF(__pyx_v_lat);
   __Pyx_GIVEREF(__pyx_v_lat);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_lat);
+  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_lat);
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
-  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_3);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1165, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_int_3);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1167, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_lon);
   __Pyx_GIVEREF(__pyx_v_lon);
-  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_lon);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_lon);
   __Pyx_INCREF(__pyx_int_4);
   __Pyx_GIVEREF(__pyx_int_4);
-  PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_4);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_4);
 
-  /* "amsimp/dynamics.pyx":1164
+  /* "amsimp/dynamics.pyx":1166
  *             standard_name='lagrangian_tendency_of_air_pressure',
  *             units='hPa s-1',
  *             dim_coords_and_dims=[             # <<<<<<<<<<<<<<
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
  *             ],
  */
-  __Pyx_TraceLine(1164,0,__PYX_ERR(0, 1164, __pyx_L1_error))
-  __pyx_t_20 = PyList_New(5); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1164, __pyx_L1_error)
+  __Pyx_TraceLine(1166,0,__PYX_ERR(0, 1166, __pyx_L1_error))
+  __pyx_t_20 = PyList_New(5); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1166, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
   __Pyx_GIVEREF(__pyx_t_1);
   PyList_SET_ITEM(__pyx_t_20, 0, __pyx_t_1);
@@ -15982,113 +15998,113 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   PyList_SET_ITEM(__pyx_t_20, 1, __pyx_t_19);
   __Pyx_GIVEREF(__pyx_t_18);
   PyList_SET_ITEM(__pyx_t_20, 2, __pyx_t_18);
+  __Pyx_GIVEREF(__pyx_t_6);
+  PyList_SET_ITEM(__pyx_t_20, 3, __pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyList_SET_ITEM(__pyx_t_20, 3, __pyx_t_2);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyList_SET_ITEM(__pyx_t_20, 4, __pyx_t_4);
+  PyList_SET_ITEM(__pyx_t_20, 4, __pyx_t_2);
   __pyx_t_1 = 0;
   __pyx_t_19 = 0;
   __pyx_t_18 = 0;
+  __pyx_t_6 = 0;
   __pyx_t_2 = 0;
-  __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_dim_coords_and_dims, __pyx_t_20) < 0) __PYX_ERR(0, 1162, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_dim_coords_and_dims, __pyx_t_20) < 0) __PYX_ERR(0, 1164, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1168
+  /* "amsimp/dynamics.pyx":1170
  *             ],
  *             attributes={
  *                 'source': 'Motus Aeris @ AMSIMP',             # <<<<<<<<<<<<<<
  *             }
  *         )
  */
-  __Pyx_TraceLine(1168,0,__PYX_ERR(0, 1168, __pyx_L1_error))
-  __pyx_t_20 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1168, __pyx_L1_error)
+  __Pyx_TraceLine(1170,0,__PYX_ERR(0, 1170, __pyx_L1_error))
+  __pyx_t_20 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1170, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
-  if (PyDict_SetItem(__pyx_t_20, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1168, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_attributes, __pyx_t_20) < 0) __PYX_ERR(0, 1162, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_20, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1170, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_attributes, __pyx_t_20) < 0) __PYX_ERR(0, 1164, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1161
+  /* "amsimp/dynamics.pyx":1163
  *         v_cube.add_aux_coord(ref_time)
  *         # Vertical Motion.
  *         omega_cube = Cube(VerticalMotion,             # <<<<<<<<<<<<<<
  *             standard_name='lagrangian_tendency_of_air_pressure',
  *             units='hPa s-1',
  */
-  __Pyx_TraceLine(1161,0,__PYX_ERR(0, 1161, __pyx_L1_error))
-  __pyx_t_20 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, __pyx_t_17); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1161, __pyx_L1_error)
+  __Pyx_TraceLine(1163,0,__PYX_ERR(0, 1163, __pyx_L1_error))
+  __pyx_t_20 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_17); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1163, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   __pyx_v_omega_cube = __pyx_t_20;
   __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1171
+  /* "amsimp/dynamics.pyx":1173
  *             }
  *         )
  *         omega_cube.add_aux_coord(ref_time)             # <<<<<<<<<<<<<<
  *         # Static Stability.
  *         sigma_cube = Cube(StaticStability,
  */
-  __Pyx_TraceLine(1171,0,__PYX_ERR(0, 1171, __pyx_L1_error))
-  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_v_omega_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1171, __pyx_L1_error)
+  __Pyx_TraceLine(1173,0,__PYX_ERR(0, 1173, __pyx_L1_error))
+  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_v_omega_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1173, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  __pyx_t_6 = NULL;
+  __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_17))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_17);
-    if (likely(__pyx_t_6)) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_17);
+    if (likely(__pyx_t_4)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
-      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(__pyx_t_4);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_17, function);
     }
   }
-  __pyx_t_20 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_6, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_v_ref_time);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1171, __pyx_L1_error)
+  __pyx_t_20 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_4, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_v_ref_time);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1173, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1173
+  /* "amsimp/dynamics.pyx":1175
  *         omega_cube.add_aux_coord(ref_time)
  *         # Static Stability.
  *         sigma_cube = Cube(StaticStability,             # <<<<<<<<<<<<<<
  *             long_name='static_stability',
  *             units='J hPa-2 kg-1',
  */
-  __Pyx_TraceLine(1173,0,__PYX_ERR(0, 1173, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_20, __pyx_n_s_Cube); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1173, __pyx_L1_error)
+  __Pyx_TraceLine(1175,0,__PYX_ERR(0, 1175, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_20, __pyx_n_s_Cube); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1175, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
-  __pyx_t_17 = PyTuple_New(1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1173, __pyx_L1_error)
+  __pyx_t_17 = PyTuple_New(1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1175, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
   __Pyx_INCREF(__pyx_v_StaticStability);
   __Pyx_GIVEREF(__pyx_v_StaticStability);
   PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_v_StaticStability);
 
-  /* "amsimp/dynamics.pyx":1174
+  /* "amsimp/dynamics.pyx":1176
  *         # Static Stability.
  *         sigma_cube = Cube(StaticStability,
  *             long_name='static_stability',             # <<<<<<<<<<<<<<
  *             units='J hPa-2 kg-1',
  *             dim_coords_and_dims=[
  */
-  __Pyx_TraceLine(1174,0,__PYX_ERR(0, 1174, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1174, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_long_name, __pyx_n_u_static_stability) < 0) __PYX_ERR(0, 1174, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_units, __pyx_kp_u_J_hPa_2_kg_1) < 0) __PYX_ERR(0, 1174, __pyx_L1_error)
+  __Pyx_TraceLine(1176,0,__PYX_ERR(0, 1176, __pyx_L1_error))
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1176, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_long_name, __pyx_n_u_static_stability) < 0) __PYX_ERR(0, 1176, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_units, __pyx_kp_u_J_hPa_2_kg_1) < 0) __PYX_ERR(0, 1176, __pyx_L1_error)
 
-  /* "amsimp/dynamics.pyx":1177
+  /* "amsimp/dynamics.pyx":1179
  *             units='J hPa-2 kg-1',
  *             dim_coords_and_dims=[
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)             # <<<<<<<<<<<<<<
  *             ],
  *             attributes={
  */
-  __Pyx_TraceLine(1177,0,__PYX_ERR(0, 1177, __pyx_L1_error))
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1177, __pyx_L1_error)
+  __Pyx_TraceLine(1179,0,__PYX_ERR(0, 1179, __pyx_L1_error))
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1179, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(__pyx_v_model_runs);
   __Pyx_GIVEREF(__pyx_v_model_runs);
@@ -16096,23 +16112,23 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_0);
   __Pyx_GIVEREF(__pyx_int_0);
   PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_int_0);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1177, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1179, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_forecast_period);
   __Pyx_GIVEREF(__pyx_v_forecast_period);
-  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_forecast_period);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_forecast_period);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
-  PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_1);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1177, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_1);
+  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1179, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_INCREF(__pyx_v_p);
   __Pyx_GIVEREF(__pyx_v_p);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_p);
+  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_p);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
-  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_2);
-  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1177, __pyx_L1_error)
+  PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_int_2);
+  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1179, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_INCREF(__pyx_v_lat);
   __Pyx_GIVEREF(__pyx_v_lat);
@@ -16120,7 +16136,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
   PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_int_3);
-  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1177, __pyx_L1_error)
+  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1179, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_19);
   __Pyx_INCREF(__pyx_v_lon);
   __Pyx_GIVEREF(__pyx_v_lon);
@@ -16129,129 +16145,129 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_GIVEREF(__pyx_int_4);
   PyTuple_SET_ITEM(__pyx_t_19, 1, __pyx_int_4);
 
-  /* "amsimp/dynamics.pyx":1176
+  /* "amsimp/dynamics.pyx":1178
  *             long_name='static_stability',
  *             units='J hPa-2 kg-1',
  *             dim_coords_and_dims=[             # <<<<<<<<<<<<<<
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
  *             ],
  */
-  __Pyx_TraceLine(1176,0,__PYX_ERR(0, 1176, __pyx_L1_error))
-  __pyx_t_1 = PyList_New(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1176, __pyx_L1_error)
+  __Pyx_TraceLine(1178,0,__PYX_ERR(0, 1178, __pyx_L1_error))
+  __pyx_t_1 = PyList_New(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1178, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_3);
   PyList_SET_ITEM(__pyx_t_1, 0, __pyx_t_3);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyList_SET_ITEM(__pyx_t_1, 1, __pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyList_SET_ITEM(__pyx_t_1, 2, __pyx_t_2);
+  PyList_SET_ITEM(__pyx_t_1, 1, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_6);
+  PyList_SET_ITEM(__pyx_t_1, 2, __pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_18);
   PyList_SET_ITEM(__pyx_t_1, 3, __pyx_t_18);
   __Pyx_GIVEREF(__pyx_t_19);
   PyList_SET_ITEM(__pyx_t_1, 4, __pyx_t_19);
   __pyx_t_3 = 0;
-  __pyx_t_4 = 0;
   __pyx_t_2 = 0;
+  __pyx_t_6 = 0;
   __pyx_t_18 = 0;
   __pyx_t_19 = 0;
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_dim_coords_and_dims, __pyx_t_1) < 0) __PYX_ERR(0, 1174, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dim_coords_and_dims, __pyx_t_1) < 0) __PYX_ERR(0, 1176, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/dynamics.pyx":1180
+  /* "amsimp/dynamics.pyx":1182
  *             ],
  *             attributes={
  *                 'source': 'Motus Aeris @ AMSIMP',             # <<<<<<<<<<<<<<
  *             }
  *         )
  */
-  __Pyx_TraceLine(1180,0,__PYX_ERR(0, 1180, __pyx_L1_error))
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1180, __pyx_L1_error)
+  __Pyx_TraceLine(1182,0,__PYX_ERR(0, 1182, __pyx_L1_error))
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1182, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1180, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_attributes, __pyx_t_1) < 0) __PYX_ERR(0, 1174, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1182, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_attributes, __pyx_t_1) < 0) __PYX_ERR(0, 1176, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/dynamics.pyx":1173
+  /* "amsimp/dynamics.pyx":1175
  *         omega_cube.add_aux_coord(ref_time)
  *         # Static Stability.
  *         sigma_cube = Cube(StaticStability,             # <<<<<<<<<<<<<<
  *             long_name='static_stability',
  *             units='J hPa-2 kg-1',
  */
-  __Pyx_TraceLine(1173,0,__PYX_ERR(0, 1173, __pyx_L1_error))
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_20, __pyx_t_17, __pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1173, __pyx_L1_error)
+  __Pyx_TraceLine(1175,0,__PYX_ERR(0, 1175, __pyx_L1_error))
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_20, __pyx_t_17, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1175, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_sigma_cube = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "amsimp/dynamics.pyx":1183
+  /* "amsimp/dynamics.pyx":1185
  *             }
  *         )
  *         sigma_cube.add_aux_coord(ref_time)             # <<<<<<<<<<<<<<
  *         # Temperature.
  *         # Air Temperature.
  */
-  __Pyx_TraceLine(1183,0,__PYX_ERR(0, 1183, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_sigma_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1183, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_TraceLine(1185,0,__PYX_ERR(0, 1185, __pyx_L1_error))
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_sigma_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1185, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_17 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_6);
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_4);
     if (likely(__pyx_t_17)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
       __Pyx_INCREF(__pyx_t_17);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
     }
   }
-  __pyx_t_1 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_17, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_ref_time);
+  __pyx_t_1 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_17, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_ref_time);
   __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1183, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1185, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/dynamics.pyx":1186
+  /* "amsimp/dynamics.pyx":1188
  *         # Temperature.
  *         # Air Temperature.
  *         T_cube = Cube(AirTemperature,             # <<<<<<<<<<<<<<
  *             standard_name='air_temperature',
  *             units='K',
  */
-  __Pyx_TraceLine(1186,0,__PYX_ERR(0, 1186, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_Cube); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1186, __pyx_L1_error)
+  __Pyx_TraceLine(1188,0,__PYX_ERR(0, 1188, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_Cube); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1188, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1186, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1188, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(__pyx_v_AirTemperature);
   __Pyx_GIVEREF(__pyx_v_AirTemperature);
-  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_AirTemperature);
+  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_AirTemperature);
 
-  /* "amsimp/dynamics.pyx":1187
+  /* "amsimp/dynamics.pyx":1189
  *         # Air Temperature.
  *         T_cube = Cube(AirTemperature,
  *             standard_name='air_temperature',             # <<<<<<<<<<<<<<
  *             units='K',
  *             dim_coords_and_dims=[
  */
-  __Pyx_TraceLine(1187,0,__PYX_ERR(0, 1187, __pyx_L1_error))
-  __pyx_t_17 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1187, __pyx_L1_error)
+  __Pyx_TraceLine(1189,0,__PYX_ERR(0, 1189, __pyx_L1_error))
+  __pyx_t_17 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1189, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_standard_name, __pyx_n_u_air_temperature) < 0) __PYX_ERR(0, 1187, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_units, __pyx_n_u_K) < 0) __PYX_ERR(0, 1187, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_standard_name, __pyx_n_u_air_temperature) < 0) __PYX_ERR(0, 1189, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_units, __pyx_n_u_K) < 0) __PYX_ERR(0, 1189, __pyx_L1_error)
 
-  /* "amsimp/dynamics.pyx":1190
+  /* "amsimp/dynamics.pyx":1192
  *             units='K',
  *             dim_coords_and_dims=[
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)             # <<<<<<<<<<<<<<
  *             ],
  *             attributes={
  */
-  __Pyx_TraceLine(1190,0,__PYX_ERR(0, 1190, __pyx_L1_error))
-  __pyx_t_20 = PyTuple_New(2); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1190, __pyx_L1_error)
+  __Pyx_TraceLine(1192,0,__PYX_ERR(0, 1192, __pyx_L1_error))
+  __pyx_t_20 = PyTuple_New(2); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1192, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
   __Pyx_INCREF(__pyx_v_model_runs);
   __Pyx_GIVEREF(__pyx_v_model_runs);
@@ -16259,7 +16275,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_0);
   __Pyx_GIVEREF(__pyx_int_0);
   PyTuple_SET_ITEM(__pyx_t_20, 1, __pyx_int_0);
-  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1190, __pyx_L1_error)
+  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1192, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_19);
   __Pyx_INCREF(__pyx_v_forecast_period);
   __Pyx_GIVEREF(__pyx_v_forecast_period);
@@ -16267,7 +16283,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
   PyTuple_SET_ITEM(__pyx_t_19, 1, __pyx_int_1);
-  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1190, __pyx_L1_error)
+  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1192, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_INCREF(__pyx_v_p);
   __Pyx_GIVEREF(__pyx_v_p);
@@ -16275,32 +16291,32 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
   PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_int_2);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1190, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1192, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_INCREF(__pyx_v_lat);
   __Pyx_GIVEREF(__pyx_v_lat);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_lat);
+  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_lat);
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
-  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_3);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1190, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_int_3);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1192, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_lon);
   __Pyx_GIVEREF(__pyx_v_lon);
-  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_lon);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_lon);
   __Pyx_INCREF(__pyx_int_4);
   __Pyx_GIVEREF(__pyx_int_4);
-  PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_4);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_4);
 
-  /* "amsimp/dynamics.pyx":1189
+  /* "amsimp/dynamics.pyx":1191
  *             standard_name='air_temperature',
  *             units='K',
  *             dim_coords_and_dims=[             # <<<<<<<<<<<<<<
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
  *             ],
  */
-  __Pyx_TraceLine(1189,0,__PYX_ERR(0, 1189, __pyx_L1_error))
-  __pyx_t_3 = PyList_New(5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1189, __pyx_L1_error)
+  __Pyx_TraceLine(1191,0,__PYX_ERR(0, 1191, __pyx_L1_error))
+  __pyx_t_3 = PyList_New(5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1191, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_20);
   PyList_SET_ITEM(__pyx_t_3, 0, __pyx_t_20);
@@ -16308,113 +16324,113 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   PyList_SET_ITEM(__pyx_t_3, 1, __pyx_t_19);
   __Pyx_GIVEREF(__pyx_t_18);
   PyList_SET_ITEM(__pyx_t_3, 2, __pyx_t_18);
+  __Pyx_GIVEREF(__pyx_t_6);
+  PyList_SET_ITEM(__pyx_t_3, 3, __pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyList_SET_ITEM(__pyx_t_3, 3, __pyx_t_2);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyList_SET_ITEM(__pyx_t_3, 4, __pyx_t_4);
+  PyList_SET_ITEM(__pyx_t_3, 4, __pyx_t_2);
   __pyx_t_20 = 0;
   __pyx_t_19 = 0;
   __pyx_t_18 = 0;
+  __pyx_t_6 = 0;
   __pyx_t_2 = 0;
-  __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_dim_coords_and_dims, __pyx_t_3) < 0) __PYX_ERR(0, 1187, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_dim_coords_and_dims, __pyx_t_3) < 0) __PYX_ERR(0, 1189, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1193
+  /* "amsimp/dynamics.pyx":1195
  *             ],
  *             attributes={
  *                 'source': 'Motus Aeris @ AMSIMP',             # <<<<<<<<<<<<<<
  *             }
  *         )
  */
-  __Pyx_TraceLine(1193,0,__PYX_ERR(0, 1193, __pyx_L1_error))
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1193, __pyx_L1_error)
+  __Pyx_TraceLine(1195,0,__PYX_ERR(0, 1195, __pyx_L1_error))
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1195, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1193, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_attributes, __pyx_t_3) < 0) __PYX_ERR(0, 1187, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1195, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_attributes, __pyx_t_3) < 0) __PYX_ERR(0, 1189, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1186
+  /* "amsimp/dynamics.pyx":1188
  *         # Temperature.
  *         # Air Temperature.
  *         T_cube = Cube(AirTemperature,             # <<<<<<<<<<<<<<
  *             standard_name='air_temperature',
  *             units='K',
  */
-  __Pyx_TraceLine(1186,0,__PYX_ERR(0, 1186, __pyx_L1_error))
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_6, __pyx_t_17); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1186, __pyx_L1_error)
+  __Pyx_TraceLine(1188,0,__PYX_ERR(0, 1188, __pyx_L1_error))
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_4, __pyx_t_17); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1188, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   __pyx_v_T_cube = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1196
+  /* "amsimp/dynamics.pyx":1198
  *             }
  *         )
  *         T_cube.add_aux_coord(ref_time)             # <<<<<<<<<<<<<<
  *         # Virtual Temperature.
  *         Tv_cube = Cube(VirtualTemperature,
  */
-  __Pyx_TraceLine(1196,0,__PYX_ERR(0, 1196, __pyx_L1_error))
-  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_v_T_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1196, __pyx_L1_error)
+  __Pyx_TraceLine(1198,0,__PYX_ERR(0, 1198, __pyx_L1_error))
+  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_v_T_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1198, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  __pyx_t_6 = NULL;
+  __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_17))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_17);
-    if (likely(__pyx_t_6)) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_17);
+    if (likely(__pyx_t_4)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
-      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(__pyx_t_4);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_17, function);
     }
   }
-  __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_6, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_v_ref_time);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1196, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_4, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_v_ref_time);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1198, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "amsimp/dynamics.pyx":1198
+  /* "amsimp/dynamics.pyx":1200
  *         T_cube.add_aux_coord(ref_time)
  *         # Virtual Temperature.
  *         Tv_cube = Cube(VirtualTemperature,             # <<<<<<<<<<<<<<
  *             standard_name='virtual_temperature',
  *             units='K',
  */
-  __Pyx_TraceLine(1198,0,__PYX_ERR(0, 1198, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_Cube); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1198, __pyx_L1_error)
+  __Pyx_TraceLine(1200,0,__PYX_ERR(0, 1200, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_Cube); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1200, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_17 = PyTuple_New(1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1198, __pyx_L1_error)
+  __pyx_t_17 = PyTuple_New(1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1200, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
   __Pyx_INCREF(__pyx_v_VirtualTemperature);
   __Pyx_GIVEREF(__pyx_v_VirtualTemperature);
   PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_v_VirtualTemperature);
 
-  /* "amsimp/dynamics.pyx":1199
+  /* "amsimp/dynamics.pyx":1201
  *         # Virtual Temperature.
  *         Tv_cube = Cube(VirtualTemperature,
  *             standard_name='virtual_temperature',             # <<<<<<<<<<<<<<
  *             units='K',
  *             dim_coords_and_dims=[
  */
-  __Pyx_TraceLine(1199,0,__PYX_ERR(0, 1199, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1199, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_standard_name, __pyx_n_u_virtual_temperature) < 0) __PYX_ERR(0, 1199, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_units, __pyx_n_u_K) < 0) __PYX_ERR(0, 1199, __pyx_L1_error)
+  __Pyx_TraceLine(1201,0,__PYX_ERR(0, 1201, __pyx_L1_error))
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1201, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_standard_name, __pyx_n_u_virtual_temperature) < 0) __PYX_ERR(0, 1201, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_units, __pyx_n_u_K) < 0) __PYX_ERR(0, 1201, __pyx_L1_error)
 
-  /* "amsimp/dynamics.pyx":1202
+  /* "amsimp/dynamics.pyx":1204
  *             units='K',
  *             dim_coords_and_dims=[
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)             # <<<<<<<<<<<<<<
  *             ],
  *             attributes={
  */
-  __Pyx_TraceLine(1202,0,__PYX_ERR(0, 1202, __pyx_L1_error))
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1202, __pyx_L1_error)
+  __Pyx_TraceLine(1204,0,__PYX_ERR(0, 1204, __pyx_L1_error))
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1204, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_v_model_runs);
   __Pyx_GIVEREF(__pyx_v_model_runs);
@@ -16422,23 +16438,23 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_0);
   __Pyx_GIVEREF(__pyx_int_0);
   PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_int_0);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1202, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1204, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_forecast_period);
   __Pyx_GIVEREF(__pyx_v_forecast_period);
-  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_forecast_period);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_forecast_period);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
-  PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_1);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1202, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_1);
+  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1204, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_INCREF(__pyx_v_p);
   __Pyx_GIVEREF(__pyx_v_p);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_p);
+  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_p);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
-  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_2);
-  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1202, __pyx_L1_error)
+  PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_int_2);
+  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1204, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_INCREF(__pyx_v_lat);
   __Pyx_GIVEREF(__pyx_v_lat);
@@ -16446,7 +16462,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
   PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_int_3);
-  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1202, __pyx_L1_error)
+  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1204, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_19);
   __Pyx_INCREF(__pyx_v_lon);
   __Pyx_GIVEREF(__pyx_v_lon);
@@ -16455,129 +16471,129 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_GIVEREF(__pyx_int_4);
   PyTuple_SET_ITEM(__pyx_t_19, 1, __pyx_int_4);
 
-  /* "amsimp/dynamics.pyx":1201
+  /* "amsimp/dynamics.pyx":1203
  *             standard_name='virtual_temperature',
  *             units='K',
  *             dim_coords_and_dims=[             # <<<<<<<<<<<<<<
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
  *             ],
  */
-  __Pyx_TraceLine(1201,0,__PYX_ERR(0, 1201, __pyx_L1_error))
-  __pyx_t_20 = PyList_New(5); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1201, __pyx_L1_error)
+  __Pyx_TraceLine(1203,0,__PYX_ERR(0, 1203, __pyx_L1_error))
+  __pyx_t_20 = PyList_New(5); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1203, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
   __Pyx_GIVEREF(__pyx_t_1);
   PyList_SET_ITEM(__pyx_t_20, 0, __pyx_t_1);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyList_SET_ITEM(__pyx_t_20, 1, __pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyList_SET_ITEM(__pyx_t_20, 2, __pyx_t_2);
+  PyList_SET_ITEM(__pyx_t_20, 1, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_6);
+  PyList_SET_ITEM(__pyx_t_20, 2, __pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_18);
   PyList_SET_ITEM(__pyx_t_20, 3, __pyx_t_18);
   __Pyx_GIVEREF(__pyx_t_19);
   PyList_SET_ITEM(__pyx_t_20, 4, __pyx_t_19);
   __pyx_t_1 = 0;
-  __pyx_t_4 = 0;
   __pyx_t_2 = 0;
+  __pyx_t_6 = 0;
   __pyx_t_18 = 0;
   __pyx_t_19 = 0;
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_dim_coords_and_dims, __pyx_t_20) < 0) __PYX_ERR(0, 1199, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dim_coords_and_dims, __pyx_t_20) < 0) __PYX_ERR(0, 1201, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1205
+  /* "amsimp/dynamics.pyx":1207
  *             ],
  *             attributes={
  *                 'source': 'Motus Aeris @ AMSIMP',             # <<<<<<<<<<<<<<
  *             }
  *         )
  */
-  __Pyx_TraceLine(1205,0,__PYX_ERR(0, 1205, __pyx_L1_error))
-  __pyx_t_20 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1205, __pyx_L1_error)
+  __Pyx_TraceLine(1207,0,__PYX_ERR(0, 1207, __pyx_L1_error))
+  __pyx_t_20 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1207, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
-  if (PyDict_SetItem(__pyx_t_20, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1205, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_attributes, __pyx_t_20) < 0) __PYX_ERR(0, 1199, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_20, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1207, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_attributes, __pyx_t_20) < 0) __PYX_ERR(0, 1201, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1198
+  /* "amsimp/dynamics.pyx":1200
  *         T_cube.add_aux_coord(ref_time)
  *         # Virtual Temperature.
  *         Tv_cube = Cube(VirtualTemperature,             # <<<<<<<<<<<<<<
  *             standard_name='virtual_temperature',
  *             units='K',
  */
-  __Pyx_TraceLine(1198,0,__PYX_ERR(0, 1198, __pyx_L1_error))
-  __pyx_t_20 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_17, __pyx_t_6); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1198, __pyx_L1_error)
+  __Pyx_TraceLine(1200,0,__PYX_ERR(0, 1200, __pyx_L1_error))
+  __pyx_t_20 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_17, __pyx_t_4); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1200, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_Tv_cube = __pyx_t_20;
   __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1208
+  /* "amsimp/dynamics.pyx":1210
  *             }
  *         )
  *         Tv_cube.add_aux_coord(ref_time)             # <<<<<<<<<<<<<<
  *         # Relative Humidity.
  *         rh_cube = Cube(RelativeHumidity,
  */
-  __Pyx_TraceLine(1208,0,__PYX_ERR(0, 1208, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_Tv_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1208, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_TraceLine(1210,0,__PYX_ERR(0, 1210, __pyx_L1_error))
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_Tv_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1210, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_17 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_6);
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_4);
     if (likely(__pyx_t_17)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
       __Pyx_INCREF(__pyx_t_17);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
     }
   }
-  __pyx_t_20 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_17, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_ref_time);
+  __pyx_t_20 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_17, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_ref_time);
   __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
-  if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1208, __pyx_L1_error)
+  if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1210, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1210
+  /* "amsimp/dynamics.pyx":1212
  *         Tv_cube.add_aux_coord(ref_time)
  *         # Relative Humidity.
  *         rh_cube = Cube(RelativeHumidity,             # <<<<<<<<<<<<<<
  *             standard_name='relative_humidity',
  *             units='%',
  */
-  __Pyx_TraceLine(1210,0,__PYX_ERR(0, 1210, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_20, __pyx_n_s_Cube); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1210, __pyx_L1_error)
+  __Pyx_TraceLine(1212,0,__PYX_ERR(0, 1212, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_20, __pyx_n_s_Cube); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1212, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
-  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1210, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1212, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(__pyx_v_RelativeHumidity);
   __Pyx_GIVEREF(__pyx_v_RelativeHumidity);
-  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_RelativeHumidity);
+  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_RelativeHumidity);
 
-  /* "amsimp/dynamics.pyx":1211
+  /* "amsimp/dynamics.pyx":1213
  *         # Relative Humidity.
  *         rh_cube = Cube(RelativeHumidity,
  *             standard_name='relative_humidity',             # <<<<<<<<<<<<<<
  *             units='%',
  *             dim_coords_and_dims=[
  */
-  __Pyx_TraceLine(1211,0,__PYX_ERR(0, 1211, __pyx_L1_error))
-  __pyx_t_17 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1211, __pyx_L1_error)
+  __Pyx_TraceLine(1213,0,__PYX_ERR(0, 1213, __pyx_L1_error))
+  __pyx_t_17 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1213, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_standard_name, __pyx_n_u_relative_humidity) < 0) __PYX_ERR(0, 1211, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_units, __pyx_kp_u__15) < 0) __PYX_ERR(0, 1211, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_standard_name, __pyx_n_u_relative_humidity) < 0) __PYX_ERR(0, 1213, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_units, __pyx_kp_u__15) < 0) __PYX_ERR(0, 1213, __pyx_L1_error)
 
-  /* "amsimp/dynamics.pyx":1214
+  /* "amsimp/dynamics.pyx":1216
  *             units='%',
  *             dim_coords_and_dims=[
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)             # <<<<<<<<<<<<<<
  *             ],
  *             attributes={
  */
-  __Pyx_TraceLine(1214,0,__PYX_ERR(0, 1214, __pyx_L1_error))
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1214, __pyx_L1_error)
+  __Pyx_TraceLine(1216,0,__PYX_ERR(0, 1216, __pyx_L1_error))
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1216, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(__pyx_v_model_runs);
   __Pyx_GIVEREF(__pyx_v_model_runs);
@@ -16585,7 +16601,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_0);
   __Pyx_GIVEREF(__pyx_int_0);
   PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_int_0);
-  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1214, __pyx_L1_error)
+  __pyx_t_19 = PyTuple_New(2); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1216, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_19);
   __Pyx_INCREF(__pyx_v_forecast_period);
   __Pyx_GIVEREF(__pyx_v_forecast_period);
@@ -16593,7 +16609,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
   PyTuple_SET_ITEM(__pyx_t_19, 1, __pyx_int_1);
-  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1214, __pyx_L1_error)
+  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1216, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_INCREF(__pyx_v_p);
   __Pyx_GIVEREF(__pyx_v_p);
@@ -16601,32 +16617,32 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
   PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_int_2);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1214, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1216, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_INCREF(__pyx_v_lat);
   __Pyx_GIVEREF(__pyx_v_lat);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_lat);
+  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_lat);
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
-  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_3);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1214, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_int_3);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1216, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_lon);
   __Pyx_GIVEREF(__pyx_v_lon);
-  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_lon);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_lon);
   __Pyx_INCREF(__pyx_int_4);
   __Pyx_GIVEREF(__pyx_int_4);
-  PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_4);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_4);
 
-  /* "amsimp/dynamics.pyx":1213
+  /* "amsimp/dynamics.pyx":1215
  *             standard_name='relative_humidity',
  *             units='%',
  *             dim_coords_and_dims=[             # <<<<<<<<<<<<<<
  *                 (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
  *             ],
  */
-  __Pyx_TraceLine(1213,0,__PYX_ERR(0, 1213, __pyx_L1_error))
-  __pyx_t_1 = PyList_New(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1213, __pyx_L1_error)
+  __Pyx_TraceLine(1215,0,__PYX_ERR(0, 1215, __pyx_L1_error))
+  __pyx_t_1 = PyList_New(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1215, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_3);
   PyList_SET_ITEM(__pyx_t_1, 0, __pyx_t_3);
@@ -16634,113 +16650,113 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   PyList_SET_ITEM(__pyx_t_1, 1, __pyx_t_19);
   __Pyx_GIVEREF(__pyx_t_18);
   PyList_SET_ITEM(__pyx_t_1, 2, __pyx_t_18);
+  __Pyx_GIVEREF(__pyx_t_6);
+  PyList_SET_ITEM(__pyx_t_1, 3, __pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyList_SET_ITEM(__pyx_t_1, 3, __pyx_t_2);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyList_SET_ITEM(__pyx_t_1, 4, __pyx_t_4);
+  PyList_SET_ITEM(__pyx_t_1, 4, __pyx_t_2);
   __pyx_t_3 = 0;
   __pyx_t_19 = 0;
   __pyx_t_18 = 0;
+  __pyx_t_6 = 0;
   __pyx_t_2 = 0;
-  __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_dim_coords_and_dims, __pyx_t_1) < 0) __PYX_ERR(0, 1211, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_dim_coords_and_dims, __pyx_t_1) < 0) __PYX_ERR(0, 1213, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/dynamics.pyx":1217
+  /* "amsimp/dynamics.pyx":1219
  *             ],
  *             attributes={
  *                 'source': 'Motus Aeris @ AMSIMP',             # <<<<<<<<<<<<<<
  *             }
  *         )
  */
-  __Pyx_TraceLine(1217,0,__PYX_ERR(0, 1217, __pyx_L1_error))
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1217, __pyx_L1_error)
+  __Pyx_TraceLine(1219,0,__PYX_ERR(0, 1219, __pyx_L1_error))
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1219, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1217, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_attributes, __pyx_t_1) < 0) __PYX_ERR(0, 1211, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1219, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_attributes, __pyx_t_1) < 0) __PYX_ERR(0, 1213, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/dynamics.pyx":1210
+  /* "amsimp/dynamics.pyx":1212
  *         Tv_cube.add_aux_coord(ref_time)
  *         # Relative Humidity.
  *         rh_cube = Cube(RelativeHumidity,             # <<<<<<<<<<<<<<
  *             standard_name='relative_humidity',
  *             units='%',
  */
-  __Pyx_TraceLine(1210,0,__PYX_ERR(0, 1210, __pyx_L1_error))
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_20, __pyx_t_6, __pyx_t_17); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1210, __pyx_L1_error)
+  __Pyx_TraceLine(1212,0,__PYX_ERR(0, 1212, __pyx_L1_error))
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_20, __pyx_t_4, __pyx_t_17); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1212, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   __pyx_v_rh_cube = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "amsimp/dynamics.pyx":1220
+  /* "amsimp/dynamics.pyx":1222
  *             }
  *         )
  *         rh_cube.add_aux_coord(ref_time)             # <<<<<<<<<<<<<<
  *         # Pressure Thickness.
  *         thickness_cube = Cube(Thickness,
  */
-  __Pyx_TraceLine(1220,0,__PYX_ERR(0, 1220, __pyx_L1_error))
-  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_v_rh_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1220, __pyx_L1_error)
+  __Pyx_TraceLine(1222,0,__PYX_ERR(0, 1222, __pyx_L1_error))
+  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_v_rh_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1222, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  __pyx_t_6 = NULL;
+  __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_17))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_17);
-    if (likely(__pyx_t_6)) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_17);
+    if (likely(__pyx_t_4)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
-      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(__pyx_t_4);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_17, function);
     }
   }
-  __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_6, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_v_ref_time);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1220, __pyx_L1_error)
+  __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_4, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_v_ref_time);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1222, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "amsimp/dynamics.pyx":1222
+  /* "amsimp/dynamics.pyx":1224
  *         rh_cube.add_aux_coord(ref_time)
  *         # Pressure Thickness.
  *         thickness_cube = Cube(Thickness,             # <<<<<<<<<<<<<<
  *             long_name='pressure_thickness',
  *             units='m',
  */
-  __Pyx_TraceLine(1222,0,__PYX_ERR(0, 1222, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_Cube); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1222, __pyx_L1_error)
+  __Pyx_TraceLine(1224,0,__PYX_ERR(0, 1224, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_Cube); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1224, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_17 = PyTuple_New(1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1222, __pyx_L1_error)
+  __pyx_t_17 = PyTuple_New(1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1224, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
   __Pyx_INCREF(__pyx_v_Thickness);
   __Pyx_GIVEREF(__pyx_v_Thickness);
   PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_v_Thickness);
 
-  /* "amsimp/dynamics.pyx":1223
+  /* "amsimp/dynamics.pyx":1225
  *         # Pressure Thickness.
  *         thickness_cube = Cube(Thickness,
  *             long_name='pressure_thickness',             # <<<<<<<<<<<<<<
  *             units='m',
  *             dim_coords_and_dims=[
  */
-  __Pyx_TraceLine(1223,0,__PYX_ERR(0, 1223, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1223, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_long_name, __pyx_n_u_pressure_thickness) < 0) __PYX_ERR(0, 1223, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_units, __pyx_n_u_m) < 0) __PYX_ERR(0, 1223, __pyx_L1_error)
+  __Pyx_TraceLine(1225,0,__PYX_ERR(0, 1225, __pyx_L1_error))
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1225, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_long_name, __pyx_n_u_pressure_thickness) < 0) __PYX_ERR(0, 1225, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_units, __pyx_n_u_m) < 0) __PYX_ERR(0, 1225, __pyx_L1_error)
 
-  /* "amsimp/dynamics.pyx":1226
+  /* "amsimp/dynamics.pyx":1228
  *             units='m',
  *             dim_coords_and_dims=[
  *                 (model_runs, 0), (forecast_period, 1), (lat, 2), (lon, 3)             # <<<<<<<<<<<<<<
  *             ],
  *             attributes={
  */
-  __Pyx_TraceLine(1226,0,__PYX_ERR(0, 1226, __pyx_L1_error))
-  __pyx_t_20 = PyTuple_New(2); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1226, __pyx_L1_error)
+  __Pyx_TraceLine(1228,0,__PYX_ERR(0, 1228, __pyx_L1_error))
+  __pyx_t_20 = PyTuple_New(2); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1228, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
   __Pyx_INCREF(__pyx_v_model_runs);
   __Pyx_GIVEREF(__pyx_v_model_runs);
@@ -16748,23 +16764,23 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_0);
   __Pyx_GIVEREF(__pyx_int_0);
   PyTuple_SET_ITEM(__pyx_t_20, 1, __pyx_int_0);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1226, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1228, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_forecast_period);
   __Pyx_GIVEREF(__pyx_v_forecast_period);
-  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_forecast_period);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_forecast_period);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
-  PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_1);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1226, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_1);
+  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1228, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_INCREF(__pyx_v_lat);
   __Pyx_GIVEREF(__pyx_v_lat);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_lat);
+  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_lat);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
-  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_2);
-  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1226, __pyx_L1_error)
+  PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_int_2);
+  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1228, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_INCREF(__pyx_v_lon);
   __Pyx_GIVEREF(__pyx_v_lon);
@@ -16773,126 +16789,126 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_GIVEREF(__pyx_int_3);
   PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_int_3);
 
-  /* "amsimp/dynamics.pyx":1225
+  /* "amsimp/dynamics.pyx":1227
  *             long_name='pressure_thickness',
  *             units='m',
  *             dim_coords_and_dims=[             # <<<<<<<<<<<<<<
  *                 (model_runs, 0), (forecast_period, 1), (lat, 2), (lon, 3)
  *             ],
  */
-  __Pyx_TraceLine(1225,0,__PYX_ERR(0, 1225, __pyx_L1_error))
-  __pyx_t_19 = PyList_New(4); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1225, __pyx_L1_error)
+  __Pyx_TraceLine(1227,0,__PYX_ERR(0, 1227, __pyx_L1_error))
+  __pyx_t_19 = PyList_New(4); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1227, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_19);
   __Pyx_GIVEREF(__pyx_t_20);
   PyList_SET_ITEM(__pyx_t_19, 0, __pyx_t_20);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyList_SET_ITEM(__pyx_t_19, 1, __pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyList_SET_ITEM(__pyx_t_19, 2, __pyx_t_2);
+  PyList_SET_ITEM(__pyx_t_19, 1, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_6);
+  PyList_SET_ITEM(__pyx_t_19, 2, __pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_18);
   PyList_SET_ITEM(__pyx_t_19, 3, __pyx_t_18);
   __pyx_t_20 = 0;
-  __pyx_t_4 = 0;
   __pyx_t_2 = 0;
+  __pyx_t_6 = 0;
   __pyx_t_18 = 0;
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_dim_coords_and_dims, __pyx_t_19) < 0) __PYX_ERR(0, 1223, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dim_coords_and_dims, __pyx_t_19) < 0) __PYX_ERR(0, 1225, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
 
-  /* "amsimp/dynamics.pyx":1229
+  /* "amsimp/dynamics.pyx":1231
  *             ],
  *             attributes={
  *                 'source': 'Motus Aeris @ AMSIMP',             # <<<<<<<<<<<<<<
  *             }
  *         )
  */
-  __Pyx_TraceLine(1229,0,__PYX_ERR(0, 1229, __pyx_L1_error))
-  __pyx_t_19 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1229, __pyx_L1_error)
+  __Pyx_TraceLine(1231,0,__PYX_ERR(0, 1231, __pyx_L1_error))
+  __pyx_t_19 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1231, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_19);
-  if (PyDict_SetItem(__pyx_t_19, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1229, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_attributes, __pyx_t_19) < 0) __PYX_ERR(0, 1223, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_19, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1231, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_attributes, __pyx_t_19) < 0) __PYX_ERR(0, 1225, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
 
-  /* "amsimp/dynamics.pyx":1222
+  /* "amsimp/dynamics.pyx":1224
  *         rh_cube.add_aux_coord(ref_time)
  *         # Pressure Thickness.
  *         thickness_cube = Cube(Thickness,             # <<<<<<<<<<<<<<
  *             long_name='pressure_thickness',
  *             units='m',
  */
-  __Pyx_TraceLine(1222,0,__PYX_ERR(0, 1222, __pyx_L1_error))
-  __pyx_t_19 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_17, __pyx_t_6); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1222, __pyx_L1_error)
+  __Pyx_TraceLine(1224,0,__PYX_ERR(0, 1224, __pyx_L1_error))
+  __pyx_t_19 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_17, __pyx_t_4); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1224, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_19);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_thickness_cube = __pyx_t_19;
   __pyx_t_19 = 0;
 
-  /* "amsimp/dynamics.pyx":1232
+  /* "amsimp/dynamics.pyx":1234
  *             }
  *         )
  *         thickness_cube.add_aux_coord(ref_time)             # <<<<<<<<<<<<<<
  *         # Precipitable Water.
  *         pwv_cube = Cube(PrecipitableWater,
  */
-  __Pyx_TraceLine(1232,0,__PYX_ERR(0, 1232, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_thickness_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1232, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_TraceLine(1234,0,__PYX_ERR(0, 1234, __pyx_L1_error))
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_thickness_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1234, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_17 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_6);
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
+    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_4);
     if (likely(__pyx_t_17)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
       __Pyx_INCREF(__pyx_t_17);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_4, function);
     }
   }
-  __pyx_t_19 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_17, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_ref_time);
+  __pyx_t_19 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_17, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_ref_time);
   __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
-  if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1232, __pyx_L1_error)
+  if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1234, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_19);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
 
-  /* "amsimp/dynamics.pyx":1234
+  /* "amsimp/dynamics.pyx":1236
  *         thickness_cube.add_aux_coord(ref_time)
  *         # Precipitable Water.
  *         pwv_cube = Cube(PrecipitableWater,             # <<<<<<<<<<<<<<
  *             long_name='precipitable_water',
  *             units='mm',
  */
-  __Pyx_TraceLine(1234,0,__PYX_ERR(0, 1234, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_19, __pyx_n_s_Cube); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1234, __pyx_L1_error)
+  __Pyx_TraceLine(1236,0,__PYX_ERR(0, 1236, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_19, __pyx_n_s_Cube); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1236, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_19);
-  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1234, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1236, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(__pyx_v_PrecipitableWater);
   __Pyx_GIVEREF(__pyx_v_PrecipitableWater);
-  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_PrecipitableWater);
+  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_PrecipitableWater);
 
-  /* "amsimp/dynamics.pyx":1235
+  /* "amsimp/dynamics.pyx":1237
  *         # Precipitable Water.
  *         pwv_cube = Cube(PrecipitableWater,
  *             long_name='precipitable_water',             # <<<<<<<<<<<<<<
  *             units='mm',
  *             dim_coords_and_dims=[
  */
-  __Pyx_TraceLine(1235,0,__PYX_ERR(0, 1235, __pyx_L1_error))
-  __pyx_t_17 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1235, __pyx_L1_error)
+  __Pyx_TraceLine(1237,0,__PYX_ERR(0, 1237, __pyx_L1_error))
+  __pyx_t_17 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1237, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_long_name, __pyx_n_u_precipitable_water) < 0) __PYX_ERR(0, 1235, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_units, __pyx_n_u_mm) < 0) __PYX_ERR(0, 1235, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_long_name, __pyx_n_u_precipitable_water) < 0) __PYX_ERR(0, 1237, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_units, __pyx_n_u_mm) < 0) __PYX_ERR(0, 1237, __pyx_L1_error)
 
-  /* "amsimp/dynamics.pyx":1238
+  /* "amsimp/dynamics.pyx":1240
  *             units='mm',
  *             dim_coords_and_dims=[
  *                 (model_runs, 0), (forecast_period, 1), (lat, 2), (lon, 3)             # <<<<<<<<<<<<<<
  *             ],
  *             attributes={
  */
-  __Pyx_TraceLine(1238,0,__PYX_ERR(0, 1238, __pyx_L1_error))
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1238, __pyx_L1_error)
+  __Pyx_TraceLine(1240,0,__PYX_ERR(0, 1240, __pyx_L1_error))
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1240, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_v_model_runs);
   __Pyx_GIVEREF(__pyx_v_model_runs);
@@ -16900,7 +16916,7 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_0);
   __Pyx_GIVEREF(__pyx_int_0);
   PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_int_0);
-  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1238, __pyx_L1_error)
+  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 1240, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_INCREF(__pyx_v_forecast_period);
   __Pyx_GIVEREF(__pyx_v_forecast_period);
@@ -16908,156 +16924,156 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
   PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_int_1);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1238, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1240, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_INCREF(__pyx_v_lat);
   __Pyx_GIVEREF(__pyx_v_lat);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_lat);
+  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_lat);
   __Pyx_INCREF(__pyx_int_2);
   __Pyx_GIVEREF(__pyx_int_2);
-  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_2);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1238, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_int_2);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1240, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_lon);
   __Pyx_GIVEREF(__pyx_v_lon);
-  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_lon);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_lon);
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
-  PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_3);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_3);
 
-  /* "amsimp/dynamics.pyx":1237
+  /* "amsimp/dynamics.pyx":1239
  *             long_name='precipitable_water',
  *             units='mm',
  *             dim_coords_and_dims=[             # <<<<<<<<<<<<<<
  *                 (model_runs, 0), (forecast_period, 1), (lat, 2), (lon, 3)
  *             ],
  */
-  __Pyx_TraceLine(1237,0,__PYX_ERR(0, 1237, __pyx_L1_error))
-  __pyx_t_20 = PyList_New(4); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1237, __pyx_L1_error)
+  __Pyx_TraceLine(1239,0,__PYX_ERR(0, 1239, __pyx_L1_error))
+  __pyx_t_20 = PyList_New(4); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1239, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
   __Pyx_GIVEREF(__pyx_t_1);
   PyList_SET_ITEM(__pyx_t_20, 0, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_18);
   PyList_SET_ITEM(__pyx_t_20, 1, __pyx_t_18);
+  __Pyx_GIVEREF(__pyx_t_6);
+  PyList_SET_ITEM(__pyx_t_20, 2, __pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyList_SET_ITEM(__pyx_t_20, 2, __pyx_t_2);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyList_SET_ITEM(__pyx_t_20, 3, __pyx_t_4);
+  PyList_SET_ITEM(__pyx_t_20, 3, __pyx_t_2);
   __pyx_t_1 = 0;
   __pyx_t_18 = 0;
+  __pyx_t_6 = 0;
   __pyx_t_2 = 0;
-  __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_dim_coords_and_dims, __pyx_t_20) < 0) __PYX_ERR(0, 1235, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_dim_coords_and_dims, __pyx_t_20) < 0) __PYX_ERR(0, 1237, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1241
+  /* "amsimp/dynamics.pyx":1243
  *             ],
  *             attributes={
  *                 'source': 'Motus Aeris @ AMSIMP',             # <<<<<<<<<<<<<<
  *             }
  *         )
  */
-  __Pyx_TraceLine(1241,0,__PYX_ERR(0, 1241, __pyx_L1_error))
-  __pyx_t_20 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1241, __pyx_L1_error)
+  __Pyx_TraceLine(1243,0,__PYX_ERR(0, 1243, __pyx_L1_error))
+  __pyx_t_20 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1243, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
-  if (PyDict_SetItem(__pyx_t_20, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1241, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_attributes, __pyx_t_20) < 0) __PYX_ERR(0, 1235, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_20, __pyx_n_u_source, __pyx_kp_u_Motus_Aeris_AMSIMP) < 0) __PYX_ERR(0, 1243, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_17, __pyx_n_s_attributes, __pyx_t_20) < 0) __PYX_ERR(0, 1237, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1234
+  /* "amsimp/dynamics.pyx":1236
  *         thickness_cube.add_aux_coord(ref_time)
  *         # Precipitable Water.
  *         pwv_cube = Cube(PrecipitableWater,             # <<<<<<<<<<<<<<
  *             long_name='precipitable_water',
  *             units='mm',
  */
-  __Pyx_TraceLine(1234,0,__PYX_ERR(0, 1234, __pyx_L1_error))
-  __pyx_t_20 = __Pyx_PyObject_Call(__pyx_t_19, __pyx_t_6, __pyx_t_17); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1234, __pyx_L1_error)
+  __Pyx_TraceLine(1236,0,__PYX_ERR(0, 1236, __pyx_L1_error))
+  __pyx_t_20 = __Pyx_PyObject_Call(__pyx_t_19, __pyx_t_4, __pyx_t_17); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1236, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
   __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   __pyx_v_pwv_cube = __pyx_t_20;
   __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1244
+  /* "amsimp/dynamics.pyx":1246
  *             }
  *         )
  *         pwv_cube.add_aux_coord(ref_time)             # <<<<<<<<<<<<<<
  * 
  *         # Create Cube list of output parameters.
  */
-  __Pyx_TraceLine(1244,0,__PYX_ERR(0, 1244, __pyx_L1_error))
-  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_v_pwv_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1244, __pyx_L1_error)
+  __Pyx_TraceLine(1246,0,__PYX_ERR(0, 1246, __pyx_L1_error))
+  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_v_pwv_cube, __pyx_n_s_add_aux_coord); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1246, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  __pyx_t_6 = NULL;
+  __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_17))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_17);
-    if (likely(__pyx_t_6)) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_17);
+    if (likely(__pyx_t_4)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
-      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(__pyx_t_4);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_17, function);
     }
   }
-  __pyx_t_20 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_6, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_v_ref_time);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1244, __pyx_L1_error)
+  __pyx_t_20 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_4, __pyx_v_ref_time) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_v_ref_time);
+  __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1246, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1247
+  /* "amsimp/dynamics.pyx":1249
  * 
  *         # Create Cube list of output parameters.
  *         output = CubeList([             # <<<<<<<<<<<<<<
  *             height_cube,
  *             u_cube,
  */
-  __Pyx_TraceLine(1247,0,__PYX_ERR(0, 1247, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_17, __pyx_n_s_CubeList); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1247, __pyx_L1_error)
+  __Pyx_TraceLine(1249,0,__PYX_ERR(0, 1249, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_17, __pyx_n_s_CubeList); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1249, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
 
-  /* "amsimp/dynamics.pyx":1257
+  /* "amsimp/dynamics.pyx":1259
  *             rh_cube,
  *             thickness_cube,
  *             pwv_cube             # <<<<<<<<<<<<<<
  *         ])
  * 
  */
-  __Pyx_TraceLine(1257,0,__PYX_ERR(0, 1257, __pyx_L1_error))
-  __pyx_t_6 = PyList_New(10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1247, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_TraceLine(1259,0,__PYX_ERR(0, 1259, __pyx_L1_error))
+  __pyx_t_4 = PyList_New(10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1249, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(__pyx_v_height_cube);
   __Pyx_GIVEREF(__pyx_v_height_cube);
-  PyList_SET_ITEM(__pyx_t_6, 0, __pyx_v_height_cube);
+  PyList_SET_ITEM(__pyx_t_4, 0, __pyx_v_height_cube);
   __Pyx_INCREF(__pyx_v_u_cube);
   __Pyx_GIVEREF(__pyx_v_u_cube);
-  PyList_SET_ITEM(__pyx_t_6, 1, __pyx_v_u_cube);
+  PyList_SET_ITEM(__pyx_t_4, 1, __pyx_v_u_cube);
   __Pyx_INCREF(__pyx_v_v_cube);
   __Pyx_GIVEREF(__pyx_v_v_cube);
-  PyList_SET_ITEM(__pyx_t_6, 2, __pyx_v_v_cube);
+  PyList_SET_ITEM(__pyx_t_4, 2, __pyx_v_v_cube);
   __Pyx_INCREF(__pyx_v_omega_cube);
   __Pyx_GIVEREF(__pyx_v_omega_cube);
-  PyList_SET_ITEM(__pyx_t_6, 3, __pyx_v_omega_cube);
+  PyList_SET_ITEM(__pyx_t_4, 3, __pyx_v_omega_cube);
   __Pyx_INCREF(__pyx_v_sigma_cube);
   __Pyx_GIVEREF(__pyx_v_sigma_cube);
-  PyList_SET_ITEM(__pyx_t_6, 4, __pyx_v_sigma_cube);
+  PyList_SET_ITEM(__pyx_t_4, 4, __pyx_v_sigma_cube);
   __Pyx_INCREF(__pyx_v_T_cube);
   __Pyx_GIVEREF(__pyx_v_T_cube);
-  PyList_SET_ITEM(__pyx_t_6, 5, __pyx_v_T_cube);
+  PyList_SET_ITEM(__pyx_t_4, 5, __pyx_v_T_cube);
   __Pyx_INCREF(__pyx_v_Tv_cube);
   __Pyx_GIVEREF(__pyx_v_Tv_cube);
-  PyList_SET_ITEM(__pyx_t_6, 6, __pyx_v_Tv_cube);
+  PyList_SET_ITEM(__pyx_t_4, 6, __pyx_v_Tv_cube);
   __Pyx_INCREF(__pyx_v_rh_cube);
   __Pyx_GIVEREF(__pyx_v_rh_cube);
-  PyList_SET_ITEM(__pyx_t_6, 7, __pyx_v_rh_cube);
+  PyList_SET_ITEM(__pyx_t_4, 7, __pyx_v_rh_cube);
   __Pyx_INCREF(__pyx_v_thickness_cube);
   __Pyx_GIVEREF(__pyx_v_thickness_cube);
-  PyList_SET_ITEM(__pyx_t_6, 8, __pyx_v_thickness_cube);
+  PyList_SET_ITEM(__pyx_t_4, 8, __pyx_v_thickness_cube);
   __Pyx_INCREF(__pyx_v_pwv_cube);
   __Pyx_GIVEREF(__pyx_v_pwv_cube);
-  PyList_SET_ITEM(__pyx_t_6, 9, __pyx_v_pwv_cube);
+  PyList_SET_ITEM(__pyx_t_4, 9, __pyx_v_pwv_cube);
   __pyx_t_19 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_17))) {
     __pyx_t_19 = PyMethod_GET_SELF(__pyx_t_17);
@@ -17068,135 +17084,135 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
       __Pyx_DECREF_SET(__pyx_t_17, function);
     }
   }
-  __pyx_t_20 = (__pyx_t_19) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_19, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_t_6);
+  __pyx_t_20 = (__pyx_t_19) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_19, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_19); __pyx_t_19 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1247, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1249, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_20);
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   __pyx_v_output = __pyx_t_20;
   __pyx_t_20 = 0;
 
-  /* "amsimp/dynamics.pyx":1261
+  /* "amsimp/dynamics.pyx":1263
  * 
  *         # If specified, save the forecast in the file format, .nc.
  *         if save_file:             # <<<<<<<<<<<<<<
  *             # Establish the file name.
  *             filename = 'motusaeris_amsimp_' + str(self.date.year)
  */
-  __Pyx_TraceLine(1261,0,__PYX_ERR(0, 1261, __pyx_L1_error))
-  __pyx_t_8 = __Pyx_PyObject_IsTrue(((PyObject *)__pyx_v_save_file)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 1261, __pyx_L1_error)
+  __Pyx_TraceLine(1263,0,__PYX_ERR(0, 1263, __pyx_L1_error))
+  __pyx_t_8 = __Pyx_PyObject_IsTrue(((PyObject *)__pyx_v_save_file)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 1263, __pyx_L1_error)
   if (__pyx_t_8) {
 
-    /* "amsimp/dynamics.pyx":1263
+    /* "amsimp/dynamics.pyx":1265
  *         if save_file:
  *             # Establish the file name.
  *             filename = 'motusaeris_amsimp_' + str(self.date.year)             # <<<<<<<<<<<<<<
  *             filename += str(self.date.month) + str(self.date.day)
  *             filename += str(self.date.hour) + '.nc'
  */
-    __Pyx_TraceLine(1263,0,__PYX_ERR(0, 1263, __pyx_L1_error))
-    __pyx_t_20 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.date, __pyx_n_s_year); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1263, __pyx_L1_error)
+    __Pyx_TraceLine(1265,0,__PYX_ERR(0, 1265, __pyx_L1_error))
+    __pyx_t_20 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.date, __pyx_n_s_year); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1265, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_20);
-    __pyx_t_17 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_20); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1263, __pyx_L1_error)
+    __pyx_t_17 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_20); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1265, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_17);
     __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
-    __pyx_t_20 = __Pyx_PyUnicode_Concat(__pyx_n_u_motusaeris_amsimp, __pyx_t_17); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1263, __pyx_L1_error)
+    __pyx_t_20 = __Pyx_PyUnicode_Concat(__pyx_n_u_motusaeris_amsimp, __pyx_t_17); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1265, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_20);
     __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
     __pyx_v_filename = __pyx_t_20;
     __pyx_t_20 = 0;
 
-    /* "amsimp/dynamics.pyx":1264
+    /* "amsimp/dynamics.pyx":1266
  *             # Establish the file name.
  *             filename = 'motusaeris_amsimp_' + str(self.date.year)
  *             filename += str(self.date.month) + str(self.date.day)             # <<<<<<<<<<<<<<
  *             filename += str(self.date.hour) + '.nc'
  * 
  */
-    __Pyx_TraceLine(1264,0,__PYX_ERR(0, 1264, __pyx_L1_error))
-    __pyx_t_20 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.date, __pyx_n_s_month); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1264, __pyx_L1_error)
+    __Pyx_TraceLine(1266,0,__PYX_ERR(0, 1266, __pyx_L1_error))
+    __pyx_t_20 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.date, __pyx_n_s_month); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1266, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_20);
-    __pyx_t_17 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_20); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1264, __pyx_L1_error)
+    __pyx_t_17 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_20); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 1266, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_17);
     __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
-    __pyx_t_20 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.date, __pyx_n_s_day); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1264, __pyx_L1_error)
+    __pyx_t_20 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.date, __pyx_n_s_day); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1266, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_20);
-    __pyx_t_6 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_20); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1264, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_4 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_20); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1266, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
-    __pyx_t_20 = __Pyx_PyUnicode_Concat(__pyx_t_17, __pyx_t_6); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1264, __pyx_L1_error)
+    __pyx_t_20 = __Pyx_PyUnicode_Concat(__pyx_t_17, __pyx_t_4); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1266, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_20);
     __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = PyNumber_InPlaceAdd(__pyx_v_filename, __pyx_t_20); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1264, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_InPlaceAdd(__pyx_v_filename, __pyx_t_20); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1266, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
-    __Pyx_DECREF_SET(__pyx_v_filename, __pyx_t_6);
-    __pyx_t_6 = 0;
+    __Pyx_DECREF_SET(__pyx_v_filename, __pyx_t_4);
+    __pyx_t_4 = 0;
 
-    /* "amsimp/dynamics.pyx":1265
+    /* "amsimp/dynamics.pyx":1267
  *             filename = 'motusaeris_amsimp_' + str(self.date.year)
  *             filename += str(self.date.month) + str(self.date.day)
  *             filename += str(self.date.hour) + '.nc'             # <<<<<<<<<<<<<<
  * 
  *             # Save.
  */
-    __Pyx_TraceLine(1265,0,__PYX_ERR(0, 1265, __pyx_L1_error))
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.date, __pyx_n_s_hour); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1265, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_20 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_6); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1265, __pyx_L1_error)
+    __Pyx_TraceLine(1267,0,__PYX_ERR(0, 1267, __pyx_L1_error))
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->__pyx_base.__pyx_base.__pyx_base.__pyx_base.date, __pyx_n_s_hour); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1267, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_20 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_t_4); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1267, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_20);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = __Pyx_PyUnicode_Concat(__pyx_t_20, __pyx_kp_u_nc); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1265, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = __Pyx_PyUnicode_Concat(__pyx_t_20, __pyx_kp_u_nc); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1267, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
-    __pyx_t_20 = PyNumber_InPlaceAdd(__pyx_v_filename, __pyx_t_6); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1265, __pyx_L1_error)
+    __pyx_t_20 = PyNumber_InPlaceAdd(__pyx_v_filename, __pyx_t_4); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1267, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_20);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF_SET(__pyx_v_filename, __pyx_t_20);
     __pyx_t_20 = 0;
 
-    /* "amsimp/dynamics.pyx":1268
+    /* "amsimp/dynamics.pyx":1270
  * 
  *             # Save.
  *             save(output, filename)             # <<<<<<<<<<<<<<
  * 
  *         return output
  */
-    __Pyx_TraceLine(1268,0,__PYX_ERR(0, 1268, __pyx_L1_error))
-    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_save); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1268, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_TraceLine(1270,0,__PYX_ERR(0, 1270, __pyx_L1_error))
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_save); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1270, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_17 = NULL;
     __pyx_t_5 = 0;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
-      __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_6);
+    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
+      __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_4);
       if (likely(__pyx_t_17)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
         __Pyx_INCREF(__pyx_t_17);
         __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_6, function);
+        __Pyx_DECREF_SET(__pyx_t_4, function);
         __pyx_t_5 = 1;
       }
     }
     #if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(__pyx_t_6)) {
+    if (PyFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[3] = {__pyx_t_17, __pyx_v_output, __pyx_v_filename};
-      __pyx_t_20 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1268, __pyx_L1_error)
+      __pyx_t_20 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1270, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
       __Pyx_GOTREF(__pyx_t_20);
     } else
     #endif
     #if CYTHON_FAST_PYCCALL
-    if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
+    if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[3] = {__pyx_t_17, __pyx_v_output, __pyx_v_filename};
-      __pyx_t_20 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1268, __pyx_L1_error)
+      __pyx_t_20 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1270, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
       __Pyx_GOTREF(__pyx_t_20);
     } else
     #endif
     {
-      __pyx_t_19 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1268, __pyx_L1_error)
+      __pyx_t_19 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1270, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_19);
       if (__pyx_t_17) {
         __Pyx_GIVEREF(__pyx_t_17); PyTuple_SET_ITEM(__pyx_t_19, 0, __pyx_t_17); __pyx_t_17 = NULL;
@@ -17207,14 +17223,14 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
       __Pyx_INCREF(__pyx_v_filename);
       __Pyx_GIVEREF(__pyx_v_filename);
       PyTuple_SET_ITEM(__pyx_t_19, 1+__pyx_t_5, __pyx_v_filename);
-      __pyx_t_20 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_19, NULL); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1268, __pyx_L1_error)
+      __pyx_t_20 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_19, NULL); if (unlikely(!__pyx_t_20)) __PYX_ERR(0, 1270, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_20);
       __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
     }
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_20); __pyx_t_20 = 0;
 
-    /* "amsimp/dynamics.pyx":1261
+    /* "amsimp/dynamics.pyx":1263
  * 
  *         # If specified, save the forecast in the file format, .nc.
  *         if save_file:             # <<<<<<<<<<<<<<
@@ -17223,12 +17239,12 @@ static PyObject *__pyx_f_6amsimp_8dynamics_8Dynamics_atmospheric_prognostic_meth
  */
   }
 
-  /* "amsimp/dynamics.pyx":1270
+  /* "amsimp/dynamics.pyx":1272
  *             save(output, filename)
  * 
  *         return output             # <<<<<<<<<<<<<<
  */
-  __Pyx_TraceLine(1270,0,__PYX_ERR(0, 1270, __pyx_L1_error))
+  __Pyx_TraceLine(1272,0,__PYX_ERR(0, 1272, __pyx_L1_error))
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(__pyx_v_output);
   __pyx_r = __pyx_v_output;

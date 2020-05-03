@@ -879,17 +879,19 @@ cdef class Dynamics(RNN):
                     # Apply predictions every six hours.
                     if t != 0 and t % 21600 == 0:
                         # Temperature. 
-                        T = (T + prediction_ai_temp) / 2
+                        T = (T + prediction_ai_temp[iterator_ai]) / 2
                         T = smooth_gaussian(
                             scalar_grid=T.value,
                             n=3,
                         ).magnitude * T.unit
                         # Relative Humidity.
-                        rh = (rh + prediction_ai_rh) / 2
+                        rh = (rh + prediction_ai_rh[iterator_ai]) / 2
                         rh = smooth_gaussian(
                             scalar_grid=rh.value,
                             n=3,
                         ).magnitude * rh.unit
+                        # Iterator.
+                        iterator_ai += 1
                 
                 # Configure the Wind class, so, that it aligns with the
                 # paramaters defined by the user.
