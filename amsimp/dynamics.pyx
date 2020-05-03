@@ -186,7 +186,7 @@ cdef class RNN(Wind):
         # Temperature.
         temperature = self.sc.fit_transform(temperature)
         # Relative Humidity.
-        relative_humidity = self.sc.fit_transform(relative_humidity)
+        relative_humidity /= 100
 
         # Output.
         output = (temperature, relative_humidity)
@@ -303,12 +303,12 @@ cdef class RNN(Wind):
         )
         # Make predictions.
         predict_temp = temp_model.predict(predict_temp_input)
+        print(predict_temp.shape)
         predict_rh = rh_model.predict(predict_rh_input)
 
         # Invert normalisation.
         predict_temp = self.sc.inverse_transform(predict_temp)
-        print(predict_temp.shape)
-        predict_rh = self.sc.inverse_transform(predict_rh)
+        predict_rh *= 100
 
         # Reshape into 3d arrays.
         # Dimensions.
