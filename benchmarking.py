@@ -204,10 +204,10 @@ def benchmarking():
             detail = amsimp.Dynamics(input_date=date, forecast_length=120, efs=False)
             label = "physical_model_with_rnn"
         elif num == 2:
-            detail = amsimp.Dynamics(input_date=date, forecast_length=120, ai=False, models=5)
+            detail = amsimp.Dynamics(input_date=date, forecast_length=120, ai=False, models=3)
             label = "physical_model_with_efs"
         elif num == 3:
-            detail = amsimp.Dynamics(input_date=date, forecast_length=120, models=5)
+            detail = amsimp.Dynamics(input_date=date, forecast_length=120, models=3)
             label = "physical_model_with_efs_and_rnn"
 
         # Start timer.
