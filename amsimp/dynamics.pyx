@@ -19,6 +19,7 @@ from tensorflow.keras.layers import RepeatVector
 from tensorflow.keras.layers import TimeDistributed
 from tensorflow.keras.layers import Bidirectional
 from tensorflow.keras.optimizers import Adam
+import tensorflow as tf
 import matplotlib.pyplot as plt
 from matplotlib import style
 import matplotlib.gridspec as gridspec
@@ -49,6 +50,9 @@ cdef class RNN(Wind):
     # Feature Scaling 
     temp_sc = MinMaxScaler(feature_range=(0,1))
     rh_sc = MinMaxScaler(feature_range=(0,1))
+
+    # Ensure reproducibility.
+    tf.random.set_seed(13)
 
     def download_historical_data(self):
         """
