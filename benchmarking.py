@@ -131,9 +131,9 @@ def benchmarking():
     n = 10
     # Starting date.
     start_date = datetime(2020, 4, 29, 0)
-    date = start_date + timedelta(days=-n)
+    date = start_date + timedelta(days=-10)
     # Historical Dataset.
-    detail = amsimp.RNN(input_date=start_date, data_size=(n+1))
+    detail = amsimp.RNN(input_date=start_date, data_size=11)
     historical_data = detail.download_historical_data()
     # Reshape Historical Dataset.
     # Dimensions.
