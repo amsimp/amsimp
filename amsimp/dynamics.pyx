@@ -186,7 +186,7 @@ cdef class RNN(Wind):
         # Temperature.
         temperature = self.sc.fit_transform(temperature)
         # Relative Humidity.
-        relative_humidity /= 100
+        relative_humidity = self.sc.fit_transform(relative_humidity)
 
         # Output.
         output = (temperature, relative_humidity)
@@ -309,7 +309,7 @@ cdef class RNN(Wind):
 
         # Invert normalisation.
         predict_temp = self.sc.inverse_transform(predict_temp)
-        predict_rh *= 100
+        predict_rh = self.sc.inverse_transform(predict_rh)
 
         # Reshape into 3d arrays.
         # Dimensions.
@@ -364,7 +364,7 @@ cdef class Dynamics(RNN):
     the specified number of forecast days.
     """
 
-    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=90, epochs=150, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):
+    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=120, epochs=150, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):
         """
         Defines the length of the forecast (in hours) generated in the simulation.
         This value must be greater than 0, and less than 168 in order

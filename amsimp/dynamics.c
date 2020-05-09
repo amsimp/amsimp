@@ -1860,14 +1860,6 @@ static CYTHON_INLINE int __Pyx_PyList_Append(PyObject* list, PyObject* x) {
 #define __Pyx_PyList_Append(L,x) PyList_Append(L,x)
 #endif
 
-/* PyIntBinop.proto */
-#if !CYTHON_COMPILING_IN_PYPY
-static PyObject* __Pyx_PyInt_TrueDivideObjC(PyObject *op1, PyObject *op2, long intval, int inplace, int zerodivision_check);
-#else
-#define __Pyx_PyInt_TrueDivideObjC(op1, op2, intval, inplace, zerodivision_check)\
-    (inplace ? PyNumber_InPlaceTrueDivide(op1, op2) : PyNumber_TrueDivide(op1, op2))
-#endif
-
 /* RaiseArgTupleInvalid.proto */
 static void __Pyx_RaiseArgtupleInvalid(const char* func_name, int exact,
     Py_ssize_t num_min, Py_ssize_t num_max, Py_ssize_t num_found);
@@ -1938,6 +1930,14 @@ static PyObject* __Pyx_PyObject_CallMethod1(PyObject* obj, PyObject* method_name
 
 /* append.proto */
 static CYTHON_INLINE int __Pyx_PyObject_Append(PyObject* L, PyObject* x);
+
+/* PyIntBinop.proto */
+#if !CYTHON_COMPILING_IN_PYPY
+static PyObject* __Pyx_PyInt_TrueDivideObjC(PyObject *op1, PyObject *op2, long intval, int inplace, int zerodivision_check);
+#else
+#define __Pyx_PyInt_TrueDivideObjC(op1, op2, intval, inplace, zerodivision_check)\
+    (inplace ? PyNumber_InPlaceTrueDivide(op1, op2) : PyNumber_TrueDivide(op1, op2))
+#endif
 
 /* None.proto */
 static CYTHON_INLINE void __Pyx_RaiseUnboundLocalError(const char *varname);
@@ -3004,8 +3004,8 @@ static PyObject *__pyx_int_14;
 static PyObject *__pyx_int_30;
 static PyObject *__pyx_int_60;
 static PyObject *__pyx_int_72;
-static PyObject *__pyx_int_90;
 static PyObject *__pyx_int_100;
+static PyObject *__pyx_int_120;
 static PyObject *__pyx_int_150;
 static PyObject *__pyx_int_168;
 static PyObject *__pyx_int_400;
@@ -4326,7 +4326,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_2standardise_data(struct __pyx_
  *         # Temperature.
  *         temperature = self.sc.fit_transform(temperature)             # <<<<<<<<<<<<<<
  *         # Relative Humidity.
- *         relative_humidity /= 100
+ *         relative_humidity = self.sc.fit_transform(relative_humidity)
  */
   __Pyx_TraceLine(187,0,__PYX_ERR(0, 187, __pyx_L1_error))
   __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_sc); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 187, __pyx_L1_error)
@@ -4355,13 +4355,31 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_2standardise_data(struct __pyx_
   /* "amsimp/dynamics.pyx":189
  *         temperature = self.sc.fit_transform(temperature)
  *         # Relative Humidity.
- *         relative_humidity /= 100             # <<<<<<<<<<<<<<
+ *         relative_humidity = self.sc.fit_transform(relative_humidity)             # <<<<<<<<<<<<<<
  * 
  *         # Output.
  */
   __Pyx_TraceLine(189,0,__PYX_ERR(0, 189, __pyx_L1_error))
-  __pyx_t_1 = __Pyx_PyInt_TrueDivideObjC(__pyx_v_relative_humidity, __pyx_int_100, 0x64, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 189, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_sc); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 189, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_fit_transform); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 189, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_v_relative_humidity) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_relative_humidity);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 189, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF_SET(__pyx_v_relative_humidity, __pyx_t_1);
   __pyx_t_1 = 0;
 
@@ -6402,7 +6420,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
  * 
  *         # Invert normalisation.
  *         predict_temp = self.sc.inverse_transform(predict_temp)             # <<<<<<<<<<<<<<
- *         predict_rh *= 100
+ *         predict_rh = self.sc.inverse_transform(predict_rh)
  * 
  */
   __Pyx_TraceLine(311,0,__PYX_ERR(0, 311, __pyx_L1_error))
@@ -6432,13 +6450,31 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   /* "amsimp/dynamics.pyx":312
  *         # Invert normalisation.
  *         predict_temp = self.sc.inverse_transform(predict_temp)
- *         predict_rh *= 100             # <<<<<<<<<<<<<<
+ *         predict_rh = self.sc.inverse_transform(predict_rh)             # <<<<<<<<<<<<<<
  * 
  *         # Reshape into 3d arrays.
  */
   __Pyx_TraceLine(312,0,__PYX_ERR(0, 312, __pyx_L1_error))
-  __pyx_t_4 = PyNumber_InPlaceMultiply(__pyx_v_predict_rh, __pyx_int_100); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 312, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_sc); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 312, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_inverse_transform); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 312, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_1);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_1, function);
+    }
+  }
+  __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_6, __pyx_v_predict_rh) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_predict_rh);
+  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 312, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF_SET(__pyx_v_predict_rh, __pyx_t_4);
   __pyx_t_4 = 0;
 
@@ -6503,10 +6539,10 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
  * 
  */
   __Pyx_TraceLine(321,0,__PYX_ERR(0, 321, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_predict_temp, __pyx_n_s_reshape); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 321, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_1 = PyInt_FromSsize_t(__pyx_v_len_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 321, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_predict_temp, __pyx_n_s_reshape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 321, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_6 = PyInt_FromSsize_t(__pyx_v_len_time); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 321, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_2 = PyInt_FromSsize_t(__pyx_v_len_pressure); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 321, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = PyInt_FromSsize_t(__pyx_v_len_lat); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 321, __pyx_L1_error)
@@ -6515,35 +6551,35 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __Pyx_GOTREF(__pyx_t_8);
   __pyx_t_9 = NULL;
   __pyx_t_5 = 0;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_6);
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
+    __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_1);
     if (likely(__pyx_t_9)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
       __Pyx_INCREF(__pyx_t_9);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_1, function);
       __pyx_t_5 = 1;
     }
   }
   #if CYTHON_FAST_PYCALL
-  if (PyFunction_Check(__pyx_t_6)) {
-    PyObject *__pyx_temp[5] = {__pyx_t_9, __pyx_t_1, __pyx_t_2, __pyx_t_3, __pyx_t_8};
-    __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_5, 4+__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 321, __pyx_L1_error)
+  if (PyFunction_Check(__pyx_t_1)) {
+    PyObject *__pyx_temp[5] = {__pyx_t_9, __pyx_t_6, __pyx_t_2, __pyx_t_3, __pyx_t_8};
+    __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_5, 4+__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 321, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
     __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   } else
   #endif
   #if CYTHON_FAST_PYCCALL
-  if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
-    PyObject *__pyx_temp[5] = {__pyx_t_9, __pyx_t_1, __pyx_t_2, __pyx_t_3, __pyx_t_8};
-    __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_5, 4+__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 321, __pyx_L1_error)
+  if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
+    PyObject *__pyx_temp[5] = {__pyx_t_9, __pyx_t_6, __pyx_t_2, __pyx_t_3, __pyx_t_8};
+    __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_5, 4+__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 321, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
     __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -6555,23 +6591,23 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
     if (__pyx_t_9) {
       __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_9); __pyx_t_9 = NULL;
     }
-    __Pyx_GIVEREF(__pyx_t_1);
-    PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_5, __pyx_t_1);
+    __Pyx_GIVEREF(__pyx_t_6);
+    PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_5, __pyx_t_6);
     __Pyx_GIVEREF(__pyx_t_2);
     PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_5, __pyx_t_2);
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_11, 2+__pyx_t_5, __pyx_t_3);
     __Pyx_GIVEREF(__pyx_t_8);
     PyTuple_SET_ITEM(__pyx_t_11, 3+__pyx_t_5, __pyx_t_8);
-    __pyx_t_1 = 0;
+    __pyx_t_6 = 0;
     __pyx_t_2 = 0;
     __pyx_t_3 = 0;
     __pyx_t_8 = 0;
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_11, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 321, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_11, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 321, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
   }
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF_SET(__pyx_v_predict_temp, __pyx_t_4);
   __pyx_t_4 = 0;
 
@@ -6583,8 +6619,8 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
  *         return predict_temp, predict_rh
  */
   __Pyx_TraceLine(322,0,__PYX_ERR(0, 322, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_predict_rh, __pyx_n_s_reshape); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 322, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_predict_rh, __pyx_n_s_reshape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 322, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_11 = PyInt_FromSsize_t(__pyx_v_len_time); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 322, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   __pyx_t_8 = PyInt_FromSsize_t(__pyx_v_len_pressure); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 322, __pyx_L1_error)
@@ -6593,23 +6629,23 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_2 = PyInt_FromSsize_t(__pyx_v_len_lon); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 322, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = NULL;
+  __pyx_t_6 = NULL;
   __pyx_t_5 = 0;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_6);
-    if (likely(__pyx_t_1)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-      __Pyx_INCREF(__pyx_t_1);
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_1);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
+      __Pyx_INCREF(__pyx_t_6);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_1, function);
       __pyx_t_5 = 1;
     }
   }
   #if CYTHON_FAST_PYCALL
-  if (PyFunction_Check(__pyx_t_6)) {
-    PyObject *__pyx_temp[5] = {__pyx_t_1, __pyx_t_11, __pyx_t_8, __pyx_t_3, __pyx_t_2};
-    __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_5, 4+__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 322, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (PyFunction_Check(__pyx_t_1)) {
+    PyObject *__pyx_temp[5] = {__pyx_t_6, __pyx_t_11, __pyx_t_8, __pyx_t_3, __pyx_t_2};
+    __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_5, 4+__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 322, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -6618,10 +6654,10 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   } else
   #endif
   #if CYTHON_FAST_PYCCALL
-  if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
-    PyObject *__pyx_temp[5] = {__pyx_t_1, __pyx_t_11, __pyx_t_8, __pyx_t_3, __pyx_t_2};
-    __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_5, 4+__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 322, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
+    PyObject *__pyx_temp[5] = {__pyx_t_6, __pyx_t_11, __pyx_t_8, __pyx_t_3, __pyx_t_2};
+    __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_5, 4+__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 322, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -6632,8 +6668,8 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   {
     __pyx_t_9 = PyTuple_New(4+__pyx_t_5); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 322, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
-    if (__pyx_t_1) {
-      __Pyx_GIVEREF(__pyx_t_1); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_1); __pyx_t_1 = NULL;
+    if (__pyx_t_6) {
+      __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_6); __pyx_t_6 = NULL;
     }
     __Pyx_GIVEREF(__pyx_t_11);
     PyTuple_SET_ITEM(__pyx_t_9, 0+__pyx_t_5, __pyx_t_11);
@@ -6647,11 +6683,11 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
     __pyx_t_8 = 0;
     __pyx_t_3 = 0;
     __pyx_t_2 = 0;
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_9, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 322, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_9, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 322, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   }
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF_SET(__pyx_v_predict_rh, __pyx_t_4);
   __pyx_t_4 = 0;
 
@@ -7128,7 +7164,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_10__setstate_cython__(struct __
 /* "amsimp/dynamics.pyx":367
  *     """
  * 
- *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=90, epochs=150, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=120, epochs=150, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):             # <<<<<<<<<<<<<<
  *         """
  *         Defines the length of the forecast (in hours) generated in the simulation.
  */
@@ -7160,7 +7196,7 @@ static int __pyx_pw_6amsimp_8dynamics_8Dynamics_1__cinit__(PyObject *__pyx_v_sel
     values[3] = ((PyObject *)__pyx_int_72);
     values[4] = (PyObject *)((PyBoolObject *)Py_True);
     values[6] = (PyObject *)((PyBoolObject *)Py_True);
-    values[7] = ((PyObject *)__pyx_int_90);
+    values[7] = ((PyObject *)__pyx_int_120);
     values[8] = ((PyObject *)__pyx_int_150);
     values[9] = ((PyObject *)Py_None);
     values[10] = (PyObject *)((PyBoolObject *)Py_False);
@@ -8220,7 +8256,7 @@ static int __pyx_pf_6amsimp_8dynamics_8Dynamics___cinit__(struct __pyx_obj_6amsi
   /* "amsimp/dynamics.pyx":367
  *     """
  * 
- *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=90, epochs=150, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=120, epochs=150, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):             # <<<<<<<<<<<<<<
  *         """
  *         Defines the length of the forecast (in hours) generated in the simulation.
  */
@@ -21689,8 +21725,8 @@ static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   __pyx_int_30 = PyInt_FromLong(30); if (unlikely(!__pyx_int_30)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_60 = PyInt_FromLong(60); if (unlikely(!__pyx_int_60)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_72 = PyInt_FromLong(72); if (unlikely(!__pyx_int_72)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_90 = PyInt_FromLong(90); if (unlikely(!__pyx_int_90)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_100 = PyInt_FromLong(100); if (unlikely(!__pyx_int_100)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_int_120 = PyInt_FromLong(120); if (unlikely(!__pyx_int_120)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_150 = PyInt_FromLong(150); if (unlikely(!__pyx_int_150)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_168 = PyInt_FromLong(168); if (unlikely(!__pyx_int_168)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_400 = PyInt_FromLong(400); if (unlikely(!__pyx_int_400)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -23556,106 +23592,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
 }
 #endif
 
-/* PyIntBinop */
-#if !CYTHON_COMPILING_IN_PYPY
-#if PY_MAJOR_VERSION < 3 || CYTHON_USE_PYLONG_INTERNALS
-#define __Pyx_PyInt_TrueDivideObjC_ZeroDivisionError(operand)\
-    if (unlikely(zerodivision_check && ((operand) == 0))) {\
-        PyErr_SetString(PyExc_ZeroDivisionError, "integer division by zero");\
-        return NULL;\
-    }
-#endif
-static PyObject* __Pyx_PyInt_TrueDivideObjC(PyObject *op1, PyObject *op2, CYTHON_UNUSED long intval, int inplace, int zerodivision_check) {
-    (void)inplace;
-    (void)zerodivision_check;
-    #if PY_MAJOR_VERSION < 3
-    if (likely(PyInt_CheckExact(op1))) {
-        const long b = intval;
-        long a = PyInt_AS_LONG(op1);
-            __Pyx_PyInt_TrueDivideObjC_ZeroDivisionError(b)
-            if (8 * sizeof(long) <= 53 || likely(labs(a) <= ((PY_LONG_LONG)1 << 53))) {
-                return PyFloat_FromDouble((double)a / (double)b);
-            }
-            return PyInt_Type.tp_as_number->nb_true_divide(op1, op2);
-    }
-    #endif
-    #if CYTHON_USE_PYLONG_INTERNALS
-    if (likely(PyLong_CheckExact(op1))) {
-        const long b = intval;
-        long a, x;
-        const digit* digits = ((PyLongObject*)op1)->ob_digit;
-        const Py_ssize_t size = Py_SIZE(op1);
-        if (likely(__Pyx_sst_abs(size) <= 1)) {
-            a = likely(size) ? digits[0] : 0;
-            if (size == -1) a = -a;
-        } else {
-            switch (size) {
-                case -2:
-                    if (8 * sizeof(long) - 1 > 2 * PyLong_SHIFT && 1 * PyLong_SHIFT < 53) {
-                        a = -(long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    }
-                    CYTHON_FALLTHROUGH;
-                case 2:
-                    if (8 * sizeof(long) - 1 > 2 * PyLong_SHIFT && 1 * PyLong_SHIFT < 53) {
-                        a = (long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    }
-                    CYTHON_FALLTHROUGH;
-                case -3:
-                    if (8 * sizeof(long) - 1 > 3 * PyLong_SHIFT && 2 * PyLong_SHIFT < 53) {
-                        a = -(long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    }
-                    CYTHON_FALLTHROUGH;
-                case 3:
-                    if (8 * sizeof(long) - 1 > 3 * PyLong_SHIFT && 2 * PyLong_SHIFT < 53) {
-                        a = (long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    }
-                    CYTHON_FALLTHROUGH;
-                case -4:
-                    if (8 * sizeof(long) - 1 > 4 * PyLong_SHIFT && 3 * PyLong_SHIFT < 53) {
-                        a = -(long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    }
-                    CYTHON_FALLTHROUGH;
-                case 4:
-                    if (8 * sizeof(long) - 1 > 4 * PyLong_SHIFT && 3 * PyLong_SHIFT < 53) {
-                        a = (long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    }
-                    CYTHON_FALLTHROUGH;
-                default: return PyLong_Type.tp_as_number->nb_true_divide(op1, op2);
-            }
-        }
-                __Pyx_PyInt_TrueDivideObjC_ZeroDivisionError(b)
-                if ((8 * sizeof(long) <= 53 || likely(labs(a) <= ((PY_LONG_LONG)1 << 53)))
-                        || __Pyx_sst_abs(size) <= 52 / PyLong_SHIFT) {
-                    return PyFloat_FromDouble((double)a / (double)b);
-                }
-                return PyLong_Type.tp_as_number->nb_true_divide(op1, op2);
-            return PyLong_FromLong(x);
-        
-    }
-    #endif
-    if (PyFloat_CheckExact(op1)) {
-        const long b = intval;
-        double a = PyFloat_AS_DOUBLE(op1);
-            double result;
-            if (unlikely(zerodivision_check && b == 0)) {
-                PyErr_SetString(PyExc_ZeroDivisionError, "float division by zero");
-                return NULL;
-            }
-            PyFPE_START_PROTECT("divide", return NULL)
-            result = ((double)a) / (double)b;
-            PyFPE_END_PROTECT(result)
-            return PyFloat_FromDouble(result);
-    }
-    return (inplace ? PyNumber_InPlaceTrueDivide : PyNumber_TrueDivide)(op1, op2);
-}
-#endif
-
 /* RaiseArgTupleInvalid */
 static void __Pyx_RaiseArgtupleInvalid(
     const char* func_name,
@@ -24370,6 +24306,106 @@ static CYTHON_INLINE int __Pyx_PyObject_Append(PyObject* L, PyObject* x) {
     }
     return 0;
 }
+
+/* PyIntBinop */
+#if !CYTHON_COMPILING_IN_PYPY
+#if PY_MAJOR_VERSION < 3 || CYTHON_USE_PYLONG_INTERNALS
+#define __Pyx_PyInt_TrueDivideObjC_ZeroDivisionError(operand)\
+    if (unlikely(zerodivision_check && ((operand) == 0))) {\
+        PyErr_SetString(PyExc_ZeroDivisionError, "integer division by zero");\
+        return NULL;\
+    }
+#endif
+static PyObject* __Pyx_PyInt_TrueDivideObjC(PyObject *op1, PyObject *op2, CYTHON_UNUSED long intval, int inplace, int zerodivision_check) {
+    (void)inplace;
+    (void)zerodivision_check;
+    #if PY_MAJOR_VERSION < 3
+    if (likely(PyInt_CheckExact(op1))) {
+        const long b = intval;
+        long a = PyInt_AS_LONG(op1);
+            __Pyx_PyInt_TrueDivideObjC_ZeroDivisionError(b)
+            if (8 * sizeof(long) <= 53 || likely(labs(a) <= ((PY_LONG_LONG)1 << 53))) {
+                return PyFloat_FromDouble((double)a / (double)b);
+            }
+            return PyInt_Type.tp_as_number->nb_true_divide(op1, op2);
+    }
+    #endif
+    #if CYTHON_USE_PYLONG_INTERNALS
+    if (likely(PyLong_CheckExact(op1))) {
+        const long b = intval;
+        long a, x;
+        const digit* digits = ((PyLongObject*)op1)->ob_digit;
+        const Py_ssize_t size = Py_SIZE(op1);
+        if (likely(__Pyx_sst_abs(size) <= 1)) {
+            a = likely(size) ? digits[0] : 0;
+            if (size == -1) a = -a;
+        } else {
+            switch (size) {
+                case -2:
+                    if (8 * sizeof(long) - 1 > 2 * PyLong_SHIFT && 1 * PyLong_SHIFT < 53) {
+                        a = -(long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
+                        break;
+                    }
+                    CYTHON_FALLTHROUGH;
+                case 2:
+                    if (8 * sizeof(long) - 1 > 2 * PyLong_SHIFT && 1 * PyLong_SHIFT < 53) {
+                        a = (long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
+                        break;
+                    }
+                    CYTHON_FALLTHROUGH;
+                case -3:
+                    if (8 * sizeof(long) - 1 > 3 * PyLong_SHIFT && 2 * PyLong_SHIFT < 53) {
+                        a = -(long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
+                        break;
+                    }
+                    CYTHON_FALLTHROUGH;
+                case 3:
+                    if (8 * sizeof(long) - 1 > 3 * PyLong_SHIFT && 2 * PyLong_SHIFT < 53) {
+                        a = (long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
+                        break;
+                    }
+                    CYTHON_FALLTHROUGH;
+                case -4:
+                    if (8 * sizeof(long) - 1 > 4 * PyLong_SHIFT && 3 * PyLong_SHIFT < 53) {
+                        a = -(long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
+                        break;
+                    }
+                    CYTHON_FALLTHROUGH;
+                case 4:
+                    if (8 * sizeof(long) - 1 > 4 * PyLong_SHIFT && 3 * PyLong_SHIFT < 53) {
+                        a = (long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
+                        break;
+                    }
+                    CYTHON_FALLTHROUGH;
+                default: return PyLong_Type.tp_as_number->nb_true_divide(op1, op2);
+            }
+        }
+                __Pyx_PyInt_TrueDivideObjC_ZeroDivisionError(b)
+                if ((8 * sizeof(long) <= 53 || likely(labs(a) <= ((PY_LONG_LONG)1 << 53)))
+                        || __Pyx_sst_abs(size) <= 52 / PyLong_SHIFT) {
+                    return PyFloat_FromDouble((double)a / (double)b);
+                }
+                return PyLong_Type.tp_as_number->nb_true_divide(op1, op2);
+            return PyLong_FromLong(x);
+        
+    }
+    #endif
+    if (PyFloat_CheckExact(op1)) {
+        const long b = intval;
+        double a = PyFloat_AS_DOUBLE(op1);
+            double result;
+            if (unlikely(zerodivision_check && b == 0)) {
+                PyErr_SetString(PyExc_ZeroDivisionError, "float division by zero");
+                return NULL;
+            }
+            PyFPE_START_PROTECT("divide", return NULL)
+            result = ((double)a) / (double)b;
+            PyFPE_END_PROTECT(result)
+            return PyFloat_FromDouble(result);
+    }
+    return (inplace ? PyNumber_InPlaceTrueDivide : PyNumber_TrueDivide)(op1, op2);
+}
+#endif
 
 /* None */
 static CYTHON_INLINE void __Pyx_RaiseUnboundLocalError(const char *varname) {
