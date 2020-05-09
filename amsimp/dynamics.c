@@ -3006,8 +3006,8 @@ static PyObject *__pyx_int_60;
 static PyObject *__pyx_int_72;
 static PyObject *__pyx_int_90;
 static PyObject *__pyx_int_100;
+static PyObject *__pyx_int_150;
 static PyObject *__pyx_int_168;
-static PyObject *__pyx_int_200;
 static PyObject *__pyx_int_400;
 static PyObject *__pyx_int_500;
 static PyObject *__pyx_int_1000;
@@ -7128,7 +7128,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_10__setstate_cython__(struct __
 /* "amsimp/dynamics.pyx":367
  *     """
  * 
- *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=90, epochs=200, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=90, epochs=150, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):             # <<<<<<<<<<<<<<
  *         """
  *         Defines the length of the forecast (in hours) generated in the simulation.
  */
@@ -7161,7 +7161,7 @@ static int __pyx_pw_6amsimp_8dynamics_8Dynamics_1__cinit__(PyObject *__pyx_v_sel
     values[4] = (PyObject *)((PyBoolObject *)Py_True);
     values[6] = (PyObject *)((PyBoolObject *)Py_True);
     values[7] = ((PyObject *)__pyx_int_90);
-    values[8] = ((PyObject *)__pyx_int_200);
+    values[8] = ((PyObject *)__pyx_int_150);
     values[9] = ((PyObject *)Py_None);
     values[10] = (PyObject *)((PyBoolObject *)Py_False);
     values[11] = ((PyObject *)Py_None);
@@ -8220,7 +8220,7 @@ static int __pyx_pf_6amsimp_8dynamics_8Dynamics___cinit__(struct __pyx_obj_6amsi
   /* "amsimp/dynamics.pyx":367
  *     """
  * 
- *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=90, epochs=200, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=90, epochs=150, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):             # <<<<<<<<<<<<<<
  *         """
  *         Defines the length of the forecast (in hours) generated in the simulation.
  */
@@ -21691,8 +21691,8 @@ static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   __pyx_int_72 = PyInt_FromLong(72); if (unlikely(!__pyx_int_72)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_90 = PyInt_FromLong(90); if (unlikely(!__pyx_int_90)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_100 = PyInt_FromLong(100); if (unlikely(!__pyx_int_100)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_int_150 = PyInt_FromLong(150); if (unlikely(!__pyx_int_150)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_168 = PyInt_FromLong(168); if (unlikely(!__pyx_int_168)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_200 = PyInt_FromLong(200); if (unlikely(!__pyx_int_200)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_400 = PyInt_FromLong(400); if (unlikely(!__pyx_int_400)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_500 = PyInt_FromLong(500); if (unlikely(!__pyx_int_500)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_1000 = PyInt_FromLong(1000); if (unlikely(!__pyx_int_1000)) __PYX_ERR(0, 1, __pyx_L1_error)
