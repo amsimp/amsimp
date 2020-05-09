@@ -47,7 +47,8 @@ cdef class RNN(Wind):
     """
 
     # Feature Scaling 
-    sc = MinMaxScaler(feature_range=(0,1))
+    temp_sc = MinMaxScaler(feature_range=(0,1))
+    rh_sc = MinMaxScaler(feature_range=(0,1))
 
     def download_historical_data(self):
         """
@@ -184,9 +185,9 @@ cdef class RNN(Wind):
 
         # Standardise the data.
         # Temperature.
-        temperature = self.sc.fit_transform(temperature)
+        temperature = self.temp_sc.fit_transform(temperature)
         # Relative Humidity.
-        relative_humidity = self.sc.fit_transform(relative_humidity)
+        relative_humidity = self.rh_sc.fit_transform(relative_humidity)
 
         # Output.
         output = (temperature, relative_humidity)
@@ -308,8 +309,8 @@ cdef class RNN(Wind):
         predict_rh = predict_rh[0]
 
         # Invert normalisation.
-        predict_temp = self.sc.inverse_transform(predict_temp)
-        predict_rh = self.sc.inverse_transform(predict_rh)
+        predict_temp = self.temp_sc.inverse_transform(predict_temp)
+        predict_rh = self.rh_sc.inverse_transform(predict_rh)
 
         # Reshape into 3d arrays.
         # Dimensions.

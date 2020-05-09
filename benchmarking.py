@@ -220,6 +220,7 @@ def benchmarking():
                     output = detail.atmospheric_prognostic_method()
                 except:
                     print("Failed, retrying ("+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+").")
+                    detail.remove_all_files()
                 else:
                     break
 
