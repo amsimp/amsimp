@@ -2,6 +2,7 @@
 import numpy as np
 from datetime import datetime, timedelta
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Set starting date
 date = datetime(2020, 4, 29, 0)
@@ -331,3 +332,94 @@ v_df.index.name = "forecast_period"
 v_df.to_csv(error_folder+'meridional_wind.csv')
 
 date = date + timedelta(hours=+6)
+
+# Plotting.
+# Function.
+def plot(x, y, title, metric):
+    plt.plot(x, y)
+    plt.scatter(x, y, color='green')
+    plt.xlabel("Forecast Period (Hours)")
+    plt.ylabel(metric)
+    plt.title("OpenWeatherAPI "+title+" "+metric)
+    folder = title.lower()
+    folder = folder.replace(" ", "_")
+    folder = "plots/"+folder+"/"
+    filename = metric.lower()
+    filename = filename.replace(" ", "_")
+    plt.savefig(folder+filename, dpi=300)
+    plt.close()
+
+def label_decide(num):
+    if i == 0:
+        label = 'Forecast Bias'
+    elif i == 1:
+        label = 'Mean Absolute Error'
+    elif i == 2:
+        label = 'Mean Squared Error'
+    elif i == 3:
+        label = 'Root Mean Squared Error'
+    elif i == 4:
+        label = 'Mean Absolute Percentage Error'
+    elif i == 5:
+        label = 'Mean Absolute Scaled Error'
+    return label
+
+# Atmospheric Pressure.
+pressure_error = np.transpose(pressure_error)
+for i in range(len(pressure_error)):
+    metric = label_decide(i)
+    title = "Atmospheric Pressure"
+    if i != 4: 
+        plot(indices[1:], pressure_error[i, 1:], title, metric)
+    else:
+        plot(indices[1:], (pressure_error[i, 1:] * 100), title, metric)
+
+# Temperature.
+# Air Temperature.
+T_error = np.transpose(T_error)
+for i in range(len(T_error)):
+    metric = label_decide(i)
+    title = "Air Temperature"
+    if i != 4: 
+        plot(indices[1:], T_error[i, 1:], title, metric)
+    else:
+        plot(indices[1:], (T_error[i, 1:] * 100), title, metric)
+# Virtual Temperature.
+Tv_error = np.transpose(Tv_error)
+for i in range(len(T_error)):
+    metric = label_decide(i)
+    title = "Virtual Temperature"
+    if i != 4: 
+        plot(indices[1:], Tv_error[i, 1:], title, metric)
+    else:
+        plot(indices[1:], (Tv_error[i, 1:] * 100), title, metric)
+
+# Relative Humidity.
+humidity_error = np.transpose(humidity_error)
+for i in range(len(humidity_error)):
+    metric = label_decide(i)
+    title = "Relative Humidity"
+    if i != 4: 
+        plot(indices[1:], humidity_error[i, 1:], title, metric)
+    else:
+        plot(indices[1:], (humidity_error[i, 1:] * 100), title, metric)
+
+# Wind.
+# Zonal Wind.
+u_error = np.transpose(u_error)
+for i in range(len(u_error)):
+    metric = label_decide(i)
+    title = "Zonal Wind"
+    if i != 4: 
+        plot(indices[1:], humidity_error[i, 1:], title, metric)
+    else:
+        plot(indices[1:], (humidity_error[i, 1:] * 100), title, metric)
+# Meridional Wind.
+v_error = np.transpose(v_error)
+for i in range(len(v_error)):
+    metric = label_decide(i)
+    title = "Meridional Wind"
+    if i != 4: 
+        plot(indices[1:], v_error[i, 1:], title, metric)
+    else:
+        plot(indices[1:], (v_error[i, 1:] * 100), title, metric)
