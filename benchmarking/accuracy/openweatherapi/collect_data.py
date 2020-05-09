@@ -9,7 +9,7 @@ from datetime import datetime
 import os
 
 # API Key.
-api_key = 'd8e21a680191eb7613420d2cc20e6d0a'
+api_key = '3691a6be3fbf3fe998b6f23d0aad1e8a'
 owm = pyowm.OWM(api_key)
 
 # Define the lines of latitude and longitude.
@@ -92,8 +92,15 @@ for lat in latitude_lines:
         lon = float(lon)
         
         # Current weather conditions.
-        obs = owm.weather_at_coords(lat, lon)
-        weather = obs.get_weather()
+        while True:
+            try:
+                obs = owm.weather_at_coords(lat, lon)
+                weather = obs.get_weather()
+            except:
+                sleep(1)
+            else:
+                break
+        
         # Temperature.
         temp = weather.get_temperature()
         temp = temp.get("temp")
@@ -108,23 +115,36 @@ for lat in latitude_lines:
         # Wind.
         v_vector = weather.get_wind()
         speed, direction = v_vector.get("speed"), v_vector.get("deg")
-        u, v = cal.wind_components(
-            speed=speed * units('m/s'), wdir=direction * units.deg
-        )
-        u, v = u.magnitude, v.magnitude
+        try:
+            direction = np.radians(direction)
+            u = -speed * np.sin(direction)
+            v = -speed * np.cos(direction)
+        except:
+            u, v = None, None
         # Zonal Wind.
         zonal_wind_lat.append(u)
         # Meridional Wind.
         meridional_wind_lat.append(v)
         # Virtual Temperature.
-        r = cal.mixing_ratio_from_relative_humidity(
-            pressure=p * units.millibars, temperature=temp * units.K, relative_humidity=(h / 100)
-        )
-        t_v = cal.virtual_temperature(temperature=temp * units.K, mixing=r)
+        if temp != None:
+            r = cal.mixing_ratio_from_relative_humidity(
+                pressure=p * units.millibars, temperature=temp * units.K, relative_humidity=(h / 100)
+            )
+            t_v = cal.virtual_temperature(temperature=temp * units.K, mixing=r)
+            t_v = t_v.magnitude
+        else:
+            t_v = None
         virtual_temperature_lat.append(t_v)
 
         # Get the weather forecast for the next five days.
-        obs_forecast = owm.three_hours_forecast_at_coords(lat, lon)
+        while True:
+            try:
+                obs_forecast = owm.three_hours_forecast_at_coords(lat, lon)
+            except:
+                sleep(1)
+            else:
+                break
+                
         forecast = obs_forecast.get_forecast()
 
         # Time variation lists.
@@ -157,19 +177,25 @@ for lat in latitude_lines:
             # Wind.
             v_vector = weather.get_wind()
             speed, direction = v_vector.get("speed"), v_vector.get("deg")
-            u, v = cal.wind_components(
-                speed=speed * units('m/s'), wdir=direction * units.deg
-            )
-            u, v = u.magnitude, v.magnitude
+            try:
+                direction = np.radians(direction)
+                u = -speed * np.sin(direction)
+                v = -speed * np.cos(direction)
+            except:
+                u, v = None, None
             # Zonal Wind.
             forecast_zonalwind_time.append(u)
             # Meridional Wind.
             forecast_meridionalwind_time.append(v)
             # Virtual Temperature.
-            r = cal.mixing_ratio_from_relative_humidity(
-                pressure=p * units.millibars, temperature=temp * units.K, relative_humidity=(h / 100)
-            )
-            t_v = cal.virtual_temperature(temperature=temp * units.K, mixing=r)
+            if temp != None:
+                r = cal.mixing_ratio_from_relative_humidity(
+                    pressure=p * units.millibars, temperature=temp * units.K, relative_humidity=(h / 100)
+                )
+                t_v = cal.virtual_temperature(temperature=temp * units.K, mixing=r)
+                t_v = t_v.magnitude
+            else:
+                t_v = None
             forecast_virtualtemperature_time.append(t_v)
 
         # Append to latitudinal list.
@@ -253,43 +279,43 @@ if hour < 10:
     hour = "0" + str(hour)
 
 # Save files.
-folder = year + "/" + month + '/' + day + '/' + hour + '/'
+folder = "openweatherapi/" + str(year) + "/" + str(month) + '/' + str(day) + '/' + str(hour) + '/'
 try:
-    os.mkdir(year)
+    os.mkdir("openweatherapi/"+str(year))
 except OSError:
     pass
 try:
-    os.mkdir(year+'/'+month)
+    os.mkdir("openweatherapi/"+str(year)+'/'+str(month))
 except OSError:
     pass
 try:
-    os.mkdir(year + "/" + month + '/' + day)
+    os.mkdir("openweatherapi/"+str(year) + "/" + str(month) + '/' + str(day))
 except OSError:
     pass
 try:
-    os.mkdir(year + "/" + month + '/' + day + '/' + hour)
+    os.mkdir("openweatherapi/"+str(year) + "/" + str(month) + '/' + str(day) + '/' + str(hour))
 except OSError:
     pass
 
 # Temperature.
 # Air Temperature.
-np.save(temperature, 'temperature.npy')
-np.save(forecast_temperature, 'forecast_temperature.npy')
+np.save(folder+'temperature.npy', temperature)
+np.save(folder+'forecast_temperature.npy', forecast_temperature)
 # Virtual Temperature.
-np.save(virtual_temperature, 'virtual_temperature.npy')
-np.save(forecast_virtualtemperature, 'forecast_virtualtemperature.npy')
+np.save(folder+'virtual_temperature.npy', virtual_temperature)
+np.save(folder+'forecast_virtualtemperature.npy', forecast_virtualtemperature)
 # Pressure.
-np.save(pressure, 'pressure.npy')
-np.save(forecast_pressure, 'forecast_pressure.npy')
+np.save(folder+'pressure.npy', pressure)
+np.save(folder+'forecast_pressure.npy', forecast_pressure)
 # Humidity.
-np.save(humidity, 'humidity.npy')
-np.save(forecast_humidity, 'forecast_humidity.npy')
+np.save(folder+'humidity.npy', humidity)
+np.save(folder+'forecast_humidity.npy', forecast_humidity)
 # Wind.
 # Zonal Wind.
-np.save(zonal_wind, 'zonal_wind.npy')
-np.save(forecast_zonalwind, 'forecast_zonalwind.npy')
+np.save(folder+'zonal_wind.npy', zonal_wind)
+np.save(folder+'forecast_zonalwind.npy', forecast_zonalwind)
 # Meridional Wind.
-np.save(meridional_wind, 'meridional_wind.npy')
-np.save(forecast_meridionalwind, 'forecast_meridionalwind.npy')
+np.save(folder+'meridional_wind.npy', meridional_wind)
+np.save(folder+'forecast_meridionalwind.npy', forecast_meridionalwind)
 
 bar.finish()

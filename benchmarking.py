@@ -310,7 +310,7 @@ def benchmarking():
         actual_rh = relative_humidity[i:len_forecast, :, :, :]
         
         # Geopotential Height.
-        height_error = accuracy_benchmark(height, actual_height)
+        height_error = accuracy_benchmark(height[:, 0, :, :], actual_height[:, 0, :, :])
         height_error = np.transpose(height_error)
         height_df = pd.DataFrame(
             data=height_error, index=indices, columns=measures_of_error
@@ -318,14 +318,14 @@ def benchmarking():
         height_df.index.name = "forecast_period"
         # Geostrophic Wind.
         # Zonal Wind.
-        u_error = accuracy_benchmark(u, actual_u)
+        u_error = accuracy_benchmark(u[:, 0, :, :], actual_u[:, 0, :, :])
         u_error = np.transpose(u_error)
         u_df = pd.DataFrame(
             data=u_error, index=indices, columns=measures_of_error
         )
         u_df.index.name = "forecast_period"
         # Meridional Wind.
-        v_error = accuracy_benchmark(v, actual_v)
+        v_error = accuracy_benchmark(v[:, 0, :, :], actual_v[:, 0, :, :])
         v_error = np.transpose(v_error)
         v_df = pd.DataFrame(
             data=v_error, index=indices, columns=measures_of_error
@@ -333,21 +333,21 @@ def benchmarking():
         v_df.index.name = "forecast_period"
         # Temperature.
         # Air Temperature.
-        temp_error = accuracy_benchmark(temp, actual_temp)
+        temp_error = accuracy_benchmark(temp[:, 0, :, :], actual_temp[:, 0, :, :])
         temp_error = np.transpose(temp_error)
         temp_df = pd.DataFrame(
             data=temp_error, index=indices, columns=measures_of_error
         )
         temp_df.index.name = "forecast_period"
         # Virtual Temperature.
-        tempv_error = accuracy_benchmark(temp_v, actual_tempv)
+        tempv_error = accuracy_benchmark(temp_v[:, 0, :, :], actual_tempv[:, 0, :, :])
         tempv_error = np.transpose(tempv_error)
         tempv_df = pd.DataFrame(
             data=tempv_error, index=indices, columns=measures_of_error
         )
         tempv_df.index.name = "forecast_period"
         # Relative Humidity.
-        rh_error = accuracy_benchmark(rh, actual_rh)
+        rh_error = accuracy_benchmark(rh[:, 0, :, :], actual_rh[:, 0, :, :])
         rh_error = np.transpose(rh_error)
         rh_df = pd.DataFrame(
             data=rh_error, index=indices, columns=measures_of_error
