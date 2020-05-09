@@ -390,6 +390,8 @@ def benchmarking():
         # Add 6 hours onto time.
         date = date + timedelta(days=+1)
 
+        break
+
     # Benchmark complete.
     print("Benchmarking Complete.")
 
