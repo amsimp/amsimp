@@ -199,13 +199,13 @@ def benchmarking():
                 detail = amsimp.Dynamics(input_date=date, forecast_length=120, efs=False, ai=False)
                 label = "physical_model"
             elif num == 1:
-                detail = amsimp.Dynamics(input_date=date, forecast_length=120, efs=False)
+                detail = amsimp.Dynamics(input_date=date, forecast_length=120, efs=False, data_size=90)
                 label = "physical_model_with_rnn"
             elif num == 2:
                 detail = amsimp.Dynamics(input_date=date, forecast_length=120, ai=False)
                 label = "physical_model_with_efs"
             elif num == 3:
-                detail = amsimp.Dynamics(input_date=date, forecast_length=120)
+                detail = amsimp.Dynamics(input_date=date, forecast_length=120, data_size=90)
                 label = "physical_model_with_efs_and_rnn"
             
             print_output = label.replace("_", " ")
