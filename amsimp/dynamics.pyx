@@ -272,7 +272,7 @@ cdef class RNN(Wind):
         temp_model.compile(optimizer=opt_temp, loss='mse', metrics=['mean_absolute_error'])
         # Train.
         temp_model.fit(
-            x_temp, y_temp, epochs=self.epochs, batch_size=32
+            x_temp, y_temp, epochs=self.epochs, batch_size=10
         )
 
         # Relative Humidity model.
@@ -293,7 +293,7 @@ cdef class RNN(Wind):
         rh_model.compile(optimizer=opt_rh, loss='mse', metrics=['mean_absolute_error'])
         # Train.
         rh_model.fit(
-            x_rh, y_rh, epochs=self.epochs, batch_size=32
+            x_rh, y_rh, epochs=self.epochs, batch_size=10
         )
 
         # Prediction.
