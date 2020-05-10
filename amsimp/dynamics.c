@@ -2479,6 +2479,7 @@ static const char __pyx_k_x_rh[] = "x_rh";
 static const char __pyx_k_y_rh[] = "y_rh";
 static const char __pyx_k_year[] = "year";
 static const char __pyx_k_Dense[] = "Dense";
+static const char __pyx_k_decay[] = "decay";
 static const char __pyx_k_hours[] = "hours";
 static const char __pyx_k_m_s_1[] = "m s-1";
 static const char __pyx_k_month[] = "month";
@@ -2775,6 +2776,7 @@ static PyObject *__pyx_n_s_date;
 static PyObject *__pyx_n_s_datetime;
 static PyObject *__pyx_n_s_day;
 static PyObject *__pyx_n_s_days;
+static PyObject *__pyx_n_s_decay;
 static PyObject *__pyx_n_u_degrees;
 static PyObject *__pyx_n_s_delta_latitude;
 static PyObject *__pyx_n_s_delta_longitude;
@@ -2996,7 +2998,8 @@ static PyObject *__pyx_tp_new_6amsimp_8dynamics_RNN(PyTypeObject *t, PyObject *a
 static PyObject *__pyx_tp_new_6amsimp_8dynamics_Dynamics(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_float_0_1;
 static PyObject *__pyx_float_0_6;
-static PyObject *__pyx_float_1eneg_6;
+static PyObject *__pyx_float_5eneg_5;
+static PyObject *__pyx_float_5eneg_7;
 static PyObject *__pyx_float_234_5;
 static PyObject *__pyx_float_18_678;
 static PyObject *__pyx_float_257_14;
@@ -5276,16 +5279,17 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   /* "amsimp/dynamics.pyx":259
  *         # Temperature model.
  *         # Optimiser.
- *         opt_temp = Adam(lr=1e-6, clipvalue=0.6)             # <<<<<<<<<<<<<<
+ *         opt_temp = Adam(lr=5e-5, decay=5e-7, clipvalue=0.6)             # <<<<<<<<<<<<<<
  *         # Create.
  *         temp_model = Sequential()
  */
   __Pyx_TraceLine(259,0,__PYX_ERR(0, 259, __pyx_L1_error))
   __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_Adam); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 259, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 259, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 259, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_lr, __pyx_float_1eneg_6) < 0) __PYX_ERR(0, 259, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_lr, __pyx_float_5eneg_5) < 0) __PYX_ERR(0, 259, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_decay, __pyx_float_5eneg_7) < 0) __PYX_ERR(0, 259, __pyx_L1_error)
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_clipvalue, __pyx_float_0_6) < 0) __PYX_ERR(0, 259, __pyx_L1_error)
   __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 259, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
@@ -5295,7 +5299,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __pyx_t_6 = 0;
 
   /* "amsimp/dynamics.pyx":261
- *         opt_temp = Adam(lr=1e-6, clipvalue=0.6)
+ *         opt_temp = Adam(lr=5e-5, decay=5e-7, clipvalue=0.6)
  *         # Create.
  *         temp_model = Sequential()             # <<<<<<<<<<<<<<
  *         temp_model.add(
@@ -5701,16 +5705,17 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   /* "amsimp/dynamics.pyx":280
  *         # Relative Humidity model.
  *         # Optimiser.
- *         opt_rh = Adam(lr=1e-6, clipvalue=0.6)             # <<<<<<<<<<<<<<
+ *         opt_rh = Adam(lr=5e-5, decay=5e-7, clipvalue=0.6)             # <<<<<<<<<<<<<<
  *         # Create.
  *         rh_model = Sequential()
  */
   __Pyx_TraceLine(280,0,__PYX_ERR(0, 280, __pyx_L1_error))
   __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_Adam); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 280, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_6 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 280, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 280, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_lr, __pyx_float_1eneg_6) < 0) __PYX_ERR(0, 280, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_lr, __pyx_float_5eneg_5) < 0) __PYX_ERR(0, 280, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_decay, __pyx_float_5eneg_7) < 0) __PYX_ERR(0, 280, __pyx_L1_error)
   if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_clipvalue, __pyx_float_0_6) < 0) __PYX_ERR(0, 280, __pyx_L1_error)
   __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -5720,7 +5725,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __pyx_t_1 = 0;
 
   /* "amsimp/dynamics.pyx":282
- *         opt_rh = Adam(lr=1e-6, clipvalue=0.6)
+ *         opt_rh = Adam(lr=5e-5, decay=5e-7, clipvalue=0.6)
  *         # Create.
  *         rh_model = Sequential()             # <<<<<<<<<<<<<<
  *         rh_model.add(
@@ -21206,6 +21211,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_datetime, __pyx_k_datetime, sizeof(__pyx_k_datetime), 0, 0, 1, 1},
   {&__pyx_n_s_day, __pyx_k_day, sizeof(__pyx_k_day), 0, 0, 1, 1},
   {&__pyx_n_s_days, __pyx_k_days, sizeof(__pyx_k_days), 0, 0, 1, 1},
+  {&__pyx_n_s_decay, __pyx_k_decay, sizeof(__pyx_k_decay), 0, 0, 1, 1},
   {&__pyx_n_u_degrees, __pyx_k_degrees, sizeof(__pyx_k_degrees), 0, 1, 0, 1},
   {&__pyx_n_s_delta_latitude, __pyx_k_delta_latitude, sizeof(__pyx_k_delta_latitude), 0, 0, 1, 1},
   {&__pyx_n_s_delta_longitude, __pyx_k_delta_longitude, sizeof(__pyx_k_delta_longitude), 0, 0, 1, 1},
@@ -21723,7 +21729,8 @@ static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
   __pyx_float_0_1 = PyFloat_FromDouble(0.1); if (unlikely(!__pyx_float_0_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_0_6 = PyFloat_FromDouble(0.6); if (unlikely(!__pyx_float_0_6)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_float_1eneg_6 = PyFloat_FromDouble(1e-6); if (unlikely(!__pyx_float_1eneg_6)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_float_5eneg_5 = PyFloat_FromDouble(5e-5); if (unlikely(!__pyx_float_5eneg_5)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_float_5eneg_7 = PyFloat_FromDouble(5e-7); if (unlikely(!__pyx_float_5eneg_7)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_234_5 = PyFloat_FromDouble(234.5); if (unlikely(!__pyx_float_234_5)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_18_678 = PyFloat_FromDouble(18.678); if (unlikely(!__pyx_float_18_678)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_257_14 = PyFloat_FromDouble(257.14); if (unlikely(!__pyx_float_257_14)) __PYX_ERR(0, 1, __pyx_L1_error)
