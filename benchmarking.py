@@ -128,7 +128,7 @@ def benchmarking():
     # CSV file.
     writer = csv_file()
     # Number of days of benchmarking.
-    n = 30
+    n = 20
     # Starting date.
     start_date = datetime(2020, 4, 29, 0)
     date = start_date + timedelta(days=-n)
