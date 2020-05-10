@@ -256,20 +256,20 @@ cdef class RNN(Wind):
         # Create, and train models.
         # Temperature model.
         # Optimiser.
-        opt_temp = Adam(lr=5e-5, decay=5e-7, clipvalue=0.6)
+        opt_temp = Adam(lr=1e-6, clipvalue=0.6)
         # Create.
         temp_model = Sequential()
         temp_model.add(
             LSTM(
-                400, activation='relu', input_shape=(past_history, features)
+                400, activation='tanh', input_shape=(past_history, features)
             )
         )
         temp_model.add(RepeatVector(future_target))
-        temp_model.add(LSTM(400, activation='relu', return_sequences=True))
+        temp_model.add(LSTM(400, activation='tanh', return_sequences=True))
         temp_model.add(LSTM(400, activation='relu', return_sequences=True))
         temp_model.add(LSTM(400, activation='relu', return_sequences=True))
         temp_model.add(TimeDistributed(Dense(features)))
-        temp_model.compile(optimizer=opt_temp, loss='mse', metrics=['mean_absolute_error'])
+        temp_model.compile(optimizer=opt_temp, loss='rmse', metrics=['mean_absolute_error'])
         # Train.
         temp_model.fit(
             x_temp, y_temp, epochs=self.epochs, batch_size=10
@@ -277,20 +277,20 @@ cdef class RNN(Wind):
 
         # Relative Humidity model.
         # Optimiser.
-        opt_rh = Adam(lr=5e-5, decay=5e-7, clipvalue=0.6)
+        opt_rh = Adam(lr=1e-6, clipvalue=0.6)
         # Create.
         rh_model = Sequential()
         rh_model.add(
             LSTM(
-                400, activation='relu', input_shape=(past_history, features)
+                400, activation='tanh', input_shape=(past_history, features)
             )
         )
         rh_model.add(RepeatVector(future_target))
-        rh_model.add(LSTM(400, activation='relu', return_sequences=True))
+        rh_model.add(LSTM(400, activation='tanh', return_sequences=True))
         rh_model.add(LSTM(400, activation='relu', return_sequences=True))
         rh_model.add(LSTM(400, activation='relu', return_sequences=True))
         rh_model.add(TimeDistributed(Dense(features)))
-        rh_model.compile(optimizer=opt_rh, loss='mse', metrics=['mean_absolute_error'])
+        rh_model.compile(optimizer=opt_rh, loss='rmse', metrics=['mean_absolute_error'])
         # Train.
         rh_model.fit(
             x_rh, y_rh, epochs=self.epochs, batch_size=10
