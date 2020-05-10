@@ -269,7 +269,7 @@ cdef class RNN(Wind):
         temp_model.add(LSTM(400, activation='relu', return_sequences=True))
         temp_model.add(LSTM(400, activation='relu', return_sequences=True))
         temp_model.add(TimeDistributed(Dense(features)))
-        temp_model.compile(optimizer=opt_temp, loss='rmse', metrics=['mean_absolute_error'])
+        temp_model.compile(optimizer=opt_temp, loss='root_mean_squared_error', metrics=['mean_absolute_error'])
         # Train.
         temp_model.fit(
             x_temp, y_temp, epochs=self.epochs, batch_size=10
@@ -290,7 +290,7 @@ cdef class RNN(Wind):
         rh_model.add(LSTM(400, activation='relu', return_sequences=True))
         rh_model.add(LSTM(400, activation='relu', return_sequences=True))
         rh_model.add(TimeDistributed(Dense(features)))
-        rh_model.compile(optimizer=opt_rh, loss='rmse', metrics=['mean_absolute_error'])
+        rh_model.compile(optimizer=opt_rh, loss='root_mean_squared_error', metrics=['mean_absolute_error'])
         # Train.
         rh_model.fit(
             x_rh, y_rh, epochs=self.epochs, batch_size=10

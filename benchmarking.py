@@ -6,6 +6,7 @@ import iris
 import time
 from datetime import datetime
 from datetime import timedelta
+import traceback
 import csv
 import os
 import random
@@ -220,6 +221,7 @@ def benchmarking():
                 try:
                     output = detail.atmospheric_prognostic_method()
                 except:
+                    traceback.print_exc()
                     print("Failed, retrying ("+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+").")
                     detail.remove_all_files()
                 else:

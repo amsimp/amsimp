@@ -2468,7 +2468,6 @@ static const char __pyx_k_mean[] = "mean";
 static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_next[] = "next";
 static const char __pyx_k_relu[] = "relu";
-static const char __pyx_k_rmse[] = "rmse";
 static const char __pyx_k_save[] = "save";
 static const char __pyx_k_self[] = "self";
 static const char __pyx_k_tanh[] = "tanh";
@@ -2661,6 +2660,7 @@ static const char __pyx_k_initial_conditions_nc[] = "initial_conditions.nc";
 static const char __pyx_k_sklearn_preprocessing[] = "sklearn.preprocessing";
 static const char __pyx_k_astropy_units_quantity[] = "astropy.units.quantity";
 static const char __pyx_k_forecast_reference_time[] = "forecast_reference_time";
+static const char __pyx_k_root_mean_squared_error[] = "root_mean_squared_error";
 static const char __pyx_k_tensorflow_keras_layers[] = "tensorflow.keras.layers";
 static const char __pyx_k_tensorflow_keras_models[] = "tensorflow.keras.models";
 static const char __pyx_k_Dynamics___reduce_cython[] = "Dynamics.__reduce_cython__";
@@ -2926,7 +2926,7 @@ static PyObject *__pyx_n_s_rh;
 static PyObject *__pyx_n_s_rh_list;
 static PyObject *__pyx_n_s_rh_model;
 static PyObject *__pyx_n_s_rh_sc;
-static PyObject *__pyx_n_u_rmse;
+static PyObject *__pyx_n_u_root_mean_squared_error;
 static PyObject *__pyx_n_s_s;
 static PyObject *__pyx_n_s_save;
 static PyObject *__pyx_n_s_save_file;
@@ -5527,7 +5527,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
  *         temp_model.add(LSTM(400, activation='relu', return_sequences=True))
  *         temp_model.add(LSTM(400, activation='relu', return_sequences=True))             # <<<<<<<<<<<<<<
  *         temp_model.add(TimeDistributed(Dense(features)))
- *         temp_model.compile(optimizer=opt_temp, loss='rmse', metrics=['mean_absolute_error'])
+ *         temp_model.compile(optimizer=opt_temp, loss='root_mean_squared_error', metrics=['mean_absolute_error'])
  */
   __Pyx_TraceLine(270,0,__PYX_ERR(0, 270, __pyx_L1_error))
   __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_temp_model, __pyx_n_s_add); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 270, __pyx_L1_error)
@@ -5564,7 +5564,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
  *         temp_model.add(LSTM(400, activation='relu', return_sequences=True))
  *         temp_model.add(LSTM(400, activation='relu', return_sequences=True))
  *         temp_model.add(TimeDistributed(Dense(features)))             # <<<<<<<<<<<<<<
- *         temp_model.compile(optimizer=opt_temp, loss='rmse', metrics=['mean_absolute_error'])
+ *         temp_model.compile(optimizer=opt_temp, loss='root_mean_squared_error', metrics=['mean_absolute_error'])
  *         # Train.
  */
   __Pyx_TraceLine(271,0,__PYX_ERR(0, 271, __pyx_L1_error))
@@ -5626,7 +5626,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   /* "amsimp/dynamics.pyx":272
  *         temp_model.add(LSTM(400, activation='relu', return_sequences=True))
  *         temp_model.add(TimeDistributed(Dense(features)))
- *         temp_model.compile(optimizer=opt_temp, loss='rmse', metrics=['mean_absolute_error'])             # <<<<<<<<<<<<<<
+ *         temp_model.compile(optimizer=opt_temp, loss='root_mean_squared_error', metrics=['mean_absolute_error'])             # <<<<<<<<<<<<<<
  *         # Train.
  *         temp_model.fit(
  */
@@ -5636,7 +5636,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __pyx_t_1 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_optimizer, __pyx_v_opt_temp) < 0) __PYX_ERR(0, 272, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_loss, __pyx_n_u_rmse) < 0) __PYX_ERR(0, 272, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_loss, __pyx_n_u_root_mean_squared_error) < 0) __PYX_ERR(0, 272, __pyx_L1_error)
   __pyx_t_4 = PyList_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(__pyx_n_u_mean_absolute_error);
@@ -5651,7 +5651,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
   /* "amsimp/dynamics.pyx":274
- *         temp_model.compile(optimizer=opt_temp, loss='rmse', metrics=['mean_absolute_error'])
+ *         temp_model.compile(optimizer=opt_temp, loss='root_mean_squared_error', metrics=['mean_absolute_error'])
  *         # Train.
  *         temp_model.fit(             # <<<<<<<<<<<<<<
  *             x_temp, y_temp, epochs=self.epochs, batch_size=10
@@ -5686,7 +5686,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_batch_size, __pyx_int_10) < 0) __PYX_ERR(0, 275, __pyx_L1_error)
 
   /* "amsimp/dynamics.pyx":274
- *         temp_model.compile(optimizer=opt_temp, loss='rmse', metrics=['mean_absolute_error'])
+ *         temp_model.compile(optimizer=opt_temp, loss='root_mean_squared_error', metrics=['mean_absolute_error'])
  *         # Train.
  *         temp_model.fit(             # <<<<<<<<<<<<<<
  *             x_temp, y_temp, epochs=self.epochs, batch_size=10
@@ -5952,7 +5952,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
  *         rh_model.add(LSTM(400, activation='relu', return_sequences=True))
  *         rh_model.add(LSTM(400, activation='relu', return_sequences=True))             # <<<<<<<<<<<<<<
  *         rh_model.add(TimeDistributed(Dense(features)))
- *         rh_model.compile(optimizer=opt_rh, loss='rmse', metrics=['mean_absolute_error'])
+ *         rh_model.compile(optimizer=opt_rh, loss='root_mean_squared_error', metrics=['mean_absolute_error'])
  */
   __Pyx_TraceLine(291,0,__PYX_ERR(0, 291, __pyx_L1_error))
   __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_rh_model, __pyx_n_s_add); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 291, __pyx_L1_error)
@@ -5989,7 +5989,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
  *         rh_model.add(LSTM(400, activation='relu', return_sequences=True))
  *         rh_model.add(LSTM(400, activation='relu', return_sequences=True))
  *         rh_model.add(TimeDistributed(Dense(features)))             # <<<<<<<<<<<<<<
- *         rh_model.compile(optimizer=opt_rh, loss='rmse', metrics=['mean_absolute_error'])
+ *         rh_model.compile(optimizer=opt_rh, loss='root_mean_squared_error', metrics=['mean_absolute_error'])
  *         # Train.
  */
   __Pyx_TraceLine(292,0,__PYX_ERR(0, 292, __pyx_L1_error))
@@ -6051,7 +6051,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   /* "amsimp/dynamics.pyx":293
  *         rh_model.add(LSTM(400, activation='relu', return_sequences=True))
  *         rh_model.add(TimeDistributed(Dense(features)))
- *         rh_model.compile(optimizer=opt_rh, loss='rmse', metrics=['mean_absolute_error'])             # <<<<<<<<<<<<<<
+ *         rh_model.compile(optimizer=opt_rh, loss='root_mean_squared_error', metrics=['mean_absolute_error'])             # <<<<<<<<<<<<<<
  *         # Train.
  *         rh_model.fit(
  */
@@ -6061,7 +6061,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __pyx_t_6 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 293, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_optimizer, __pyx_v_opt_rh) < 0) __PYX_ERR(0, 293, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_loss, __pyx_n_u_rmse) < 0) __PYX_ERR(0, 293, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_loss, __pyx_n_u_root_mean_squared_error) < 0) __PYX_ERR(0, 293, __pyx_L1_error)
   __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 293, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_n_u_mean_absolute_error);
@@ -6076,7 +6076,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "amsimp/dynamics.pyx":295
- *         rh_model.compile(optimizer=opt_rh, loss='rmse', metrics=['mean_absolute_error'])
+ *         rh_model.compile(optimizer=opt_rh, loss='root_mean_squared_error', metrics=['mean_absolute_error'])
  *         # Train.
  *         rh_model.fit(             # <<<<<<<<<<<<<<
  *             x_rh, y_rh, epochs=self.epochs, batch_size=10
@@ -6111,7 +6111,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_3RNN_6model_prediction(struct __pyx_
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_batch_size, __pyx_int_10) < 0) __PYX_ERR(0, 296, __pyx_L1_error)
 
   /* "amsimp/dynamics.pyx":295
- *         rh_model.compile(optimizer=opt_rh, loss='rmse', metrics=['mean_absolute_error'])
+ *         rh_model.compile(optimizer=opt_rh, loss='root_mean_squared_error', metrics=['mean_absolute_error'])
  *         # Train.
  *         rh_model.fit(             # <<<<<<<<<<<<<<
  *             x_rh, y_rh, epochs=self.epochs, batch_size=10
@@ -21358,7 +21358,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_rh_list, __pyx_k_rh_list, sizeof(__pyx_k_rh_list), 0, 0, 1, 1},
   {&__pyx_n_s_rh_model, __pyx_k_rh_model, sizeof(__pyx_k_rh_model), 0, 0, 1, 1},
   {&__pyx_n_s_rh_sc, __pyx_k_rh_sc, sizeof(__pyx_k_rh_sc), 0, 0, 1, 1},
-  {&__pyx_n_u_rmse, __pyx_k_rmse, sizeof(__pyx_k_rmse), 0, 1, 0, 1},
+  {&__pyx_n_u_root_mean_squared_error, __pyx_k_root_mean_squared_error, sizeof(__pyx_k_root_mean_squared_error), 0, 1, 0, 1},
   {&__pyx_n_s_s, __pyx_k_s, sizeof(__pyx_k_s), 0, 0, 1, 1},
   {&__pyx_n_s_save, __pyx_k_save, sizeof(__pyx_k_save), 0, 0, 1, 1},
   {&__pyx_n_s_save_file, __pyx_k_save_file, sizeof(__pyx_k_save_file), 0, 0, 1, 1},
