@@ -256,7 +256,7 @@ cdef class RNN(Wind):
         # Create, and train models.
         # Temperature model.
         # Optimiser.
-        opt_temp = Adam()
+        opt_temp = Adam(lr=5e-5, clipvalue=0.6)
         # Create.
         temp_model = Sequential()
         temp_model.add(
@@ -272,12 +272,12 @@ cdef class RNN(Wind):
         temp_model.compile(optimizer=opt_temp, loss='mean_absolute_error', metrics=['mse'])
         # Train.
         temp_model.fit(
-            x_temp, y_temp, epochs=self.epochs, batch_size=10
+            x_temp, y_temp, epochs=self.epochs, batch_size=32
         )
 
         # Relative Humidity model.
         # Optimiser.
-        opt_rh = Adam()
+        opt_rh = Adam(lr=5e-5, clipvalue=0.6)
         # Create.
         rh_model = Sequential()
         rh_model.add(
@@ -293,7 +293,7 @@ cdef class RNN(Wind):
         rh_model.compile(optimizer=opt_rh, loss='mean_absolute_error', metrics=['mse'])
         # Train.
         rh_model.fit(
-            x_rh, y_rh, epochs=self.epochs, batch_size=10
+            x_rh, y_rh, epochs=self.epochs, batch_size=32
         )
 
         # Prediction.
