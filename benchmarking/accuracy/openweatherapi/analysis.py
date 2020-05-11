@@ -300,8 +300,10 @@ forecast_u = np.load(forecast_u_file)
 forecast_u = np.asarray(forecast_u, dtype=float)
 forecast_u = np.transpose(forecast_u, (2, 0, 1))
 forecast_u = forecast_u[::2, :, :]
+forecast_u = np.nan_to_num(forecast_u)
 # Actual Zonal Wind.
 actual_u = initial_u[:len_forecast, :, :]
+actual_u = np.nan_to_num(actual_u)
 # Test accuracy.
 u_error = accuracy_benchmark(forecast_u, actual_u)
 u_error = np.transpose(u_error)
@@ -319,8 +321,10 @@ forecast_v = np.load(forecast_v_file)
 forecast_v = np.asarray(forecast_v, dtype=float)
 forecast_v = np.transpose(forecast_v, (2, 0, 1))
 forecast_v = forecast_v[::2, :, :]
+forecast_v = np.nan_to_num(forecast_v)
 # Actual Meridional Wind.
 actual_v = initial_v[:len_forecast, :, :]
+actual_v = np.nan_to_num(actual_v)
 # Test accuracy.
 v_error = accuracy_benchmark(forecast_v, actual_v)
 v_error = np.transpose(v_error)
@@ -411,9 +415,9 @@ for i in range(len(u_error)):
     metric = label_decide(i)
     title = "Zonal Wind"
     if i != 4: 
-        plot(indices[1:], humidity_error[i, 1:], title, metric)
+        plot(indices[1:], u_error[i, 1:], title, metric)
     else:
-        plot(indices[1:], (humidity_error[i, 1:] * 100), title, metric)
+        pass
 # Meridional Wind.
 v_error = np.transpose(v_error)
 for i in range(len(v_error)):
@@ -422,4 +426,4 @@ for i in range(len(v_error)):
     if i != 4: 
         plot(indices[1:], v_error[i, 1:], title, metric)
     else:
-        plot(indices[1:], (v_error[i, 1:] * 100), title, metric)
+        pass
