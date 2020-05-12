@@ -196,7 +196,6 @@ def benchmarking():
         # Determine whether to enable the recurrent neural network, and the
         # ensemble forecast system.
         for num in range(3):
-            num += 2
             if num == 0:
                 detail = amsimp.Dynamics(input_date=date, forecast_length=120, efs=False, ai=False)
                 label = "physical_model"
