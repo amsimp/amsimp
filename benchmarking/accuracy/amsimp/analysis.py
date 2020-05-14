@@ -78,7 +78,7 @@ v_rnn = v_rnn.values
 v_rnn = np.transpose(v_rnn)
 v_rnn = v_rnn[1:, :]
 
-# Physical Model with EFS.
+# Physical Model with EPS.
 # Folder.
 folder = "physical_model_with_efs/"
 
@@ -117,7 +117,7 @@ v_efs = v_efs[1:, :]
 
 # Plotting.
 # Function.
-types = "Physical Model", "Physical Model with RNN", "Physical Model with EFS"
+types = "Physical Model", "Physical Model with RNN", "Physical Model with EPS"
 def plot(x, y1, y2, y3, title, metric):
     plt.plot(x, y1)
     plt.scatter(x, y1, label=types[0])
@@ -125,6 +125,8 @@ def plot(x, y1, y2, y3, title, metric):
     plt.scatter(x, y2, label=types[1])
     plt.plot(x, y3, linestyle="dotted")
     plt.scatter(x, y3, label=types[2])
+    if metric == 'Mean Absolute Scaled Error':
+        plt.plot([x.min(), x.max()], [1, 1], linestyle='dashdot')
     plt.xlabel("Forecast Period (Hours)")
     plt.ylabel(metric)
     plt.title("AMSIMP "+title+" "+metric)
