@@ -7,7 +7,8 @@ AMSIMP
     longer supported. Please instal the latest version of
     AMSIMP to get access to the latest features.
     Please note that it is strongly recommended that you
-    install AMSIMP via Anaconda Cloud.
+    install AMSIMP via Anaconda Cloud. Please note that this
+    is the documentation for AMSIMP v0.3.x.
 
 |Azure DevOps builds| |version| |GitHub| |Anaconda-Server
 Badge| |codecov|
@@ -20,7 +21,7 @@ Badge| |codecov|
 
 An open-source implementation to simulating atmospheric dynamics
 in the troposphere and the stratosphere, written in the programming
-language of Cython. Read the `paper <https://github.com/amsimp/papers/raw/master/project-book/main.pdf>`_.
+language of Cython. Read the `paper <https://github.com/amsimp/papers/raw/master/scifest-online/project-book/main.pdf>`_.
 
 Table of Contents
 =================
