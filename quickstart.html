@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
   
@@ -13,15 +13,15 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Getting Started &#8212; AMSIMP 0.3.7 documentation</title>
+    <title>Getting Started &#8212; AMSIMP 0.4.2 documentation</title>
     <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Visualisations" href="visualisations.html" />
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="install.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">AMSIMP 0.3.7 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">AMSIMP 0.4.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -106,36 +106,46 @@ the software by importing it into Python:</p>
 </div>
 <p>Once imported, you can utilise the four classes that
 are available to you. The classes available are:
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Backend</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Wind</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Water</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Backend</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Wind</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Moist</span></code>,
 and <code class="xref py py-class docutils literal notranslate"><span class="pre">Dynamics</span></code>.</p>
 <p>In most situations, you will interact with the
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Dynamics</span></code> class. Once you have chosen
-a particular class, you must then decide on a
-level of simulation detail between 1 and 5. If
-you are interacting with the <code class="xref py py-class docutils literal notranslate"><span class="pre">Dynamics</span></code>
+a particular class, you must then decide on the grid size.
+If you are interacting with the <code class="xref py py-class docutils literal notranslate"><span class="pre">Dynamics</span></code>
 class, you must also specify the length of
 forecast that will be generated. The forecast
-length, in days, must at least one day in length, and
-can have a maximum length of five. An example
+length, in hours, must at least one hour in length, and
+can have a maximum length of 168 hours. An example
 of the initialisation needed for the <code class="xref py py-class docutils literal notranslate"><span class="pre">Dynamics</span></code>
 class is given below:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Choose a level of simulation detail combined with a class you want to use.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Choose a simulation grid size combined with a class you want to use.</span>
 <span class="c1"># The forecast length must also be specified.</span>
-<span class="n">detail</span> <span class="o">=</span> <span class="n">amsimp</span><span class="o">.</span><span class="n">Dynamics</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-<span class="c1">#    Simulation detail---^  ^---Forecast length</span>
+<span class="n">detail</span> <span class="o">=</span> <span class="n">amsimp</span><span class="o">.</span><span class="n">Dynamics</span><span class="p">(</span>
+    <span class="n">delta_latitude</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">delta_longitude</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">forecast_length</span><span class="o">=</span><span class="mi">72</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <p>In this tutorial, I will show you how to
-get a visualisation of a rudimentary
-simulation of tropospheric and stratsopheric
-dynamics on a synoptic scale. To do this,
-you can use the code below:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualisation of a rudimentary simulation of tropospheric and stratsopheric</span>
-<span class="c1"># dynamics on a synoptic scale.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>
+generate a ensemble forecast prediction for
+the next 3 days,  with the recurrent neural
+network enabled. Following which, the output
+will be saved as a file on the machine.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import package.</span>
+<span class="kn">import</span> <span class="nn">amsimp</span>
+
+<span class="c1"># Initialise class.</span>
+<span class="n">detail</span> <span class="o">=</span> <span class="n">amsimp</span><span class="o">.</span><span class="n">Dynamics</span><span class="p">(</span>
+    <span class="n">delta_latitude</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">delta_longitude</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">forecast_length</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span>
+    <span class="n">efs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">ai</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="c1"># Generate forecast and save output.</span>
+<span class="n">detail</span><span class="o">.</span><span class="n">atmospheric_prognostic_method</span><span class="p">(</span><span class="n">save_file</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/project-book/Graphs/contour_plots/forecast.png"><img alt="Visualisation of a rudimentary simulation of tropospheric and stratsopheric dynamics on a synoptic scale." class="align-center" src="https://github.com/amsimp/papers/raw/master/project-book/Graphs/contour_plots/forecast.png" style="width: 90%;" /></a>
 </div>
 
 
@@ -168,7 +178,7 @@ you can use the code below:</p>
         <li class="right" >
           <a href="install.html" title="Installation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">AMSIMP 0.3.7 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">AMSIMP 0.4.2 documentation</a> &#187;</li> 
       </ul>
     </div>
 <script type="text/javascript">

@@ -5,28 +5,28 @@ Visualisations
 The software also provides additional visualisations of different
 atmospheric parameters, such as geostrophic wind and precipitable
 water. These visualisations can be found in the :class:`Backend`,
-:class:`Wind`, :class:`Water` classes. In this particular tutorial,
-we will initialise with the :class:`Water` class, as it also
+:class:`Wind`, :class:`Moist` classes. In this particular tutorial,
+we will initialise with the :class:`Moist` class, as it also
 inherits the other classes we are interested in:
 
 .. code-block:: python
 
     # Initialise the Water class.
-    detail = amsimp.Water(5)
-    # Simulation detail---^
+    detail = amsimp.Water()
 
 Longitude - Latitude Contour Plots
 ----------------------------------
 
 The default altitude at which these longitude - latitude contour plots
-are generated is at sea level, however, a particular altitude, in metres,
-can be specified the majority of the time by doing the following:
+are generated is at a pressure surface of 1000 hectopascals, however,
+a particular pressure surface, in hectopascals, can be specified the
+majority of the time by doing the following:
 
 .. code-block:: python
 
-    # Specify a particular altitude, in metres.
-    detail.method(alt=1000)
-    #   Altitude (m) ---^
+    # Specify a particular pressure surface, in hectopascals.
+    detail.method(psurface=500)
+    # Pressire Surface (hPa) ^ 
 
 Atmospheric Density
 ^^^^^^^^^^^^^^^^^^^
@@ -39,7 +39,7 @@ volume.
     # amsimp.Backend
     # Generate a longitude - latitude contour plot for atmospheric density
     # based on current atmospheric conditions.
-    detail.longitude_contourf(2, alt=0)
+    detail.longitude_contourf(2, psurface=1000)
     #                         ^--This number determines the atmospheric parameter.
 
 .. image:: https://github.com/amsimp/papers/raw/master/project-book/Graphs/contour_plots/density.png

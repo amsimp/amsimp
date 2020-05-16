@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
   
@@ -13,15 +13,15 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>AMSIMP &#8212; AMSIMP 0.3.7 documentation</title>
+    <title>AMSIMP &#8212; AMSIMP 0.4.2 documentation</title>
     <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Installation" href="install.html" />
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="install.html" title="Installation"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">AMSIMP 0.3.7 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">AMSIMP 0.4.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -104,16 +104,17 @@
 <h1>AMSIMP<a class="headerlink" href="#amsimp" title="Permalink to this headline">¶</a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Please note that versions of AMSIMP below v0.3.0 are no
+<p>Please note that versions of AMSIMP below v0.3.x are no
 longer supported. Please instal the latest version of
 AMSIMP to get access to the latest features.
 Please note that it is strongly recommended that you
 install AMSIMP via Anaconda Cloud.</p>
 </div>
 <p><img alt="Azure DevOps builds" src="https://dev.azure.com/16ccasey/AMSIMP/_apis/build/status/amsimp.amsimp?branchName=master" /> <img alt="version" src="https://anaconda.org/amsimp/amsimp/badges/version.svg" /> <img alt="GitHub" src="https://img.shields.io/github/license/amsimp/amsimp.svg?style=flat-square" /> <img alt="Anaconda-Server Badge" src="https://anaconda.org/amsimp/amsimp/badges/downloads.svg" /> <img alt="codecov" src="https://codecov.io/gh/amsimp/amsimp/branch/master/graph/badge.svg" /></p>
-<p>An open-source implementation to simulating atmospheric dynamics
-in the troposphere and the stratosphere, written in the programming
-language of Cython. Read the <a class="reference external" href="https://github.com/amsimp/papers/raw/master/project-book/main.pdf">paper</a>.</p>
+<p>An open-source ensemble prediction scheme implementation
+to simulating atmospheric dynamics in the troposphere
+and the stratosphere, written in the programming language
+of Cython. Read the <a class="reference external" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/main.pdf">paper</a>.</p>
 <div class="section" id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -121,7 +122,6 @@ language of Cython. Read the <a class="reference external" href="https://github.
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="install.html#prerequisites">Prerequisites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install.html#installing-from-anaconda-cloud">Installing from Anaconda Cloud</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#installing-from-pypi">Installing from PyPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install.html#installing-from-source">Installing from Source</a></li>
 </ul>
 </li>
@@ -131,17 +131,44 @@ language of Cython. Read the <a class="reference external" href="https://github.
 <li class="toctree-l2"><a class="reference internal" href="visualisations.html#latitude-altitude-contour-plots">Latitude - Altitude Contour Plots</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="core.html">Finite Difference Method</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#derivation-of-the-finite-difference-method">Derivation of the Finite Difference Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#ftcs-scheme">FTCS Scheme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#leapfrog-scheme">Leapfrog Scheme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#nonlinear-instability">Nonlinear Instability</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core.html#ensemble-prediction-system">Ensemble Prediction System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html#introduction-1">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#advantages-of-eps">Advantages of EPS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#global-eps">Global EPS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core.html#recurrent-neural-network">Recurrent Neural Network</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html#introduction-2">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#lstm">LSTM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#implementation">Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core.html#initial-conditions">Initial Conditions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html#global-data-assimilation-system">Global Data Assimilation System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#isobaric-co-ordinates">Isobaric Co-Ordinates</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="math.html">Mathematics of AMSIMP</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="math.html#geostrophic-wind">Geostrophic Wind</a></li>
 <li class="toctree-l2"><a class="reference internal" href="math.html#pressure-thickness">Pressure Thickness</a></li>
 <li class="toctree-l2"><a class="reference internal" href="math.html#precipitable-water">Precipitable Water</a></li>
-<li class="toctree-l2"><a class="reference internal" href="math.html#primitive-equations">Primitive Equations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math.html#virtual-temperature">Virtual Temperature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math.html#quasi-geostrophic-theory">Quasi-Geostrophic Theory</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="refs.html">References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">Source Code</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="code.html#backend-class">Backend Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="code.html#wind-class">Wind Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#water-class">Water Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#moist-class">Moist Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="code.html#dynamics-class">Dynamics Class</a></li>
 </ul>
 </li>
@@ -173,7 +200,7 @@ language of Cython. Read the <a class="reference external" href="https://github.
         <li class="right" >
           <a href="install.html" title="Installation"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">AMSIMP 0.3.7 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">AMSIMP 0.4.2 documentation</a> &#187;</li> 
       </ul>
     </div>
 <script type="text/javascript">
