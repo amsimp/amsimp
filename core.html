@@ -13,7 +13,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Finite Difference Method &#8212; AMSIMP 0.4.2 documentation</title>
+    <title>Dynamical Core &#8212; AMSIMP 0.4.2 documentation</title>
     <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -57,7 +57,8 @@
     <h2>Contents</h2>
     <div class="sidebar-localtoc">
       <ul>
-<li><a class="reference internal" href="#">Finite Difference Method</a><ul>
+<li><a class="reference internal" href="#">Dynamical Core</a><ul>
+<li><a class="reference internal" href="#finite-difference-method">Finite Difference Method</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#derivation-of-the-finite-difference-method">Derivation of the Finite Difference Method</a></li>
 <li><a class="reference internal" href="#ftcs-scheme">FTCS Scheme</a></li>
@@ -80,6 +81,8 @@
 <li><a class="reference internal" href="#initial-conditions">Initial Conditions</a><ul>
 <li><a class="reference internal" href="#global-data-assimilation-system">Global Data Assimilation System</a></li>
 <li><a class="reference internal" href="#isobaric-co-ordinates">Isobaric Co-Ordinates</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -122,16 +125,18 @@
             <ol class="breadcrumb">
               <li><a href="index.html">Docs</a></li>
               
-              <li>Finite Difference Method</li>
+              <li>Dynamical Core</li>
             </ol>
           </div>
           
           <div class="document clearer body">
             
-  <div class="section" id="finite-difference-method">
-<span id="fdm-section"></span><h1>Finite Difference Method<a class="headerlink" href="#finite-difference-method" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="dynamical-core">
+<span id="fdm-section"></span><h1>Dynamical Core<a class="headerlink" href="#dynamical-core" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="finite-difference-method">
+<h2>Finite Difference Method<a class="headerlink" href="#finite-difference-method" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
 <p>The use of numerical models for the simulation of dynamics within the
 atmosphere typically involves the solution of a set of partial
 differential equations. These equations generally describe three
@@ -166,7 +171,7 @@ being that the problem becomes an algebraic one, and that a continuous
 problem becomes a discrete one.</p>
 </div>
 <div class="section" id="derivation-of-the-finite-difference-method">
-<h2>Derivation of the Finite Difference Method<a class="headerlink" href="#derivation-of-the-finite-difference-method" title="Permalink to this headline">¶</a></h2>
+<h3>Derivation of the Finite Difference Method<a class="headerlink" href="#derivation-of-the-finite-difference-method" title="Permalink to this headline">¶</a></h3>
 <p>In order to derive the finite difference method, it is necessary to look
 at the Taylor series expansion of the function.</p>
 <p>The Taylor series of a function is the limit of that function’s Taylor
@@ -219,7 +224,7 @@ is 2 minutes. As such, since the software will use an Eulerian scheme,
 the time step will be 2 minutes <a class="bibtex reference internal" href="refs.html#leapfrog-slides-one" id="id3">[12]</a>.</p>
 </div>
 <div class="section" id="ftcs-scheme">
-<span id="ftcs-section"></span><h2>FTCS Scheme<a class="headerlink" href="#ftcs-scheme" title="Permalink to this headline">¶</a></h2>
+<span id="ftcs-section"></span><h3>FTCS Scheme<a class="headerlink" href="#ftcs-scheme" title="Permalink to this headline">¶</a></h3>
 <p>Given the information mentioned in the previous section, the most
 obvious scheme to approximate a differential equation, which will be
 used to predict the future state of the atmosphere, would be to combine
@@ -252,7 +257,7 @@ scheme and the leapfrog scheme, please see the following article:
 <a class="reference external" href="https://www.ecmwf.int/sites/default/files/elibrary/2002/16948-numerical-methods.pdf">https://www.ecmwf.int/sites/default/files/elibrary/2002/16948-numerical-methods.pdf</a>.</p>
 </div>
 <div class="section" id="leapfrog-scheme">
-<span id="leapfrog"></span><h2>Leapfrog Scheme<a class="headerlink" href="#leapfrog-scheme" title="Permalink to this headline">¶</a></h2>
+<span id="leapfrog"></span><h3>Leapfrog Scheme<a class="headerlink" href="#leapfrog-scheme" title="Permalink to this headline">¶</a></h3>
 <p>This scheme is probably the most common scheme used for meteorological
 problems. The “leapfrog” refers to the centred time difference which is
 used in conjunction with centred space differences.</p>
@@ -283,7 +288,7 @@ step <a class="bibtex reference internal" href="refs.html#leapfrog-slides-two" i
 utilised within the software.</p>
 </div>
 <div class="section" id="nonlinear-instability">
-<h2>Nonlinear Instability<a class="headerlink" href="#nonlinear-instability" title="Permalink to this headline">¶</a></h2>
+<h3>Nonlinear Instability<a class="headerlink" href="#nonlinear-instability" title="Permalink to this headline">¶</a></h3>
 <p>A major problem which occurs while dealing with nonlinear partial
 differential equations is nonlinear instability. This is a problem where
 there is a nonlinear interaction between atmospheric
@@ -313,9 +318,9 @@ rectified by applying a Robert-Asselin Time Filter. After
 </div>
 </div>
 <div class="section" id="ensemble-prediction-system">
-<h1>Ensemble Prediction System<a class="headerlink" href="#ensemble-prediction-system" title="Permalink to this headline">¶</a></h1>
+<h2>Ensemble Prediction System<a class="headerlink" href="#ensemble-prediction-system" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="introduction-1">
-<span id="id10"></span><h2>Introduction<a class="headerlink" href="#introduction-1" title="Permalink to this headline">¶</a></h2>
+<span id="id10"></span><h3>Introduction<a class="headerlink" href="#introduction-1" title="Permalink to this headline">¶</a></h3>
 <p>Ensemble Prediction Systems (EPS) are numerical weather prediction
 systems that allow for the estimation of uncertainty in a weather
 forecast, as well as, providing a better prediction for the future state
@@ -330,7 +335,7 @@ simulation that makes up the system is called an ensemble
 member <a class="bibtex reference internal" href="refs.html#intro-efs" id="id11">[17]</a>.</p>
 </div>
 <div class="section" id="advantages-of-eps">
-<h2>Advantages of EPS<a class="headerlink" href="#advantages-of-eps" title="Permalink to this headline">¶</a></h2>
+<h3>Advantages of EPS<a class="headerlink" href="#advantages-of-eps" title="Permalink to this headline">¶</a></h3>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Images/efs.jpg"><img alt="Visualisation of the Advantages of an Ensemble Prediction System" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Images/efs.jpg" style="width: 95%;" /></a>
 </div>
@@ -348,7 +353,7 @@ degree of confidence in the ensemble forecast, with the opposite also
 holding true <a class="bibtex reference internal" href="refs.html#intro-efs" id="id12">[17]</a>.</p>
 </div>
 <div class="section" id="global-eps">
-<h2>Global EPS<a class="headerlink" href="#global-eps" title="Permalink to this headline">¶</a></h2>
+<h3>Global EPS<a class="headerlink" href="#global-eps" title="Permalink to this headline">¶</a></h3>
 <p>There are three distinct types of ensemble prediction systems: global,
 regional and convective-scale. Each system address different timescales,
 and different grid-sizes. A global ensemble prediction system is
@@ -374,9 +379,9 @@ on this scale. This will be discussed at greater depth in chapter
 </div>
 </div>
 <div class="section" id="recurrent-neural-network">
-<h1>Recurrent Neural Network<a class="headerlink" href="#recurrent-neural-network" title="Permalink to this headline">¶</a></h1>
+<h2>Recurrent Neural Network<a class="headerlink" href="#recurrent-neural-network" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="introduction-2">
-<span id="id14"></span><h2>Introduction<a class="headerlink" href="#introduction-2" title="Permalink to this headline">¶</a></h2>
+<span id="id14"></span><h3>Introduction<a class="headerlink" href="#introduction-2" title="Permalink to this headline">¶</a></h3>
 <p>Weather forecasting has traditionally been done by physical models of
 the atmosphere, which are unstable to perturbations, and thus are
 inaccurate for large periods of time <a class="bibtex reference internal" href="refs.html#why-rnn" id="id15">[13]</a>. Since
@@ -490,7 +495,7 @@ combat this, a long short-term memory is
 used <a class="bibtex reference internal" href="refs.html#intro-rnn" id="id20">[20]</a>.</p>
 </div>
 <div class="section" id="lstm">
-<h2>LSTM<a class="headerlink" href="#lstm" title="Permalink to this headline">¶</a></h2>
+<h3>LSTM<a class="headerlink" href="#lstm" title="Permalink to this headline">¶</a></h3>
 <p>LSTM’s were created as a solution to the short-term memory problem. They
 have internal mechanisms called gates that can regulate the flow of
 information. These gates can learn which data in a sequence is important
@@ -540,7 +545,7 @@ hidden state. The new cell state and the new hidden is then carried over
 to the next time step <a class="bibtex reference internal" href="refs.html#lstm-rnn" id="id22">[19]</a>.</p>
 </div>
 <div class="section" id="implementation">
-<span id="implement-rnn"></span><h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<span id="implement-rnn"></span><h3>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h3>
 <p>The data set for the initial conditions consists of three features:
 geopotential height, air temperature, and relative humidity. For the
 purposes of this specific project, the RNN will solely be trained on air
@@ -634,9 +639,9 @@ examples.</p>
 </div>
 </div>
 <div class="section" id="initial-conditions">
-<span id="noaa-initial-conditions"></span><h1>Initial Conditions<a class="headerlink" href="#initial-conditions" title="Permalink to this headline">¶</a></h1>
+<span id="noaa-initial-conditions"></span><h2>Initial Conditions<a class="headerlink" href="#initial-conditions" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="global-data-assimilation-system">
-<h2>Global Data Assimilation System<a class="headerlink" href="#global-data-assimilation-system" title="Permalink to this headline">¶</a></h2>
+<h3>Global Data Assimilation System<a class="headerlink" href="#global-data-assimilation-system" title="Permalink to this headline">¶</a></h3>
 <p>The initial conditions utilised by the software are from the Global Data
 Assimilation System (GDAS), which is provided by the National Oceanic
 and Atmospheric Adminstration in the United States. The primary reason
@@ -658,7 +663,7 @@ co-ordinate, or the vertical co-ordiante is pressure. This co-ordinate
 system is known as isobaric co-ordinates.</p>
 </div>
 <div class="section" id="isobaric-co-ordinates">
-<h2>Isobaric Co-Ordinates<a class="headerlink" href="#isobaric-co-ordinates" title="Permalink to this headline">¶</a></h2>
+<h3>Isobaric Co-Ordinates<a class="headerlink" href="#isobaric-co-ordinates" title="Permalink to this headline">¶</a></h3>
 <p>In coordinate systems applied to the earth, the vertical coordinate
 describes position in the vertical direction (that is, parallel to the
 force of effective gravity). In meteorology, pressure can be a more
@@ -694,6 +699,7 @@ geopotential height. As such, this will be a parameter of great
 interest. From the aforementioned three selected parameters, any other
 parameter that is needed in the software can be calculated, including
 the wind. This will be discussed in greater depth in the next chapter.</p>
+</div>
 </div>
 </div>
 

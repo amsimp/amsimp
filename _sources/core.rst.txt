@@ -4,6 +4,10 @@
 
 .. _fdm_section:
 
+==============
+Dynamical Core
+==============
+
 Finite Difference Method
 ========================
 
