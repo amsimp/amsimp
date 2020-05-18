@@ -1,6 +1,6 @@
-=====================
-Mathematics of AMSIMP
-=====================
+===========
+Mathematics
+===========
 
 .. _geostrophic_wind:
 
