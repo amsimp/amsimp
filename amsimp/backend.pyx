@@ -125,12 +125,6 @@ cdef class Backend:
         software solely deals with atmospheric dynamics on a synoptic scale, 
         with the equations utilised within the software becoming increasingly
         inaccurate at a local sclae. The parameter values, therefore, must be
-<<<<<<< Updated upstream
-        between 5 and 30 degrees. Defaults to a value of 10 degrees. The parameter,
-        remove_files is a boolean value, and when set to True, it will remove any
-        file downloaded from the AMSIMP Initial Atmospheric Conditions Data 
-        Repository.
-=======
         between 3 and 20 degrees. Defaults to a value of 10 degrees. 
         
         The parameter, remove_files, is a boolean value, and when set to True,
@@ -154,7 +148,6 @@ cdef class Backend:
         specified by the parameter, data_size. A prediction by the
         recurrent neural network will be generated, and will be 
         combined with a traditional physical model of the atmosphere. 
->>>>>>> Stashed changes
         """
         # Make the aforementioned variables available else where in the class.
         self.delta_latitude = delta_latitude

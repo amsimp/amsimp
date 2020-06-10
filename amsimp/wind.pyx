@@ -33,11 +33,6 @@ cdef class Wind(Moist):
     description of their intended purpose. Please see the relevant class methods
     for more information.
 
-<<<<<<< Updated upstream
-    zonal_wind ~ outputs the zonal component of geostrophic wind.
-    meridional_wind ~ outputs the meridional component of geostrophic wind.
-    wind_contourf ~ generates a geostrophic wind contour plot.
-=======
     geostrophic_wind ~ generates a NumPy array of the components of
     geostrophic wind. The unit of measurement is metres per second.
     wind ~ generates a NumPy array of the components of wind (non-geostrophic).
@@ -51,7 +46,6 @@ cdef class Wind(Moist):
     mass continunity equation.
     wind_contourf ~ generates a vertical profile of geostrophic wind,
     and outputs this as a contour plot.
->>>>>>> Stashed changes
     globe ~ generates a geostrophic wind contour plot, adds wind vectors to
     that said plot, and overlays both on a Nearside Projection of the Earth.
     """
