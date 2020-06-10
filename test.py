@@ -1,203 +1,82 @@
-"""
-AMSIMP - An Open Source Implementation to Simulating Atmospheric
-Dynamics in the Troposphere and the Stratosphere, written in
-Cython.
-
-This is the test coverage suite for AMSIMP. Test coverage is a meausure
-of how much of the source code is excuted when a particular test suite
-is run. Software with a high percentage of coverage has a lower
-probabilty of containing undetected software bugs.
-"""
-# Import dependencies.
-import matplotlib.pyplot as plt
+# Numerical Poisson Equation Solution using Finite Difference Method
+import numpy as np
 import amsimp
+import sys
+from datetime import datetime
 
-# Define two levels of detail. The variable detail_1 is created to
-# ensure that the methods that require a level of detail of 3, or
-# greater raise an exception when called by a lower level of
-# detail.
-detail = amsimp.Dynamics(5, 2)
-detail_1 = amsimp.Dynamics(1)
-# Ensure detail_level and forecast_days raise an exception when
-# it is appropriate to do so.
-# Ensure detail_level cannot be above 5.
-try:
-    detail = amsimp.Dynamics(6)
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-# Ensure detail_level cannot be below 1.
-try:
-    detail = amsimp.Dynamics(0)
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-# Ensure forecast_days cannot be above 5.
-try:
-    detail = amsimp.Dynamics(3, 6)
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-# Ensure forecast_days cannot be below 1.
-try:
-    detail = amsimp.Dynamics(3, 0)
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
+nt = 1E4
+date = datetime(2020, 6, 4, 12)
+detail = amsimp.Wind(delta_latitude=3, delta_longitude=3, input_date=date)
+detail.remove_all_files()
+height_guess = detail.geopotential_height()
+height_naive = height_guess
+height_bound = height_guess
+detail.remove_all_files()
 
-# Make Matplotlib plots interactive, so, they can be closed
-# with the command, plt.close()
-plt.ion()
+detail = amsimp.Wind(delta_latitude=3, delta_longitude=3)
 
-# amsimp.Backend
-# Ensure the gravitational_acceleration method functions correctly.
-detail.gravitational_acceleration()
-# Ensure that the methods, temperature and density, function at each
-# level of detail.
-for i in range(5):
-    i += 1
-    detail_i = amsimp.Backend(i)
-    detail_i.latitude_lines()
-    detail_i.temperature()
-    detail_i.density()
-# Ensure the methods, sigma_coordinates, potential_temperature
-# and exner_function, function correctly.
-detail.potential_temperature()
-detail.exner_function()
-# Ensure that each plot option in the longitude_contourf method functions
-# correctly. Also ensure that an exception is raised when the value of,
-# which, is either greater than 2 or less than 0.
-for i in range(5):
-    i -= 1
-    if i < 0 or i > 2:
-        try:
-            detail.longitude_contourf(i)
-        except Exception:
-            pass
-        else:
-            raise Exception("Test Failed!")
-    else:
-        detail.longitude_contourf(i)
-# Ensure that an exception is raised when which is a non-integer
-# number.
-try:
-    detail.longitude_contourf(1.5)
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-# Ensure that an exception is raised when, alt, has a value less
-# than 0.
-try:
-    detail.longitude_contourf(0, -1)
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-detail.altitude_contourf()
-# Ensure that an exception is raised when, which, has a value
-# greater than 0.
-try:
-    detail.altitude_contourf(3)
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-# Ensure that an exception is raised when, central_long, has a value
-# greater than 180.
-try:
-    detail.altitude_contourf(0, 200)
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-# Ensure that the pressurethickness_contourf method functions correctly.
-detail.pressurethickness_contourf()
+actual_height = detail.geopotential_height()
+f = np.resize(
+    detail.coriolis_parameter().value, (
+        actual_height.shape[0],
+        actual_height.shape[2],
+        actual_height.shape[1],
+    )
+) / detail.units.s
+f = np.transpose(f, (0, 2, 1))
+geostophic_vorticity = (
+    detail.geostophic_vorticity() * f
+) / detail.gravitational_acceleration()
+height = height_guess
+ny = height.shape[1]
+nx = height.shape[2]
 
-# amsimp.Wind
-# Ensure that the methods, zonal_wind and meridional method, cannot be
-# called when the level of detail is less than 3.
-try:
-    detail_1.zonal_wind()
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-try:
-    detail_1.meridional_wind()
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-# Ensure that the zonal and meridional contour plots are generated
-# correctly.
-detail.wind_contourf()
-detail.wind_contourf(1)
-# Ensure that an exception is raised when, which, has a value greater
-# than 1.
-try:
-    detail.wind_contourf(2)
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-# Ensure that an exception is raised when, central_long, has a value
-# greater than 180.
-try:
-    detail.wind_contourf(0, 200)
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-# Ensure than the globe method functions correctly.
-detail.globe()
-# Ensure that an exception is raised in the globe method where it is
-# appropriate to do so.
-try:
-    detail.globe(100)
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-try:
-    detail.globe(45, 200)
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-try:
-    detail.globe(45, 90, -1)
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
+lat = np.radians(detail.latitude_lines().value)
+lat = np.resize(
+    lat, (
+        geostophic_vorticity.shape[0],
+        geostophic_vorticity.shape[2],
+        geostophic_vorticity.shape[1],
+    )
+)
+dy = detail.a * np.gradient(lat, axis=2)
+dy = np.transpose(dy, (0, 2, 1))
 
-# amsimp.water.Water
-# Ensure you cannot call the vapor_pressure method if the value of
-# detail_level is below zero.
-try:
-    detail_1.vapor_pressure()
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-# Ensure the precipitable water method is functioning correctly when
-# sum_altitude has a boolean value of True.
-detail.precipitable_water()
-# Ensure the precipitable water method only accepts boolean values
-# for sum_altitude.
-try:
-    detail.precipitable_water(0)
-except Exception:
-    pass
-else:
-    raise Exception("Test Failed!")
-# Ensure the water_contourf method functions correctly.
-detail.water_contourf()
+lon = np.radians(10)
+dx_y = detail.a * np.cos(lat)
+dx_y = np.resize(
+    dx_y, (
+        geostophic_vorticity.shape[0],
+        geostophic_vorticity.shape[2],
+        geostophic_vorticity.shape[1],
+    )
+)
+dx = dx_y * lon
+dx = np.transpose(dx, (0, 2, 1))
 
-# amsimp.dynamics.Dynamics
-detail.simulate()
+for it in range(int(nt)):
+    height_guess = height.copy()
+
+    height[:, 1:-1, 1:-1] = (
+        (
+            (
+                height_guess[:, 1:-1, 2:] + height_guess[:, 1:-1, :-2]
+            ) * dy[:, 1:-1, 1:-1]**2 + (
+                height_guess[:, 2:, 1:-1] + height_guess[:, :-2, 1:-1]
+            ) * dx[:, 1:-1, 1:-1]**2 - geostophic_vorticity[:, 1:-1, 1:-1] * dx[:, 1:-1, 1:-1]**2 * dy[:, 1:-1, 1:-1]**2
+        ) / (2 * (dx[:, 1:-1, 1:-1]**2 + dy[:, 1:-1, 1:-1]**2))
+    )
+
+    height[:, 0, :] = height_bound[:, 0, :]
+    height[:, ny-1, :] = height_bound[:, ny-1, :]
+    height[:, :, 0] = height_bound[:, :, 0]
+    height[:, :, nx-1] = height_bound[:, :, nx-1]
+
+print(" ")
+diff = actual_height - height
+diff = np.abs(diff)
+print(np.mean(diff))
+
+diff = actual_height - height_naive
+diff = np.abs(diff)
+print(np.mean(diff))

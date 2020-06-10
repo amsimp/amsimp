@@ -8,6 +8,9 @@ AMSIMP Wind Class. For information about this class is described below.
 # -----------------------------------------------------------------------------------------#
 
 # Importing Dependencies
+import os
+import wget
+import iris
 import cartopy.crs as ccrs
 from cartopy.util import add_cyclic_point
 import matplotlib.pyplot as plt
@@ -30,16 +33,32 @@ cdef class Wind(Moist):
     description of their intended purpose. Please see the relevant class methods
     for more information.
 
+<<<<<<< Updated upstream
     zonal_wind ~ outputs the zonal component of geostrophic wind.
     meridional_wind ~ outputs the meridional component of geostrophic wind.
     wind_contourf ~ generates a geostrophic wind contour plot.
+=======
+    geostrophic_wind ~ generates a NumPy array of the components of
+    geostrophic wind. The unit of measurement is metres per second.
+    wind ~ generates a NumPy array of the components of wind (non-geostrophic).
+    The unit of measurement is metres per second.
+    ageostrophic_wind ~ generates a NumPy array of the components of the
+    ageostrophic wind. The unit of measurement is metres per second.
+    static_stability ~ generates a NumPy array of the the static
+    stability within a vertical profile.
+    verical_motion ~ generates a NumPy array of the vertical motion
+    with the atmosphere, by integrating the quasi-geostrophic
+    mass continunity equation.
+    wind_contourf ~ generates a vertical profile of geostrophic wind,
+    and outputs this as a contour plot.
+>>>>>>> Stashed changes
     globe ~ generates a geostrophic wind contour plot, adds wind vectors to
     that said plot, and overlays both on a Nearside Projection of the Earth.
     """
 
-    cpdef np.ndarray zonal_wind(self):
+    cpdef tuple geostrophic_wind(self):
         """
-        This method outputs the zonal component of geostrophic wind, in
+        This method outputs the components of geostrophic wind, in
         the shape of (len(pressure_surfaces), len(latitude_lines),
         len(longitude_lines)). 
         
@@ -49,84 +68,297 @@ cdef class Wind(Moist):
 
         Equation:
             u_g = -frac{g}{f} \* frac{1}{a} \* frac{\partial \Phi}{\partial y}
+            v_g = frac{g}{f} \* frac{1}{a} \* frac{\partial \Phi}{\partial x}
         
-        Note: Geostrophic balance does not hold near the equator.
+        Note: Geostrophic balance does not hold near the equator. For
+        non-geostrophic wind, please see the method, wind.
         """
         # Gradient of geopotential height over latitudinal distance.
-        cdef np.ndarray latitude = np.radians(self.latitude_lines())
-        cdef height_gradient = np.gradient(
+        cdef np.ndarray latitude = np.radians(self.latitude_lines().value)
+        cdef np.ndarray height_gradienty = np.gradient(
             self.geopotential_height(),
-            self.a * latitude.value,
+            self.a * latitude,
             axis=1,
         )
 
+        # Gradient of geopotential height over longitudinal distance.
+        cdef np.ndarray longitude = np.radians(self.longitude_lines().value)
+        cdef np.ndarray height_gradientx = np.gradient(
+            self.geopotential_height().value,
+            longitude,
+            axis=2,
+        )
+        height_gradientx *= self.units.m
+        height_gradientx = self.gradient_x(parameter=height_gradientx)
+
         # Defining a 3D coriolis parameter NumPy array.
         cdef np.ndarray coriolis_parameter = self.coriolis_parameter().value
-        coriolis_parameter /= self.units.s
-        coriolis_parameter = self.make_3dimensional_array(
-            parameter=coriolis_parameter, axis=1
-        )
+        coriolis_parameter = np.resize(
+            coriolis_parameter, (
+                height_gradienty.shape[0],
+                height_gradienty.shape[2],
+                height_gradienty.shape[1],
+            )
+        ) / self.units.s
+        coriolis_parameter = np.transpose(coriolis_parameter, (0, 2, 1))
 
         # Geostrophic wind calculation (zonal component).
-        zonal_wind = (
+        u_g = (
             -(self.gravitational_acceleration() / coriolis_parameter)
-            * height_gradient
+            * height_gradienty
         )
 
         # Convert zonal wind to metres per second.
-        zonal_wind = zonal_wind.si
+        u_g = u_g.si
 
-        return zonal_wind
+        # Geostrophic wind calculation (meridional component).
+        v_g = (
+            (self.gravitational_acceleration() / coriolis_parameter)
+            * height_gradientx
+        )
+        # Convert meridional wind to metres per second.
+        v_g = v_g.si
 
-    cpdef np.ndarray meridional_wind(self):
+        return u_g, v_g
+
+    cpdef tuple wind(self):
         """
-        This method outputs the meridional component of geostrophic wind, in
-        the shape of (len(pressure_surfaces), len(latitude_lines),
-        len(longitude_lines)).
+        This method imports wind data from a GRIB file, which is
+        located in the AMSIMP Initial Conditions Data Repository on GitHub.
+        The data stored within this repo is updated every six hours by amsimp-bot.
+        Following which, it outputs a NumPy array in the shape of
+        (len(pressure_surfaces), len(latitude_lines), len(longitude_lines)).
         
-        Geostrophic wind is a theoretical wind that is a result of a perfect
-        balance between the Coriolis force and the pressure gradient force.
-        This balance is known as geostrophic balance.
+        Wind is the flow of gases on a large scale. Wind consists of
+        the bulk movement of air.
+        
+        I strongly recommend storing the output into a variable in order to
+        prevent the need to repeatly download the file. For more information,
+        visit https://github.com/amsimp/initial-conditions.
+
+        For geostrophic wind, please see the method, geostrophic_wind.
+        """
+        if not self.input_data:
+            folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
+            
+            # Define date.
+            year = self.date.year
+            month = self.date.month
+            day = self.date.day
+            hour = self.date.hour
+
+            # Adds zero before single digit numbers.
+            if day < 10:
+                day = "0" + str(day)
+
+            if month < 10:
+                month =  "0" + str(month)
+
+            if hour < 10:
+                hour = "0" + str(hour)
+
+            # Converts integers to strings.
+            day = str(day)
+            month = str(month)
+            year = str(year)
+            hour = str(hour)
+
+            folder += (
+                year + "/" + month + "/" + day + "/" + hour + "/"
+            )
+            # The url to the NumPy pressure surfaces file stored on the AMSIMP
+            # Initial Conditions Data repository.
+            url = folder + "initial_conditions.nc"
+
+            # Download the NumPy file and store the NumPy array into a variable.
+            try:
+                wind_cube = iris.load("initial_conditions.nc")
+                u = np.asarray(wind_cube[3].data)
+                v = np.asarray(wind_cube[4].data)
+            except OSError:  
+                wind_file = wget.download(url)
+                wind_cube = iris.load(wind_file)
+                u = np.asarray(wind_cube[3].data)
+                v = np.asarray(wind_cube[4].data)
+
+            # Ensure that the correct data was downloaded (wind).
+            if wind_cube[3].units != (self.units.m / self.units.s):
+                raise Exception("Unable to determine the zonal wind"
+                + " at this time. Please contact the developer for futher"
+                + " assistance.")
+            elif wind_cube[3].metadata[0] != 'x_wind':
+                raise Exception("Unable to determine the zonal wind"
+                + " at this time. Please contact the developer for futher"
+                + " assistance.")
+            
+            if wind_cube[4].units != (self.units.m / self.units.s):
+                raise Exception("Unable to determine the meridional wind"
+                + " at this time. Please contact the developer for futher"
+                + " assistance.")
+            elif wind_cube[4].metadata[0] != 'y_wind':
+                raise Exception("Unable to determine the meridional wind"
+                + " at this time. Please contact the developer for futher"
+                + " assistance.")
+        else:
+            u = self.input_u.value
+            v = self.input_v.value
+        
+        if np.shape(u) == (31, 181, 360):
+            # Reshape the data in such a way that it matches the pressure surfaces defined in
+            # the software.
+            u = np.flip(u, axis=0)
+            v = np.flip(v, axis=0)
+
+            # Reshape the data in such a way that it matches the latitude lines defined in
+            # the software.
+            u = np.transpose(u, (1, 2, 0))
+            u = u[1:-1]
+            u = np.delete(u, [89], axis=0)
+            nh_u, sh_u = np.split(u, 2)
+            nh_lat, sh_lat = np.split(self.latitude_lines().value, 2)
+            nh_u = nh_u[::self.delta_latitude]
+            sh_startindex = int((nh_lat[-1] * -1) - 1)
+            sh_u = sh_u[sh_startindex::self.delta_latitude]
+            u = np.concatenate((nh_u, sh_u))
+
+            v = np.transpose(v, (1, 2, 0))
+            v = v[1:-1]
+            v = np.delete(v, [89], axis=0)
+            nh_v, sh_v = np.split(v, 2)
+            nh_lat, sh_lat = np.split(self.latitude_lines().value, 2)
+            nh_v = nh_v[::self.delta_latitude]
+            sh_startindex = int((nh_lat[-1] * -1) - 1)
+            sh_v = sh_v[sh_startindex::self.delta_latitude]
+            v = np.concatenate((nh_v, sh_v))
+
+            # Reshape the data in such a way that it matches the longitude lines defined in
+            # the software.
+            u = np.transpose(u, (2, 0, 1))
+            u = u[:, :, ::self.delta_longitude]
+            v = np.transpose(v, (2, 0, 1))
+            v = v[:, :, ::self.delta_longitude]
+            
+            if self.remove_files and not self.input_data:
+                os.remove("initial_conditions.nc")
+
+            # Define the unit of measurement for wind.
+            u *= self.units.m / self.units.s
+            v *= self.units.m / self.units.s
+        else:
+            u *= self.units.m / self.units.s
+            v *= self.units.m / self.units.s
+
+        return u, v
+
+    cpdef tuple ageostrophic_wind(self):
+        """
+        This method outputs the components of ageostrophic wind, in
+        the shape of (len(pressure_surfaces), len(latitude_lines),
+        len(longitude_lines)). 
+
+        Ageostrophic wind is the vector difference between the 
+        real (or observed) wind and the geostrophic wind. Ageostrophy
+        is the real condition that works against geostrophic wind, and
+        works against an exact balance between the Coriolis force
+        and the pressure gradient force.
 
         Equation:
-            v_g = frac{g}{f} \* frac{\partial \Phi}{\partial y} 
-        
-        Note: Geostrophic balance does not hold near the equator.
+            u_a = u - u_g
+            v_a = v - v_g
         """
-        # Gradient of geopotential height over longitudinal distance.
-        cdef np.ndarray longitude = np.radians(self.longitude_lines())
-        cdef np.ndarray height_gradient = np.gradient(
-            self.geopotential_height().value,
-            longitude.value,
-            axis=2,
-        )
-        height_gradient *= self.units.m
-        height_gradient = self.gradient_x(parameter=height_gradient)
+        # Geostrophic wind components.
+        u_g, v_g = self.geostrophic_wind()
 
-        # Defining a 3D Coriolis parameter NumPy array.
-        cdef np.ndarray coriolis_parameter = self.coriolis_parameter().value
-        cdef list f_list = []
-        for f in coriolis_parameter:
-            f = f + np.zeros(
-                (len(self.pressure_surfaces()), len(self.longitude_lines()))
+        # Wind components.
+        u, v = self.wind()
+
+        # Determine the agestrophic components of wind.
+        u_a = u - u_g
+        v_a = v - v_g
+
+        return u_a, v_a
+
+    cpdef np.ndarray vertical_motion(self):
+        """
+        Generates a NumPy array of the vertical motion within
+        the atmosphere, by integrating the quasi-geostrophic
+        mass continunity equation. 
+        
+        The basic idea of quasi-geostrophic theory is that
+        it reveals how hydrostatic balance and geostrophic
+        balance constrain and simply atmospheric dynamics, but,
+        in a realistic manner. Typical large-scale
+        vertical motions in the atmosphere are of the order
+        of 0.01 – 0.1 m s−1.
+
+        Equation:
+            frac{\partial u_a}{\partial x} + frac{\partial v_a}{\partial y} = - frac{\partial \omega}{\partial p}
+        """
+        # Define variables.
+        cdef np.ndarray latitude = np.radians(self.latitude_lines()).value
+        cdef np.ndarray longitude = np.radians(self.longitude_lines()).value
+        cdef np.ndarray pressure = self.pressure_surfaces(dim_3d=True)
+        cdef np.ndarray u_a, v_a
+        u_a, v_a = self.ageostrophic_wind()
+        
+        # Determine the LHS pf the equation by calculating the derivatives.
+        # Change in meridional wind with respect to latitude.
+        va_dy = np.gradient(v_a, self.a * latitude, axis=1)
+
+        # Change in zonal wind with respect to longitude.
+        ua_dx = np.gradient(u_a, longitude, axis=2)
+        ua_dx = self.gradient_x(parameter=ua_dx)
+
+        LHS = ua_dx + va_dy
+        LHS *= -1
+
+        # Integrate the continunity equation.
+        cdef list vertical_motion_list = []
+        cdef int n = 0
+        cdef int len_pressure = len(pressure)
+        cdef omega, omega_unit
+        while n < len_pressure:
+            p1 = n
+            p2 = n+2
+            y = LHS[p1:p2, :, :]
+            p = pressure[p1:p2, :, :]
+            omega = np.trapz(
+                y=y, x=p, axis=0
             )
-            f = f.tolist()
-            f_list.append(f)
-        coriolis_parameter = np.asarray(f_list)
-        coriolis_parameter = np.transpose(coriolis_parameter, (1, 0, 2))
-        coriolis_parameter /= self.units.s
+            omega_unit = omega.unit
+            vertical_motion_list.append(omega.value)
 
-        meridional_wind = (
-            (self.gravitational_acceleration() / coriolis_parameter)
-            * height_gradient
-        )
-        meridional_wind = meridional_wind.si
+            n += 1
 
-        return meridional_wind
+        # Convert list to NumPy array.
+        vertical_motion = np.asarray(vertical_motion_list)
+
+        # Add units.
+        vertical_motion *= omega_unit
+
+        # Ensure the shape is correct.
+        if np.shape(vertical_motion) != np.shape(u_a):
+            raise Exception("Unable to determine vertical motion"
+                + " at this time. Please contact the developer for futher"
+                + " assistance.")
+
+        return vertical_motion
 
     cpdef np.ndarray static_stability(self):
         """
+<<<<<<< Updated upstream
         Explain here.
+=======
+        Generates a NumPy array of the the static stability within
+        a vertical profile. 
+        
+        Static stability is defined as the stability of the
+        atmosphere in hydrostatic equilibrium with respect to vertical
+        displacements.
+
+        Equation:
+            sigma = - frac{R T}{p theta} frac{partial theta}{partial p}
+>>>>>>> Stashed changes
         """
         cdef np.ndarray theta = self.potential_temperature(moist=False)
         cdef np.ndarray temperature = self.temperature()
@@ -139,57 +371,19 @@ cdef class Wind(Moist):
         )
         return static_stability
 
-    cpdef tuple q_vector(self):
+    cpdef np.ndarray geostophic_vorticity(self):
         """
         Explain here.
         """
+        # Define variables.
         cdef np.ndarray latitude = np.radians(self.latitude_lines()).value
         cdef np.ndarray longitude = np.radians(self.longitude_lines()).value
-        cdef np.ndarray zonal_wind = self.zonal_wind()
-        cdef np.ndarray meridional_wind = self.meridional_wind()
-        cdef np.ndarray temperature = self.temperature()
-        cdef np.ndarray pressure = self.pressure_surfaces(dim_3d=True)
-        cdef np.ndarray static_stability = self.static_stability()
+        cdef np.ndarray u_g, v_g, u_dy, v_dx
 
-        # Geostrophic Wind.
-        cdef np.ndarray du_dx = np.gradient(
-            zonal_wind.value, longitude, axis=2
-        ) * zonal_wind.unit
-        cdef np.ndarray du_dy = np.gradient(
-            zonal_wind.value, latitude, axis=1
-        ) * zonal_wind.unit
-        cdef np.ndarray dv_dx = np.gradient(
-            meridional_wind.value, longitude, axis=2
-        ) * meridional_wind.unit
-        cdef np.ndarray dv_dy = np.gradient(
-            meridional_wind.value, latitude, axis=1
-        ) * meridional_wind.unit
+        # Geostrophic wind.
+        u_g, v_g = self.geostrophic_wind()
 
-        # Temperature.
-        cdef np.ndarray dT_dx = np.gradient(
-            temperature.value, longitude, axis=2
-        ) * temperature.unit
-        cdef np.ndarray dT_dy = np.gradient(
-            temperature.value, latitude, axis=1
-        ) * temperature.unit
-
-        # Delta x.
-        du_dx = self.gradient_x(parameter=du_dx)
-        dv_dx = self.gradient_x(parameter=dv_dx)
-        dT_dx = self.gradient_x(parameter=dT_dx)
-        
-        # Delta y
-        du_dy = (1 / self.a) * du_dy
-        dv_dy = (1 / self.a) * dv_dy
-        dT_dy = (1 / self.a) * dT_dy
-
-        # q_vector
-        q1 = (-self.R / (pressure * static_stability)) * (du_dx * dT_dx + dv_dx * dT_dy)
-        q2 = (-self.R / (pressure * static_stability)) * (du_dy * dT_dx + dv_dy * dT_dy)
-
-        q_vector = (q1, q2)
-        return q_vector
-
+<<<<<<< Updated upstream
     cpdef np.ndarray vertical_motion(self):
         """
         Explain here.
@@ -201,14 +395,18 @@ cdef class Wind(Moist):
         q1, q2 = self.q_vector()
         
         q2_dy = np.gradient(q2, self.a * latitude, axis=1)
+=======
+        # Change in zonal wind with respect to latitude.
+        u_dy = np.gradient(u_g, self.a * latitude, axis=1)
 
-        q1_dx = np.gradient(q1, longitude, axis=2)
-        q1_dx = self.gradient_x(parameter=q1_dx)
+        # Change in zonal wind with respect to latitude.
+        v_dx = np.gradient(v_g, longitude, axis=2)
+        v_dx = self.gradient_x(parameter=v_dx)
+>>>>>>> Stashed changes
 
-        vertical_motion = -2 * (q1_dx + q2_dy)
-        vertical_motion *= -1
-        vertical_motion = vertical_motion.value * (self.units.hPa / self.units.s)
-        return vertical_motion
+        geostophic_vorticity = v_dx - u_dy
+
+        return geostophic_vorticity
 
 # -----------------------------------------------------------------------------------------#
 
@@ -216,12 +414,14 @@ cdef class Wind(Moist):
         """
         For zonal (geostrophic) wind, set which_wind to 0.
         For meridional (geostrophic) wind, set which_wind to 1.
+        For zonal wind, set which_wind to 2.
+        For meridional wind, set which_wind to 3.
         
-        Generates a geostrophic wind contour plot, with the axes being
-        latitude, and longitude.
+        Generates a geostrophic wind, or non-geostrophic wind contour
+        plot, with the axes being latitude, and pressure surfaces.
         
         For the raw data, please use the
-        amsimp.Wind.geostrophic_wind() method.
+        amsimp.Wind.geostrophic_wind() or the amsimp.Wind.wind() method.
         """
         # Ensure central_long is between -180 and 180.
         if central_long < -180 or central_long > 180:
@@ -236,14 +436,20 @@ cdef class Wind(Moist):
         
         # Set geostrophic wind to either the zonal, or meridional component.
         if which_wind == 0:
-            geostrophic_wind = self.zonal_wind()[:, :, indx_long]
-            wind_type = "Zonal"
+            wind = self.geostrophic_wind()[0][:, :, indx_long]
+            wind_type = "Zonal Geostrophic"
         elif which_wind == 1:
-            geostrophic_wind = self.meridional_wind()[:, :, indx_long]
+            wind = self.geostrophic_wind()[1][:, :, indx_long]
+            wind_type = "Meridional Geostrophic"
+        elif which_wind == 2:
+            wind = self.wind()[0][:, :, indx_long]
+            wind_type = "Zonal"
+        elif which_wind == 3:
+            wind = self.wind()[1][:, :, indx_long]
             wind_type = "Meridional"
         else:
             raise Exception(
-                "which_wind must be equal to either zero or one. The value of which_wind was: {}".format(
+                "which_wind must be equal to between 0 and 3. The value of which_wind was: {}".format(
                     which_wind
                 )
             )
@@ -252,12 +458,12 @@ cdef class Wind(Moist):
         latitude, pressure_surfaces = np.meshgrid(self.latitude_lines(), self.pressure_surfaces())
 
         # Specifies the contour levels
-        minimum = geostrophic_wind.min()
-        maximum = geostrophic_wind.max()
+        minimum = wind.min()
+        maximum = wind.max()
         levels = np.linspace(minimum, maximum, 21)
 
         # Contour plotting.
-        plt.contourf(latitude, pressure_surfaces, geostrophic_wind, levels=levels)
+        plt.contourf(latitude, pressure_surfaces, wind, levels=levels)
 
         plt.set_cmap("jet")
 
@@ -280,12 +486,13 @@ cdef class Wind(Moist):
             )
 
         # Footnote
-        plt.figtext(
-            0.99,
-            0.01,
-            "Note: Geostrophic balance does not hold near the equator.",
-            horizontalalignment="right",
-        )
+        if which_wind < 2:
+            plt.figtext(
+                0.99,
+                0.01,
+                "Note: Geostrophic balance does not hold near the equator.",
+                horizontalalignment="right",
+            )
         plt.subplots_adjust(bottom=0.135)
 
         # Colorbar creation.
@@ -314,14 +521,16 @@ cdef class Wind(Moist):
         plt.show()
         plt.close()
 
-    def globe(self, central_lat=53.1424, central_long=-7.6921, psurface=1000):
+    def globe(self, central_lat=53.1424, central_long=-7.6921, psurface=1000, which_wind=0):
         """
         Similiar to amsimp.Wind.wind_contourf(), however, this particular method
         adds wind vectors to the contour plot. It also overlays both of these
         elements onto a Nearside Perspective projection of the Earth.
 
         By default, the perspective view is looking directly down at the city
-        of Dublin in the country of Ireland.
+        of Dublin in the country of Ireland. If which_wind is set to 0, it will
+        plot the geostophic wind data, otherwise, if it is set to 1, it will
+        plot the non-geostrophic wind data.
 
         Note:
         The NumPy method, seterr, is used to suppress a weird RunTime warning
@@ -361,8 +570,22 @@ cdef class Wind(Moist):
         latitude = self.latitude_lines()
         longitude = self.longitude_lines()
 
-        u = self.zonal_wind()[indx_psurface, :, :]
-        v = self.meridional_wind()[indx_psurface, :, :]
+        if which_wind == 0:
+            geostrophic_wind = self.geostrophic_wind()
+            u = geostrophic_wind[0][indx_psurface, :, :]
+            v = geostrophic_wind[1][indx_psurface, :, :]
+            title = "Geostrophic Wind"
+        elif which_wind == 1:
+            wind = self.wind()
+            u = wind[0][indx_psurface, :, :]
+            v = wind[1][indx_psurface, :, :]
+            title = "Wind"
+        else:
+            raise Exception(
+                "which_wind must be equal to between 0 and 1. The value of which_wind was: {}".format(
+                    which_wind
+                )
+            )
 
         u_norm = u / np.sqrt(u ** 2 + v ** 2)
         v_norm = v / np.sqrt(u ** 2 + v ** 2)
@@ -407,14 +630,14 @@ cdef class Wind(Moist):
         plt.xlabel("Latitude ($\phi$)")
         plt.ylabel("Longitude ($\lambda$)")
         if not self.input_data:
-            plt.title("Geostrophic Wind ("
+            plt.title(title + " ("
                 + str(self.date.year) + '-' + str(self.date.month) + '-'
                 + str(self.date.day) + " " + str(self.date.hour)
                 + ":00 h, Pressure Surface = "
                 + str(self.pressure_surfaces()[indx_psurface]) +")"
             )
         else:
-            plt.title("Geostrophic Wind ("
+            plt.title(title + " ("
                 + "Pressure Surface = "
                 + str(self.pressure_surfaces()[indx_psurface]) +")"
             )

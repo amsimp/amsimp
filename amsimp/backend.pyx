@@ -118,17 +118,43 @@ cdef class Backend:
     # geopotential height array.
     remove_psurfaces = [23, 26, 33]
 
-    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=120, epochs=150, input_date=None, bool input_data=False, geo=None, temp=None, rh=None):
+    def __cinit__(self, int delta_latitude=10, int delta_longitude=10, bool remove_files=False, forecast_length=72, bool efs=True, int models=15, bool ai=True, data_size=150, epochs=150, input_date=None, bool input_data=False, geo=None, temp=None, rh=None, u=None, v=None):
         """
         The parameters, delta_latitude and delta_longitude, defines the
         horizontal resolution between grid points within the software. The
         software solely deals with atmospheric dynamics on a synoptic scale, 
         with the equations utilised within the software becoming increasingly
         inaccurate at a local sclae. The parameter values, therefore, must be
+<<<<<<< Updated upstream
         between 5 and 30 degrees. Defaults to a value of 10 degrees. The parameter,
         remove_files is a boolean value, and when set to True, it will remove any
         file downloaded from the AMSIMP Initial Atmospheric Conditions Data 
         Repository.
+=======
+        between 3 and 20 degrees. Defaults to a value of 10 degrees. 
+        
+        The parameter, remove_files, is a boolean value, and when set to True,
+        it will remove any file downloaded from the AMSIMP Initial Atmospheric
+        Conditions Data Repository.
+
+        The parameter, input_date, allows the end-user to specify the initial
+        date at which the forecast is generated from. Please note that
+        currently you cannot specify dates before Janurary 2020. Please also
+        note that the latest data available to the software is typically
+        from three days ago. This is due to the rate at which the NOAA
+        updates the data on the Global Data Assimilation System.
+
+        The parameter, input_data, is a boolean value, and when set to True,
+        it will allow the end-user to provide their own initial conditions
+        to the software. Please note that this feature has not been fully
+        tested as of this moment.
+
+        The parameter, ai, is a boolean value, and when set to True, a 
+        recurrent neural network will be trained on the amount of days 
+        specified by the parameter, data_size. A prediction by the
+        recurrent neural network will be generated, and will be 
+        combined with a traditional physical model of the atmosphere. 
+>>>>>>> Stashed changes
         """
         # Make the aforementioned variables available else where in the class.
         self.delta_latitude = delta_latitude
@@ -137,21 +163,21 @@ cdef class Backend:
         self.input_date = input_date
         self.input_data = input_data
 
-        # Ensure self.delta_latitude is between 5 and 30 degrees.
+        # Ensure self.delta_latitude is between 3 and 20 degrees.
         # AMSIMP solely deals with atmospheric dynamics on a synoptic scale, with the
         # equations utilised within the software becoming increasingly inaccurate
         # at a local sclae.
-        if self.delta_latitude > 30 or self.delta_latitude < 5:
+        if self.delta_latitude > 20 or self.delta_latitude < 3:
             raise Exception(
-                "delta_latitude must be a positive integer between 5 and 30. The value of delta_latitude was: {}".format(
+                "delta_latitude must be a positive integer between 3 and 20. The value of delta_latitude was: {}".format(
                     self.delta_latitude
                 )
             )
 
-        # Ensure self.delta_longitude is between 5 and 30 degrees.
-        if self.delta_longitude > 30 or self.delta_longitude < 5:
+        # Ensure self.delta_longitude is between 3 and 20 degrees.
+        if self.delta_longitude > 20 or self.delta_longitude < 3:
             raise Exception(
-                "delta_longitude must be a positive integer between 5 and 30. The value of delta_longitude was: {}".format(
+                "delta_longitude must be a positive integer between 3 and 20. The value of delta_longitude was: {}".format(
                     self.delta_longitude
                 )
             )
@@ -195,7 +221,7 @@ cdef class Backend:
         def dimension(input_variable):
             if np.ndim(input_variable) != 3:
                 raise Exception(
-                    "All input data variables (geo, rh, temp) must be a 3 dimensional."
+                    "All input data variables (geo, rh, temp, u, v) must be a 3 dimensional."
                 )
 
         if self.input_data == True:
@@ -203,11 +229,15 @@ cdef class Backend:
             dimension(geo)
             dimension(rh)
             dimension(temp)
+            dimension(u)
+            dimension(v)
 
             # Convert input data lists to NumPy arrays.
             geo = np.asarray(geo)
             rh = np.asarray(rh)
             temp = np.asarray(temp)
+            u = np.asarray(u)
+            v = np.asarray(v)
 
             # Add units to input variables.
             # geo variable.
@@ -219,11 +249,19 @@ cdef class Backend:
             # temp variable.
             if type(temp) != Quantity:
                temp = temp * units.K
+            # u variable.
+            if type(u) != Quantity:
+               u = u * (units.m / units.s)
+            # v variable.
+            if type(v) != Quantity:
+               v = v * (units.m / units.s)
 
         # Make the input data variables available else where in the class.
         self.input_geo = geo
         self.input_rh = rh
         self.input_temp = temp
+        self.input_u = u
+        self.input_v = v
 
         # Function to check for an internet connection.
         def is_connected():
@@ -284,31 +322,42 @@ cdef class Backend:
         """
         Generates a NumPy array of latitude lines.
         """
-        # In order to deterrmine the Corilios force, under the beta
-        # plane approximation.
-        if f:
-            delta_latitude = self.delta_latitude * 3
-        else:
-            delta_latitude = self.delta_latitude
-
         cdef float i 
         sh = [
             i
-            for i in np.arange(-89, 0, delta_latitude)
+            for i in np.arange(-89, 0, self.delta_latitude)
             if i != 0
         ]
         start_nh = sh[-1] * -1
         nh = [
             i
-            for i in np.arange(start_nh, 90, delta_latitude)
+            for i in np.arange(start_nh, 90, self.delta_latitude)
             if i != 0 and i != 90
         ]
 
         for deg in nh:
             sh.append(deg)
 
-        # Convert list to NumPy array and add the unit of measurement.
-        latitude_lines = np.asarray(sh) * units.deg
+        # Convert list to NumPy array.
+        latitude_lines = np.asarray(sh)
+
+        # For corilios parameter calculations.
+        if f:
+            # Reduce resolution.
+            reduce_lat_sh = np.split(latitude_lines, 2)[0]
+            reduce_lat_sh = reduce_lat_sh[::4]
+            reduce_lat_nh = np.sort(reduce_lat_sh * -1)
+            reduce_lat = np.concatenate((reduce_lat_sh, reduce_lat_nh))
+
+            # Enlargen array to match expected output.
+            latitude_lines = np.sort(
+                np.resize(
+                    reduce_lat, latitude_lines.shape
+                )
+            )
+
+        # Add the unit of measurement.
+        latitude_lines *= self.units.deg
 
         return latitude_lines
     
@@ -419,26 +468,29 @@ cdef class Backend:
 
 # -----------------------------------------------------------------------------------------
 
-    cpdef np.ndarray coriolis_parameter(self, bool f=False):
+    cpdef np.ndarray coriolis_parameter(self):
         """
         Generates a NumPy arrray of the Coriolis parameter at various latitudes
-        of the Earth's surface, under the f-plane approximation. The Coriolis
-        parameter is defined as two times the angular rotation of the Earth by
-        the sin of the latitude you are interested in.
+        of the Earth's surface, under the f-plane approximation. 
+        
+        The Coriolis parameter is defined as two times the angular rotation of
+        the Earth by the sin of the latitude you are interested in.
 
         Equation:
             f_0 = 2 \* Upomega * sin(\phi)
         """
         coriolis_parameter = (
-            2 * self.Upomega * np.sin(np.radians(self.latitude_lines(f=f)))
+            2 * self.Upomega * np.sin(np.radians(self.latitude_lines(f=True)))
         )
 
         return coriolis_parameter
 
-    cpdef np.ndarray rossby_parameter(self, bool f=False):
+    cpdef np.ndarray rossby_parameter(self):
         """
         Generates a NumPy arrray of the Rossby parameter at various latitudes
-        of the Earth's surface. The Rossby parameter is defined as two times
+        of the Earth's surface. 
+        
+        The Rossby parameter is defined as two times
         the angular rotation of the Earth by the cosine of the latitude you are
         interested in, all over the mean radius of the Earth.
 
@@ -446,7 +498,7 @@ cdef class Backend:
             beta = frac{2 \* Upomega * cos(\phi)}{a}
         """
         rossby_parameter = (
-            2 * self.Upomega * np.cos(np.radians(self.latitude_lines(f=f)))
+            2 * self.Upomega * np.cos(np.radians(self.latitude_lines(f=True)))
         ) / self.a
 
         return rossby_parameter
@@ -454,19 +506,20 @@ cdef class Backend:
     cpdef np.ndarray beta_plane(self):
         """
         Generates a NumPy arrray of the Coriolis parameter at various latitudes
-        of the Earth's surface, under the beta plane approximation. The Coriolis
-        parameter is defined as the sum of the Coriolis parameter at a particular
-        reference latitude (see amsimp.Backend.coriolis_parameter), and the
-        product of the Rossby parameter at the reference latitude and the 
+        of the Earth's surface, under the beta plane approximation. 
+        
+        The Coriolis parameter is defined as the sum of the Coriolis parameter
+        at a particular reference latitude (see amsimp.Backend.coriolis_parameter),
+        and the product of the Rossby parameter at the reference latitude and the 
         meridional distance from the reference latitude.
 
         Equation:
             f = f_0 + beta \* y
         """
         # Define parameters
-        cdef np.ndarray f_0 = self.coriolis_parameter(f=True).value
-        cdef np.ndarray beta_0 = self.rossby_parameter(f=True).value
-        cdef np.ndarray lat_0 = self.latitude_lines(f=True).value
+        cdef np.ndarray f_0 = self.coriolis_parameter().value
+        cdef np.ndarray beta_0 = self.rossby_parameter().value
+        cdef np.ndarray lat_0 = self.latitude_lines().value
         cdef np.ndarray lat = self.latitude_lines().value
 
         cdef int n = 0
@@ -586,7 +639,7 @@ cdef class Backend:
             geopotential_height = geopotential_height[:, :, ::self.delta_longitude]
             
             if self.remove_files and not self.input_data:
-                os.remove("geopotential_height.nc")
+                os.remove("initial_conditions.nc")
 
             # Define the unit of measurement for geopotential height.
             geopotential_height *= units.m
@@ -685,7 +738,7 @@ cdef class Backend:
             relative_humidity = relative_humidity[:, :, ::self.delta_longitude]
             
             if self.remove_files and not self.input_data:
-                os.remove("relative_humdity.nc")
+                os.remove("initial_conditions.nc")
 
             # Define the unit of measurement for relative humidity.
             relative_humidity *= units.percent
@@ -786,7 +839,7 @@ cdef class Backend:
             temperature = temperature[:, :, ::self.delta_longitude]
             
             if self.remove_files and not self.input_data:
-                os.remove("temperature.nc")
+                os.remove("initial_conditions.nc")
 
             # Define the unit of measurement for temperature.
             temperature *= units.K

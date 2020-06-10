@@ -1,0 +1,80 @@
+package:
+  name: amsimp
+  version: "0.4.0"
+
+source:
+  git_url: https://github.com/amsimp/amsimp.git
+
+channels:
+  - conda-forge
+  - defaults
+
+requirements:
+  dependices:
+    - cython
+    - python=3.7
+    - astropy
+    - matplotlib=1.5.*
+    - numpy
+    - cartopy
+    - pandas
+    - python-wget
+    - scikit-learn
+    - tensorflow=2
+    - metpy
+    - iris
+    - progress
+  host:
+    - cython
+    - python=3.7
+    - astropy
+    - matplotlib=1.5.*
+    - numpy
+    - cartopy
+    - pandas
+    - python-wget
+    - scikit-learn
+    - tensorflow=2
+    - metpy
+    - iris
+    - progress
+  build:
+    - cython
+    - python=3.7
+    - astropy
+    - matplotlib=1.5.*
+    - numpy
+    - cartopy
+    - pandas
+    - python-wget
+    - scikit-learn
+    - tensorflow=2
+    - metpy
+    - iris
+    - progress
+  run:
+    - cython
+    - python=3.7
+    - astropy
+    - matplotlib=1.5.*
+    - numpy
+    - cartopy
+    - pandas
+    - python-wget
+    - scikit-learn
+    - tensorflow=2
+    - metpy
+    - iris
+    - progress
+
+test:
+  imports:
+    - amsimp
+
+about:
+  home: https://amsimp.com
+  license: MIT
+  summary: An open-source ensemble prediction scheme implementation to simulating atmospheric dynamics in the troposphere and the stratosphere, written in the programming language of Cython.
+  dev_url: https://github.com/amsimp
+  doc_url: https://docs.amsimp.com
+  doc_source_url: https://github.com/amsimp/amsimp/tree/master/docs

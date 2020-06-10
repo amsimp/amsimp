@@ -8,7 +8,7 @@ AMSIMP Dynamics Class. For information about this class is described below.
 # -----------------------------------------------------------------------------------------#
 
 # Importing Dependencies
-from datetime import timedelta
+from datetime import timedelta, datetime
 import os
 import wget
 from sklearn.preprocessing import MinMaxScaler
@@ -125,6 +125,20 @@ cdef class RNN(Wind):
 
             # Configure the Wind class, so, that it aligns with the
             # paramaters defined by the user.
+            # Check if date is before the 15th of May, as data before
+            # this point do not have wind data.
+            before_date = datetime(2020, 5, 15, 0)
+            if self.date > before_date:
+                # Zonal Wind.
+                u = np.asarray(data[3].data)
+                # Meridional Wind.
+                v = np.asarray(data[4].data)
+            else:
+                # Zonal Wind.
+                u = self.geostrophic_wind()[0]
+                # Meridional Wind.
+                v = self.geostrophic_wind()[1]
+
             config = Wind(
                 delta_latitude=self.delta_latitude,
                 delta_longitude=self.delta_longitude,
@@ -132,7 +146,9 @@ cdef class RNN(Wind):
                 input_data=True, 
                 geo=geo, 
                 temp=T, 
-                rh=rh, 
+                rh=rh,
+                u=u,
+                v=v 
             )
 
             # Redefine NumPy arrays.
@@ -477,39 +493,54 @@ cdef class Dynamics(RNN):
             )
 
         # Define variables that do not vary with respect to time.
-        cdef lat = self.latitude_lines().value
-        cdef np.ndarray latitude = np.radians(lat)
+        cdef lat_map = self.latitude_lines().value
+        cdef np.ndarray latitude = np.radians(lat_map)
         cdef np.ndarray longitude = np.radians(self.longitude_lines().value)
         cdef np.ndarray pressure = self.pressure_surfaces()
         cdef np.ndarray pressure_3d = self.pressure_surfaces(dim_3d=True)
         cdef time = self.forecast_period()[0]
         cdef np.ndarray g = self.gravitational_acceleration()
+
+        # Define delta x and delta y.
+        # Delta x.
+        lon = np.radians(10)
+        dx_y = detail.a * np.cos(lat)
+        dx_y = np.resize(
+            dx_y, (
+                geostophic_vorticity.shape[0],
+                geostophic_vorticity.shape[2],
+                geostophic_vorticity.shape[1],
+            )
+        )
+        cdef np.ndarray dx = dx_y * lon
+        dx = np.transpose(dx, (0, 2, 1))
+
+        # Delta y.
+        lat = np.resize(
+            latitude, (
+                geostophic_vorticity.shape[0],
+                geostophic_vorticity.shape[2],
+                geostophic_vorticity.shape[1],
+            )
+        )
+        cdef np.ndarray dy = detail.a * np.gradient(lat, axis=2)
+        dy = np.transpose(dy, (0, 2, 1))
+
+        # For determining the convergence of the geopotential height calculation.
+        cdef float l1norm = 1 
+        cdef float l1norm_target = 1E-6
         
         # The Coriolis parameter at various latitudes of the Earth's surface,
         # under the beta plane approximation.
         cdef np.ndarray f = self.beta_plane().value / self.units.s
         f = self.make_3dimensional_array(parameter=f, axis=1)
 
-        # The Coriolis parameter at various reference latitudes
-        # of the Earth's surface, under the beta plane approximation.
-        cdef np.ndarray f_0 = self.coriolis_parameter(f=True).value
-        cdef np.ndarray lat_0 = self.latitude_lines(f=True).value
-        cdef int n = 0
-        cdef f0_list = []
-        while n < len(latitude):
-            # Define the nearest reference latitude line (index value).
-            nearest_lat0_index = (np.abs(lat_0 - lat[n])).argmin()
-
-            # Define the nearest reference latitude line.
-            nearest_lat0 = lat_0[nearest_lat0_index]
-            # Define the nearest reference Coriolis parameter.
-            nearest_f0 = f_0[nearest_lat0_index]
-
-            f0_list.append(nearest_f0)
-
-            n += 1
-        f_0 = np.asarray(f0_list) / self.units.s
+        cdef np.ndarray f_0 = self.coriolis_parameter().value / self.units.s
         f_0 = self.make_3dimensional_array(parameter=f_0, axis=1)
+
+        # Rossby parameter.
+        cdef np.ndarray beta = self.rossby_parameter().value / (self.units.m * self.units.s)
+        beta = self.make_3dimensional_array(parameter=beta, axis=1)
 
         # Define the change with respect to time.
         cdef delta_t = self.forecast_period()[1]
@@ -522,15 +553,22 @@ cdef class Dynamics(RNN):
         # Define initial conditions.
         # Geopotential Height.
         cdef np.ndarray height = self.geopotential_height()
-        # Geopotential.
-        cdef np.ndarray geo = height * g
+        # Geostrophic Vorticity.
+        cdef np.ndarray geo = self.geostrophic_vorticity()
         cdef np.ndarray geo_i = geo
         cdef np.ndarray geo_initial = geo
         # Geostrophic Wind.
+        geostrophic_wind = self.geostrophic_wind()
         # Zonal Wind.
-        cdef np.ndarray u_g = self.zonal_wind()
+        cdef np.ndarray u_g = geostrophic_wind[0]
         # Meridional Wind.
-        cdef np.ndarray v_g = self.meridional_wind()
+        cdef np.ndarray v_g = geostrophic_wind[1]
+        # Non-Geostrophic Wind.
+        nongeostrophic_wind = self.wind()
+        # Zonal Wind.
+        cdef np.ndarray u = nongeostrophic_wind[0]
+        # Meridional Wind.
+        cdef np.ndarray v = nongeostrophic_wind[1]
         # Vertical Motion.
         cdef np.ndarray omega = self.vertical_motion()
         # Static Stability.
@@ -564,8 +602,6 @@ cdef class Dynamics(RNN):
         cdef list ZonalList = []
         # Meridional Wind.
         cdef list MeridionalList = []
-        # Vertical Motion.
-        cdef list VerticalList = []
         # Static Stability.
         cdef list StabilityList = []
         # Temperature.
@@ -581,7 +617,7 @@ cdef class Dynamics(RNN):
         cdef list WaterList = []
 
         # Acceptable amount of devivation from initial conditions.
-        # Geopotential Height.
+        # Geostrophic vorticity.
         cdef np.ndarray geo_max = np.max(np.max(geo_i, axis=2), axis=1)
         cdef np.ndarray geo_mean = np.max(np.mean(geo_i, axis=2), axis=1)
         cdef np.ndarray geo_dev = self.make_3dimensional_array((geo_max - geo_mean), axis=0)
@@ -620,7 +656,7 @@ cdef class Dynamics(RNN):
         cdef np.ndarray geo_0, geo_n, T_0, T_n, Tv_0, Tv_n
         cdef np.ndarray dv_dx, du_dy, geostrophic_vorticity, A, A_diffx, A_diffy, Part_1
         cdef np.ndarray dT_dx, dT_dy, nabla_T, B, dB_dp, Part_2, RHS_geo
-        cdef np.ndarray change_geopotential, u_0, v_0, C, RHS,
+        cdef np.ndarray change_vorticity, u_0, v_0, C, RHS,
         cdef np.ndarray dTv_dx, dTv_dy, e, T_c, sat_vapor_pressure
         cdef np.ndarray randomise, geo_rand, T_rand, Tv_rand
         # Lists.
@@ -668,9 +704,6 @@ cdef class Dynamics(RNN):
             # Meridional Wind.
             meridional_wind = []
             meridional_wind.append(v_g.value)
-            # Vertical Motion.
-            vertical_motion = []
-            vertical_motion.append(omega.value)
             # Static Stability.
             static_stability = []
             static_stability.append(sigma.value)
@@ -690,7 +723,7 @@ cdef class Dynamics(RNN):
             t = 0
             while t < forecast_length.value:
                 # Define initial state.
-                # Geopotential.
+                # Geostrophic Vorticity.
                 if n > 2:
                     geo_0 = geo
                     geo = geo_n
@@ -705,71 +738,50 @@ cdef class Dynamics(RNN):
                     Tv_0 = T_v
                     T_v = Tv_n
 
-                # The Prognostic Section for Geopotential Height (Height
-                # Tendency Equation).
-                # Geostrophic Vorticity.
-                dv_dx = self.gradient_x(
-                    parameter=np.gradient(
-                        v_g, longitude, axis=2
-                    )
-                )
-                du_dy = np.gradient(u_g, self.a * latitude, axis=1)
-                geostrophic_vorticity = dv_dx - du_dy
-                
-                # Part (1).
-                A = geostrophic_vorticity + f
-                A_diffx = self.gradient_x(
+                # The Prognostic Section for Geopotential Height (QG
+                # Vorticity Equation).
+                # The derivative of geostrophic vorticity with respect to latitude
+                # and longitude.
+                # Longitude.
+                geo_x = -u_g * self.gradient_x(
                     parameter=np.gradient(
                         A, longitude, axis=2
                     )
                 )
-                A_diffy = np.gradient(A, self.a * latitude, axis=1)
-                Part_1 = f_0 * (
-                    (-u_g * A_diffx) + (-v_g * A_diffy)
-                )
+                # Latitude.
+                geo_y = -v_g * np.gradient(geo, self.a * latitude, axis=1)
 
-                # The derivative of temperature with respect to latitude
-                # and longitude.
-                dT_dx = self.gradient_x(
-                    parameter=np.gradient(
-                        T, longitude, axis=2
-                    )
-                )
-                dT_dy = np.gradient(T, self.a * latitude, axis=1)
+                # The derivative of vertical motion with respect to pressure.
+                omega_p = f_0 * np.gradient(omega, pressure, axis=0)
 
-                # Part (2)
-                nabla_T = -u_g * dT_dx + -v_g * dT_dy
-                
-                B = (self.R / pressure_3d) * nabla_T
-                dB_dp = np.gradient(B, pressure, axis=0)
+                # Last term.
+                d = -beta * v_g
 
-                Part_2 = ((f_0 ** 2) / sigma) * dB_dp
+                # Right hand side.
+                RHS_geo = geo_x + geo_y + omega_p + d
 
-                RHS_geo = Part_1 - Part_2
-                RHS_geo *= -1
-
-                # Change with respect to time for geopotential.
+                # Change with respect to time for geostrophic vorticity.
                 if n == 0:
                     RHS_geo = RHS_geo * delta_halfstep
                 else:
                     RHS_geo = RHS_geo * delta_2t
-                change_geopotential = RHS_geo.value * geo.unit
+                change_vorticity = RHS_geo.value * geo.unit
 
                 # Smoothing operator (filter with normal distribution
                 # of weights).
-                change_geopotential = smooth_gaussian(
-                    scalar_grid=change_geopotential.value,
+                change_vorticity = smooth_gaussian(
+                    scalar_grid=change_vorticity.value,
                     n=14,
-                ).magnitude * change_geopotential.unit
+                ).magnitude * change_vorticity.unit
 
                 if n == 0:
-                    geo = geo_i + change_geopotential
+                    geo = geo_i + change_vorticity
                 elif n == 1:
-                    geo = geo_i + change_geopotential
+                    geo = geo_i + change_vorticity
                 elif n == 2:
-                    geo_n = geo_i + change_geopotential
+                    geo_n = geo_i + change_vorticity
                 else:
-                    geo_n = geo_0 + change_geopotential
+                    geo_n = geo_0 + change_vorticity
                     # Apply Robert-Asselin time filter.
                     geo = geo + 0.1 * (geo_n - 2*geo + geo_0)
                 
@@ -784,6 +796,15 @@ cdef class Dynamics(RNN):
                 # Determine the mean flow to linearise the PDE.
                 u_0 = np.mean(u_g)
                 v_0 = np.mean(v_g)
+
+                # The derivative of temperature with respect to latitude
+                # and longitude.
+                dT_dx = self.gradient_x(
+                    parameter=np.gradient(
+                        T, longitude, axis=2
+                    )
+                )
+                dT_dy = np.gradient(T, self.a * latitude, axis=1)
 
                 # Thermodynamic Equation.
                 A = -u_0 * dT_dx
@@ -907,7 +928,9 @@ cdef class Dynamics(RNN):
                     input_data=True, 
                     geo=height, 
                     temp=T, 
-                    rh=rh, 
+                    rh=rh,
+                    u=u,
+                    v=v 
                 )
 
                 # Recurrent Neural Network.
@@ -927,9 +950,6 @@ cdef class Dynamics(RNN):
                 # Meridional Wind.
                 v_g = config.meridional_wind()
 
-                # Vertical Motion.
-                omega = config.vertical_motion()
-
                 # Static Stability.
                 sigma = config.static_stability()
 
@@ -945,8 +965,6 @@ cdef class Dynamics(RNN):
                     zonal_wind.append(u_g.value)
                     # Meridional Wind.
                     meridional_wind.append(v_g.value)
-                    # Vertical Motion.
-                    vertical_motion.append(omega.value)
                     # Static Stability
                     static_stability.append(sigma.value)
                     # Temperature.
@@ -971,7 +989,6 @@ cdef class Dynamics(RNN):
             HeightList.append(geopotential_height)
             ZonalList.append(zonal_wind)
             MeridionalList.append(meridional_wind)
-            VerticalList.append(vertical_motion)
             StabilityList.append(static_stability)
             TemperatureList.append(temperature)
             VirtualList.append(virtual_temperature)
@@ -1048,15 +1065,15 @@ cdef class Dynamics(RNN):
                 input_data=True, 
                 geo=height, 
                 temp=T_i, 
-                rh=rh, 
+                rh=rh,
+                u=u,
+                v=v 
             )
             # Geostrophic Wind.
             # Zonal Wind.
             u_g = config.zonal_wind()
             # Meridional Wind.
             v_g = config.meridional_wind()
-            # Vertical Motion.
-            omega = config.vertical_motion()
             # Static Stability.
             sigma = config.static_stability()
             # Precipitable Water.
@@ -1071,8 +1088,6 @@ cdef class Dynamics(RNN):
         ZonalWind = np.asarray(ZonalList)
         # Meridional Wind.
         MeridionalWind = np.asarray(MeridionalList)
-        # Vertical Motion.
-        VerticalMotion = np.asarray(VerticalList)
         # Static Stability.
         StaticStability = np.asarray(StabilityList)
         # Air Temperature.
@@ -1091,7 +1106,7 @@ cdef class Dynamics(RNN):
 
         # Define the coordinates for the cube. 
         # Latitude.
-        lat = DimCoord(
+        lat_map = DimCoord(
             self.latitude_lines(),
             standard_name='latitude',
             units='degrees'
@@ -1132,7 +1147,7 @@ cdef class Dynamics(RNN):
             standard_name='geopotential_height',
             units='m',
             dim_coords_and_dims=[
-                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat_map, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1145,7 +1160,7 @@ cdef class Dynamics(RNN):
             standard_name='x_wind',
             units='m s-1',
             dim_coords_and_dims=[
-                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat_map, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1157,31 +1172,19 @@ cdef class Dynamics(RNN):
             standard_name='y_wind',
             units='m s-1',
             dim_coords_and_dims=[
-                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat_map, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
             }
         )
         v_cube.add_aux_coord(ref_time)
-        # Vertical Motion.
-        omega_cube = Cube(VerticalMotion,
-            standard_name='lagrangian_tendency_of_air_pressure',
-            units='hPa s-1',
-            dim_coords_and_dims=[
-                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
-            ],
-            attributes={
-                'source': 'Motus Aeris @ AMSIMP',
-            }
-        )
-        omega_cube.add_aux_coord(ref_time)
         # Static Stability.
         sigma_cube = Cube(StaticStability,
             long_name='static_stability',
             units='J hPa-2 kg-1',
             dim_coords_and_dims=[
-                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat_map, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1194,7 +1197,7 @@ cdef class Dynamics(RNN):
             standard_name='air_temperature',
             units='K',
             dim_coords_and_dims=[
-                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat_map, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1206,7 +1209,7 @@ cdef class Dynamics(RNN):
             standard_name='virtual_temperature',
             units='K',
             dim_coords_and_dims=[
-                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat_map, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1218,7 +1221,7 @@ cdef class Dynamics(RNN):
             standard_name='relative_humidity',
             units='%',
             dim_coords_and_dims=[
-                (model_runs, 0), (forecast_period, 1), (p, 2), (lat, 3), (lon, 4)
+                (model_runs, 0), (forecast_period, 1), (p, 2), (lat_map, 3), (lon, 4)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1230,7 +1233,7 @@ cdef class Dynamics(RNN):
             long_name='pressure_thickness',
             units='m',
             dim_coords_and_dims=[
-                (model_runs, 0), (forecast_period, 1), (lat, 2), (lon, 3)
+                (model_runs, 0), (forecast_period, 1), (lat_map, 2), (lon, 3)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -1242,7 +1245,7 @@ cdef class Dynamics(RNN):
             long_name='precipitable_water',
             units='mm',
             dim_coords_and_dims=[
-                (model_runs, 0), (forecast_period, 1), (lat, 2), (lon, 3)
+                (model_runs, 0), (forecast_period, 1), (lat_map, 2), (lon, 3)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
