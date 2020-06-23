@@ -11,13 +11,13 @@ cdef class Backend:
     cdef bool input_data
     cdef input_date, date, input_geo, input_rh, input_temp, input_u, input_v
 
-    cpdef np.ndarray latitude_lines(self, bool f=?)
+    cpdef np.ndarray latitude_lines(self, bool beta=?)
     cpdef np.ndarray longitude_lines(self)
     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)
     cdef np.ndarray gradient_x(self, parameter=?)
     cdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)
 
-    cpdef np.ndarray coriolis_parameter(self)
+    cpdef np.ndarray coriolis_parameter(self, bool beta=?)
     cpdef np.ndarray rossby_parameter(self)
     cpdef np.ndarray beta_plane(self)
 

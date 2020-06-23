@@ -24,24 +24,37 @@ from cpython cimport bool
 
 cdef class Moist(Backend):
     """
-    AMSIMP Moist Thermodynamics Class - This class is concerned with calculating how much
-    precipitable water vapor is in the air at a given latitude. Considering
-    stratospheric air can be approximated as dry, to a reasonable degree of
-    accuracy, this class will only consider tropospheric air. (Change description).
+    AMSIMP Moist Thermodynamics Class - This class is concerned with incorpating
+    moisture into the atmospheric model. This is done through the utilisation of
+    Mosit Thermodynamics. Atmospheric thermodynamics is the study of heat-to-work
+    transformations (and their reverse) that take place in the earth's atmosphere
+    and manifest as weather or climate. Atmospheric thermodynamics use the laws
+    of classical thermodynamics, to describe and explain such phenomena as
+    the properties of moist air
 
     vapor_pressure ~ generates a NumPy array of saturated vapor pressure.
-    precipitable_water ~ generates a NumPy array of saturated precipitable water
-    vapor.
+    virtual_temperature ~ generates a NumPy array of the virtual temperature.
+    The unit of measurement is Kelvin.
+
+    density ~ generates a NumPy array of the atmospheric density. The unit of
+    measurement is kilograms per cubic metric.
+    exner_function ~ generates a NumPy array of the Exner function (4). This
+    method has no unit of measurement, i.e. it is dimensionless.
+    precipitable_water ~ generates a NumPy array of precipitable water
+    vapor. The unit of measurement is millimetres.
+    potential_temperature ~ outputs a NumPy array of potential temperature.
+    The unit of measurement is Kelvin.
     water_contourf ~ generates a precipitable water vapor contour plot, and
     overlays that said plot onto a EckertIII projection of the Earth.
     """
 
     cpdef np.ndarray vapor_pressure(self):
         """
-        Generates a NumPy array of vapor pressure. Vapor pressure, in
-        meteorology, is the partial pressure of water vapor. The partial
-        pressure of water vapor is the pressure that water vapor contributes
-        to the total atmospheric pressure.
+        Generates a NumPy array of vapor pressure. 
+        
+        Vapor pressure, in meteorology, is the partial pressure of water vapor.
+        The partial pressure of water vapor is the pressure that water vapor
+        contributes to the total atmospheric pressure.
 
         Equation (Saturated Vapor Pressure):
             e_s = 6.112 \* \exp((17.67 * T) / (T + 243.15))
@@ -72,7 +85,16 @@ cdef class Moist(Backend):
 
     cpdef np.ndarray virtual_temperature(self):
         """
-        Explain here.
+        Generates a NumPy array of the virtual temperature. 
+        
+        The virtual temperature is the temperature at which dry air
+        would have the same density as the moist air, at a given
+        pressure. In other words, two air samples with the same
+        virtual temperature have the same density, regardless
+        of their actual temperature or relative humidity.
+        
+        Equation:
+        T_v = frac{T}{1 - frac{0.378 e}{p}}
         """
         virtual_temperature = self.temperature() / (
             1 - (
@@ -87,16 +109,16 @@ cdef class Moist(Backend):
     cpdef np.ndarray density(self):
         """
         Generates a NumPy array of atmospheric pressure utilising the Ideal
-        Gas Law. The ideal gas equation is the equation of state for the
+        Gas Law.
+
+        The atmospheric density is the mass of the atmosphere per unit
+        volume. The ideal gas equation is the equation of state for the
         atmosphere, and is defined as an equation relating temperature,
         pressure, and specific volume of a system in theromodynamic
         equilibrium.
 
         Equation:
             rho = frac{p}{R * T_v}
-
-        The atmospheric density is the mass of the atmosphere per unit
-        volume.
         """
         cdef np.ndarray pressure_surfaces = self.pressure_surfaces(dim_3d=True)
 
@@ -108,8 +130,9 @@ cdef class Moist(Backend):
 
     cpdef np.ndarray exner_function(self):
         """
-        Generates a NumPy array of the exner function. The Exner function can be
-        viewed as non-dimensionalized pressure.
+        Generates a NumPy array of the exner function. 
+        
+        The Exner function can be viewed as non-dimensionalized pressure.
 
         Equation:
             \Pi = frac{T}{theta}
@@ -117,6 +140,25 @@ cdef class Moist(Backend):
         exner_function = self.virtual_temperature() / self.potential_temperature()
 
         return exner_function
+
+    cpdef np.ndarray mixing_ratio(self):
+        """"
+        Generates a NumPy array of the mixing ratio.
+
+        The mixing ratio is the ratio of the mass of a variable atmospheric
+        constituent to the mass of dry air. In this particular case, it refers
+        to water vapor.
+
+        Equation:
+            q = frac{0.622 * e}{p - e}
+        """
+        mixing_ratio = (
+            0.622 * self.vapor_pressure()
+        ) / (
+                self.pressure_surfaces(dim_3d=True) - self.vapor_pressure()
+        )
+
+        return mixing_ratio
 
     cpdef np.ndarray potential_temperature(self, moist=False):
         """
@@ -166,7 +208,7 @@ cdef class Moist(Backend):
 
 # -----------------------------------------------------------------------------------------#
 
-    def mixing_ratio(self, pressure, vapor_pressure):
+    def __mixing_ratio(self, pressure, vapor_pressure):
         """
         This method is solely utilised for integration in the
         amsimp.Water.precipitable_water() method. Please do not interact with
@@ -176,9 +218,10 @@ cdef class Moist(Backend):
 
         return y
 
-    cpdef np.ndarray precipitable_water(self):
+    cpdef np.ndarray precipitable_water(self, sum_pwv=True):
         """
         Generates a NumPy array of saturated precipitable water vapor.
+        
         Precipitable water is the total atmospheric water vapor contained in a
         vertical column of unit cross-sectional area extending between any two
         specified levels. For a contour plot of this data, please use the
@@ -200,7 +243,8 @@ cdef class Moist(Backend):
         cdef list list_precipitablewater = []
         cdef list pwv_lat, pwv_alt
         cdef tuple integration_term
-        cdef float p1, p2, e, P_wv, Pwv_intergrationterm
+        cdef float p1, p2, e, Pwv_intergrationterm
+        cdef P_wv
         cdef int len_pressurelong = len(pressure)
         cdef int len_pressurelat = len(pressure[0])
         cdef int len_pressurealt = len(pressure[0][0]) - 1
@@ -219,13 +263,17 @@ cdef class Moist(Backend):
                     p2 = pressure[i][n][k + 1]
                     e = (vapor_pressure[i][n][k] + vapor_pressure[i][n][k + 1]) / 2
 
-                    integration_term = quad(self.mixing_ratio, p1, p2, args=(e,))
+                    integration_term = quad(self.__mixing_ratio, p1, p2, args=(e,))
                     Pwv_intergrationterm = integration_term[0]
                     pwv_alt.append(Pwv_intergrationterm)
 
                     k += 1
 
-                P_wv = np.sum(pwv_alt)
+                if sum_pwv: 
+                    P_wv = np.sum(pwv_alt)
+                else:
+                    P_wv = pwv_alt
+                
                 pwv_lat.append(P_wv)                   
 
                 n += 1
