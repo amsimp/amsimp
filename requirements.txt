@@ -1,0 +1,7 @@
+scipy
+astropy
+matplotlib
+numpy
+cartopy
+wget
+scikit-learn

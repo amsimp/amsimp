@@ -1,0 +1,30 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'macOS-10.14'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.7.5'
+- bash: echo "##vso[task.prependpath]$CONDA/bin"
+  displayName: Add conda to PATH
+- bash: sudo chown -R $USER $CONDA
+  displayName: Take ownership of conda installation
+- bash: conda create --yes --quiet --name myEnvironment
+  displayName: Create Anaconda environment
+- bash: |
+    conda install --yes -c amsimp amsimp
+    pip install wget
+    pip install pynverse
+  displayName: Install Anaconda packages
+- task: PythonScript@0
+  inputs:
+    scriptSource: 'inline'
+    script: |
+      import amsimp
+
+      detail = amsimp.Dynamics(5, 1)
+
+      detail.simulate()
