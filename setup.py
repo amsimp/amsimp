@@ -14,6 +14,7 @@ else:
 ext = '.pyx' if USE_CYTHON else '.c'
 
 extensions = [
+    Extension("amsimp.download", ["amsimp/download"+ext], language='c', include_dirs=['amsimp/']),
     Extension("amsimp.backend", ["amsimp/backend"+ext], language='c',
     include_dirs=['amsimp/']),
     Extension("amsimp.wind", ["amsimp/wind"+ext], language='c',
@@ -32,7 +33,7 @@ setup(
     name="amsimp",
     ext_modules=extensions,
     include_dirs=[numpy.get_include()],
-    version="0.4.1",
+    version="1.0.0",
     author="Conor Casey",
     author_email="support@amsimp.com",
     description="Simulator for Atmospheric Dynamics",
@@ -43,14 +44,11 @@ setup(
     include_package_data=True,
     packages=find_packages(),
     classifiers=[
-        "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: MacOS :: MacOS X",
-        "Operating System :: Microsoft :: Windows :: Windows 10",
         "Operating System :: POSIX :: Linux",
         "Programming Language :: Cython",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Atmospheric Science",

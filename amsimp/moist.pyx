@@ -3,6 +3,21 @@
 #cython: language_level=3
 """
 AMSIMP Moist Thermodynamics Class. For information about this class is described below.
+
+Copyright (C) 2020 AMSIMP
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # -----------------------------------------------------------------------------------------#
@@ -293,56 +308,3 @@ cdef class Moist(Backend):
 
         precipitable_water = precipitable_water.to(self.units.mm)
         return precipitable_water
-
-    def water_contourf(self):
-        """
-        Plots precipitable water on a contour plot, with the axes being
-        latitude and longitude. This plot is then layed on top of a EckertIII
-        global projection. For the raw data, please use the
-        amsimp.Water.precipitable_water() method.
-        """
-        # Defines the axes, and the data.
-        latitude, longitude = self.latitude_lines(), self.longitude_lines()
-        cdef np.ndarray precipitable_water = self.precipitable_water()
-
-        # EckertIII projection details.
-        ax = plt.axes(projection=ccrs.EckertIII())
-        ax.set_global()
-        ax.coastlines()
-        ax.gridlines()
-
-        # Contourf plotting.
-        minimum = precipitable_water.min()
-        maximum = precipitable_water.max()
-        levels = np.linspace(minimum, maximum, 21)
-        precipitable_water, lon = add_cyclic_point(
-            precipitable_water, coord=self.longitude_lines()
-        )
-        plt.contourf(
-            lon,
-            latitude,
-            precipitable_water,
-            transform=ccrs.PlateCarree(),
-            levels=levels,
-        )
-
-        # Add SALT.
-        plt.xlabel("Latitude ($\phi$)")
-        plt.ylabel("Longitude ($\lambda$)")
-        if not self.input_data:
-            plt.title("Precipitable Water" + " ("
-                + str(self.date.year) + '-' + str(self.date.month) + '-'
-                + str(self.date.day) + " " + str(self.date.hour) + ":00 h)"
-            )
-        else:
-            plt.title("Precipitable Water")
-
-        # Colorbar creation.
-        colorbar = plt.colorbar()
-        tick_locator = ticker.MaxNLocator(nbins=15)
-        colorbar.locator = tick_locator
-        colorbar.update_ticks()
-        colorbar.set_label("Precipitable Water (mm)")
-
-        plt.show()
-        plt.close()

@@ -1,6 +1,6 @@
 package:
   name: amsimp
-  version: "0.4.0"
+  version: "1.0.0"
 
 source:
   git_url: https://github.com/amsimp/amsimp.git
@@ -74,7 +74,7 @@ test:
 about:
   home: https://amsimp.com
   license: MIT
-  summary: An open-source ensemble prediction scheme implementation to simulating atmospheric dynamics in the troposphere and the stratosphere, written in the programming language of Cython.
+  summary: An open-source dynamical core using machine learning, written in the programming language of Cython.
   dev_url: https://github.com/amsimp
   doc_url: https://docs.amsimp.com
   doc_source_url: https://github.com/amsimp/amsimp/tree/master/docs

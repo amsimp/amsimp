@@ -3,6 +3,21 @@
 #cython: language_level=3
 """
 AMSIMP Backend Class. For information about this class is described below.
+
+Copyright (C) 2020 AMSIMP
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # -----------------------------------------------------------------------------------------#
@@ -11,7 +26,8 @@ AMSIMP Backend Class. For information about this class is described below.
 import os
 from datetime import datetime
 import socket
-import wget
+from amsimp.download cimport Download
+from amsimp.download import Download
 import numpy as np
 from astropy import constants
 from astropy import units
@@ -30,7 +46,7 @@ from iris.coord_systems import GeogCS
 # -----------------------------------------------------------------------------------------#
 
 
-cdef class Backend:
+cdef class Backend(Download):
     """
     AMSIMP Backend Class - This is the base class for AMSIMP, as such, all
     other classes within AMSIMP inherit this class, either directly or
@@ -118,11 +134,18 @@ cdef class Backend:
     G = G.value * G.unit
     # Mass of the Earth.
     M = constants.M_earth
-    M = M.value  * M.unit
+    M = M.value * M.unit
     # The specific heat capacity on a constant pressure surface for dry air.
     c_p = 1004 * (units.J / (units.kg * units.K))
     # Gravitational acceleration at the Earth's surface.
-    g = 9.80665 * (units.m / (units.s ** 2)) 
+    g = 9.80665 * (units.m / (units.s ** 2))
+    # Stefan-Boltzmann constant.
+    sigma = constants.sigma_sb
+    sigma = sigma.value * sigma.unit
+    # Insolation.
+    insolation = 1370 * (units.W / (units.m ** 2))
+    # Global Mean Albedo.
+    albedo = 0.3 * (units.m ** -2)
     
     # Remove extra constant pressure surfaces from the temperature, and
     # geopotential height array.
@@ -188,9 +211,9 @@ cdef class Backend:
         # The date at which the initial conditions was gathered (i.e. how
         # recent the data is).
         if self.input_date == None:
-            data_date_file = wget.download(
+            data_date_file = self.download(
                 "https://github.com/amsimp/initial-conditions/raw/master/date.npy", 
-                bar=None,
+                bar=False,
             )
             data_date = np.load(data_date_file)
             os.remove(data_date_file)
@@ -392,7 +415,7 @@ cdef class Backend:
         try:
             pressure_surfaces = np.load("pressure_surfaces.npy")
         except FileNotFoundError:  
-            psurfaces_file = wget.download(url)
+            psurfaces_file = self.download(url)
             pressure_surfaces = np.load(psurfaces_file)
         
         if self.remove_files:
@@ -436,6 +459,22 @@ cdef class Backend:
         gradient_x = np.transpose(parameter, (1, 0, 2)) * unit
 
         return gradient_x
+
+    cdef np.ndarray gradient_y(self, parameter=None):
+        cdef np.ndarray latitude = np.radians(self.latitude_lines().value)
+
+        gradient_y = np.gradient(
+            parameter.value, self.a * latitude, axis=1
+        ) * (parameter.unit / units.m)
+        return gradient_y
+    
+    cdef np.ndarray gradient_p(self, parameter=None):
+        cdef np.ndarray pressure = self.pressure_surfaces()
+
+        gradient_p = np.gradient(
+            parameter.value, pressure, axis=0
+        ) * (parameter.unit / pressure.unit)
+        return gradient_p
 
     cdef np.ndarray make_3dimensional_array(self, parameter=None, axis=1):
         if axis == 0:
@@ -560,7 +599,7 @@ cdef class Backend:
         meters above sea level.
 
         I strongly recommend storing the output into a variable in order to
-        prevent the need to repeatly download the file. For more information,
+        prevent the need to repeatly self.download the file. For more information,
         visit https://github.com/amsimp/initial-conditions.
         """
         if not self.input_data:
@@ -600,7 +639,7 @@ cdef class Backend:
                 geo_cube = iris.load("initial_conditions.nc")
                 geo = np.asarray(geo_cube[1].data)
             except OSError:  
-                geo_file = wget.download(url)
+                geo_file = self.download(url)
                 geo_cube = iris.load(geo_file)
                 geo = np.asarray(geo_cube[1].data)
 
@@ -661,7 +700,7 @@ cdef class Backend:
         as a percentage of the amount needed for saturation at the same temperature.
 
         I strongly recommend storing the output into a variable in order to
-        prevent the need to repeatly download the file. For more information,
+        prevent the need to repeatly self.download the file. For more information,
         visit https://github.com/amsimp/initial-conditions.
         """
         if not self.input_data:
@@ -701,7 +740,7 @@ cdef class Backend:
                 rh_cube = iris.load("initial_conditions.nc")
                 rh = np.asarray(rh_cube[2].data)
             except OSError:  
-                rh_file = wget.download(url)
+                rh_file = self.download(url)
                 rh_cube = iris.load(rh_file)
                 rh = np.asarray(rh_cube[2].data)
 
@@ -761,7 +800,7 @@ cdef class Backend:
         motion, measured at or near the surface of the Earth.
 
         I strongly recommend storing the output into a variable in order to
-        prevent the need to repeatly download the file. For more information,
+        prevent the need to repeatly self.download the file. For more information,
         visit https://github.com/amsimp/initial-conditions.
         """
         if not self.input_data:
@@ -801,7 +840,7 @@ cdef class Backend:
                 temp_cube = iris.load("initial_conditions.nc")
                 temp = np.asarray(temp_cube[3].data)
             except OSError:  
-                temp_file = wget.download(url)
+                temp_file = self.download(url)
                 temp_cube = iris.load(temp_file)
                 temp = np.asarray(temp_cube[3].data)
 
@@ -855,7 +894,7 @@ cdef class Backend:
         motion.
 
         I strongly recommend storing the output into a variable in order to
-        prevent the need to repeatly download the file. For more information,
+        prevent the need to repeatly self.download the file. For more information,
         visit https://github.com/amsimp/initial-conditions.
         """
         if not self.input_data:
@@ -895,7 +934,7 @@ cdef class Backend:
                 temp_cube = iris.load("initial_conditions.nc")
                 temp = np.asarray(temp_cube[0].data)
             except OSError:  
-                temp_file = wget.download(url)
+                temp_file = self.download(url)
                 temp_cube = iris.load(temp_file)
                 temp = np.asarray(temp_cube[0].data)
 
@@ -1115,12 +1154,13 @@ cdef class Backend:
         info += "contour plot, the value of which is 4. For a virtual temperature contour "
         info += "plot, the value of which is 5. For a vapor pressure contour plot, the "
         info += "value of which is 6. For a potential temperature contour plot, the "
-        info += "value of which is 7."
+        info += "value of which is 7. For a insolation contour plot, the value of which "
+        info += "is 8/"
 
-        # Ensure, which, is a number between 0 and 7.
-        if which < 0 or which > 7:
+        # Ensure, which, is a number between 0 and 8.
+        if which < 0 or which > 8:
             raise Exception(
-                "which must be a natural number between 0 and 7. The value of which was: {}.".format(
+                "which must be a natural number between 0 and 8. The value of which was: {}.".format(
                     which
                 ) + info
             )
@@ -1128,7 +1168,7 @@ cdef class Backend:
         # Ensure, which, is a integer.
         if not isinstance(which, int):
             raise Exception(
-                "which must be a natural number between 0 and 7. The value of which was: {}.".format(
+                "which must be a natural number between 0 and 8. The value of which was: {}.".format(
                     which
                 ) + info
             )
@@ -1146,8 +1186,9 @@ cdef class Backend:
         indx_psurface = (np.abs(self.pressure_surfaces().value - psurface)).argmin()
         
         # Defines the axes, and the data.
-        latitude, longitude = np.meshgrid(self.latitude_lines(),
-         self.longitude_lines()
+        latitude, longitude = np.meshgrid(
+            self.latitude_lines().value,
+            self.longitude_lines().value
         )
         if which == 0:
             data = self.surface_temperature()
@@ -1181,6 +1222,10 @@ cdef class Backend:
             data = self.potential_temperature()[indx_psurface, :, :]
             data_type = "Potential Temperature"
             unit = " (K)"
+        elif which == 8:
+            data = self.precipitable_water()
+            data_type = "Precipitable Water Vapor"
+            unit = " (mm)"
 
         # EckertIII projection details.
         ax = plt.axes(projection=ccrs.EckertIII())
@@ -1192,10 +1237,10 @@ cdef class Backend:
         minimum = data.min()
         maximum = data.max()
         levels = np.linspace(minimum, maximum, 21)
-        data, lon = add_cyclic_point(data, coord=self.longitude_lines())
+        data, lon = add_cyclic_point(data, coord=self.longitude_lines().value)
         contour = plt.contourf(
             lon,
-            self.latitude_lines(),
+            self.latitude_lines().value,
             data,
             transform=ccrs.PlateCarree(),
             levels=levels,
@@ -1209,12 +1254,12 @@ cdef class Backend:
                 data_type + " ("
                 + str(self.date.year) + '-' + str(self.date.month) + '-'
                 + str(self.date.day) + " " + str(self.date.hour)
-                + ":00 h"
+                + ":00 h)"
             )
         else:
             title = data_type
     
-        if which != 0:
+        if which != 0 and which != 8:
             title = (
                 title + " (" + "Pressure Surface = " + str(self.pressure_surfaces()[indx_psurface]) +")"
             )
@@ -1274,7 +1319,9 @@ cdef class Backend:
         indx_long = (np.abs(self.longitude_lines().value - central_long)).argmin()
 
         # Defines the axes, and the data.
-        latitude, pressure_surfaces = np.meshgrid(self.latitude_lines(), self.pressure_surfaces())
+        latitude, pressure_surfaces = np.meshgrid(
+            self.latitude_lines().value, self.pressure_surfaces()
+        )
         
         if which == 0:
             data = self.temperature()[:, :, indx_long]
@@ -1350,7 +1397,7 @@ cdef class Backend:
         amsimp.Backend.pressure_thickness() method.
         """
         # Defines the axes, and the data.
-        latitude, longitude = self.latitude_lines(), self.longitude_lines()
+        latitude, longitude = self.latitude_lines().value, self.longitude_lines().value
 
         cdef np.ndarray pressure_thickness = self.pressure_thickness(p1=p1, p2=p2)
 

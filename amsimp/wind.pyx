@@ -3,13 +3,27 @@
 #cython: language_level=3
 """
 AMSIMP Wind Class. For information about this class is described below.
+
+Copyright (C) 2020 AMSIMP
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # -----------------------------------------------------------------------------------------#
 
 # Importing Dependencies
 import os
-import wget
 import iris
 import cartopy.crs as ccrs
 from cartopy.util import add_cyclic_point
@@ -69,20 +83,17 @@ cdef class Wind(Moist):
         """
         # Gradient of geopotential height over latitudinal distance.
         cdef np.ndarray latitude = np.radians(self.latitude_lines().value)
-        cdef np.ndarray height_gradienty = np.gradient(
-            self.geopotential_height(),
-            self.a * latitude,
-            axis=1,
+        cdef np.ndarray height_gradienty = self.gradient_y(
+            parameter=self.geopotential_height()
         )
 
         # Gradient of geopotential height over longitudinal distance.
         cdef np.ndarray longitude = np.radians(self.longitude_lines().value)
         cdef np.ndarray height_gradientx = np.gradient(
-            self.geopotential_height().value,
+            self.geopotential_height(),
             longitude,
             axis=2,
         )
-        height_gradientx *= self.units.m
         height_gradientx = self.gradient_x(parameter=height_gradientx)
 
         # Defining a 3D coriolis parameter NumPy array.
@@ -133,8 +144,8 @@ cdef class Wind(Moist):
 
         static_stability = - self.R * (
                 temperature / (pressure * theta)
-            ) * np.gradient(
-                theta, self.pressure_surfaces(), axis=0
+            ) * self.gradient_p(
+                parameter=theta
         )
         return static_stability
 
@@ -193,7 +204,7 @@ cdef class Wind(Moist):
                 u = np.asarray(wind_cube[4].data)
                 v = np.asarray(wind_cube[5].data)
             except OSError:  
-                wind_file = wget.download(url)
+                wind_file = self.download(url)
                 wind_cube = iris.load(wind_file)
                 u = np.asarray(wind_cube[4].data)
                 v = np.asarray(wind_cube[5].data)
@@ -292,7 +303,7 @@ cdef class Wind(Moist):
         
         # Determine the LHS pf the equation by calculating the derivatives.
         # Change in meridional wind with respect to latitude.
-        v_dy = np.gradient(v, self.a * latitude, axis=1)
+        v_dy = self.gradient_y(parameter=v)
 
         # Change in zonal wind with respect to longitude.
         u_dx = np.gradient(u, longitude, axis=2)
@@ -492,8 +503,8 @@ cdef class Wind(Moist):
         np.seterr(all="ignore")
 
         # Define the axes, and the data.
-        latitude = self.latitude_lines()
-        longitude = self.longitude_lines()
+        latitude = self.latitude_lines().value
+        longitude = self.longitude_lines().value
 
         if which_wind == 0:
             wind = self.wind()
@@ -544,8 +555,8 @@ cdef class Wind(Moist):
 
         # Add geostrophic wind vectors.
         plt.quiver(
-            longitude.value,
-            latitude.value,
+            longitude,
+            latitude,
             u_norm.value,
             v_norm.value,
             transform=ccrs.PlateCarree(),   
@@ -575,12 +586,13 @@ cdef class Wind(Moist):
         colorbar.set_label("Velocity ($\\frac{m}{s}$)")
 
         # Footnote
-        plt.figtext(
-            0.99,
-            0.01,
-            "Note: Geostrophic balance does not hold near the equator.",
-            horizontalalignment="right",
-        )
+        if which_wind == 1:
+            plt.figtext(
+                0.99,
+                0.01,
+                "Note: Geostrophic balance does not hold near the equator.",
+                horizontalalignment="right",
+            )
 
         plt.show()
         plt.close()
