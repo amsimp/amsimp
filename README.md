@@ -6,16 +6,11 @@
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/downloads.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/amsimp/amsimp.svg?style=flat-square)
 
-An open-source implementation to simulating atmospheric dynamics in the troposphere and the stratosphere. Read the [paper](https://github.com/amsimp/papers/raw/master/scifest-online/project-book/main.pdf).
+An open-source dynamical core using machine learning, written in the programming language of Cython. Read the [paper](https://github.com/amsimp/papers/raw/master/scifest-online/project-book/main.pdf).
 
 **Features:**
 
-* Provides a visualisation of tropospheric and stratsopheric dynamics on a synoptic scale (Motus Aeris @ AMSIMP).
-* Provides the raw data of the simulation of tropospheric and stratsopheric dynamics. The forecasted values are achieved by numerically solving the Height Tendency and Advection Equations through the finite difference method.
-* Provides an ensemble prediction system simulation, which can be used to determine uncertainty in a weather forecast, as well as, providing a better prediction for the future state of the atmosphere. Instead of running a atmospheric dynamical simulation once (this would be regarded as deterministic), the simulation is run many different time with slightly different initial conditions.
-* Provides an option to incorpate a recurrent neural network with the traditional physical model to improve overall accuracy.
-* Provides example visualisations of different atmospheric processes, an example being a contour plot of geostrophic wind, overlayed by wind vectors, with axes being transformed onto a [Nearside Projection](https://scitools.org.uk/cartopy/docs/v0.15/crs/projections.html)(a perspective view looking directly down at a point on the globe).
-* Provides extensive unit support through the utilisation of the unit module within astropy.
+* Amazing features.
 
 ## Installation
 
@@ -27,5 +22,16 @@ $ conda install -c amsimp amsimp
 
 For more information, please [read the documentation](https://docs.amsimp.com) on the website.
 
-<sub><sup>AMSIMP DOES NOT PROVIDE A WEATHER FORECAST! PLEASE VISIT THE WEBSITE OF YOUR LOCAL METEOROLOGICAL AGENCY FOR ACCURATE WEATHER INFORMATION. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</sup></sub>
+## License
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see [this webpage](https://www.gnu.org/licenses/).
