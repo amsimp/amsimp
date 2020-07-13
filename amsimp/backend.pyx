@@ -151,7 +151,7 @@ cdef class Backend(Download):
     # geopotential height array.
     remove_psurfaces = [23, 26, 33]
 
-    def __cinit__(self, int delta_latitude=5, int delta_longitude=5, bool remove_files=False, forecast_length=72, bool ai=True, data_size=150, epochs=200, input_date=None, bool input_data=False, geo=None, temp=None, rh=None, u=None, v=None):
+    def __cinit__(self, int delta_latitude=5, int delta_longitude=5, bool remove_files=False, forecast_length=72, delta_t=2, bool ai=True, data_size=150, epochs=200, input_date=None, bool input_data=False, geo=None, temp=None, rh=None, u=None, v=None):
         """
         The parameters, delta_latitude and delta_longitude, defines the
         horizontal resolution between grid points within the software. The
@@ -344,7 +344,7 @@ cdef class Backend(Download):
                 )
             )
 
-    cpdef np.ndarray latitude_lines(self, bool beta=False):
+    cpdef np.ndarray latitude_lines(self):
         """
         Generates a NumPy array of latitude lines.
         """
@@ -366,21 +366,6 @@ cdef class Backend(Download):
 
         # Convert list to NumPy array.
         latitude_lines = np.asarray(sh)
-
-        # For corilios parameter calculations.
-        if beta:
-            # Reduce resolution.
-            reduce_lat_sh = np.split(latitude_lines, 2)[0]
-            reduce_lat_sh = reduce_lat_sh[::4]
-            reduce_lat_nh = np.sort(reduce_lat_sh * -1)
-            reduce_lat = np.concatenate((reduce_lat_sh, reduce_lat_nh))
-
-            # Enlargen array to match expected output.
-            latitude_lines = np.sort(
-                np.resize(
-                    reduce_lat, latitude_lines.shape
-                )
-            )
 
         # Add the unit of measurement.
         latitude_lines *= self.units.deg
@@ -504,7 +489,7 @@ cdef class Backend(Download):
 
 # -----------------------------------------------------------------------------------------
 
-    cpdef np.ndarray coriolis_parameter(self, bool beta=False):
+    cpdef np.ndarray coriolis_parameter(self):
         """
         Generates a NumPy arrray of the Coriolis parameter at various latitudes
         of the Earth's surface.
@@ -516,71 +501,10 @@ cdef class Backend(Download):
             f_0 = 2 \* Upomega * sin(\phi)
         """
         coriolis_parameter = (
-            2 * self.Upomega * np.sin(np.radians(self.latitude_lines(beta=beta)))
+            2 * self.Upomega * np.sin(np.radians(self.latitude_lines()))
         )
 
         return coriolis_parameter
-
-    cpdef np.ndarray rossby_parameter(self):
-        """
-        Generates a NumPy arrray of the Rossby parameter at various latitudes
-        of the Earth's surface. 
-        
-        The Rossby parameter is defined as two times
-        the angular rotation of the Earth by the cosine of the latitude you are
-        interested in, all over the mean radius of the Earth.
-
-        Equation:
-            beta = frac{2 \* Upomega * cos(\phi)}{a}
-        """
-        rossby_parameter = (
-            2 * self.Upomega * np.cos(np.radians(self.latitude_lines(beta=True)))
-        ) / self.a
-
-        return rossby_parameter
-
-    cpdef np.ndarray beta_plane(self):
-        """
-        Generates a NumPy arrray of the Coriolis parameter at various latitudes
-        of the Earth's surface, under the beta plane approximation. 
-        
-        The Coriolis parameter is defined as the sum of the Coriolis parameter
-        at a particular reference latitude (see amsimp.Backend.coriolis_parameter),
-        and the product of the Rossby parameter at the reference latitude and the 
-        meridional distance from the reference latitude.
-
-        Equation:
-            f = f_0 + beta \* y
-        """
-        # Define parameters
-        cdef np.ndarray f_0 = self.coriolis_parameter(beta=True).value
-        cdef np.ndarray beta_0 = self.rossby_parameter().value
-        cdef np.ndarray lat_0 = self.latitude_lines().value
-        cdef np.ndarray lat = self.latitude_lines().value
-
-        cdef int n = 0
-        f_list = []
-        while n < len(lat):
-            # Define the nearest reference latitude line (index value).
-            nearest_lat0_index = (np.abs(lat_0 - lat[n])).argmin()
-
-            # Define the nearest reference latitude line.
-            nearest_lat0 = lat_0[nearest_lat0_index]
-            # Define the nearest reference Coriolis parameter.
-            nearest_f0 = f_0[nearest_lat0_index]
-            # Define the nearest reference Rossby parameter.
-            nearest_beta0 = beta_0[nearest_lat0_index]
-            
-            # Calculation, and append to list.
-            f = nearest_f0 + nearest_beta0 * (
-                self.a.value * np.radians(lat[n] - nearest_lat0)
-            )
-            f_list.append(f)
-
-            n += 1
-        
-        beta_plane = np.asarray(f_list) * (units.rad / units.s)
-        return beta_plane
 
 # -----------------------------------------------------------------------------------------#
 

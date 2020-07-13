@@ -1119,29 +1119,15 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  * cdef inline object PyArray_MultiIterNew1(a):
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
-struct __pyx_opt_args_6amsimp_7backend_7Backend_latitude_lines;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_surfaces;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_x;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_y;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_p;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_make_3dimensional_array;
-struct __pyx_opt_args_6amsimp_7backend_7Backend_coriolis_parameter;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_thickness;
 
-/* "amsimp/backend.pxd":40
- *     cdef input_date, date, input_geo, input_rh, input_temp, input_u, input_v
- * 
- *     cpdef np.ndarray latitude_lines(self, bool beta=?)             # <<<<<<<<<<<<<<
- *     cpdef np.ndarray longitude_lines(self)
- *     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)
- */
-struct __pyx_opt_args_6amsimp_7backend_7Backend_latitude_lines {
-  int __pyx_n;
-  PyBoolObject *beta;
-};
-
 /* "amsimp/backend.pxd":42
- *     cpdef np.ndarray latitude_lines(self, bool beta=?)
+ *     cpdef np.ndarray latitude_lines(self)
  *     cpdef np.ndarray longitude_lines(self)
  *     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)             # <<<<<<<<<<<<<<
  *     cdef np.ndarray gradient_x(self, parameter=?)
@@ -1193,7 +1179,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_p {
  *     cdef np.ndarray gradient_p(self, parameter=?)
  *     cdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)             # <<<<<<<<<<<<<<
  * 
- *     cpdef np.ndarray coriolis_parameter(self, bool beta=?)
+ *     cpdef np.ndarray coriolis_parameter(self)
  */
 struct __pyx_opt_args_6amsimp_7backend_7Backend_make_3dimensional_array {
   int __pyx_n;
@@ -1201,19 +1187,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_make_3dimensional_array {
   PyObject *axis;
 };
 
-/* "amsimp/backend.pxd":48
- *     cdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)
- * 
- *     cpdef np.ndarray coriolis_parameter(self, bool beta=?)             # <<<<<<<<<<<<<<
- *     cpdef np.ndarray rossby_parameter(self)
- *     cpdef np.ndarray beta_plane(self)
- */
-struct __pyx_opt_args_6amsimp_7backend_7Backend_coriolis_parameter {
-  int __pyx_n;
-  PyBoolObject *beta;
-};
-
-/* "amsimp/backend.pxd":59
+/* "amsimp/backend.pxd":57
  * 
  *     cpdef np.ndarray gravitational_acceleration(self)
  *     cpdef np.ndarray pressure_thickness(self, p1=?, p2=?)             # <<<<<<<<<<<<<<
@@ -1320,16 +1294,14 @@ struct __pyx_obj_6amsimp_4wind_Wind {
  */
 
 struct __pyx_vtabstruct_6amsimp_7backend_Backend {
-  PyArrayObject *(*latitude_lines)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch, struct __pyx_opt_args_6amsimp_7backend_7Backend_latitude_lines *__pyx_optional_args);
+  PyArrayObject *(*latitude_lines)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*longitude_lines)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*pressure_surfaces)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch, struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_surfaces *__pyx_optional_args);
   PyArrayObject *(*gradient_x)(struct __pyx_obj_6amsimp_7backend_Backend *, struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_x *__pyx_optional_args);
   PyArrayObject *(*gradient_y)(struct __pyx_obj_6amsimp_7backend_Backend *, struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_y *__pyx_optional_args);
   PyArrayObject *(*gradient_p)(struct __pyx_obj_6amsimp_7backend_Backend *, struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_p *__pyx_optional_args);
   PyArrayObject *(*make_3dimensional_array)(struct __pyx_obj_6amsimp_7backend_Backend *, struct __pyx_opt_args_6amsimp_7backend_7Backend_make_3dimensional_array *__pyx_optional_args);
-  PyArrayObject *(*coriolis_parameter)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch, struct __pyx_opt_args_6amsimp_7backend_7Backend_coriolis_parameter *__pyx_optional_args);
-  PyArrayObject *(*rossby_parameter)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
-  PyArrayObject *(*beta_plane)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
+  PyArrayObject *(*coriolis_parameter)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*geopotential_height)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*relative_humidity)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*surface_temperature)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
@@ -2969,7 +2941,7 @@ static PyObject *__pyx_f_6amsimp_4wind_4Wind_geostrophic_wind(struct __pyx_obj_6
   __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_radians); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, NULL)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 85, __pyx_L1_error)
+  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
@@ -3153,7 +3125,7 @@ static PyObject *__pyx_f_6amsimp_4wind_4Wind_geostrophic_wind(struct __pyx_obj_6
  *             coriolis_parameter, (
  */
   __Pyx_TraceLine(100,0,__PYX_ERR(0, 100, __pyx_L1_error))
-  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.coriolis_parameter(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.coriolis_parameter(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_value); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
@@ -5085,7 +5057,7 @@ static PyObject *__pyx_f_6amsimp_4wind_4Wind_wind(struct __pyx_obj_6amsimp_4wind
     __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_split); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 246, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, NULL)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 246, __pyx_L1_error)
+    __pyx_t_4 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 246, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_value); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 246, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
@@ -5521,7 +5493,7 @@ static PyObject *__pyx_f_6amsimp_4wind_4Wind_wind(struct __pyx_obj_6amsimp_4wind
     __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_split); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 256, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, NULL)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 256, __pyx_L1_error)
+    __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 256, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_value); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 256, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_13);
@@ -6307,7 +6279,7 @@ static PyArrayObject *__pyx_f_6amsimp_4wind_4Wind_vertical_motion(struct __pyx_o
   __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_radians); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 298, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, NULL)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 298, __pyx_L1_error)
+  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 298, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -7557,7 +7529,7 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_8wind_contourf(struct __pyx_obj_6a
   __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_meshgrid); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 394, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, NULL)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 394, __pyx_L1_error)
+  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 394, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_5 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.pressure_surfaces(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, NULL)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 394, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
@@ -9280,7 +9252,7 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_10globe(struct __pyx_obj_6amsimp_4
  * 
  */
   __Pyx_TraceLine(506,0,__PYX_ERR(0, 506, __pyx_L1_error))
-  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, NULL)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 506, __pyx_L1_error)
+  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.latitude_lines(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 506, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 506, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);

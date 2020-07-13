@@ -1117,29 +1117,15 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  * cdef inline object PyArray_MultiIterNew1(a):
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
-struct __pyx_opt_args_6amsimp_7backend_7Backend_latitude_lines;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_surfaces;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_x;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_y;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_p;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_make_3dimensional_array;
-struct __pyx_opt_args_6amsimp_7backend_7Backend_coriolis_parameter;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_thickness;
 
-/* "amsimp/backend.pxd":40
- *     cdef input_date, date, input_geo, input_rh, input_temp, input_u, input_v
- * 
- *     cpdef np.ndarray latitude_lines(self, bool beta=?)             # <<<<<<<<<<<<<<
- *     cpdef np.ndarray longitude_lines(self)
- *     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)
- */
-struct __pyx_opt_args_6amsimp_7backend_7Backend_latitude_lines {
-  int __pyx_n;
-  PyBoolObject *beta;
-};
-
 /* "amsimp/backend.pxd":42
- *     cpdef np.ndarray latitude_lines(self, bool beta=?)
+ *     cpdef np.ndarray latitude_lines(self)
  *     cpdef np.ndarray longitude_lines(self)
  *     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)             # <<<<<<<<<<<<<<
  *     cdef np.ndarray gradient_x(self, parameter=?)
@@ -1191,7 +1177,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_p {
  *     cdef np.ndarray gradient_p(self, parameter=?)
  *     cdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)             # <<<<<<<<<<<<<<
  * 
- *     cpdef np.ndarray coriolis_parameter(self, bool beta=?)
+ *     cpdef np.ndarray coriolis_parameter(self)
  */
 struct __pyx_opt_args_6amsimp_7backend_7Backend_make_3dimensional_array {
   int __pyx_n;
@@ -1199,19 +1185,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_make_3dimensional_array {
   PyObject *axis;
 };
 
-/* "amsimp/backend.pxd":48
- *     cdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)
- * 
- *     cpdef np.ndarray coriolis_parameter(self, bool beta=?)             # <<<<<<<<<<<<<<
- *     cpdef np.ndarray rossby_parameter(self)
- *     cpdef np.ndarray beta_plane(self)
- */
-struct __pyx_opt_args_6amsimp_7backend_7Backend_coriolis_parameter {
-  int __pyx_n;
-  PyBoolObject *beta;
-};
-
-/* "amsimp/backend.pxd":59
+/* "amsimp/backend.pxd":57
  * 
  *     cpdef np.ndarray gravitational_acceleration(self)
  *     cpdef np.ndarray pressure_thickness(self, p1=?, p2=?)             # <<<<<<<<<<<<<<
@@ -1306,16 +1280,14 @@ struct __pyx_obj_6amsimp_5moist_Moist {
  */
 
 struct __pyx_vtabstruct_6amsimp_7backend_Backend {
-  PyArrayObject *(*latitude_lines)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch, struct __pyx_opt_args_6amsimp_7backend_7Backend_latitude_lines *__pyx_optional_args);
+  PyArrayObject *(*latitude_lines)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*longitude_lines)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*pressure_surfaces)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch, struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_surfaces *__pyx_optional_args);
   PyArrayObject *(*gradient_x)(struct __pyx_obj_6amsimp_7backend_Backend *, struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_x *__pyx_optional_args);
   PyArrayObject *(*gradient_y)(struct __pyx_obj_6amsimp_7backend_Backend *, struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_y *__pyx_optional_args);
   PyArrayObject *(*gradient_p)(struct __pyx_obj_6amsimp_7backend_Backend *, struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_p *__pyx_optional_args);
   PyArrayObject *(*make_3dimensional_array)(struct __pyx_obj_6amsimp_7backend_Backend *, struct __pyx_opt_args_6amsimp_7backend_7Backend_make_3dimensional_array *__pyx_optional_args);
-  PyArrayObject *(*coriolis_parameter)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch, struct __pyx_opt_args_6amsimp_7backend_7Backend_coriolis_parameter *__pyx_optional_args);
-  PyArrayObject *(*rossby_parameter)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
-  PyArrayObject *(*beta_plane)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
+  PyArrayObject *(*coriolis_parameter)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*geopotential_height)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*relative_humidity)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*surface_temperature)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);

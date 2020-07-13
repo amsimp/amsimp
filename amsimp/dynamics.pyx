@@ -408,12 +408,13 @@ cdef class Dynamics(RNN):
     visualise ~ please explain here.
     """
 
-    def __cinit__(self, int delta_latitude=5, int delta_longitude=5, bool remove_files=False, forecast_length=72, bool ai=True, data_size=150, epochs=200, input_date=None, bool input_data=False, geo=None, temp=None, rh=None, u=None, v=None):
+    def __cinit__(self, int delta_latitude=5, int delta_longitude=5, bool remove_files=False, forecast_length=72, delta_t=2, bool ai=True, data_size=150, epochs=200, input_date=None, bool input_data=False, geo=None, temp=None, rh=None, u=None, v=None):
         """
-        The parameter, forecast_length, defines the length of the forecast
-        (in hours) generated in the simulation. This value must be greater
-        than 0, and less than 168 in order to ensure that the simulation
-        methods function correctly. Defaults to a value of 72.
+        The parameter, forecast_length, defines the length of the 
+        simulation (defined in hours). Defaults to a value of 72.
+
+        The parameter, delta_t, defines the change with respect to time
+        (in minutes) defined in the simulation. Defaults to a value of 2.
         
         For more information, please refer to amsimp.Backend.__cinit__()
         method.
@@ -421,12 +422,16 @@ cdef class Dynamics(RNN):
         # Add units to forecast length variable.
         if type(forecast_length) != Quantity:
             forecast_length = forecast_length * self.units.h
+        # Add units to delta_t variable.
+        if type(delta_t) != Quantity:
+            delta_t = delta_t * self.units.min
 
         # Declare class variables.
         super().__init__(delta_latitude)
         super().__init__(delta_longitude)
         super().__init__(remove_files)
         self.forecast_length = forecast_length
+        self.delta_t = delta_t
         self.ai = ai
         super().__init__(input_date)
         super().__init__(input_data)
@@ -435,11 +440,11 @@ cdef class Dynamics(RNN):
         super().__init__(rh)
         super().__init__(u)
         super().__init__(v)
-
-        # Ensure self.forecast_length is between 0 and 168.
-        if self.forecast_length.value > 168 or self.forecast_length.value <= 0:
+        
+        # Ensure self.forecast_length is greater than, or equal to 1.
+        if self.forecast_length.value <= 0:
             raise Exception(
-                "forecast_length must be a positive integer between 1 and 168. The value of forecast_length was: {}".format(
+                "forecast_length must be a positive number greater than, or equal to 1. The value of forecast_length was: {}".format(
                     self.forecast_length
                 )
             )
@@ -452,30 +457,26 @@ cdef class Dynamics(RNN):
                 )
             )
 
-    def forecast_period(self):
+    cpdef tuple forecast_period(self):
         """
         Generates the period of time over which the forecast will be generated
         for. 
         
-        Please also note that this method also outputs the change in time
-        used. This is used in the prognostic equations defined in the method
-        atmospheric_prognostic_method.
+        Explain more.
         """
-        forecast_length = int(self.forecast_length.value)
+        segments = int((self.forecast_length / self.delta_t).si.value) + 1
 
         # Define the forecast period.
         forecast_period = np.linspace(
-            0, forecast_length, (forecast_length * 30) + 1
+            0, self.forecast_length.value, segments
         ) * self.forecast_length.unit
 
-        # Change in time (delta t) utilised to get a numerical solution to the
-        # partial derivative equations.
-        delta_t = (1/30) * self.units.hr
-        delta_t = delta_t.to(self.units.s)
+        # Convert to seconds.
+        delta_t = self.delta_t.to(self.units.s)
 
         return forecast_period, delta_t
 
-    cpdef simulate(self, bool save_file=False, p1=1000, p2=500):
+    cpdef simulate(self, bool save_file=False):
         """
         Generates a simulation of tropospheric and stratsopheric dynamics.
         Predictions are made by numerically solving the Primitive
@@ -489,11 +490,7 @@ cdef class Dynamics(RNN):
         this class. The output will be saved as a NetCDF file. These
         files can be opened by using the Iris library, which can
         be downloaded via Anaconda Cloud.
-        """
-        # Ensure p1 is greater than p2.
-        if p1 < p2:
-            raise Exception("Please note that p1 must be greater than p2.")
-        
+        """    
         # Ensure save_file is a boolean value.
         if not isinstance(save_file, bool):
             raise Exception(
@@ -515,12 +512,6 @@ cdef class Dynamics(RNN):
         # No approximation.
         cdef np.ndarray f = self.coriolis_parameter().value / self.units.s
         f = self.make_3dimensional_array(parameter=f, axis=1)
-        # beta plane.
-        cdef np.ndarray f_beta = self.beta_plane().value / self.units.s
-        f_beta = self.make_3dimensional_array(parameter=f_beta, axis=1)
-        # f-plane.
-        cdef np.ndarray f_0 = self.coriolis_parameter().value / self.units.s
-        f_0 = self.make_3dimensional_array(parameter=f_0, axis=1)
 
         # Define the change with respect to time.
         cdef delta_t = self.forecast_period()[1]
@@ -535,22 +526,13 @@ cdef class Dynamics(RNN):
         cdef np.ndarray g = self.gravitational_acceleration()
         # Geopotential Height.
         cdef np.ndarray height = self.geopotential_height()
-        # Geopotential.
-        cdef np.ndarray geo = height * g
-        cdef np.ndarray geo_i = geo
-        # Geostrophic Wind.
-        cdef tuple geostrophic_wind = self.geostrophic_wind()
+        # Wind.
+        cdef tuple wind = self.wind()
         # Zonal Wind.
-        cdef np.ndarray u_g = geostrophic_wind[0]
-        # Meridional Wind.
-        cdef np.ndarray v_g = geostrophic_wind[1]
-        # Non-Geostrophic Wind.
-        cdef tuple nongeostrophic_wind = self.wind()
-        # Zonal Wind.
-        cdef np.ndarray u = nongeostrophic_wind[0]
+        cdef np.ndarray u = wind[0]
         cdef np.ndarray u_i = u
         # Meridional Wind.
-        cdef np.ndarray v = nongeostrophic_wind[1]
+        cdef np.ndarray v = wind[1]
         cdef np.ndarray v_i = v
         # Vertical Motion.
         cdef np.ndarray omega = self.vertical_motion()
@@ -567,14 +549,8 @@ cdef class Dynamics(RNN):
         # Mixing Ratio.
         cdef np.ndarray q = self.mixing_ratio()
         cdef np.ndarray q_i = q
-        # Thickness.
-        cdef np.ndarray thickness = self.pressure_thickness(p1=p1, p2=p2)
         # Precipitable Water.
         cdef np.ndarray pwv = self.precipitable_water()
-
-        # Index of pressure surfaces.
-        cdef int indx_p1 = (np.abs(self.pressure_surfaces().value - p1)).argmin()
-        cdef int indx_p2 = (np.abs(self.pressure_surfaces().value - p2)).argmin()
 
         # Prediction from Recurrent Neural Network.
         cdef np.ndarray prediction_ai_temp, prediction_ai_height, prediction_ai_rh
@@ -586,18 +562,22 @@ cdef class Dynamics(RNN):
             prediction_ai_rh = prediction_ai[1] * self.units.percent
             iterator_ai = 0
 
-        # Define variable types.
+        # Define extra variable types.
         # Numy Arrays.
-        cdef np.ndarray geo_0, geo_n, T_0, T_n, q_0, q_n, u_0, u_n, v_0, v_n
-        cdef np.ndarray geostrophic_vorticity, A, A_diffx, A_diffy, Part_1
-        cdef np.ndarray dT_dx, dT_dy, dT_dp, nabla_T, B, dB_dp, Part_2, RHS_geo
-        cdef np.ndarray change_geopotential, du_dx, du_dy, du_dp, dv_dx, dv_dy, dv_dp, 
+        cdef np.ndarray T_0, T_n, q_0, q_n, u_0, u_n, v_0, v_n, dT_dx, dT_dy, dT_dp
+        cdef np.ndarray du_dx, du_dy, du_dp, dv_dx, dv_dy, dv_dp, A, B 
         cdef np.ndarray C, D, E, RHS, dq_dx, dq_dy, dq_dp, e, T_c, sat_vapor_pressure
         cdef np.ndarray geopotential_height, temperature, virtual_temperature
         cdef np.ndarray zonal_wind, meridional_wind, static_stability 
-        cdef np.ndarray relative_humidity, mixing_ratio, pressure_thickness
-        cdef np.ndarray precipitable_water
+        cdef np.ndarray relative_humidity, mixing_ratio, precipitable_water
+        cdef np.ndarray height_new, z2, z1, p_height, Tv, Tv_mean
+        # Booleans.
         cdef bool break_loop
+        # Ints / Floats.
+        cdef int len_p = len(pressure) - 1
+        cdef int i
+        # Tuples.
+        cdef tuple shape, shape_2d
 
         # Create a bar to determine progress.
         max_bar = len(time)
@@ -637,9 +617,6 @@ cdef class Dynamics(RNN):
         # Mixing Ratio.
         mixing_ratio = np.zeros(shape) * q_i.unit
         mixing_ratio[0, :, :, :] = q_i
-        # Pressure Thickness.
-        pressure_thickness = np.zeros(shape_2d) * thickness.unit
-        pressure_thickness[0, :, :] = thickness
         # Precipitable Water.
         precipitable_water = np.zeros(shape_2d) * pwv.unit
         precipitable_water[0, :, :] = pwv
@@ -648,12 +625,6 @@ cdef class Dynamics(RNN):
         cdef int len_t = 1
         try:
             while t < forecast_length.value:
-                # Define initial state.
-                # Geopotential.
-                if n > 2:
-                    geo_0 = geo
-                    geo = geo_n
-
                 # Wind.
                 # Zonal Wind.
                 if n > 2:
@@ -674,73 +645,6 @@ cdef class Dynamics(RNN):
                 if n > 2:
                     q_0 = q
                     q = q_n
-
-                # The Prognostic Section for Geopotential Height (Height
-                # Tendency Equation).
-                # Geostrophic Vorticity.
-                dv_dx = self.gradient_x(
-                    parameter=np.gradient(
-                        v_g, longitude, axis=2
-                    )
-                )
-                du_dy = self.gradient_y(parameter=u_g)
-                geostrophic_vorticity = dv_dx - du_dy
-                
-                # Part (1).
-                A = geostrophic_vorticity + f_beta
-                A_diffx = self.gradient_x(
-                    parameter=np.gradient(
-                        A, longitude, axis=2
-                    )
-                )
-                A_diffy = self.gradient_y(parameter=A)
-                Part_1 = f_0 * (
-                    (-u_g * A_diffx) + (-v_g * A_diffy)
-                )
-
-                # The derivative of temperature with respect to latitude
-                # and longitude.
-                dT_dx = self.gradient_x(
-                    parameter=np.gradient(
-                        T, longitude, axis=2
-                    )
-                )
-                dT_dy = self.gradient_y(parameter=T)
-
-                # Part (2)
-                nabla_T = -u_g * dT_dx + -v_g * dT_dy
-                
-                B = (self.R / pressure_3d) * nabla_T
-                dB_dp = self.gradient_p(parameter=B)
-
-                Part_2 = ((f_0 ** 2) / sigma) * dB_dp
-
-                RHS_geo = Part_1 - Part_2
-                RHS_geo *= -1
-
-                # Change with respect to time for geopotential.
-                if n == 0:
-                    RHS_geo = RHS_geo * delta_halfstep
-                else:
-                    RHS_geo = RHS_geo * delta_2t
-                change_geopotential = RHS_geo.value * geo.unit
-
-                if n == 0:
-                    geo = geo_i + change_geopotential
-                elif n == 1:
-                    geo = geo_i + change_geopotential
-                elif n == 2:
-                    geo_n = geo_i + change_geopotential
-                else:
-                    geo_n = geo_0 + change_geopotential
-                    # Apply Robert-Asselin time filter.
-                    geo = geo + 0.1 * (geo_n - 2*geo + geo_0)
-                
-                # Convert to geopotential height.
-                height = geo / g
-
-                # Pressure thickness.
-                thickness = height[indx_p2] - height[indx_p1]
 
                 # Wind
                 # Scalar gradients of geopotential height.
@@ -835,7 +739,14 @@ cdef class Dynamics(RNN):
 
                 # Temperature.
                 # Air Temperature.
-                # Vertical scalar gradient of temperature.
+                # Scalar gradients of temperature.
+                dT_dx = self.gradient_x(
+                    parameter=np.gradient(
+                        T, longitude, axis=2
+                    )
+                )
+
+                dT_dy = self.gradient_y(parameter=T)
                 dT_dp = self.gradient_p(parameter=T)
 
                 # Thermodynamic Equation.
@@ -843,7 +754,6 @@ cdef class Dynamics(RNN):
                 B = -v * dT_dy
                 C = -omega * dT_dp
                 D = omega * ((self.R * T) / (pressure_3d * self.c_p))
-                # Radiative forcing needs to be added!!!!!!!
                 
                 if n == 0:
                     RHS = (A + B + C + D) * delta_halfstep
@@ -929,6 +839,32 @@ cdef class Dynamics(RNN):
                 rh[rh < 0] = 0
                 rh *= self.units.percent
 
+                # Virtual Temperature.
+                T_v = T / (
+                    1 - (
+                    e / pressure_3d
+                    ) * (1 - 0.622)
+                )
+
+                # Geopotential Height (Hydrostatic Balance).
+                z2 = height[-1]
+                Tv = T_v[::-1, :, :]
+                p_height = pressure[::-1]
+                height_new = np.zeros(Tv.value.shape) * height.unit
+                height_new[0, :, :] = z2
+
+                for i in range(len_p):
+                    Tv_mean = (Tv[i+1, :, :] + Tv[i, :, :]) / 2
+                    z1 = z2 - (
+                        (
+                            (self.R * Tv_mean) / self.g
+                        ) * np.log(p_height[i+1] / p_height[i])
+                    )
+                    height_new[i+1, :, :] = z1
+                    z2 = z1
+
+                height = height_new[::-1, :, :]
+
                 # Recurrent Neural Network.
                 if self.ai:
                     # Apply predictions every six hours.
@@ -962,18 +898,6 @@ cdef class Dynamics(RNN):
                     except:
                         pass
 
-                # Geostrophic Wind.
-                geostrophic_wind = self.geostrophic_wind()
-                
-                # Geostrophic Wind.
-                # Zonal Wind.
-                u_g = geostrophic_wind[0]
-                # Meridional Wind.
-                v_g = geostrophic_wind[1]
-
-                # Virtual Temperature.
-                T_v = config.virtual_temperature()
-
                 # Static Stability.
                 sigma = config.static_stability()
 
@@ -1006,8 +930,6 @@ cdef class Dynamics(RNN):
                     relative_humidity[len_t, :, :, :] = rh
                     # Mixing Ratio.
                     mixing_ratio[len_t, :, :, :] = q
-                    # Thickness.
-                    pressure_thickness[len_t, :, :] = thickness
                     # Precipitable Water.
                     precipitable_water[len_t, :, :] = pwv
 
@@ -1152,18 +1074,6 @@ cdef class Dynamics(RNN):
             }
         )
         q_cube.add_aux_coord(ref_time)
-        # Pressure Thickness.
-        thickness_cube = Cube(pressure_thickness,
-            long_name='pressure_thickness',
-            units='m',
-            dim_coords_and_dims=[
-                (forecast_period, 0), (lat, 1), (lon, 2)
-            ],
-            attributes={
-                'source': 'Motus Aeris @ AMSIMP',
-            }
-        )
-        thickness_cube.add_aux_coord(ref_time)
         # Precipitable Water.
         pwv_cube = Cube(precipitable_water,
             long_name='precipitable_water',
@@ -1187,7 +1097,6 @@ cdef class Dynamics(RNN):
             Tv_cube,
             rh_cube,
             q_cube,
-            thickness_cube,
             pwv_cube
         ])
 
