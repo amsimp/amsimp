@@ -1,4 +1,4 @@
-# AMSIMP - Simulator of Atmospheric Dynamics
+# AMSIMP - Atmospheric Dynamical Core
 
 ![Azure DevOps builds](https://dev.azure.com/16ccasey/AMSIMP/_apis/build/status/amsimp.amsimp?branchName=master)
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/version.svg)
