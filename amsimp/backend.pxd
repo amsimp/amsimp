@@ -35,7 +35,7 @@ cdef class Backend(Download):
     cdef bool ai
     cdef int data_size, epochs
     cdef bool input_data
-    cdef input_date, date, input_geo, input_rh, input_temp, input_u, input_v
+    cdef input_date, date, input_height, input_rh, input_temp, input_u, input_v
 
     cpdef np.ndarray latitude_lines(self)
     cpdef np.ndarray longitude_lines(self)

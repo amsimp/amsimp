@@ -151,7 +151,24 @@ cdef class Backend(Download):
     # geopotential height array.
     remove_psurfaces = [23, 26, 33]
 
-    def __cinit__(self, int delta_latitude=5, int delta_longitude=5, bool remove_files=False, forecast_length=72, delta_t=2, bool ai=True, data_size=150, epochs=200, input_date=None, bool input_data=False, geo=None, temp=None, rh=None, u=None, v=None):
+    def __cinit__(
+            self,
+            int delta_latitude=5,
+            int delta_longitude=5, 
+            bool remove_files=False, 
+            forecast_length=72, 
+            delta_t=2, 
+            bool ai=True, 
+            data_size=150, 
+            epochs=200, 
+            input_date=None, 
+            bool input_data=False, 
+            height=None, 
+            temp=None, 
+            rh=None, 
+            u=None, 
+            v=None
+        ):
         """
         The parameters, delta_latitude and delta_longitude, defines the
         horizontal resolution between grid points within the software. The
@@ -247,28 +264,28 @@ cdef class Backend(Download):
         def dimension(input_variable):
             if np.ndim(input_variable) != 3:
                 raise Exception(
-                    "All input data variables (geo, rh, temp, u, v) must be a 3 dimensional."
+                    "All input data variables (height, rh, temp, u, v) must be a 3 dimensional."
                 )
 
         if self.input_data == True:
             # Check if input data is 3 dimensional.
-            dimension(geo)
+            dimension(height)
             dimension(rh)
             dimension(temp)
             dimension(u)
             dimension(v)
 
             # Convert input data lists to NumPy arrays.
-            geo = np.asarray(geo)
+            height = np.asarray(height)
             rh = np.asarray(rh)
             temp = np.asarray(temp)
             u = np.asarray(u)
             v = np.asarray(v)
 
             # Add units to input variables.
-            # geo variable.
-            if type(geo) != Quantity:
-                geo = geo * units.m
+            # height variable.
+            if type(height) != Quantity:
+                height = height * units.m
             # rh variable.
             if type(rh) != Quantity:
                 rh = rh * units.percent
@@ -283,7 +300,7 @@ cdef class Backend(Download):
                v = v * (units.m / units.s)
 
         # Make the input data variables available else where in the class.
-        self.input_geo = geo
+        self.input_height = height
         self.input_rh = rh
         self.input_temp = temp
         self.input_u = u
@@ -561,11 +578,11 @@ cdef class Backend(Download):
             # Download the NumPy file and store the NumPy array into a variable.
             try:
                 geo_cube = iris.load("initial_conditions.nc")
-                geo = np.asarray(geo_cube[1].data)
+                height = np.asarray(geo_cube[1].data)
             except OSError:  
                 geo_file = self.download(url)
                 geo_cube = iris.load(geo_file)
-                geo = np.asarray(geo_cube[1].data)
+                height = np.asarray(geo_cube[1].data)
 
             # Ensure that the correct data was downloaded (geopotential height).
             if geo_cube[1].units != units.m:
@@ -577,20 +594,20 @@ cdef class Backend(Download):
                 + " at this time. Please contact the developer for futher"
                 + " assistance.")
         else:
-            geo = self.input_geo.value
+            height = self.input_height.value
         
-        if np.shape(geo) == (34, 181, 360):
+        if np.shape(height) == (34, 181, 360):
             # Reshape the data in such a way that it matches the pressure surfaces defined in
             # the software.
-            geo = np.flip(geo, axis=0)
-            geo = np.delete(geo, self.remove_psurfaces, axis=0)
+            height = np.flip(height, axis=0)
+            height = np.delete(height, self.remove_psurfaces, axis=0)
 
             # Reshape the data in such a way that it matches the latitude lines defined in
             # the software.
-            geo = np.transpose(geo, (1, 2, 0))
-            geo = geo[1:-1]
-            geo = np.delete(geo, [89], axis=0)
-            nh_geo, sh_geo = np.split(geo, 2)
+            height = np.transpose(height, (1, 2, 0))
+            height = height[1:-1]
+            height = np.delete(height, [89], axis=0)
+            nh_geo, sh_geo = np.split(height, 2)
             nh_lat, sh_lat = np.split(self.latitude_lines().value, 2)
             nh_geo = nh_geo[::self.delta_latitude]
             sh_startindex = int((nh_lat[-1] * -1) - 1)
@@ -608,7 +625,7 @@ cdef class Backend(Download):
             # Define the unit of measurement for geopotential height.
             geopotential_height *= units.m
         else:
-            geopotential_height = geo * units.m
+            geopotential_height = height * units.m
         
         return geopotential_height
 

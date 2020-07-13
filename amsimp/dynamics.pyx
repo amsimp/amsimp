@@ -116,7 +116,7 @@ cdef class RNN(Wind):
         cdef list rh_list = []
 
         # Define variable types.
-        cdef np.ndarray T, geo, rh
+        cdef np.ndarray T, height, rh
 
         # Beginning date of the dataset.
         cdef date = self.date
@@ -138,8 +138,8 @@ cdef class RNN(Wind):
 
             # Redefine NumPy arrays.
             # Geopotential Height.
-            geo = config.geopotential_height().value
-            geo = geo.flatten()
+            height = config.geopotential_height().value
+            height = height.flatten()
             # Temperature.
             T = config.temperature().value
             T = T.flatten()
@@ -149,7 +149,7 @@ cdef class RNN(Wind):
 
             # Append to list.
             # Geopotential Height.
-            geo_list.append(geo)
+            geo_list.append(height)
             # Temperature.
             T_list.append(T)
             # Relative Humidity.
@@ -408,7 +408,24 @@ cdef class Dynamics(RNN):
     visualise ~ please explain here.
     """
 
-    def __cinit__(self, int delta_latitude=5, int delta_longitude=5, bool remove_files=False, forecast_length=72, delta_t=2, bool ai=True, data_size=150, epochs=200, input_date=None, bool input_data=False, geo=None, temp=None, rh=None, u=None, v=None):
+    def __cinit__(
+            self,
+            int delta_latitude=5,
+            int delta_longitude=5, 
+            bool remove_files=False, 
+            forecast_length=72, 
+            delta_t=2, 
+            bool ai=True, 
+            data_size=150, 
+            epochs=200, 
+            input_date=None, 
+            bool input_data=False, 
+            height=None, 
+            temp=None, 
+            rh=None, 
+            u=None, 
+            v=None
+        ):
         """
         The parameter, forecast_length, defines the length of the 
         simulation (defined in hours). Defaults to a value of 72.
@@ -435,7 +452,7 @@ cdef class Dynamics(RNN):
         self.ai = ai
         super().__init__(input_date)
         super().__init__(input_data)
-        super().__init__(geo)
+        super().__init__(height)
         super().__init__(temp)
         super().__init__(rh)
         super().__init__(u)
@@ -888,7 +905,7 @@ cdef class Dynamics(RNN):
                             delta_longitude=self.delta_longitude,
                             remove_files=self.remove_files,
                             input_data=True, 
-                            geo=height, 
+                            height=height, 
                             temp=T, 
                             rh=rh,
                             u=u,
