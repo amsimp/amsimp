@@ -40,16 +40,15 @@ cdef class Backend(Download):
     cpdef np.ndarray latitude_lines(self)
     cpdef np.ndarray longitude_lines(self)
     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)
-    cdef np.ndarray gradient_x(self, parameter=?)
-    cdef np.ndarray gradient_y(self, parameter=?)
-    cdef np.ndarray gradient_p(self, parameter=?)
-    cdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)
+    cpdef np.ndarray gradient_x(self, parameter=?)
+    cpdef np.ndarray gradient_y(self, parameter=?)
+    cpdef np.ndarray gradient_p(self, parameter=?)
+    cpdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)
 
     cpdef np.ndarray coriolis_parameter(self)
 
     cpdef np.ndarray geopotential_height(self)
     cpdef np.ndarray relative_humidity(self)
-    cpdef np.ndarray surface_temperature(self)
     cpdef np.ndarray temperature(self)
     cpdef remove_all_files(self)
     

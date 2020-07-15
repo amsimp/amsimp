@@ -55,12 +55,13 @@ cdef class Moist(Backend):
     measurement is kilograms per cubic metric.
     exner_function ~ generates a NumPy array of the Exner function (4). This
     method has no unit of measurement, i.e. it is dimensionless.
-    precipitable_water ~ generates a NumPy array of precipitable water
-    vapor. The unit of measurement is millimetres.
+    mixing_ratio ~ generates a NumPy array of the mixing ratio (water vapor).
+    This method has no unit of measurement, i.e. it is dimensionless.
     potential_temperature ~ outputs a NumPy array of potential temperature.
     The unit of measurement is Kelvin.
-    water_contourf ~ generates a precipitable water vapor contour plot, and
-    overlays that said plot onto a EckertIII projection of the Earth.
+    
+    precipitable_water ~ generates a NumPy array of precipitable water
+    vapor. The unit of measurement is millimetres.
     """
 
     cpdef np.ndarray vapor_pressure(self):
@@ -226,8 +227,7 @@ cdef class Moist(Backend):
     def __mixing_ratio(self, pressure, vapor_pressure):
         """
         This method is solely utilised for integration in the
-        amsimp.Water.precipitable_water() method. Please do not interact with
-        the method directly.
+        amsimp.Water.precipitable_water() method.
         """
         y = (0.622 * vapor_pressure) / (pressure - vapor_pressure)
 
