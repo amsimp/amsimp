@@ -193,9 +193,6 @@ cdef class Backend(Download):
         self.remove_files = remove_files
         self.input_date = input_date
         self.input_data = input_data
-        self.psurfaces = psurfaces
-        self.lat = lat
-        self.lon = lon
 
         # The date at which the initial conditions was gathered (i.e. how
         # recent the data is).
@@ -239,7 +236,49 @@ cdef class Backend(Download):
                     "All input data variables (height, rh, temp, u, v) must be a 3 dimensional."
                 )
 
-        if self.input_data == True:
+        # Function to check if a function is a NumPy array, or a list.
+        def type_check(input_variable):
+            if type(input_variable) == Quantity:
+                pass
+            elif type(input_variable) == np.ndarray:
+                pass
+            elif type(input_variable) == list:
+                pass
+            else:
+                raise Exception(
+                    "All input data variables must be either NumPy arrays, or lists."
+                )
+        
+        # Function to check if grid input variables are 1 dimensional.
+        def dimension_grid(input_variable):
+            if np.ndim(input_variable) != 1:
+                raise Exception(
+                    "All grid input variables (psurfaces, lat, lon) must be a 1 dimensional."
+                )
+
+        # Function to convert input lists into NumPy arrays.
+        def list_to_numpy(input_variable):
+            if type(input_variable) == list:
+                input_variable = np.asarray(input_variable)
+            
+            return input_variable
+
+        if self.input_data:
+            # Ensure input data variables are either NumPy arrays, or lists.
+            type_check(psurfaces)
+            type_check(lat)
+            type_check(lon)
+            type_check(height)
+            type_check(rh)
+            type_check(temp)
+            type_check(u)
+            type_check(v)
+
+            # Check if grid input variables are 1 dimensional.
+            dimension_grid(psurfaces)
+            dimension_grid(lat)
+            dimension_grid(lon)
+
             # Check if input data is 3 dimensional.
             dimension(height)
             dimension(rh)
@@ -248,13 +287,25 @@ cdef class Backend(Download):
             dimension(v)
 
             # Convert input data lists to NumPy arrays.
-            height = np.asarray(height)
-            rh = np.asarray(rh)
-            temp = np.asarray(temp)
-            u = np.asarray(u)
-            v = np.asarray(v)
+            list_to_numpy(psurfaces)
+            list_to_numpy(lat)
+            list_to_numpy(lon)
+            list_to_numpy(height)
+            list_to_numpy(rh)
+            list_to_numpy(temp)
+            list_to_numpy(u)
+            list_to_numpy(v)
 
             # Add units to input variables.
+            # psurfaces variable.
+            if type(psurfaces) != Quantity:
+                psurfaces = psurfaces * units.hPa
+            # lat variable.
+            if type(lat) != Quantity:
+                lat = lat * units.deg
+            # lon variable.
+            if type(height) != Quantity:
+                lon = lon * units.deg
             # height variable.
             if type(height) != Quantity:
                 height = height * units.m
@@ -333,6 +384,9 @@ cdef class Backend(Download):
             v = cube.extract("y_wind")[0]
 
         # Make the input data variables available else where in the class.
+        self.psurfaces = psurfaces
+        self.lat = lat
+        self.lon = lon
         self.input_height = height
         self.input_rh = rh
         self.input_temp = temp
@@ -403,14 +457,14 @@ cdef class Backend(Download):
             latitude_lines = [
                 i
                 for i in np.arange(
-                    -89, 89+self.delta_latitude, self.delta_latitude
+                    -89, 90, self.delta_latitude
                 )
             ]
+
+            # Convert list to NumPy array and add the unit of measurement.
+            latitude_lines = np.asarray(latitude_lines) * units.deg
         else:
             latitude_lines = self.lat
-
-        # Convert list to NumPy array and add the unit of measurement.
-        latitude_lines = np.asarray(latitude_lines) * units.deg
 
         return latitude_lines
     
@@ -426,11 +480,11 @@ cdef class Backend(Download):
                     0, 360, self.delta_longitude
                 )
             ]
+
+            # Convert list to NumPy array and add the unit of measurement.
+            longitude_lines = np.asarray(longitude_lines) * units.deg
         else:
             longitude_lines = self.lon
-
-        # Convert list to NumPy array and add the unit of measurement.
-        longitude_lines = np.asarray(longitude_lines) * units.deg
 
         return longitude_lines
 
@@ -445,7 +499,7 @@ cdef class Backend(Download):
             pressure_surfaces = pressure_surfaces.to(self.units.hPa)
             pressure_surfaces = pressure_surfaces.value
         else:
-            pressure_surfaces = self.psurfaces
+            pressure_surfaces = self.psurfaces.value
 
         # Convert Pressure Array into 3D Array.
         if dim_3d:
