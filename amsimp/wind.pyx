@@ -100,114 +100,45 @@ cdef class Wind(Moist):
         For geostrophic wind, please see the method, geostrophic_wind.
         """
         if not self.input_data:
-            folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
-            
-            # Define date.
-            year = self.date.year
-            month = self.date.month
-            day = self.date.day
-            hour = self.date.hour
+            # Input data.
+            # Zonal.
+            u = self.input_u
+            # Meridional.
+            v = self.input_v
 
-            # Adds zero before single digit numbers.
-            if day < 10:
-                day = "0" + str(day)
+            pressure = self.pressure_surfaces().to(self.units.Pa)
+            # Grid.
+            grid_points = [
+                ('pressure',  pressure.value),
+                ('latitude',  self.latitude_lines().value),
+                ('longitude', self.longitude_lines().value),                
+            ]
 
-            if month < 10:
-                month =  "0" + str(month)
-
-            if hour < 10:
-                hour = "0" + str(hour)
-
-            # Converts integers to strings.
-            day = str(day)
-            month = str(month)
-            year = str(year)
-            hour = str(hour)
-
-            folder += (
-                year + "/" + month + "/" + day + "/" + hour + "/"
+            # Interpolation
+            # Zonal.
+            u = u.interpolate(
+                grid_points, iris.analysis.Linear()
             )
-            # The url to the NumPy pressure surfaces file stored on the AMSIMP
-            # Initial Conditions Data repository.
-            url = folder + "initial_conditions.nc"
+            # Meridional.
+            v = v.interpolate(
+                grid_points, iris.analysis.Linear()
+            )
 
-            # Download the NumPy file and store the NumPy array into a variable.
-            try:
-                wind_cube = iris.load("initial_conditions.nc")
-                u = np.asarray(wind_cube[4].data)
-                v = np.asarray(wind_cube[5].data)
-            except OSError:  
-                wind_file = self.download(url)
-                wind_cube = iris.load(wind_file)
-                u = np.asarray(wind_cube[4].data)
-                v = np.asarray(wind_cube[5].data)
+            # Get data.
+            # Zonal.
+            u = u.data
+            u = np.asarray(u.tolist())
+            # Meridional.
+            v = v.data
+            v = np.asarray(v.tolist())
 
-            # Ensure that the correct data was downloaded (wind).
-            if wind_cube[4].units != (self.units.m / self.units.s):
-                raise Exception("Unable to determine the zonal wind"
-                + " at this time. Please contact the developer for futher"
-                + " assistance.")
-            elif wind_cube[4].metadata[0] != 'x_wind':
-                raise Exception("Unable to determine the zonal wind"
-                + " at this time. Please contact the developer for futher"
-                + " assistance.")
-            
-            if wind_cube[5].units != (self.units.m / self.units.s):
-                raise Exception("Unable to determine the meridional wind"
-                + " at this time. Please contact the developer for futher"
-                + " assistance.")
-            elif wind_cube[5].metadata[0] != 'y_wind':
-                raise Exception("Unable to determine the meridional wind"
-                + " at this time. Please contact the developer for futher"
-                + " assistance.")
-        else:
-            u = self.input_u.value
-            v = self.input_v.value
-        
-        if np.shape(u) == (31, 181, 360):
-            # Reshape the data in such a way that it matches the pressure surfaces defined in
-            # the software.
-            u = np.flip(u, axis=0)
-            v = np.flip(v, axis=0)
-
-            # Reshape the data in such a way that it matches the latitude lines defined in
-            # the software.
-            u = np.transpose(u, (1, 2, 0))
-            u = u[1:-1]
-            u = np.delete(u, [89], axis=0)
-            nh_u, sh_u = np.split(u, 2)
-            nh_lat, sh_lat = np.split(self.latitude_lines().value, 2)
-            nh_u = nh_u[::self.delta_latitude]
-            sh_startindex = int((nh_lat[-1] * -1) - 1)
-            sh_u = sh_u[sh_startindex::self.delta_latitude]
-            u = np.concatenate((nh_u, sh_u))
-
-            v = np.transpose(v, (1, 2, 0))
-            v = v[1:-1]
-            v = np.delete(v, [89], axis=0)
-            nh_v, sh_v = np.split(v, 2)
-            nh_lat, sh_lat = np.split(self.latitude_lines().value, 2)
-            nh_v = nh_v[::self.delta_latitude]
-            sh_startindex = int((nh_lat[-1] * -1) - 1)
-            sh_v = sh_v[sh_startindex::self.delta_latitude]
-            v = np.concatenate((nh_v, sh_v))
-
-            # Reshape the data in such a way that it matches the longitude lines defined in
-            # the software.
-            u = np.transpose(u, (2, 0, 1))
-            u = u[:, ::-1, ::self.delta_longitude]
-            v = np.transpose(v, (2, 0, 1))
-            v = v[:, ::-1, ::self.delta_longitude]
-            
-            if self.remove_files and not self.input_data:
-                os.remove("initial_conditions.nc")
-
-            # Define the unit of measurement for wind.
             u *= self.units.m / self.units.s
             v *= self.units.m / self.units.s
         else:
-            u *= self.units.m / self.units.s
-            v *= self.units.m / self.units.s
+            # Zonal.
+            u = self.input_u
+            # Meridional.
+            v = self.input_v
 
         return u, v
 

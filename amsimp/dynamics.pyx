@@ -415,12 +415,15 @@ cdef class Dynamics(RNN):
             int delta_longitude=5, 
             bool remove_files=False, 
             forecast_length=72, 
-            delta_t=2,
+            delta_t=2, 
             bool ai=True, 
             data_size=150, 
             epochs=200, 
             input_date=None, 
-            bool input_data=False, 
+            bool input_data=False,
+            psurfaces=None,
+            lat=None,
+            lon=None,
             height=None, 
             temp=None, 
             rh=None, 
@@ -806,8 +809,7 @@ cdef class Dynamics(RNN):
                 dq_dy = self.gradient_y(parameter=q)
                 dq_dp = self.gradient_p(parameter=q)
 
-                # Advect mixing ratio via wind. Sources and sinks
-                # need to be added later!!!!!!
+                # Advect mixing ratio via wind.
                 A = -u * dq_dx
                 B = -v * dq_dy
                 C = -omega * dq_dp
@@ -905,7 +907,10 @@ cdef class Dynamics(RNN):
                             delta_latitude=self.delta_latitude,
                             delta_longitude=self.delta_longitude,
                             remove_files=self.remove_files,
-                            input_data=True, 
+                            input_data=True,
+                            psurfaces=self.pressure_surfaces().value,
+                            lat=self.latitude_lines().value,
+                            lon=self.longitude_lines().value,
                             height=height, 
                             temp=T, 
                             rh=rh,

@@ -23,7 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # -----------------------------------------------------------------------------------------#
 
 # Importing Dependencies
-import os
+import os, sys
 from datetime import datetime
 import socket
 from amsimp.download cimport Download
@@ -132,10 +132,6 @@ cdef class Backend(Download):
     c_p = 1004 * (units.J / (units.kg * units.K))
     # Gravitational acceleration at the Earth's surface.
     g = 9.80665 * (units.m / (units.s ** 2))
-    
-    # Remove extra constant pressure surfaces from the temperature, and
-    # geopotential height array.
-    remove_psurfaces = [23, 26, 33]
 
     def __cinit__(
             self,
@@ -148,7 +144,10 @@ cdef class Backend(Download):
             data_size=150, 
             epochs=200, 
             input_date=None, 
-            bool input_data=False, 
+            bool input_data=False,
+            psurfaces=None,
+            lat=None,
+            lon=None,
             height=None, 
             temp=None, 
             rh=None, 
@@ -194,23 +193,9 @@ cdef class Backend(Download):
         self.remove_files = remove_files
         self.input_date = input_date
         self.input_data = input_data
-
-        # Ensure self.delta_latitude is between 1 and 10 degrees.
-        if not input_data:
-            if self.delta_latitude > 10 or self.delta_latitude < 1:
-                raise Exception(
-                    "delta_latitude must be a positive integer between 1 and 10. The value of delta_latitude was: {}".format(
-                        self.delta_latitude
-                    )
-                )
-
-            # Ensure self.delta_longitude is between 1 and 10 degrees.
-            if self.delta_longitude > 10 or self.delta_longitude < 1:
-                raise Exception(
-                    "delta_longitude must be a positive integer between 1 and 10. The value of delta_longitude was: {}".format(
-                        self.delta_longitude
-                    )
-                )
+        self.psurfaces = psurfaces
+        self.lat = lat
+        self.lon = lon
 
         # The date at which the initial conditions was gathered (i.e. how
         # recent the data is).
@@ -286,6 +271,67 @@ cdef class Backend(Download):
             if type(v) != Quantity:
                v = v * (units.m / units.s)
 
+        # Ensure self.delta_latitude is between 1 and 10 degrees.
+        if not input_data:
+            if self.delta_latitude > 10 or self.delta_latitude < 1:
+                raise Exception(
+                    "delta_latitude must be a positive integer between 1 and 10. The value of delta_latitude was: {}".format(
+                        self.delta_latitude
+                    )
+                )
+
+            # Ensure self.delta_longitude is between 1 and 10 degrees.
+            if self.delta_longitude > 10 or self.delta_longitude < 1:
+                raise Exception(
+                    "delta_longitude must be a positive integer between 1 and 10. The value of delta_longitude was: {}".format(
+                        self.delta_longitude
+                    )
+                )
+
+            folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
+
+            # Define date.
+            year = self.date.year
+            month = self.date.month
+            day = self.date.day
+            hour = self.date.hour
+
+            # Adds zero before single digit numbers.
+            if day < 10:
+                day = "0" + str(day)
+
+            if month < 10:
+                month =  "0" + str(month)
+
+            if hour < 10:
+                hour = "0" + str(hour)
+
+            # Converts integers to strings.
+            day = str(day)
+            month = str(month)
+            year = str(year)
+            hour = str(hour)
+
+            folder += (
+                year + "/" + month + "/" + day + "/" + hour + "/"
+            )
+            # The url to the NumPy pressure surfaces file stored on the AMSIMP
+            # Initial Conditions Data repository.
+            url = folder + "initial_conditions.nc"
+
+            # Download the NumPy file and store the NumPy array into a variable.
+            try:
+                cube = iris.load("initial_conditions.nc")
+            except OSError:  
+                fname = self.download(url)
+                cube = iris.load(fname)
+            
+            height = cube.extract("geopotential_height")[0]
+            temp = cube.extract("air_temperature")[0]
+            rh = cube.extract("relative_humidity")[0]
+            u = cube.extract("x_wind")[0]
+            v = cube.extract("y_wind")[0]
+
         # Make the input data variables available else where in the class.
         self.input_height = height
         self.input_rh = rh
@@ -352,27 +398,19 @@ cdef class Backend(Download):
         """
         Generates a NumPy array of latitude lines.
         """
-        cdef float i 
-        sh = [
-            i
-            for i in np.arange(-89, 0, self.delta_latitude)
-            if i != 0
-        ]
-        start_nh = sh[-1] * -1
-        nh = [
-            i
-            for i in np.arange(start_nh, 90, self.delta_latitude)
-            if i != 0 and i != 90
-        ]
+        cdef float i
+        if not self.input_data:
+            latitude_lines = [
+                i
+                for i in np.arange(
+                    -89, 89+self.delta_latitude, self.delta_latitude
+                )
+            ]
+        else:
+            latitude_lines = self.lat
 
-        for deg in nh:
-            sh.append(deg)
-
-        # Convert list to NumPy array.
-        latitude_lines = np.asarray(sh)
-
-        # Add the unit of measurement.
-        latitude_lines *= self.units.deg
+        # Convert list to NumPy array and add the unit of measurement.
+        latitude_lines = np.asarray(latitude_lines) * units.deg
 
         return latitude_lines
     
@@ -381,10 +419,15 @@ cdef class Backend(Download):
         Generates a NumPy array of longitude lines.
         """
         cdef float i
-        longitude_lines = [
-            i
-            for i in np.arange(0, 359, self.delta_longitude)
-        ]
+        if not self.input_data:
+            longitude_lines = [
+                i
+                for i in np.arange(
+                    0, 360, self.delta_longitude
+                )
+            ]
+        else:
+            longitude_lines = self.lon
 
         # Convert list to NumPy array and add the unit of measurement.
         longitude_lines = np.asarray(longitude_lines) * units.deg
@@ -396,19 +439,13 @@ cdef class Backend(Download):
         Generates a NumPy array of the constant pressure surfaces. This
         is the isobaric coordinate system.
         """
-        # The url to the NumPy pressure surfaces file stored on the AMSIMP
-        # Initial Conditions Data repository.
-        url = "https://github.com/amsimp/initial-conditions/raw/master/pressure_surfaces.npy"
-
-        # Download the NumPy file and store the NumPy array into a variable.
-        try:
-            pressure_surfaces = np.load("pressure_surfaces.npy")
-        except FileNotFoundError:  
-            psurfaces_file = self.download(url)
-            pressure_surfaces = np.load(psurfaces_file)
-        
-        if self.remove_files:
-            os.remove("pressure_surfaces.npy")
+        if not self.input_data:
+            pressure_surfaces = self.input_rh.coords('pressure')[0].points
+            pressure_surfaces = pressure_surfaces[::-1] * self.units.Pa
+            pressure_surfaces = pressure_surfaces.to(self.units.hPa)
+            pressure_surfaces = pressure_surfaces.value
+        else:
+            pressure_surfaces = self.psurfaces
 
         # Convert Pressure Array into 3D Array.
         if dim_3d:
@@ -543,88 +580,29 @@ cdef class Backend(Download):
         visit https://github.com/amsimp/initial-conditions.
         """
         if not self.input_data:
-            folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
+            # Input data.
+            height = self.input_height
 
-            # Define date.
-            year = self.date.year
-            month = self.date.month
-            day = self.date.day
-            hour = self.date.hour
+            pressure = self.pressure_surfaces().to(self.units.Pa)
+            # Grid.
+            grid_points = [
+                ('pressure',  pressure.value),
+                ('latitude',  self.latitude_lines().value),
+                ('longitude', self.longitude_lines().value),                
+            ]
 
-            # Adds zero before single digit numbers.
-            if day < 10:
-                day = "0" + str(day)
-
-            if month < 10:
-                month =  "0" + str(month)
-
-            if hour < 10:
-                hour = "0" + str(hour)
-
-            # Converts integers to strings.
-            day = str(day)
-            month = str(month)
-            year = str(year)
-            hour = str(hour)
-
-            folder += (
-                year + "/" + month + "/" + day + "/" + hour + "/"
+            # Interpolation
+            height = height.interpolate(
+                grid_points, iris.analysis.Linear()
             )
-            # The url to the NumPy pressure surfaces file stored on the AMSIMP
-            # Initial Conditions Data repository.
-            url = folder + "initial_conditions.nc"
 
-            # Download the NumPy file and store the NumPy array into a variable.
-            try:
-                geo_cube = iris.load("initial_conditions.nc")
-                height = np.asarray(geo_cube[1].data)
-            except OSError:  
-                geo_file = self.download(url)
-                geo_cube = iris.load(geo_file)
-                height = np.asarray(geo_cube[1].data)
+            # Get data.
+            geopotential_height = height.data
+            geopotential_height = np.asarray(geopotential_height.tolist())
 
-            # Ensure that the correct data was downloaded (geopotential height).
-            if geo_cube[1].units != units.m:
-                raise Exception("Unable to determine the geopotential height"
-                + " at this time. Please contact the developer for futher"
-                + " assistance.")
-            elif geo_cube[1].metadata[0] != 'geopotential_height':
-                raise Exception("Unable to determine the geopotential height"
-                + " at this time. Please contact the developer for futher"
-                + " assistance.")
+            geopotential_height *= self.units.m
         else:
-            height = self.input_height.value
-        
-        if np.shape(height) == (34, 181, 360):
-            # Reshape the data in such a way that it matches the pressure surfaces defined in
-            # the software.
-            height = np.flip(height, axis=0)
-            height = np.delete(height, self.remove_psurfaces, axis=0)
-
-            # Reshape the data in such a way that it matches the latitude lines defined in
-            # the software.
-            height = np.transpose(height, (1, 2, 0))
-            height = height[1:-1]
-            height = np.delete(height, [89], axis=0)
-            nh_geo, sh_geo = np.split(height, 2)
-            nh_lat, sh_lat = np.split(self.latitude_lines().value, 2)
-            nh_geo = nh_geo[::self.delta_latitude]
-            sh_startindex = int((nh_lat[-1] * -1) - 1)
-            sh_geo = sh_geo[sh_startindex::self.delta_latitude]
-            geopotential_height = np.concatenate((nh_geo, sh_geo))
-
-            # Reshape the data in such a way that it matches the longitude lines defined in
-            # the software.
-            geopotential_height = np.transpose(geopotential_height, (2, 0, 1))
-            geopotential_height = geopotential_height[:, ::-1, ::self.delta_longitude]
-            
-            if self.remove_files and not self.input_data:
-                os.remove("initial_conditions.nc")
-
-            # Define the unit of measurement for geopotential height.
-            geopotential_height *= units.m
-        else:
-            geopotential_height = height * units.m
+            geopotential_height = self.input_height
         
         return geopotential_height
 
@@ -644,88 +622,30 @@ cdef class Backend(Download):
         visit https://github.com/amsimp/initial-conditions.
         """
         if not self.input_data:
-            folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
-            
-            # Define date.
-            year = self.date.year
-            month = self.date.month
-            day = self.date.day
-            hour = self.date.hour
+            # Input data.
+            rh = self.input_rh
 
-            # Adds zero before single digit numbers.
-            if day < 10:
-                day = "0" + str(day)
+            pressure = self.pressure_surfaces().to(self.units.Pa)
+            # Grid.
+            grid_points = [
+                ('pressure',  pressure.value),
+                ('latitude',  self.latitude_lines().value),
+                ('longitude', self.longitude_lines().value),                
+            ]
 
-            if month < 10:
-                month =  "0" + str(month)
-
-            if hour < 10:
-                hour = "0" + str(hour)
-
-            # Converts integers to strings.
-            day = str(day)
-            month = str(month)
-            year = str(year)
-            hour = str(hour)
-
-            folder += (
-                year + "/" + month + "/" + day + "/" + hour + "/"
+            # Interpolation
+            rh = rh.interpolate(
+                grid_points, iris.analysis.Linear()
             )
-            # The url to the NumPy pressure surfaces file stored on the AMSIMP
-            # Initial Conditions Data repository.
-            url = folder + "initial_conditions.nc"
 
-            # Download the NumPy file and store the NumPy array into a variable.
-            try:
-                rh_cube = iris.load("initial_conditions.nc")
-                rh = np.asarray(rh_cube[2].data)
-            except OSError:  
-                rh_file = self.download(url)
-                rh_cube = iris.load(rh_file)
-                rh = np.asarray(rh_cube[2].data)
+            # Get data.
+            relative_humidity = rh.data
+            relative_humidity = np.asarray(relative_humidity.tolist())
 
-            # Ensure that the correct data was downloaded (relative humidity).
-            if rh_cube[2].units != units.percent:
-                raise Exception("Unable to determine the relative humidity"
-                + " at this time. Please contact the developer for futher"
-                + " assistance.")
-            elif rh_cube[2].metadata[0] != 'relative_humidity':
-                raise Exception("Unable to determine the relative humidity"
-                + " at this time. Please contact the developer for futher"
-                + " assistance.")
+            relative_humidity *= self.units.percent
         else:
-            rh = self.input_rh.value
+            relative_humidity = self.input_rh
         
-        if np.shape(rh) == (31, 181, 360):
-            # Reshape the data in such a way that it matches the pressure surfaces defined in
-            # the software.
-            rh = np.flip(rh, axis=0)
-
-            # Reshape the data in such a way that it matches the latitude lines defined in
-            # the software.
-            rh = np.transpose(rh, (1, 2, 0))
-            rh = rh[1:-1]
-            rh = np.delete(rh, [89], axis=0)
-            nh_rh, sh_rh = np.split(rh, 2)
-            nh_lat, sh_lat = np.split(self.latitude_lines().value, 2)
-            nh_rh = nh_rh[::self.delta_latitude]
-            sh_startindex = int((nh_lat[-1] * -1) - 1)
-            sh_rh = sh_rh[sh_startindex::self.delta_latitude]
-            relative_humidity = np.concatenate((nh_rh, sh_rh))
-
-            # Reshape the data in such a way that it matches the longitude lines defined in
-            # the software.
-            relative_humidity = np.transpose(relative_humidity, (2, 0, 1))
-            relative_humidity = relative_humidity[:, ::-1, ::self.delta_longitude]
-            
-            if self.remove_files and not self.input_data:
-                os.remove("initial_conditions.nc")
-
-            # Define the unit of measurement for relative humidity.
-            relative_humidity *= units.percent
-        else:
-            relative_humidity = rh * units.percent
-
         return relative_humidity
 
     cpdef np.ndarray temperature(self):
@@ -744,92 +664,33 @@ cdef class Backend(Download):
         visit https://github.com/amsimp/initial-conditions.
         """
         if not self.input_data:
-            folder = "https://github.com/amsimp/initial-conditions/raw/master/initial_conditions/"
-            
-            # Define date.
-            year = self.date.year
-            month = self.date.month
-            day = self.date.day
-            hour = self.date.hour
+            # Input data.
+            temp = self.input_temp
 
-            # Adds zero before single digit numbers.
-            if day < 10:
-                day = "0" + str(day)
+            pressure = self.pressure_surfaces().to(self.units.Pa)
+            # Grid.
+            grid_points = [
+                ('pressure',  pressure.value),
+                ('latitude',  self.latitude_lines().value),
+                ('longitude', self.longitude_lines().value),                
+            ]
 
-            if month < 10:
-                month =  "0" + str(month)
-
-            if hour < 10:
-                hour = "0" + str(hour)
-
-            # Converts integers to strings.
-            day = str(day)
-            month = str(month)
-            year = str(year)
-            hour = str(hour)
-
-            folder += (
-                year + "/" + month + "/" + day + "/" + hour + "/"
+            # Interpolation
+            temp = temp.interpolate(
+                grid_points, iris.analysis.Linear()
             )
-            # The url to the NumPy pressure surfaces file stored on the AMSIMP
-            # Initial Conditions Data repository.
-            url = folder + "initial_conditions.nc"
 
-            # Download the NumPy file and store the NumPy array into a variable.
-            try:
-                temp_cube = iris.load("initial_conditions.nc")
-                temp = np.asarray(temp_cube[0].data)
-            except OSError:  
-                temp_file = self.download(url)
-                temp_cube = iris.load(temp_file)
-                temp = np.asarray(temp_cube[0].data)
+            # Get data.
+            temperature = temp.data
+            temperature = np.asarray(temperature.tolist())
 
-            # Ensure that the correct data was downloaded (temperature).
-            if temp_cube[0].units != units.K:
-                raise Exception("Unable to determine the temperature"
-                + " at this time. Please contact the developer for futher"
-                + " assistance.")
-            elif temp_cube[0].metadata[0] != 'air_temperature':
-                raise Exception("Unable to determine the temperature"
-                + " at this time. Please contact the developer for futher"
-                + " assistance.")
+            temperature *= self.units.K
         else:
-            temp = self.input_temp.value
+            temperature = self.input_temp
         
-        if np.shape(temp) == (34, 181, 360):
-            # Reshape the data in such a way that it matches the pressure surfaces defined in
-            # the software.
-            temp = np.flip(temp, axis=0)
-            temp = np.delete(temp, self.remove_psurfaces, axis=0)
-
-            # Reshape the data in such a way that it matches the latitude lines defined in
-            # the software.
-            temp = np.transpose(temp, (1, 2, 0))
-            temp = temp[1:-1]
-            temp = np.delete(temp, [89], axis=0)
-            nh_temp, sh_temp = np.split(temp, 2)
-            nh_lat, sh_lat = np.split(self.latitude_lines().value, 2)
-            nh_temp = nh_temp[::self.delta_latitude]
-            sh_startindex = int((nh_lat[-1] * -1) - 1)
-            sh_temp = sh_temp[sh_startindex::self.delta_latitude]
-            temperature = np.concatenate((nh_temp, sh_temp))
-
-            # Reshape the data in such a way that it matches the longitude lines defined in
-            # the software.
-            temperature = np.transpose(temperature, (2, 0, 1))
-            temperature = temperature[:, ::-1, ::self.delta_longitude]
-            
-            if self.remove_files and not self.input_data:
-                os.remove("initial_conditions.nc")
-
-            # Define the unit of measurement for temperature.
-            temperature *= units.K
-        else:
-            temperature = temp * units.K
-
         return temperature
 
-    cpdef remove_all_files(self):
+    cpdef exit(self):
         """
         This method deletes any file created by the software,
         whilst downloading data from the AMSIMP Initial Atmospheric
@@ -839,19 +700,14 @@ cdef class Backend(Download):
         such files throught the utilisation of the parameter, remove_files,
         when the class is initialised.
         """
-        # Pressure surfaces file.
-        try:
-            os.remove("pressure_surfaces.npy")
-        except OSError:
-            pass
-
         # Initial atmospheric conditions file.
         try:
             os.remove("initial_conditions.nc")
         except OSError:
             pass
-
-        return "Deleted!"
+        
+        # Close Python.
+        sys.exit()
 
 # -----------------------------------------------------------------------------------------#
 
@@ -1058,6 +914,10 @@ cdef class Backend(Download):
             data = np.sqrt(data[0]**2 + data[1]**2)[indx_psurface, :, :]
             data_type = "Wind"
             unit = " ($\\frac{m}{s}$)"
+        elif which == "mixing_ratio":
+            data = self.mixing_ratio()[indx_psurface, :, :]
+            data_type = "Mixing Ratio"
+            unit = " (Dimensionless)"
         else:
             raise Exception(
                 "Invalid keyword. which must be a string of an atmospheric parameter included with AMSIMP."
@@ -1187,6 +1047,10 @@ cdef class Backend(Download):
             data = self.wind()[1][:, :, indx_long]
             data_type = "Meridional Wind"
             unit = " ($\\frac{m}{s}$)"
+        elif which == "mixing_ratio":
+            data = self.mixing_ratio()[:, :, indx_long]
+            data_type = "Mixing Ratio"
+            unit = " (Dimensionless)"
         else:
             raise Exception(
                 "Invalid keyword. which must be a string of an atmospheric parameter included with AMSIMP."

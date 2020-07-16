@@ -35,7 +35,8 @@ cdef class Backend(Download):
     cdef bool ai
     cdef int data_size, epochs
     cdef bool input_data
-    cdef input_date, date, input_height, input_rh, input_temp, input_u, input_v
+    cdef input_date, date, psurfaces, lat, lon, input_height, input_rh
+    cdef input_temp, input_u, input_v
 
     cpdef np.ndarray latitude_lines(self)
     cpdef np.ndarray longitude_lines(self)
@@ -50,7 +51,7 @@ cdef class Backend(Download):
     cpdef np.ndarray geopotential_height(self)
     cpdef np.ndarray relative_humidity(self)
     cpdef np.ndarray temperature(self)
-    cpdef remove_all_files(self)
+    cpdef exit(self)
     
     cpdef np.ndarray gravitational_acceleration(self)
     cpdef np.ndarray pressure_thickness(self, p1=?, p2=?)
