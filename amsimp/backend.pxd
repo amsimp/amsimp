@@ -35,23 +35,23 @@ cdef class Backend(Download):
     cdef bool ai
     cdef int data_size, epochs
     cdef bool input_data
-    cdef input_date, date, input_geo, input_rh, input_temp, input_u, input_v
+    cdef input_date, date, psurfaces, lat, lon, input_height, input_rh
+    cdef input_temp, input_u, input_v
 
     cpdef np.ndarray latitude_lines(self)
     cpdef np.ndarray longitude_lines(self)
     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)
-    cdef np.ndarray gradient_x(self, parameter=?)
-    cdef np.ndarray gradient_y(self, parameter=?)
-    cdef np.ndarray gradient_p(self, parameter=?)
-    cdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)
+    cpdef np.ndarray gradient_x(self, parameter=?)
+    cpdef np.ndarray gradient_y(self, parameter=?)
+    cpdef np.ndarray gradient_p(self, parameter=?)
+    cpdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)
 
     cpdef np.ndarray coriolis_parameter(self)
 
     cpdef np.ndarray geopotential_height(self)
     cpdef np.ndarray relative_humidity(self)
-    cpdef np.ndarray surface_temperature(self)
     cpdef np.ndarray temperature(self)
-    cpdef remove_all_files(self)
+    cpdef exit(self)
     
     cpdef np.ndarray gravitational_acceleration(self)
     cpdef np.ndarray pressure_thickness(self, p1=?, p2=?)
