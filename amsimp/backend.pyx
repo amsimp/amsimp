@@ -128,7 +128,7 @@ cdef class Backend(Download):
     # Mass of the Earth.
     M = constants.M_earth
     M = M.value * M.unit
-    # The specific heat capacity on a constant pressure surface for dry air.
+    # The specific heat capacity on a constant pressure surface.
     c_p = 1004 * (units.J / (units.kg * units.K))
     # Gravitational acceleration at the Earth's surface.
     g = 9.80665 * (units.m / (units.s ** 2))

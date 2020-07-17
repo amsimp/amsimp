@@ -644,6 +644,30 @@ cdef class Dynamics(RNN):
 
         cdef int n = 0
         cdef int len_t = 1
+        cdef int smooth = 4
+
+        # Smoothing operator (filter with normal distribution
+        # of weights) on initial conditions.
+        # Zonal Wind.
+        u_i = smooth_gaussian(
+            scalar_grid=u_i.value,
+            n=smooth,
+        ).magnitude * u_i.unit
+        # Meridional Wind.
+        v_i = smooth_gaussian(
+            scalar_grid=v_i.value,
+            n=smooth,
+        ).magnitude * v_i.unit
+        # Air Temperature.
+        T_i = smooth_gaussian(
+            scalar_grid=T_i.value,
+            n=smooth,
+        ).magnitude * T.unit
+        # Mixing Ratio.
+        q_i = smooth_gaussian(
+            scalar_grid=q_i.value,
+            n=smooth,
+        ).magnitude * q_i.unit
         try:
             while t < forecast_length.value:
                 # Wind.
@@ -708,13 +732,13 @@ cdef class Dynamics(RNN):
                 else:
                     u_n[:, 1:-1, 1:-1] = u_0[:, 1:-1, 1:-1] + RHS[:, 1:-1, 1:-1]
                     # Apply Robert-Asselin time filter.
-                    u = u + 0.1 * (u_n - 2*u + u_0)
+                    u = u + 0.5 * (u_n - 2*u + u_0)
 
                 # Smoothing operator (filter with normal distribution
                 # of weights).
                 u = smooth_gaussian(
                     scalar_grid=u.value,
-                    n=3,
+                    n=smooth,
                 ).magnitude * u.unit
 
                 # Meridional Wind.
@@ -749,13 +773,13 @@ cdef class Dynamics(RNN):
                 else:
                     v_n[:, 1:-1, 1:-1] = v_0[:, 1:-1, 1:-1] + RHS[:, 1:-1, 1:-1]
                     # Apply Robert-Asselin time filter.
-                    v = v + 0.1 * (v_n - 2*v + v_0)
+                    v = v + 0.5 * (v_n - 2*v + v_0)
 
                 # Smoothing operator (filter with normal distribution
                 # of weights).
                 v = smooth_gaussian(
                     scalar_grid=v.value,
-                    n=3,
+                    n=smooth,
                 ).magnitude * v.unit
 
                 # Temperature.
@@ -790,13 +814,13 @@ cdef class Dynamics(RNN):
                 else:
                     T_n[:, 1:-1, 1:-1] = T_0[:, 1:-1, 1:-1] + RHS[:, 1:-1, 1:-1]
                     # Apply Robert-Asselin time filter.
-                    T = T + 0.1 * (T_n - 2*T + T_0)
+                    T = T + 0.5 * (T_n - 2*T + T_0)
                 
                 # Smoothing operator (filter with normal distribution
                 # of weights).
                 T = smooth_gaussian(
                     scalar_grid=T.value,
-                    n=3,
+                    n=smooth,
                 ).magnitude * T.unit
 
                 # Mixing ratio
@@ -828,13 +852,13 @@ cdef class Dynamics(RNN):
                 else:
                     q_n[:, 1:-1, 1:-1] = q_0[:, 1:-1, 1:-1] + RHS[:, 1:-1, 1:-1]
                     # Apply Robert-Asselin time filter.
-                    q = q + 0.1 * (q_n - 2*q + q_0)
+                    q = q + 0.5 * (q_n - 2*q + q_0)
 
                 # Smoothing operator (filter with normal distribution
                 # of weights).
                 q = smooth_gaussian(
                     scalar_grid=q.value,
-                    n=3,
+                    n=smooth,
                 ).magnitude * q.unit
 
                 # Vapor pressure.
@@ -884,6 +908,13 @@ cdef class Dynamics(RNN):
                     z2 = z1
 
                 height = height_new[::-1, :, :]
+
+                # Smoothing operator (filter with normal distribution
+                # of weights).
+                height = smooth_gaussian(
+                    scalar_grid=height.value,
+                    n=smooth,
+                ).magnitude * height.unit
 
                 # Recurrent Neural Network.
                 if self.ai:
