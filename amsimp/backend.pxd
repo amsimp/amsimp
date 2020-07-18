@@ -35,6 +35,8 @@ cdef class Backend(Download):
     cdef bool ai
     cdef int data_size, epochs
     cdef bool input_data
+    cpdef dict constants
+    cpdef sidereal_day, Upomega, R, a, G, M, c_p, g
     cdef input_date, date, psurfaces, lat, lon, input_height, input_rh
     cdef input_temp, input_u, input_v
 
@@ -53,6 +55,5 @@ cdef class Backend(Download):
     cpdef np.ndarray temperature(self)
     cpdef exit(self)
     
-    cpdef np.ndarray gravitational_acceleration(self)
     cpdef np.ndarray pressure_thickness(self, p1=?, p2=?)
     cpdef np.ndarray troposphere_boundaryline(self)

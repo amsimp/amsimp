@@ -35,6 +35,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from matplotlib import style, ticker, gridspec
 import numpy as np
+from astropy import constants as constant
 import cartopy.crs as ccrs
 from cartopy.util import add_cyclic_point
 from cpython cimport bool
@@ -428,7 +429,15 @@ cdef class Dynamics(RNN):
             temp=None, 
             rh=None, 
             u=None, 
-            v=None
+            v=None,
+            dict constants={
+                "sidereal_day": (23 + (56 / 60)) * 3600,
+                "angular_rotation_rate": ((2 * np.pi) / ((23 + (56 / 60)) * 3600)),
+                "planet_radius": constant.R_earth.value,
+                "planet_mass": constant.M_earth.value,
+                "specific_heat_capacity_psurface": 1004,
+                "gravitational_acceleration": 9.80665 
+            }
         ):
         """
         The parameter, forecast_length, defines the length of the 
@@ -461,6 +470,7 @@ cdef class Dynamics(RNN):
         super().__init__(rh)
         super().__init__(u)
         super().__init__(v)
+        super().__init__(constants)
         
         # Ensure self.forecast_length is greater than, or equal to 1.
         if self.forecast_length.value <= 0:
@@ -544,7 +554,7 @@ cdef class Dynamics(RNN):
 
         # Define initial conditions.
         # Gravitational Acceleration.
-        cdef np.ndarray g = self.gravitational_acceleration()
+        cdef g = self.g
         # Geopotential Height.
         cdef np.ndarray height = self.geopotential_height()
         # Wind.
@@ -901,20 +911,13 @@ cdef class Dynamics(RNN):
                     Tv_mean = (Tv[i+1, :, :] + Tv[i, :, :]) / 2
                     z1 = z2 - (
                         (
-                            (self.R * Tv_mean) / self.g
+                            (self.R * Tv_mean) / g
                         ) * np.log(p_height[i+1] / p_height[i])
                     )
                     height_new[i+1, :, :] = z1
                     z2 = z1
 
                 height = height_new[::-1, :, :]
-
-                # Smoothing operator (filter with normal distribution
-                # of weights).
-                height = smooth_gaussian(
-                    scalar_grid=height.value,
-                    n=smooth,
-                ).magnitude * height.unit
 
                 # Recurrent Neural Network.
                 if self.ai:
@@ -960,9 +963,6 @@ cdef class Dynamics(RNN):
 
                 # Precipitable Water.
                 pwv = config.precipitable_water()
-
-                # Gravitational Acceleration.
-                g = config.gravitational_acceleration()
 
                 # Add predictions to NumPy arrays.
                 if n > 1:

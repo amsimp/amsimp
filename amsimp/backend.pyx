@@ -29,7 +29,8 @@ import socket
 from amsimp.download cimport Download
 from amsimp.download import Download
 import numpy as np
-from astropy import constants, units
+from astropy import constants as constant
+from astropy import units
 from astropy.units.quantity import Quantity
 cimport numpy as np
 from cpython cimport bool
@@ -93,8 +94,6 @@ cdef class Backend(Download):
     to save such files throught the utilisation of the parameter, remove_files,
     when the class is initialised.
     
-    gravitational_acceleration ~ generates a NumPy arrray of the gravitational
-    acceleration (4). The unit of measurement is metres per second squared.
     pressure_thickness ~ outputs a NumPy array of atmospheric pressure
     thickness (4). The unit of measurement is metres.
     troposphere_boundaryline ~ generates a NumPy array of the
@@ -112,26 +111,6 @@ cdef class Backend(Download):
 
     # Define units of measurement for AMSIMP.
     units = units
-
-    # Predefined Constants.
-    # Angular rotation rate of Earth.
-    sidereal_day = ((23 + (56 / 60)) * 3600) * units.s
-    Upomega = ((2 * np.pi) / sidereal_day) * units.rad
-    # Ideal Gas Constant
-    R = 287 * (units.J / (units.kg * units.K))
-    # Mean radius of the Earth.
-    a = constants.R_earth
-    a = a.value * units.m
-    # Universal Gravitational Constant.
-    G = constants.G
-    G = G.value * G.unit
-    # Mass of the Earth.
-    M = constants.M_earth
-    M = M.value * M.unit
-    # The specific heat capacity on a constant pressure surface.
-    c_p = 1004 * (units.J / (units.kg * units.K))
-    # Gravitational acceleration at the Earth's surface.
-    g = 9.80665 * (units.m / (units.s ** 2))
 
     def __cinit__(
             self,
@@ -152,7 +131,15 @@ cdef class Backend(Download):
             temp=None, 
             rh=None, 
             u=None, 
-            v=None
+            v=None,
+            dict constants={
+                "sidereal_day": (23 + (56 / 60)) * 3600,
+                "angular_rotation_rate": ((2 * np.pi) / ((23 + (56 / 60)) * 3600)),
+                "planet_radius": constant.R_earth.value,
+                "planet_mass": constant.M_earth.value,
+                "specific_heat_capacity_psurface": 1004,
+                "gravitational_acceleration": 9.80665 
+            }
         ):
         """
         The parameters, delta_latitude and delta_longitude, defines the
@@ -383,6 +370,32 @@ cdef class Backend(Download):
             u = cube.extract("x_wind")[0]
             v = cube.extract("y_wind")[0]
 
+        # Constants dictionary.
+        # Sidereal day.
+        if type(constants["sidereal_day"]) != Quantity:
+            constants["sidereal_day"] = constants["sidereal_day"] * units.s
+        # Angular rotation rate.
+        if type(constants["angular_rotation_rate"]) != Quantity:
+            constants["angular_rotation_rate"] = constants["angular_rotation_rate"] * (
+                units.rad / units.s
+            )
+        # Planet radius.
+        if type(constants["planet_radius"]) != Quantity:
+            constants["planet_radius"] = constants["planet_radius"] * units.m
+        # Planet mass.
+        if type(constants["planet_mass"]) != Quantity:
+            constants["planet_mass"] = constants["planet_mass"] * units.kg
+        # Specific heat capacity on a constant pressure surface.
+        if type(constants["specific_heat_capacity_psurface"]) != Quantity:
+            constants["specific_heat_capacity_psurface"] = constants[
+                "specific_heat_capacity_psurface"
+            ] * (units.J / (units.kg * units.K))
+        # Gravitational acceleration.
+        if type(constants["gravitational_acceleration"]) != Quantity: 
+            constants["gravitational_acceleration"] = constants["gravitational_acceleration"] * (
+                units.m / (units.s ** 2)
+            )
+
         # Make the input data variables available else where in the class.
         self.psurfaces = psurfaces
         self.lat = lat
@@ -392,6 +405,25 @@ cdef class Backend(Download):
         self.input_temp = temp
         self.input_u = u
         self.input_v = v
+        self.constants = constants
+
+        # Predefined Constants.
+        # Angular rotation rate of the planet.
+        self.sidereal_day = constants["sidereal_day"]
+        self.Upomega = constants["angular_rotation_rate"]
+        # Ideal Gas Constant
+        self.R = 287 * (units.J / (units.kg * units.K))
+        # Mean radius of the planet.
+        self.a = self.constants["planet_radius"]
+        # Universal Gravitational Constant.
+        G = constant.G
+        self.G = G.value * G.unit
+        # Mass of the planet.
+        self.M = self.constants["planet_mass"]
+        # The specific heat capacity on a constant pressure surface.
+        self.c_p = self.constants["specific_heat_capacity_psurface"]
+        # Gravitational acceleration.
+        self.g = self.constants["gravitational_acceleration"]
 
         # Function to check for an internet connection.
         def is_connected():
@@ -764,69 +796,6 @@ cdef class Backend(Download):
         sys.exit()
 
 # -----------------------------------------------------------------------------------------#
-
-    cpdef np.ndarray gravitational_acceleration(self):
-        """
-        Generates a NumPy arrray of the effective gravitational acceleration
-        according to WGS84 at a distance z from the Globe.
-
-        Gravitational acceleration is the free fall acceleration of an object
-        in vacuum — without any drag. This is the steady gain in speed caused
-        exclusively by the force of gravitational attraction.
-
-        Equation:
-            Please see the following website:
-            http://walter.bislins.ch/bloge/index.asp?page=Earth+Gravity+Calculator
-        """
-        cdef list lat = (np.radians(self.latitude_lines().value)).tolist()
-        cdef float a = 6378137
-        cdef float b = 6356752.3142
-        cdef float g_e = 9.7803253359
-        cdef float g_p = 9.8321849378
-
-        cdef list lat_long = []
-        cdef int len_longitude = len(self.longitude_lines())
-        cdef int n = 0
-        while n < len_longitude:
-            lat_long.append(lat)
-
-            n += 1
-        lat_long = (np.transpose(lat_long)).tolist()
-
-        cdef list lat_list = []
-        cdef int len_psurfaces = len(self.pressure_surfaces().value)
-        n = 0
-        while n < len_psurfaces:
-            lat_list.append(lat_long)
-
-            n += 1
-        cdef np.ndarray latitude = np.asarray(lat_list)
-
-        # Magnitude of the effective gravitational acceleration according to WGS84
-        # at point P on the ellipsoid.
-        g_0 = (
-            (a * g_e * (np.cos(latitude) ** 2)) + (b * g_p * (np.sin(latitude) ** 2))
-        ) / np.sqrt(
-            ((a ** 2) * (np.cos(latitude) ** 2) + (b ** 2) * (np.sin(latitude) ** 2))
-        )
-
-        cdef float f = (a - b) / a
-        cdef float m = (
-            (self.Upomega.value ** 2) * (a ** 2) * b
-            ) / (self.G.value * self.M.value)
-
-        # Magnitude of the effective gravitational acceleration according to WGS84 at
-        # a distance z from the ellipsoid.
-        cdef np.ndarray height = self.geopotential_height().value
-        gravitational_acceleration = g_0 * (
-            1
-            - (2 / a) * (1 + f + m - 2 * f * (np.sin(latitude) ** 2)) * height
-            + (3 / (a ** 2)) * (height ** 2)
-        )
-
-        # Add the unit of measurement
-        gravitational_acceleration *= (units.m / (units.s ** 2))
-        return gravitational_acceleration
 
     cpdef np.ndarray pressure_thickness(self, p1=1000, p2=500):
         """
