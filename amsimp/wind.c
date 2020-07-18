@@ -1126,7 +1126,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_p;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_make_3dimensional_array;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_thickness;
 
-/* "amsimp/backend.pxd":43
+/* "amsimp/backend.pxd":45
  *     cpdef np.ndarray latitude_lines(self)
  *     cpdef np.ndarray longitude_lines(self)
  *     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)             # <<<<<<<<<<<<<<
@@ -1138,7 +1138,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_surfaces {
   PyObject *dim_3d;
 };
 
-/* "amsimp/backend.pxd":44
+/* "amsimp/backend.pxd":46
  *     cpdef np.ndarray longitude_lines(self)
  *     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)
  *     cpdef np.ndarray gradient_x(self, parameter=?)             # <<<<<<<<<<<<<<
@@ -1150,7 +1150,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_x {
   PyObject *parameter;
 };
 
-/* "amsimp/backend.pxd":45
+/* "amsimp/backend.pxd":47
  *     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)
  *     cpdef np.ndarray gradient_x(self, parameter=?)
  *     cpdef np.ndarray gradient_y(self, parameter=?)             # <<<<<<<<<<<<<<
@@ -1162,7 +1162,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_y {
   PyObject *parameter;
 };
 
-/* "amsimp/backend.pxd":46
+/* "amsimp/backend.pxd":48
  *     cpdef np.ndarray gradient_x(self, parameter=?)
  *     cpdef np.ndarray gradient_y(self, parameter=?)
  *     cpdef np.ndarray gradient_p(self, parameter=?)             # <<<<<<<<<<<<<<
@@ -1174,7 +1174,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_p {
   PyObject *parameter;
 };
 
-/* "amsimp/backend.pxd":47
+/* "amsimp/backend.pxd":49
  *     cpdef np.ndarray gradient_y(self, parameter=?)
  *     cpdef np.ndarray gradient_p(self, parameter=?)
  *     cpdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)             # <<<<<<<<<<<<<<
@@ -1187,9 +1187,9 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_make_3dimensional_array {
   PyObject *axis;
 };
 
-/* "amsimp/backend.pxd":57
+/* "amsimp/backend.pxd":58
+ *     cpdef exit(self)
  * 
- *     cpdef np.ndarray gravitational_acceleration(self)
  *     cpdef np.ndarray pressure_thickness(self, p1=?, p2=?)             # <<<<<<<<<<<<<<
  *     cpdef np.ndarray troposphere_boundaryline(self)
  */
@@ -1250,6 +1250,15 @@ struct __pyx_obj_6amsimp_7backend_Backend {
   int data_size;
   int epochs;
   PyBoolObject *input_data;
+  PyObject *constants;
+  PyObject *sidereal_day;
+  PyObject *Upomega;
+  PyObject *R;
+  PyObject *a;
+  PyObject *G;
+  PyObject *M;
+  PyObject *c_p;
+  PyObject *g;
   PyObject *input_date;
   PyObject *date;
   PyObject *psurfaces;
@@ -1309,7 +1318,6 @@ struct __pyx_vtabstruct_6amsimp_7backend_Backend {
   PyArrayObject *(*relative_humidity)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*temperature)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyObject *(*exit)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
-  PyArrayObject *(*gravitational_acceleration)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*pressure_thickness)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch, struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_thickness *__pyx_optional_args);
   PyArrayObject *(*troposphere_boundaryline)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
 };
@@ -2317,7 +2325,6 @@ static PyObject *__pyx_builtin_ValueError;
 static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_RuntimeError;
 static PyObject *__pyx_builtin_ImportError;
-static const char __pyx_k_R[] = "R";
 static const char __pyx_k_m[] = "m";
 static const char __pyx_k_s[] = "s";
 static const char __pyx_k_u[] = "u";
@@ -2475,7 +2482,7 @@ static const char __pyx_k_AMSIMP_Wind_Class_For_informati[] = "\nAMSIMP Wind Cla
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
 static const char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static const char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
-static const char __pyx_k_Incompatible_checksums_s_vs_0x81[] = "Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))";
+static const char __pyx_k_Incompatible_checksums_s_vs_0x71[] = "Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))";
 static const char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
 static const char __pyx_k_Note_Geostrophic_balance_does_no[] = "Note: Geostrophic balance does not hold near the equator.";
 static const char __pyx_k_Unable_to_determine_vertical_mot[] = "Unable to determine vertical motion at this time. Please contact the developer for futher assistance.";
@@ -2489,7 +2496,7 @@ static PyObject *__pyx_kp_u_00_h_Pressure_Surface;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
 static PyObject *__pyx_n_s_ImportError;
-static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x81;
+static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x71;
 static PyObject *__pyx_kp_u_Latitude_phi;
 static PyObject *__pyx_n_s_Linear;
 static PyObject *__pyx_kp_u_Longitude_lambda;
@@ -2502,7 +2509,6 @@ static PyObject *__pyx_n_s_Pa;
 static PyObject *__pyx_n_s_PickleError;
 static PyObject *__pyx_n_s_PlateCarree;
 static PyObject *__pyx_kp_u_Pressure_Surface;
-static PyObject *__pyx_n_s_R;
 static PyObject *__pyx_n_s_RuntimeError;
 static PyObject *__pyx_kp_u_Unable_to_determine_vertical_mot;
 static PyObject *__pyx_n_s_ValueError;
@@ -2678,7 +2684,7 @@ static PyObject *__pyx_int_23;
 static PyObject *__pyx_int_90;
 static PyObject *__pyx_int_359;
 static PyObject *__pyx_int_1000;
-static PyObject *__pyx_int_136180609;
+static PyObject *__pyx_int_119408128;
 static PyObject *__pyx_int_neg_1;
 static PyObject *__pyx_int_neg_90;
 static PyObject *__pyx_codeobj_;
@@ -2836,11 +2842,8 @@ static PyArrayObject *__pyx_f_6amsimp_4wind_4Wind_static_stability(struct __pyx_
  *             ) * self.gradient_p(
  */
   __Pyx_TraceLine(78,0,__PYX_ERR(0, 78, __pyx_L1_error))
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_R); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Negative(__pyx_v_self->__pyx_base.__pyx_base.R); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyNumber_Negative(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "amsimp/wind.pyx":79
  * 
@@ -2850,11 +2853,11 @@ static PyArrayObject *__pyx_f_6amsimp_4wind_4Wind_static_stability(struct __pyx_
  *                 parameter=theta
  */
   __Pyx_TraceLine(79,0,__PYX_ERR(0, 79, __pyx_L1_error))
-  __pyx_t_1 = PyNumber_Multiply(((PyObject *)__pyx_v_pressure), ((PyObject *)__pyx_v_theta)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 79, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyNumber_Divide(((PyObject *)__pyx_v_temperature), __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 79, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Multiply(((PyObject *)__pyx_v_pressure), ((PyObject *)__pyx_v_theta)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 79, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyNumber_Divide(((PyObject *)__pyx_v_temperature), __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 79, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "amsimp/wind.pyx":78
  *         cdef np.ndarray pressure = self.pressure_surfaces(dim_3d=True)
@@ -2864,9 +2867,9 @@ static PyArrayObject *__pyx_f_6amsimp_4wind_4Wind_static_stability(struct __pyx_
  *             ) * self.gradient_p(
  */
   __Pyx_TraceLine(78,0,__PYX_ERR(0, 78, __pyx_L1_error))
-  __pyx_t_1 = PyNumber_Multiply(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = PyNumber_Multiply(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
   /* "amsimp/wind.pyx":80
@@ -2881,12 +2884,12 @@ static PyArrayObject *__pyx_f_6amsimp_4wind_4Wind_static_stability(struct __pyx_
   __pyx_t_7.parameter = ((PyObject *)__pyx_v_theta);
   __pyx_t_3 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_4wind_Wind *)__pyx_v_self->__pyx_base.__pyx_base.__pyx_vtab)->__pyx_base.__pyx_base.gradient_p(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, &__pyx_t_7)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 80, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = PyNumber_Multiply(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 80, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = PyNumber_Multiply(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 80, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_v_static_stability = __pyx_t_2;
-  __pyx_t_2 = 0;
+  __pyx_v_static_stability = __pyx_t_1;
+  __pyx_t_1 = 0;
 
   /* "amsimp/wind.pyx":83
  *                 parameter=theta
@@ -6510,7 +6513,7 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_8__reduce_cython__(struct __pyx_ob
   /* "(tree fragment)":5
  *     cdef object _dict
  *     cdef bint use_setstate
- *     state = (self.ai, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files)             # <<<<<<<<<<<<<<
+ *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files, self.sidereal_day)             # <<<<<<<<<<<<<<
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:
  */
@@ -6523,55 +6526,82 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_8__reduce_cython__(struct __pyx_ob
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.__pyx_base.epochs); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyTuple_New(17); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(26); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.G);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.G);
+  PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_v_self->__pyx_base.__pyx_base.G);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.M);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.M);
+  PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_v_self->__pyx_base.__pyx_base.M);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.R);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.R);
+  PyTuple_SET_ITEM(__pyx_t_5, 2, __pyx_v_self->__pyx_base.__pyx_base.R);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.Upomega);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.Upomega);
+  PyTuple_SET_ITEM(__pyx_t_5, 3, __pyx_v_self->__pyx_base.__pyx_base.Upomega);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.a);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.a);
+  PyTuple_SET_ITEM(__pyx_t_5, 4, __pyx_v_self->__pyx_base.__pyx_base.a);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.ai));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.ai));
-  PyTuple_SET_ITEM(__pyx_t_5, 0, ((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.ai));
+  PyTuple_SET_ITEM(__pyx_t_5, 5, ((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.ai));
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.c_p);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.c_p);
+  PyTuple_SET_ITEM(__pyx_t_5, 6, __pyx_v_self->__pyx_base.__pyx_base.c_p);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.constants);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.constants);
+  PyTuple_SET_ITEM(__pyx_t_5, 7, __pyx_v_self->__pyx_base.__pyx_base.constants);
   __Pyx_GIVEREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_5, 8, __pyx_t_1);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.date);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.date);
-  PyTuple_SET_ITEM(__pyx_t_5, 2, __pyx_v_self->__pyx_base.__pyx_base.date);
+  PyTuple_SET_ITEM(__pyx_t_5, 9, __pyx_v_self->__pyx_base.__pyx_base.date);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyTuple_SET_ITEM(__pyx_t_5, 3, __pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_5, 10, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_3);
-  PyTuple_SET_ITEM(__pyx_t_5, 4, __pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_5, 11, __pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_4);
-  PyTuple_SET_ITEM(__pyx_t_5, 5, __pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_5, 12, __pyx_t_4);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.g);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.g);
+  PyTuple_SET_ITEM(__pyx_t_5, 13, __pyx_v_self->__pyx_base.__pyx_base.g);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.input_data));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.input_data));
-  PyTuple_SET_ITEM(__pyx_t_5, 6, ((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.input_data));
+  PyTuple_SET_ITEM(__pyx_t_5, 14, ((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.input_data));
   __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.input_date);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.input_date);
-  PyTuple_SET_ITEM(__pyx_t_5, 7, __pyx_v_self->__pyx_base.__pyx_base.input_date);
+  PyTuple_SET_ITEM(__pyx_t_5, 15, __pyx_v_self->__pyx_base.__pyx_base.input_date);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.input_height);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.input_height);
-  PyTuple_SET_ITEM(__pyx_t_5, 8, __pyx_v_self->__pyx_base.__pyx_base.input_height);
+  PyTuple_SET_ITEM(__pyx_t_5, 16, __pyx_v_self->__pyx_base.__pyx_base.input_height);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.input_rh);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.input_rh);
-  PyTuple_SET_ITEM(__pyx_t_5, 9, __pyx_v_self->__pyx_base.__pyx_base.input_rh);
+  PyTuple_SET_ITEM(__pyx_t_5, 17, __pyx_v_self->__pyx_base.__pyx_base.input_rh);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.input_temp);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.input_temp);
-  PyTuple_SET_ITEM(__pyx_t_5, 10, __pyx_v_self->__pyx_base.__pyx_base.input_temp);
+  PyTuple_SET_ITEM(__pyx_t_5, 18, __pyx_v_self->__pyx_base.__pyx_base.input_temp);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.input_u);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.input_u);
-  PyTuple_SET_ITEM(__pyx_t_5, 11, __pyx_v_self->__pyx_base.__pyx_base.input_u);
+  PyTuple_SET_ITEM(__pyx_t_5, 19, __pyx_v_self->__pyx_base.__pyx_base.input_u);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.input_v);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.input_v);
-  PyTuple_SET_ITEM(__pyx_t_5, 12, __pyx_v_self->__pyx_base.__pyx_base.input_v);
+  PyTuple_SET_ITEM(__pyx_t_5, 20, __pyx_v_self->__pyx_base.__pyx_base.input_v);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.lat);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.lat);
-  PyTuple_SET_ITEM(__pyx_t_5, 13, __pyx_v_self->__pyx_base.__pyx_base.lat);
+  PyTuple_SET_ITEM(__pyx_t_5, 21, __pyx_v_self->__pyx_base.__pyx_base.lat);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.lon);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.lon);
-  PyTuple_SET_ITEM(__pyx_t_5, 14, __pyx_v_self->__pyx_base.__pyx_base.lon);
+  PyTuple_SET_ITEM(__pyx_t_5, 22, __pyx_v_self->__pyx_base.__pyx_base.lon);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.psurfaces);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.psurfaces);
-  PyTuple_SET_ITEM(__pyx_t_5, 15, __pyx_v_self->__pyx_base.__pyx_base.psurfaces);
+  PyTuple_SET_ITEM(__pyx_t_5, 23, __pyx_v_self->__pyx_base.__pyx_base.psurfaces);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.remove_files));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.remove_files));
-  PyTuple_SET_ITEM(__pyx_t_5, 16, ((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.remove_files));
+  PyTuple_SET_ITEM(__pyx_t_5, 24, ((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.remove_files));
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.__pyx_base.sidereal_day);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.__pyx_base.sidereal_day);
+  PyTuple_SET_ITEM(__pyx_t_5, 25, __pyx_v_self->__pyx_base.__pyx_base.sidereal_day);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
   __pyx_t_3 = 0;
@@ -6581,7 +6611,7 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_8__reduce_cython__(struct __pyx_ob
 
   /* "(tree fragment)":6
  *     cdef bint use_setstate
- *     state = (self.ai, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files)
+ *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files, self.sidereal_day)
  *     _dict = getattr(self, '__dict__', None)             # <<<<<<<<<<<<<<
  *     if _dict is not None:
  *         state += (_dict,)
@@ -6593,7 +6623,7 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_8__reduce_cython__(struct __pyx_ob
   __pyx_t_5 = 0;
 
   /* "(tree fragment)":7
- *     state = (self.ai, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files)
+ *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files, self.sidereal_day)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -6628,13 +6658,13 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_8__reduce_cython__(struct __pyx_ob
  *         state += (_dict,)
  *         use_setstate = True             # <<<<<<<<<<<<<<
  *     else:
- *         use_setstate = self.ai is not None or self.date is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
  */
     __Pyx_TraceLine(9,0,__PYX_ERR(1, 9, __pyx_L1_error))
     __pyx_v_use_setstate = 1;
 
     /* "(tree fragment)":7
- *     state = (self.ai, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files)
+ *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files, self.sidereal_day)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -6646,20 +6676,76 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_8__reduce_cython__(struct __pyx_ob
   /* "(tree fragment)":11
  *         use_setstate = True
  *     else:
- *         use_setstate = self.ai is not None or self.date is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None             # <<<<<<<<<<<<<<
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None             # <<<<<<<<<<<<<<
  *     if use_setstate:
- *         return __pyx_unpickle_Wind, (type(self), 0x81df381, None), state
+ *         return __pyx_unpickle_Wind, (type(self), 0x71e0600, None), state
  */
   __Pyx_TraceLine(11,0,__PYX_ERR(1, 11, __pyx_L1_error))
   /*else*/ {
-    __pyx_t_6 = (((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.ai) != Py_None);
+    __pyx_t_6 = (__pyx_v_self->__pyx_base.__pyx_base.G != Py_None);
     __pyx_t_8 = (__pyx_t_6 != 0);
     if (!__pyx_t_8) {
     } else {
       __pyx_t_7 = __pyx_t_8;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_8 = (__pyx_v_self->__pyx_base.__pyx_base.date != Py_None);
+    __pyx_t_8 = (__pyx_v_self->__pyx_base.__pyx_base.M != Py_None);
+    __pyx_t_6 = (__pyx_t_8 != 0);
+    if (!__pyx_t_6) {
+    } else {
+      __pyx_t_7 = __pyx_t_6;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_6 = (__pyx_v_self->__pyx_base.__pyx_base.R != Py_None);
+    __pyx_t_8 = (__pyx_t_6 != 0);
+    if (!__pyx_t_8) {
+    } else {
+      __pyx_t_7 = __pyx_t_8;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_8 = (__pyx_v_self->__pyx_base.__pyx_base.Upomega != Py_None);
+    __pyx_t_6 = (__pyx_t_8 != 0);
+    if (!__pyx_t_6) {
+    } else {
+      __pyx_t_7 = __pyx_t_6;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_6 = (__pyx_v_self->__pyx_base.__pyx_base.a != Py_None);
+    __pyx_t_8 = (__pyx_t_6 != 0);
+    if (!__pyx_t_8) {
+    } else {
+      __pyx_t_7 = __pyx_t_8;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_8 = (((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.ai) != Py_None);
+    __pyx_t_6 = (__pyx_t_8 != 0);
+    if (!__pyx_t_6) {
+    } else {
+      __pyx_t_7 = __pyx_t_6;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_6 = (__pyx_v_self->__pyx_base.__pyx_base.c_p != Py_None);
+    __pyx_t_8 = (__pyx_t_6 != 0);
+    if (!__pyx_t_8) {
+    } else {
+      __pyx_t_7 = __pyx_t_8;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_8 = (__pyx_v_self->__pyx_base.__pyx_base.constants != ((PyObject*)Py_None));
+    __pyx_t_6 = (__pyx_t_8 != 0);
+    if (!__pyx_t_6) {
+    } else {
+      __pyx_t_7 = __pyx_t_6;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_6 = (__pyx_v_self->__pyx_base.__pyx_base.date != Py_None);
+    __pyx_t_8 = (__pyx_t_6 != 0);
+    if (!__pyx_t_8) {
+    } else {
+      __pyx_t_7 = __pyx_t_8;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_8 = (__pyx_v_self->__pyx_base.__pyx_base.g != Py_None);
     __pyx_t_6 = (__pyx_t_8 != 0);
     if (!__pyx_t_6) {
     } else {
@@ -6738,7 +6824,14 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_8__reduce_cython__(struct __pyx_ob
     }
     __pyx_t_6 = (((PyObject *)__pyx_v_self->__pyx_base.__pyx_base.remove_files) != Py_None);
     __pyx_t_8 = (__pyx_t_6 != 0);
-    __pyx_t_7 = __pyx_t_8;
+    if (!__pyx_t_8) {
+    } else {
+      __pyx_t_7 = __pyx_t_8;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_8 = (__pyx_v_self->__pyx_base.__pyx_base.sidereal_day != Py_None);
+    __pyx_t_6 = (__pyx_t_8 != 0);
+    __pyx_t_7 = __pyx_t_6;
     __pyx_L4_bool_binop_done:;
     __pyx_v_use_setstate = __pyx_t_7;
   }
@@ -6746,9 +6839,9 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_8__reduce_cython__(struct __pyx_ob
 
   /* "(tree fragment)":12
  *     else:
- *         use_setstate = self.ai is not None or self.date is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_Wind, (type(self), 0x81df381, None), state
+ *         return __pyx_unpickle_Wind, (type(self), 0x71e0600, None), state
  *     else:
  */
   __Pyx_TraceLine(12,0,__PYX_ERR(1, 12, __pyx_L1_error))
@@ -6756,11 +6849,11 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_8__reduce_cython__(struct __pyx_ob
   if (__pyx_t_7) {
 
     /* "(tree fragment)":13
- *         use_setstate = self.ai is not None or self.date is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
  *     if use_setstate:
- *         return __pyx_unpickle_Wind, (type(self), 0x81df381, None), state             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_Wind, (type(self), 0x71e0600, None), state             # <<<<<<<<<<<<<<
  *     else:
- *         return __pyx_unpickle_Wind, (type(self), 0x81df381, state)
+ *         return __pyx_unpickle_Wind, (type(self), 0x71e0600, state)
  */
     __Pyx_TraceLine(13,0,__PYX_ERR(1, 13, __pyx_L1_error))
     __Pyx_XDECREF(__pyx_r);
@@ -6771,9 +6864,9 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_8__reduce_cython__(struct __pyx_ob
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     PyTuple_SET_ITEM(__pyx_t_5, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_136180609);
-    __Pyx_GIVEREF(__pyx_int_136180609);
-    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_136180609);
+    __Pyx_INCREF(__pyx_int_119408128);
+    __Pyx_GIVEREF(__pyx_int_119408128);
+    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_119408128);
     __Pyx_INCREF(Py_None);
     __Pyx_GIVEREF(Py_None);
     PyTuple_SET_ITEM(__pyx_t_5, 2, Py_None);
@@ -6794,17 +6887,17 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_8__reduce_cython__(struct __pyx_ob
 
     /* "(tree fragment)":12
  *     else:
- *         use_setstate = self.ai is not None or self.date is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_Wind, (type(self), 0x81df381, None), state
+ *         return __pyx_unpickle_Wind, (type(self), 0x71e0600, None), state
  *     else:
  */
   }
 
   /* "(tree fragment)":15
- *         return __pyx_unpickle_Wind, (type(self), 0x81df381, None), state
+ *         return __pyx_unpickle_Wind, (type(self), 0x71e0600, None), state
  *     else:
- *         return __pyx_unpickle_Wind, (type(self), 0x81df381, state)             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_Wind, (type(self), 0x71e0600, state)             # <<<<<<<<<<<<<<
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_Wind__set_state(self, __pyx_state)
  */
@@ -6818,9 +6911,9 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_8__reduce_cython__(struct __pyx_ob
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     PyTuple_SET_ITEM(__pyx_t_5, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_136180609);
-    __Pyx_GIVEREF(__pyx_int_136180609);
-    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_136180609);
+    __Pyx_INCREF(__pyx_int_119408128);
+    __Pyx_GIVEREF(__pyx_int_119408128);
+    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_119408128);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
     PyTuple_SET_ITEM(__pyx_t_5, 2, __pyx_v_state);
@@ -6863,7 +6956,7 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_8__reduce_cython__(struct __pyx_ob
 
 /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Wind, (type(self), 0x81df381, state)
+ *         return __pyx_unpickle_Wind, (type(self), 0x71e0600, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Wind__set_state(self, __pyx_state)
  */
@@ -6895,7 +6988,7 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_10__setstate_cython__(struct __pyx
   __Pyx_TraceCall("__setstate_cython__", __pyx_f[1], 16, 0, __PYX_ERR(1, 16, __pyx_L1_error));
 
   /* "(tree fragment)":17
- *         return __pyx_unpickle_Wind, (type(self), 0x81df381, state)
+ *         return __pyx_unpickle_Wind, (type(self), 0x71e0600, state)
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_Wind__set_state(self, __pyx_state)             # <<<<<<<<<<<<<<
  */
@@ -6907,7 +7000,7 @@ static PyObject *__pyx_pf_6amsimp_4wind_4Wind_10__setstate_cython__(struct __pyx
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Wind, (type(self), 0x81df381, state)
+ *         return __pyx_unpickle_Wind, (type(self), 0x71e0600, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Wind__set_state(self, __pyx_state)
  */
@@ -7030,19 +7123,19 @@ static PyObject *__pyx_pf_6amsimp_4wind___pyx_unpickle_Wind(CYTHON_UNUSED PyObje
   /* "(tree fragment)":4
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0x81df381:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0x71e0600:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  */
   __Pyx_TraceLine(4,0,__PYX_ERR(1, 4, __pyx_L1_error))
-  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0x81df381) != 0);
+  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0x71e0600) != 0);
   if (__pyx_t_1) {
 
     /* "(tree fragment)":5
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0x81df381:
+ *     if __pyx_checksum != 0x71e0600:
  *         from pickle import PickleError as __pyx_PickleError             # <<<<<<<<<<<<<<
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  *     __pyx_result = Wind.__new__(__pyx_type)
  */
     __Pyx_TraceLine(5,0,__PYX_ERR(1, 5, __pyx_L1_error))
@@ -7062,16 +7155,16 @@ static PyObject *__pyx_pf_6amsimp_4wind___pyx_unpickle_Wind(CYTHON_UNUSED PyObje
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":6
- *     if __pyx_checksum != 0x81df381:
+ *     if __pyx_checksum != 0x71e0600:
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))" % __pyx_checksum)             # <<<<<<<<<<<<<<
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)             # <<<<<<<<<<<<<<
  *     __pyx_result = Wind.__new__(__pyx_type)
  *     if __pyx_state is not None:
  */
     __Pyx_TraceLine(6,0,__PYX_ERR(1, 6, __pyx_L1_error))
     __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v___pyx_checksum); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 6, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0x81, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 6, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0x71, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 6, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_INCREF(__pyx_v___pyx_PickleError);
@@ -7098,15 +7191,15 @@ static PyObject *__pyx_pf_6amsimp_4wind___pyx_unpickle_Wind(CYTHON_UNUSED PyObje
     /* "(tree fragment)":4
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0x81df381:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0x71e0600:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  */
   }
 
   /* "(tree fragment)":7
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  *     __pyx_result = Wind.__new__(__pyx_type)             # <<<<<<<<<<<<<<
  *     if __pyx_state is not None:
  *         __pyx_unpickle_Wind__set_state(<Wind> __pyx_result, __pyx_state)
@@ -7133,7 +7226,7 @@ static PyObject *__pyx_pf_6amsimp_4wind___pyx_unpickle_Wind(CYTHON_UNUSED PyObje
   __pyx_t_3 = 0;
 
   /* "(tree fragment)":8
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  *     __pyx_result = Wind.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_Wind__set_state(<Wind> __pyx_result, __pyx_state)
@@ -7158,7 +7251,7 @@ static PyObject *__pyx_pf_6amsimp_4wind___pyx_unpickle_Wind(CYTHON_UNUSED PyObje
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":8
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  *     __pyx_result = Wind.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_Wind__set_state(<Wind> __pyx_result, __pyx_state)
@@ -7171,7 +7264,7 @@ static PyObject *__pyx_pf_6amsimp_4wind___pyx_unpickle_Wind(CYTHON_UNUSED PyObje
  *         __pyx_unpickle_Wind__set_state(<Wind> __pyx_result, __pyx_state)
  *     return __pyx_result             # <<<<<<<<<<<<<<
  * cdef __pyx_unpickle_Wind__set_state(Wind __pyx_result, tuple __pyx_state):
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
  */
   __Pyx_TraceLine(10,0,__PYX_ERR(1, 10, __pyx_L1_error))
   __Pyx_XDECREF(__pyx_r);
@@ -7206,8 +7299,8 @@ static PyObject *__pyx_pf_6amsimp_4wind___pyx_unpickle_Wind(CYTHON_UNUSED PyObje
  *         __pyx_unpickle_Wind__set_state(<Wind> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Wind__set_state(Wind __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]
- *     if len(__pyx_state) > 17 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
+ *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
  */
 
 static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __pyx_obj_6amsimp_4wind_Wind *__pyx_v___pyx_result, PyObject *__pyx_v___pyx_state) {
@@ -7232,9 +7325,9 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
   /* "(tree fragment)":12
  *     return __pyx_result
  * cdef __pyx_unpickle_Wind__set_state(Wind __pyx_result, tuple __pyx_state):
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]             # <<<<<<<<<<<<<<
- *     if len(__pyx_state) > 17 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[17])
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]             # <<<<<<<<<<<<<<
+ *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[26])
  */
   __Pyx_TraceLine(12,0,__PYX_ERR(1, 12, __pyx_L1_error))
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
@@ -7242,6 +7335,61 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
   __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.G);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.G);
+  __pyx_v___pyx_result->__pyx_base.__pyx_base.G = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.M);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.M);
+  __pyx_v___pyx_result->__pyx_base.__pyx_base.M = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.R);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.R);
+  __pyx_v___pyx_result->__pyx_base.__pyx_base.R = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.Upomega);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.Upomega);
+  __pyx_v___pyx_result->__pyx_base.__pyx_base.Upomega = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.a);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.a);
+  __pyx_v___pyx_result->__pyx_base.__pyx_base.a = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 5, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_7cpython_4bool_bool))))) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
@@ -7253,7 +7401,30 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 6, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.c_p);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.c_p);
+  __pyx_v___pyx_result->__pyx_base.__pyx_base.c_p = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 7, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (!(likely(PyDict_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "dict", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.constants);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.constants);
+  __pyx_v___pyx_result->__pyx_base.__pyx_base.constants = ((PyObject*)__pyx_t_1);
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 8, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -7262,7 +7433,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 9, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.date);
@@ -7273,7 +7444,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 10, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -7282,7 +7453,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 11, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -7291,7 +7462,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 5, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 12, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -7300,7 +7471,18 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 6, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 13, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.g);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.g);
+  __pyx_v___pyx_result->__pyx_base.__pyx_base.g = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 14, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_7cpython_4bool_bool))))) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
@@ -7312,7 +7494,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 7, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 15, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.input_date);
@@ -7323,7 +7505,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 8, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 16, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.input_height);
@@ -7334,7 +7516,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 9, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 17, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.input_rh);
@@ -7345,7 +7527,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 10, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 18, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.input_temp);
@@ -7356,7 +7538,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 11, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 19, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.input_u);
@@ -7367,7 +7549,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 12, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 20, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.input_v);
@@ -7378,7 +7560,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 13, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 21, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.lat);
@@ -7389,7 +7571,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 14, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 22, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.lon);
@@ -7400,7 +7582,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 15, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 23, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.psurfaces);
@@ -7411,7 +7593,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 16, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 24, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_7cpython_4bool_bool))))) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
@@ -7419,12 +7601,23 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
   __Pyx_DECREF(((PyObject *)__pyx_v___pyx_result->__pyx_base.__pyx_base.remove_files));
   __pyx_v___pyx_result->__pyx_base.__pyx_base.remove_files = ((PyBoolObject *)__pyx_t_1);
   __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 25, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.sidereal_day);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.__pyx_base.sidereal_day);
+  __pyx_v___pyx_result->__pyx_base.__pyx_base.sidereal_day = __pyx_t_1;
+  __pyx_t_1 = 0;
 
   /* "(tree fragment)":13
  * cdef __pyx_unpickle_Wind__set_state(Wind __pyx_result, tuple __pyx_state):
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]
- *     if len(__pyx_state) > 17 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[17])
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
+ *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[26])
  */
   __Pyx_TraceLine(13,0,__PYX_ERR(1, 13, __pyx_L1_error))
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
@@ -7432,7 +7625,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
     __PYX_ERR(1, 13, __pyx_L1_error)
   }
   __pyx_t_4 = PyTuple_GET_SIZE(__pyx_v___pyx_state); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(1, 13, __pyx_L1_error)
-  __pyx_t_5 = ((__pyx_t_4 > 17) != 0);
+  __pyx_t_5 = ((__pyx_t_4 > 26) != 0);
   if (__pyx_t_5) {
   } else {
     __pyx_t_3 = __pyx_t_5;
@@ -7445,9 +7638,9 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
   if (__pyx_t_3) {
 
     /* "(tree fragment)":14
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]
- *     if len(__pyx_state) > 17 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[17])             # <<<<<<<<<<<<<<
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
+ *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[26])             # <<<<<<<<<<<<<<
  */
     __Pyx_TraceLine(14,0,__PYX_ERR(1, 14, __pyx_L1_error))
     __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v___pyx_result), __pyx_n_s_dict); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
@@ -7459,7 +7652,7 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(1, 14, __pyx_L1_error)
     }
-    __pyx_t_7 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 17, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 26, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_9 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
@@ -7481,9 +7674,9 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
 
     /* "(tree fragment)":13
  * cdef __pyx_unpickle_Wind__set_state(Wind __pyx_result, tuple __pyx_state):
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]
- *     if len(__pyx_state) > 17 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[17])
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
+ *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[26])
  */
   }
 
@@ -7491,8 +7684,8 @@ static PyObject *__pyx_f_6amsimp_4wind___pyx_unpickle_Wind__set_state(struct __p
  *         __pyx_unpickle_Wind__set_state(<Wind> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Wind__set_state(Wind __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]
- *     if len(__pyx_state) > 17 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
+ *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
  */
 
   /* function exit code */
@@ -10316,7 +10509,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_Format_string_allocated_too_shor, __pyx_k_Format_string_allocated_too_shor, sizeof(__pyx_k_Format_string_allocated_too_shor), 0, 1, 0, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
-  {&__pyx_kp_s_Incompatible_checksums_s_vs_0x81, __pyx_k_Incompatible_checksums_s_vs_0x81, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x81), 0, 0, 1, 0},
+  {&__pyx_kp_s_Incompatible_checksums_s_vs_0x71, __pyx_k_Incompatible_checksums_s_vs_0x71, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x71), 0, 0, 1, 0},
   {&__pyx_kp_u_Latitude_phi, __pyx_k_Latitude_phi, sizeof(__pyx_k_Latitude_phi), 0, 1, 0, 0},
   {&__pyx_n_s_Linear, __pyx_k_Linear, sizeof(__pyx_k_Linear), 0, 0, 1, 1},
   {&__pyx_kp_u_Longitude_lambda, __pyx_k_Longitude_lambda, sizeof(__pyx_k_Longitude_lambda), 0, 1, 0, 0},
@@ -10329,7 +10522,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_PickleError, __pyx_k_PickleError, sizeof(__pyx_k_PickleError), 0, 0, 1, 1},
   {&__pyx_n_s_PlateCarree, __pyx_k_PlateCarree, sizeof(__pyx_k_PlateCarree), 0, 0, 1, 1},
   {&__pyx_kp_u_Pressure_Surface, __pyx_k_Pressure_Surface, sizeof(__pyx_k_Pressure_Surface), 0, 1, 0, 0},
-  {&__pyx_n_s_R, __pyx_k_R, sizeof(__pyx_k_R), 0, 0, 1, 1},
   {&__pyx_n_s_RuntimeError, __pyx_k_RuntimeError, sizeof(__pyx_k_RuntimeError), 0, 0, 1, 1},
   {&__pyx_kp_u_Unable_to_determine_vertical_mot, __pyx_k_Unable_to_determine_vertical_mot, sizeof(__pyx_k_Unable_to_determine_vertical_mot), 0, 1, 0, 0},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
@@ -10668,7 +10860,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Wind, (type(self), 0x81df381, state)
+ *         return __pyx_unpickle_Wind, (type(self), 0x71e0600, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Wind__set_state(self, __pyx_state)
  */
@@ -10708,7 +10900,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   __pyx_int_90 = PyInt_FromLong(90); if (unlikely(!__pyx_int_90)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_359 = PyInt_FromLong(359); if (unlikely(!__pyx_int_359)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_1000 = PyInt_FromLong(1000); if (unlikely(!__pyx_int_1000)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_136180609 = PyInt_FromLong(136180609L); if (unlikely(!__pyx_int_136180609)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_int_119408128 = PyInt_FromLong(119408128L); if (unlikely(!__pyx_int_119408128)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_neg_1 = PyInt_FromLong(-1); if (unlikely(!__pyx_int_neg_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_neg_90 = PyInt_FromLong(-90); if (unlikely(!__pyx_int_neg_90)) __PYX_ERR(0, 1, __pyx_L1_error)
   return 0;
@@ -11281,7 +11473,7 @@ if (!__Pyx_RefNanny) {
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Wind, (type(self), 0x81df381, state)
+ *         return __pyx_unpickle_Wind, (type(self), 0x71e0600, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Wind__set_state(self, __pyx_state)
  */
@@ -11307,8 +11499,8 @@ if (!__Pyx_RefNanny) {
  *         __pyx_unpickle_Wind__set_state(<Wind> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Wind__set_state(Wind __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]
- *     if len(__pyx_state) > 17 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
+ *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
  */
   __Pyx_TraceLine(11,0,__PYX_ERR(1, 11, __pyx_L1_error))
 

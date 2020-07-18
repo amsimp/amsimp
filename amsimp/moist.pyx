@@ -178,10 +178,11 @@ cdef class Moist(Backend):
 
     cpdef np.ndarray potential_temperature(self, moist=False):
         """
-        Generates a NumPy array of potential temperature. The potential
-        temperature of a parcel of fluid at pressure P is the temperature that
-        the parcel would attain if adiabatically brought to a standard reference
-        pressure
+        Generates a NumPy array of potential temperature. 
+        
+        The potential temperature of a parcel of fluid at pressure P is the
+        temperature that the parcel would attain if adiabatically brought
+        to a standard reference pressure.
 
         Equation:
             theta = T \* (frac{P}{P_0}) ** (-R / c_p)

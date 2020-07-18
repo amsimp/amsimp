@@ -35,6 +35,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from matplotlib import style, ticker, gridspec
 import numpy as np
+from astropy import constants as constant
 import cartopy.crs as ccrs
 from cartopy.util import add_cyclic_point
 from cpython cimport bool
@@ -428,7 +429,15 @@ cdef class Dynamics(RNN):
             temp=None, 
             rh=None, 
             u=None, 
-            v=None
+            v=None,
+            dict constants={
+                "sidereal_day": (23 + (56 / 60)) * 3600,
+                "angular_rotation_rate": ((2 * np.pi) / ((23 + (56 / 60)) * 3600)),
+                "planet_radius": constant.R_earth.value,
+                "planet_mass": constant.M_earth.value,
+                "specific_heat_capacity_psurface": 1004,
+                "gravitational_acceleration": 9.80665 
+            }
         ):
         """
         The parameter, forecast_length, defines the length of the 
@@ -461,6 +470,7 @@ cdef class Dynamics(RNN):
         super().__init__(rh)
         super().__init__(u)
         super().__init__(v)
+        super().__init__(constants)
         
         # Ensure self.forecast_length is greater than, or equal to 1.
         if self.forecast_length.value <= 0:
@@ -544,7 +554,7 @@ cdef class Dynamics(RNN):
 
         # Define initial conditions.
         # Gravitational Acceleration.
-        cdef np.ndarray g = self.gravitational_acceleration()
+        cdef g = self.g
         # Geopotential Height.
         cdef np.ndarray height = self.geopotential_height()
         # Wind.
@@ -644,6 +654,30 @@ cdef class Dynamics(RNN):
 
         cdef int n = 0
         cdef int len_t = 1
+        cdef int smooth = 4
+
+        # Smoothing operator (filter with normal distribution
+        # of weights) on initial conditions.
+        # Zonal Wind.
+        u_i = smooth_gaussian(
+            scalar_grid=u_i.value,
+            n=smooth,
+        ).magnitude * u_i.unit
+        # Meridional Wind.
+        v_i = smooth_gaussian(
+            scalar_grid=v_i.value,
+            n=smooth,
+        ).magnitude * v_i.unit
+        # Air Temperature.
+        T_i = smooth_gaussian(
+            scalar_grid=T_i.value,
+            n=smooth,
+        ).magnitude * T.unit
+        # Mixing Ratio.
+        q_i = smooth_gaussian(
+            scalar_grid=q_i.value,
+            n=smooth,
+        ).magnitude * q_i.unit
         try:
             while t < forecast_length.value:
                 # Wind.
@@ -708,13 +742,13 @@ cdef class Dynamics(RNN):
                 else:
                     u_n[:, 1:-1, 1:-1] = u_0[:, 1:-1, 1:-1] + RHS[:, 1:-1, 1:-1]
                     # Apply Robert-Asselin time filter.
-                    u = u + 0.1 * (u_n - 2*u + u_0)
+                    u = u + 0.5 * (u_n - 2*u + u_0)
 
                 # Smoothing operator (filter with normal distribution
                 # of weights).
                 u = smooth_gaussian(
                     scalar_grid=u.value,
-                    n=3,
+                    n=smooth,
                 ).magnitude * u.unit
 
                 # Meridional Wind.
@@ -749,13 +783,13 @@ cdef class Dynamics(RNN):
                 else:
                     v_n[:, 1:-1, 1:-1] = v_0[:, 1:-1, 1:-1] + RHS[:, 1:-1, 1:-1]
                     # Apply Robert-Asselin time filter.
-                    v = v + 0.1 * (v_n - 2*v + v_0)
+                    v = v + 0.5 * (v_n - 2*v + v_0)
 
                 # Smoothing operator (filter with normal distribution
                 # of weights).
                 v = smooth_gaussian(
                     scalar_grid=v.value,
-                    n=3,
+                    n=smooth,
                 ).magnitude * v.unit
 
                 # Temperature.
@@ -790,13 +824,13 @@ cdef class Dynamics(RNN):
                 else:
                     T_n[:, 1:-1, 1:-1] = T_0[:, 1:-1, 1:-1] + RHS[:, 1:-1, 1:-1]
                     # Apply Robert-Asselin time filter.
-                    T = T + 0.1 * (T_n - 2*T + T_0)
+                    T = T + 0.5 * (T_n - 2*T + T_0)
                 
                 # Smoothing operator (filter with normal distribution
                 # of weights).
                 T = smooth_gaussian(
                     scalar_grid=T.value,
-                    n=3,
+                    n=smooth,
                 ).magnitude * T.unit
 
                 # Mixing ratio
@@ -828,13 +862,13 @@ cdef class Dynamics(RNN):
                 else:
                     q_n[:, 1:-1, 1:-1] = q_0[:, 1:-1, 1:-1] + RHS[:, 1:-1, 1:-1]
                     # Apply Robert-Asselin time filter.
-                    q = q + 0.1 * (q_n - 2*q + q_0)
+                    q = q + 0.5 * (q_n - 2*q + q_0)
 
                 # Smoothing operator (filter with normal distribution
                 # of weights).
                 q = smooth_gaussian(
                     scalar_grid=q.value,
-                    n=3,
+                    n=smooth,
                 ).magnitude * q.unit
 
                 # Vapor pressure.
@@ -877,7 +911,7 @@ cdef class Dynamics(RNN):
                     Tv_mean = (Tv[i+1, :, :] + Tv[i, :, :]) / 2
                     z1 = z2 - (
                         (
-                            (self.R * Tv_mean) / self.g
+                            (self.R * Tv_mean) / g
                         ) * np.log(p_height[i+1] / p_height[i])
                     )
                     height_new[i+1, :, :] = z1
@@ -908,9 +942,9 @@ cdef class Dynamics(RNN):
                             delta_longitude=self.delta_longitude,
                             remove_files=self.remove_files,
                             input_data=True,
-                            psurfaces=self.pressure_surfaces().value,
-                            lat=self.latitude_lines().value,
-                            lon=self.longitude_lines().value,
+                            psurfaces=self.pressure_surfaces(),
+                            lat=self.latitude_lines(),
+                            lon=self.longitude_lines(),
                             height=height, 
                             temp=T, 
                             rh=rh,
@@ -929,9 +963,6 @@ cdef class Dynamics(RNN):
 
                 # Precipitable Water.
                 pwv = config.precipitable_water()
-
-                # Gravitational Acceleration.
-                g = config.gravitational_acceleration()
 
                 # Add predictions to NumPy arrays.
                 if n > 1:

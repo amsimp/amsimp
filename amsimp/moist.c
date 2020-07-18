@@ -1124,7 +1124,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_p;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_make_3dimensional_array;
 struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_thickness;
 
-/* "amsimp/backend.pxd":43
+/* "amsimp/backend.pxd":45
  *     cpdef np.ndarray latitude_lines(self)
  *     cpdef np.ndarray longitude_lines(self)
  *     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)             # <<<<<<<<<<<<<<
@@ -1136,7 +1136,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_surfaces {
   PyObject *dim_3d;
 };
 
-/* "amsimp/backend.pxd":44
+/* "amsimp/backend.pxd":46
  *     cpdef np.ndarray longitude_lines(self)
  *     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)
  *     cpdef np.ndarray gradient_x(self, parameter=?)             # <<<<<<<<<<<<<<
@@ -1148,7 +1148,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_x {
   PyObject *parameter;
 };
 
-/* "amsimp/backend.pxd":45
+/* "amsimp/backend.pxd":47
  *     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)
  *     cpdef np.ndarray gradient_x(self, parameter=?)
  *     cpdef np.ndarray gradient_y(self, parameter=?)             # <<<<<<<<<<<<<<
@@ -1160,7 +1160,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_y {
   PyObject *parameter;
 };
 
-/* "amsimp/backend.pxd":46
+/* "amsimp/backend.pxd":48
  *     cpdef np.ndarray gradient_x(self, parameter=?)
  *     cpdef np.ndarray gradient_y(self, parameter=?)
  *     cpdef np.ndarray gradient_p(self, parameter=?)             # <<<<<<<<<<<<<<
@@ -1172,7 +1172,7 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_gradient_p {
   PyObject *parameter;
 };
 
-/* "amsimp/backend.pxd":47
+/* "amsimp/backend.pxd":49
  *     cpdef np.ndarray gradient_y(self, parameter=?)
  *     cpdef np.ndarray gradient_p(self, parameter=?)
  *     cpdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)             # <<<<<<<<<<<<<<
@@ -1185,9 +1185,9 @@ struct __pyx_opt_args_6amsimp_7backend_7Backend_make_3dimensional_array {
   PyObject *axis;
 };
 
-/* "amsimp/backend.pxd":57
+/* "amsimp/backend.pxd":58
+ *     cpdef exit(self)
  * 
- *     cpdef np.ndarray gravitational_acceleration(self)
  *     cpdef np.ndarray pressure_thickness(self, p1=?, p2=?)             # <<<<<<<<<<<<<<
  *     cpdef np.ndarray troposphere_boundaryline(self)
  */
@@ -1248,6 +1248,15 @@ struct __pyx_obj_6amsimp_7backend_Backend {
   int data_size;
   int epochs;
   PyBoolObject *input_data;
+  PyObject *constants;
+  PyObject *sidereal_day;
+  PyObject *Upomega;
+  PyObject *R;
+  PyObject *a;
+  PyObject *G;
+  PyObject *M;
+  PyObject *c_p;
+  PyObject *g;
   PyObject *input_date;
   PyObject *date;
   PyObject *psurfaces;
@@ -1295,7 +1304,6 @@ struct __pyx_vtabstruct_6amsimp_7backend_Backend {
   PyArrayObject *(*relative_humidity)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*temperature)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyObject *(*exit)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
-  PyArrayObject *(*gravitational_acceleration)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
   PyArrayObject *(*pressure_thickness)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch, struct __pyx_opt_args_6amsimp_7backend_7Backend_pressure_thickness *__pyx_optional_args);
   PyArrayObject *(*troposphere_boundaryline)(struct __pyx_obj_6amsimp_7backend_Backend *, int __pyx_skip_dispatch);
 };
@@ -2284,8 +2292,6 @@ static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_RuntimeError;
 static PyObject *__pyx_builtin_ImportError;
 static const char __pyx_k_K[] = "K";
-static const char __pyx_k_R[] = "R";
-static const char __pyx_k_g[] = "g";
 static const char __pyx_k_m[] = "m";
 static const char __pyx_k_y[] = "y";
 static const char __pyx_k_Pa[] = "Pa";
@@ -2295,7 +2301,6 @@ static const char __pyx_k_np[] = "np";
 static const char __pyx_k_si[] = "si";
 static const char __pyx_k_to[] = "to";
 static const char __pyx_k__20[] = "*";
-static const char __pyx_k_c_p[] = "c_p";
 static const char __pyx_k_exp[] = "exp";
 static const char __pyx_k_hPa[] = "hPa";
 static const char __pyx_k_kPa[] = "kPa";
@@ -2381,7 +2386,7 @@ static const char __pyx_k_AMSIMP_Moist_Thermodynamics_Cla[] = "\nAMSIMP Moist Th
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
 static const char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static const char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
-static const char __pyx_k_Incompatible_checksums_s_vs_0x81[] = "Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))";
+static const char __pyx_k_Incompatible_checksums_s_vs_0x71[] = "Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))";
 static const char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
 static const char __pyx_k_moist_must_be_a_boolean_value_Th[] = "moist must be a boolean value. The value of moist was: {}";
 static const char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not Fortran contiguous";
@@ -2391,7 +2396,7 @@ static PyObject *__pyx_n_s_Backend;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
 static PyObject *__pyx_n_s_ImportError;
-static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x81;
+static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x71;
 static PyObject *__pyx_n_s_K;
 static PyObject *__pyx_n_s_Moist;
 static PyObject *__pyx_n_s_Moist___mixing_ratio;
@@ -2407,7 +2412,6 @@ static PyObject *__pyx_n_s_Moist_virtual_temperature;
 static PyObject *__pyx_kp_u_Non_native_byte_order_not_suppor;
 static PyObject *__pyx_n_s_Pa;
 static PyObject *__pyx_n_s_PickleError;
-static PyObject *__pyx_n_s_R;
 static PyObject *__pyx_n_s_RuntimeError;
 static PyObject *__pyx_n_s_ValueError;
 static PyObject *__pyx_n_s__20;
@@ -2417,7 +2421,6 @@ static PyObject *__pyx_n_s_amsimp_moist;
 static PyObject *__pyx_kp_s_amsimp_moist_pyx;
 static PyObject *__pyx_n_s_args;
 static PyObject *__pyx_n_s_asarray;
-static PyObject *__pyx_n_s_c_p;
 static PyObject *__pyx_n_s_cartopy_crs;
 static PyObject *__pyx_n_s_cartopy_util;
 static PyObject *__pyx_n_s_ccrs;
@@ -2428,7 +2431,6 @@ static PyObject *__pyx_n_s_dict_2;
 static PyObject *__pyx_n_s_exner_function;
 static PyObject *__pyx_n_s_exp;
 static PyObject *__pyx_n_s_format;
-static PyObject *__pyx_n_s_g;
 static PyObject *__pyx_n_s_getstate;
 static PyObject *__pyx_n_s_hPa;
 static PyObject *__pyx_n_s_import;
@@ -2516,7 +2518,7 @@ static PyObject *__pyx_int_2;
 static PyObject *__pyx_int_3;
 static PyObject *__pyx_int_100;
 static PyObject *__pyx_int_997;
-static PyObject *__pyx_int_136180609;
+static PyObject *__pyx_int_119408128;
 static PyObject *__pyx_int_neg_1;
 static PyObject *__pyx_codeobj_;
 static PyObject *__pyx_tuple__9;
@@ -3219,17 +3221,14 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_density(struct __pyx_obj_6am
   __Pyx_TraceLine(141,0,__PYX_ERR(0, 141, __pyx_L1_error))
   __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_5moist_Moist *)__pyx_v_self->__pyx_base.__pyx_vtab)->virtual_temperature(__pyx_v_self, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 141, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_R); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 141, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Multiply(__pyx_t_1, __pyx_v_self->__pyx_base.R); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 141, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 141, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyNumber_Divide(((PyObject *)__pyx_v_pressure_surfaces), __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 141, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyNumber_Divide(((PyObject *)__pyx_v_pressure_surfaces), __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 141, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_v_density = __pyx_t_2;
-  __pyx_t_2 = 0;
+  __pyx_v_density = __pyx_t_1;
+  __pyx_t_1 = 0;
 
   /* "amsimp/moist.pyx":144
  * 
@@ -3239,10 +3238,10 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_density(struct __pyx_obj_6am
  * 
  */
   __Pyx_TraceLine(144,0,__PYX_ERR(0, 144, __pyx_L1_error))
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_density, __pyx_n_s_si); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 144, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF_SET(__pyx_v_density, __pyx_t_2);
-  __pyx_t_2 = 0;
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_density, __pyx_n_s_si); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 144, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF_SET(__pyx_v_density, __pyx_t_1);
+  __pyx_t_1 = 0;
 
   /* "amsimp/moist.pyx":145
  *         # Switch to the appropriate SI units.
@@ -3711,7 +3710,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_8mixing_ratio(struct __pyx_obj_6
  * 
  *     cpdef np.ndarray potential_temperature(self, moist=False):             # <<<<<<<<<<<<<<
  *         """
- *         Generates a NumPy array of potential temperature. The potential
+ *         Generates a NumPy array of potential temperature.
  */
 
 static PyObject *__pyx_pw_6amsimp_5moist_5Moist_11potential_temperature(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -3798,37 +3797,37 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_potential_temperature(struct
     #endif
   }
 
-  /* "amsimp/moist.pyx":190
+  /* "amsimp/moist.pyx":191
  *         """
  *         # Ensure moist is a boolean value.
  *         if not isinstance(moist, bool):             # <<<<<<<<<<<<<<
  *             raise Exception(
  *                 "moist must be a boolean value. The value of moist was: {}".format(
  */
-  __Pyx_TraceLine(190,0,__PYX_ERR(0, 190, __pyx_L1_error))
+  __Pyx_TraceLine(191,0,__PYX_ERR(0, 191, __pyx_L1_error))
   __pyx_t_5 = __Pyx_TypeCheck(__pyx_v_moist, __pyx_ptype_7cpython_4bool_bool); 
   __pyx_t_6 = ((!(__pyx_t_5 != 0)) != 0);
   if (unlikely(__pyx_t_6)) {
 
-    /* "amsimp/moist.pyx":192
+    /* "amsimp/moist.pyx":193
  *         if not isinstance(moist, bool):
  *             raise Exception(
  *                 "moist must be a boolean value. The value of moist was: {}".format(             # <<<<<<<<<<<<<<
  *                     moist
  *                 )
  */
-    __Pyx_TraceLine(192,0,__PYX_ERR(0, 192, __pyx_L1_error))
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_u_moist_must_be_a_boolean_value_Th, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 192, __pyx_L1_error)
+    __Pyx_TraceLine(193,0,__PYX_ERR(0, 193, __pyx_L1_error))
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_u_moist_must_be_a_boolean_value_Th, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 193, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
 
-    /* "amsimp/moist.pyx":193
+    /* "amsimp/moist.pyx":194
  *             raise Exception(
  *                 "moist must be a boolean value. The value of moist was: {}".format(
  *                     moist             # <<<<<<<<<<<<<<
  *                 )
  *             )
  */
-    __Pyx_TraceLine(193,0,__PYX_ERR(0, 193, __pyx_L1_error))
+    __Pyx_TraceLine(194,0,__PYX_ERR(0, 194, __pyx_L1_error))
     __pyx_t_3 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
       __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
@@ -3841,26 +3840,26 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_potential_temperature(struct
     }
     __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_v_moist) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_moist);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 192, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 193, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "amsimp/moist.pyx":191
+    /* "amsimp/moist.pyx":192
  *         # Ensure moist is a boolean value.
  *         if not isinstance(moist, bool):
  *             raise Exception(             # <<<<<<<<<<<<<<
  *                 "moist must be a boolean value. The value of moist was: {}".format(
  *                     moist
  */
-    __Pyx_TraceLine(191,0,__PYX_ERR(0, 191, __pyx_L1_error))
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 191, __pyx_L1_error)
+    __Pyx_TraceLine(192,0,__PYX_ERR(0, 192, __pyx_L1_error))
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 192, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 191, __pyx_L1_error)
+    __PYX_ERR(0, 192, __pyx_L1_error)
 
-    /* "amsimp/moist.pyx":190
+    /* "amsimp/moist.pyx":191
  *         """
  *         # Ensure moist is a boolean value.
  *         if not isinstance(moist, bool):             # <<<<<<<<<<<<<<
@@ -3869,35 +3868,35 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_potential_temperature(struct
  */
   }
 
-  /* "amsimp/moist.pyx":200
+  /* "amsimp/moist.pyx":201
  *         # potential temperature.
  *         cdef np.ndarray temperature
  *         if moist:             # <<<<<<<<<<<<<<
  *             temperature = self.virtual_temperature().value
  *         else:
  */
-  __Pyx_TraceLine(200,0,__PYX_ERR(0, 200, __pyx_L1_error))
-  __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_v_moist); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 200, __pyx_L1_error)
+  __Pyx_TraceLine(201,0,__PYX_ERR(0, 201, __pyx_L1_error))
+  __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_v_moist); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 201, __pyx_L1_error)
   if (__pyx_t_6) {
 
-    /* "amsimp/moist.pyx":201
+    /* "amsimp/moist.pyx":202
  *         cdef np.ndarray temperature
  *         if moist:
  *             temperature = self.virtual_temperature().value             # <<<<<<<<<<<<<<
  *         else:
  *             temperature = self.temperature().value
  */
-    __Pyx_TraceLine(201,0,__PYX_ERR(0, 201, __pyx_L1_error))
-    __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_5moist_Moist *)__pyx_v_self->__pyx_base.__pyx_vtab)->virtual_temperature(__pyx_v_self, 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 201, __pyx_L1_error)
+    __Pyx_TraceLine(202,0,__PYX_ERR(0, 202, __pyx_L1_error))
+    __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_5moist_Moist *)__pyx_v_self->__pyx_base.__pyx_vtab)->virtual_temperature(__pyx_v_self, 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 202, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_value); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 201, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_value); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 202, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 201, __pyx_L1_error)
+    if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 202, __pyx_L1_error)
     __pyx_v_temperature = ((PyArrayObject *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "amsimp/moist.pyx":200
+    /* "amsimp/moist.pyx":201
  *         # potential temperature.
  *         cdef np.ndarray temperature
  *         if moist:             # <<<<<<<<<<<<<<
@@ -3907,211 +3906,205 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_potential_temperature(struct
     goto __pyx_L4;
   }
 
-  /* "amsimp/moist.pyx":203
+  /* "amsimp/moist.pyx":204
  *             temperature = self.virtual_temperature().value
  *         else:
  *             temperature = self.temperature().value             # <<<<<<<<<<<<<<
  * 
  *         cdef np.ndarray pressure_surfaces = self.pressure_surfaces(dim_3d=True).value
  */
-  __Pyx_TraceLine(203,0,__PYX_ERR(0, 203, __pyx_L1_error))
+  __Pyx_TraceLine(204,0,__PYX_ERR(0, 204, __pyx_L1_error))
   /*else*/ {
-    __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_5moist_Moist *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base.temperature(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 203, __pyx_L1_error)
+    __pyx_t_1 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_5moist_Moist *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base.temperature(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 204, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 203, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 204, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 203, __pyx_L1_error)
+    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 204, __pyx_L1_error)
     __pyx_v_temperature = ((PyArrayObject *)__pyx_t_2);
     __pyx_t_2 = 0;
   }
   __pyx_L4:;
 
-  /* "amsimp/moist.pyx":205
+  /* "amsimp/moist.pyx":206
  *             temperature = self.temperature().value
  * 
  *         cdef np.ndarray pressure_surfaces = self.pressure_surfaces(dim_3d=True).value             # <<<<<<<<<<<<<<
  *         cdef float R = self.R.value
  *         cdef float c_p = self.c_p.value
  */
-  __Pyx_TraceLine(205,0,__PYX_ERR(0, 205, __pyx_L1_error))
+  __Pyx_TraceLine(206,0,__PYX_ERR(0, 206, __pyx_L1_error))
   __pyx_t_7.__pyx_n = 1;
   __pyx_t_7.dim_3d = Py_True;
-  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_5moist_Moist *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base.pressure_surfaces(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, &__pyx_t_7)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 205, __pyx_L1_error)
+  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_5moist_Moist *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base.pressure_surfaces(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, &__pyx_t_7)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 206, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_value); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 205, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_value); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 206, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 205, __pyx_L1_error)
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 206, __pyx_L1_error)
   __pyx_v_pressure_surfaces = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "amsimp/moist.pyx":206
+  /* "amsimp/moist.pyx":207
  * 
  *         cdef np.ndarray pressure_surfaces = self.pressure_surfaces(dim_3d=True).value
  *         cdef float R = self.R.value             # <<<<<<<<<<<<<<
  *         cdef float c_p = self.c_p.value
  * 
  */
-  __Pyx_TraceLine(206,0,__PYX_ERR(0, 206, __pyx_L1_error))
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_R); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 206, __pyx_L1_error)
+  __Pyx_TraceLine(207,0,__PYX_ERR(0, 207, __pyx_L1_error))
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->__pyx_base.R, __pyx_n_s_value); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 207, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 206, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_8 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_8 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 207, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_8 = __pyx_PyFloat_AsFloat(__pyx_t_2); if (unlikely((__pyx_t_8 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 206, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_R = __pyx_t_8;
 
-  /* "amsimp/moist.pyx":207
+  /* "amsimp/moist.pyx":208
  *         cdef np.ndarray pressure_surfaces = self.pressure_surfaces(dim_3d=True).value
  *         cdef float R = self.R.value
  *         cdef float c_p = self.c_p.value             # <<<<<<<<<<<<<<
  * 
  *         cdef list list_potentialtemperature = []
  */
-  __Pyx_TraceLine(207,0,__PYX_ERR(0, 207, __pyx_L1_error))
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_c_p); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 207, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_value); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 207, __pyx_L1_error)
+  __Pyx_TraceLine(208,0,__PYX_ERR(0, 208, __pyx_L1_error))
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->__pyx_base.c_p, __pyx_n_s_value); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 208, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_8 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_8 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 207, __pyx_L1_error)
+  __pyx_t_8 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_8 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 208, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_c_p = __pyx_t_8;
 
-  /* "amsimp/moist.pyx":209
+  /* "amsimp/moist.pyx":210
  *         cdef float c_p = self.c_p.value
  * 
  *         cdef list list_potentialtemperature = []             # <<<<<<<<<<<<<<
  *         cdef int n = 0
  *         cdef int len_psurfaces = len(pressure_surfaces)
  */
-  __Pyx_TraceLine(209,0,__PYX_ERR(0, 209, __pyx_L1_error))
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 209, __pyx_L1_error)
+  __Pyx_TraceLine(210,0,__PYX_ERR(0, 210, __pyx_L1_error))
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 210, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_list_potentialtemperature = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "amsimp/moist.pyx":210
+  /* "amsimp/moist.pyx":211
  * 
  *         cdef list list_potentialtemperature = []
  *         cdef int n = 0             # <<<<<<<<<<<<<<
  *         cdef int len_psurfaces = len(pressure_surfaces)
  *         while n < len_psurfaces:
  */
-  __Pyx_TraceLine(210,0,__PYX_ERR(0, 210, __pyx_L1_error))
+  __Pyx_TraceLine(211,0,__PYX_ERR(0, 211, __pyx_L1_error))
   __pyx_v_n = 0;
 
-  /* "amsimp/moist.pyx":211
+  /* "amsimp/moist.pyx":212
  *         cdef list list_potentialtemperature = []
  *         cdef int n = 0
  *         cdef int len_psurfaces = len(pressure_surfaces)             # <<<<<<<<<<<<<<
  *         while n < len_psurfaces:
  *             theta = temperature[n] * (
  */
-  __Pyx_TraceLine(211,0,__PYX_ERR(0, 211, __pyx_L1_error))
-  __pyx_t_9 = PyObject_Length(((PyObject *)__pyx_v_pressure_surfaces)); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 211, __pyx_L1_error)
+  __Pyx_TraceLine(212,0,__PYX_ERR(0, 212, __pyx_L1_error))
+  __pyx_t_9 = PyObject_Length(((PyObject *)__pyx_v_pressure_surfaces)); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 212, __pyx_L1_error)
   __pyx_v_len_psurfaces = __pyx_t_9;
 
-  /* "amsimp/moist.pyx":212
+  /* "amsimp/moist.pyx":213
  *         cdef int n = 0
  *         cdef int len_psurfaces = len(pressure_surfaces)
  *         while n < len_psurfaces:             # <<<<<<<<<<<<<<
  *             theta = temperature[n] * (
  *                 (pressure_surfaces[n] / pressure_surfaces[0]) ** (-R / c_p)
  */
-  __Pyx_TraceLine(212,0,__PYX_ERR(0, 212, __pyx_L1_error))
+  __Pyx_TraceLine(213,0,__PYX_ERR(0, 213, __pyx_L1_error))
   while (1) {
     __pyx_t_6 = ((__pyx_v_n < __pyx_v_len_psurfaces) != 0);
     if (!__pyx_t_6) break;
 
-    /* "amsimp/moist.pyx":213
+    /* "amsimp/moist.pyx":214
  *         cdef int len_psurfaces = len(pressure_surfaces)
  *         while n < len_psurfaces:
  *             theta = temperature[n] * (             # <<<<<<<<<<<<<<
  *                 (pressure_surfaces[n] / pressure_surfaces[0]) ** (-R / c_p)
  *             )
  */
-    __Pyx_TraceLine(213,0,__PYX_ERR(0, 213, __pyx_L1_error))
-    __pyx_t_1 = __Pyx_GetItemInt(((PyObject *)__pyx_v_temperature), __pyx_v_n, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 213, __pyx_L1_error)
+    __Pyx_TraceLine(214,0,__PYX_ERR(0, 214, __pyx_L1_error))
+    __pyx_t_1 = __Pyx_GetItemInt(((PyObject *)__pyx_v_temperature), __pyx_v_n, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 214, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
 
-    /* "amsimp/moist.pyx":214
+    /* "amsimp/moist.pyx":215
  *         while n < len_psurfaces:
  *             theta = temperature[n] * (
  *                 (pressure_surfaces[n] / pressure_surfaces[0]) ** (-R / c_p)             # <<<<<<<<<<<<<<
  *             )
  * 
  */
-    __Pyx_TraceLine(214,0,__PYX_ERR(0, 214, __pyx_L1_error))
-    __pyx_t_2 = __Pyx_GetItemInt(((PyObject *)__pyx_v_pressure_surfaces), __pyx_v_n, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 214, __pyx_L1_error)
+    __Pyx_TraceLine(215,0,__PYX_ERR(0, 215, __pyx_L1_error))
+    __pyx_t_2 = __Pyx_GetItemInt(((PyObject *)__pyx_v_pressure_surfaces), __pyx_v_n, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 215, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_GetItemInt(((PyObject *)__pyx_v_pressure_surfaces), 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 214, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetItemInt(((PyObject *)__pyx_v_pressure_surfaces), 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 215, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyNumber_Divide(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 214, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyNumber_Divide(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 215, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_8 = (-__pyx_v_R);
     if (unlikely(__pyx_v_c_p == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-      __PYX_ERR(0, 214, __pyx_L1_error)
+      __PYX_ERR(0, 215, __pyx_L1_error)
     }
-    __pyx_t_3 = PyFloat_FromDouble((__pyx_t_8 / __pyx_v_c_p)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 214, __pyx_L1_error)
+    __pyx_t_3 = PyFloat_FromDouble((__pyx_t_8 / __pyx_v_c_p)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 215, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = PyNumber_Power(__pyx_t_4, __pyx_t_3, Py_None); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 214, __pyx_L1_error)
+    __pyx_t_2 = PyNumber_Power(__pyx_t_4, __pyx_t_3, Py_None); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 215, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "amsimp/moist.pyx":213
+    /* "amsimp/moist.pyx":214
  *         cdef int len_psurfaces = len(pressure_surfaces)
  *         while n < len_psurfaces:
  *             theta = temperature[n] * (             # <<<<<<<<<<<<<<
  *                 (pressure_surfaces[n] / pressure_surfaces[0]) ** (-R / c_p)
  *             )
  */
-    __Pyx_TraceLine(213,0,__PYX_ERR(0, 213, __pyx_L1_error))
-    __pyx_t_3 = PyNumber_Multiply(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 213, __pyx_L1_error)
+    __Pyx_TraceLine(214,0,__PYX_ERR(0, 214, __pyx_L1_error))
+    __pyx_t_3 = PyNumber_Multiply(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 214, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_XDECREF_SET(__pyx_v_theta, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "amsimp/moist.pyx":217
+    /* "amsimp/moist.pyx":218
  *             )
  * 
  *             list_potentialtemperature.append(theta)             # <<<<<<<<<<<<<<
  * 
  *             n += 1
  */
-    __Pyx_TraceLine(217,0,__PYX_ERR(0, 217, __pyx_L1_error))
-    __pyx_t_10 = __Pyx_PyList_Append(__pyx_v_list_potentialtemperature, __pyx_v_theta); if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 217, __pyx_L1_error)
+    __Pyx_TraceLine(218,0,__PYX_ERR(0, 218, __pyx_L1_error))
+    __pyx_t_10 = __Pyx_PyList_Append(__pyx_v_list_potentialtemperature, __pyx_v_theta); if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 218, __pyx_L1_error)
 
-    /* "amsimp/moist.pyx":219
+    /* "amsimp/moist.pyx":220
  *             list_potentialtemperature.append(theta)
  * 
  *             n += 1             # <<<<<<<<<<<<<<
  * 
  *         potential_temperature = np.asarray(list_potentialtemperature)
  */
-    __Pyx_TraceLine(219,0,__PYX_ERR(0, 219, __pyx_L1_error))
+    __Pyx_TraceLine(220,0,__PYX_ERR(0, 220, __pyx_L1_error))
     __pyx_v_n = (__pyx_v_n + 1);
   }
 
-  /* "amsimp/moist.pyx":221
+  /* "amsimp/moist.pyx":222
  *             n += 1
  * 
  *         potential_temperature = np.asarray(list_potentialtemperature)             # <<<<<<<<<<<<<<
  *         potential_temperature *= self.units.K
  *         return potential_temperature
  */
-  __Pyx_TraceLine(221,0,__PYX_ERR(0, 221, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 221, __pyx_L1_error)
+  __Pyx_TraceLine(222,0,__PYX_ERR(0, 222, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 222, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_asarray); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 221, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_asarray); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 222, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -4126,41 +4119,41 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_potential_temperature(struct
   }
   __pyx_t_3 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_2, __pyx_v_list_potentialtemperature) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_list_potentialtemperature);
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 221, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 222, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_potential_temperature = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/moist.pyx":222
+  /* "amsimp/moist.pyx":223
  * 
  *         potential_temperature = np.asarray(list_potentialtemperature)
  *         potential_temperature *= self.units.K             # <<<<<<<<<<<<<<
  *         return potential_temperature
  * 
  */
-  __Pyx_TraceLine(222,0,__PYX_ERR(0, 222, __pyx_L1_error))
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 222, __pyx_L1_error)
+  __Pyx_TraceLine(223,0,__PYX_ERR(0, 223, __pyx_L1_error))
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 223, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_K); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 222, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_K); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 223, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_InPlaceMultiply(__pyx_v_potential_temperature, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 222, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_InPlaceMultiply(__pyx_v_potential_temperature, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 223, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF_SET(__pyx_v_potential_temperature, __pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "amsimp/moist.pyx":223
+  /* "amsimp/moist.pyx":224
  *         potential_temperature = np.asarray(list_potentialtemperature)
  *         potential_temperature *= self.units.K
  *         return potential_temperature             # <<<<<<<<<<<<<<
  * 
  * # -----------------------------------------------------------------------------------------#
  */
-  __Pyx_TraceLine(223,0,__PYX_ERR(0, 223, __pyx_L1_error))
+  __Pyx_TraceLine(224,0,__PYX_ERR(0, 224, __pyx_L1_error))
   __Pyx_XDECREF(((PyObject *)__pyx_r));
-  if (!(likely(((__pyx_v_potential_temperature) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_potential_temperature, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 223, __pyx_L1_error)
+  if (!(likely(((__pyx_v_potential_temperature) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_potential_temperature, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 224, __pyx_L1_error)
   __Pyx_INCREF(__pyx_v_potential_temperature);
   __pyx_r = ((PyArrayObject *)__pyx_v_potential_temperature);
   goto __pyx_L0;
@@ -4170,7 +4163,7 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_potential_temperature(struct
  * 
  *     cpdef np.ndarray potential_temperature(self, moist=False):             # <<<<<<<<<<<<<<
  *         """
- *         Generates a NumPy array of potential temperature. The potential
+ *         Generates a NumPy array of potential temperature.
  */
 
   /* function exit code */
@@ -4195,7 +4188,7 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_potential_temperature(struct
 
 /* Python wrapper */
 static PyObject *__pyx_pw_6amsimp_5moist_5Moist_11potential_temperature(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_6amsimp_5moist_5Moist_10potential_temperature[] = "\n        Generates a NumPy array of potential temperature. The potential\n        temperature of a parcel of fluid at pressure P is the temperature that\n        the parcel would attain if adiabatically brought to a standard reference\n        pressure\n\n        Equation:\n            theta = T \\* (frac{P}{P_0}) ** (-R / c_p)\n        ";
+static char __pyx_doc_6amsimp_5moist_5Moist_10potential_temperature[] = "\n        Generates a NumPy array of potential temperature. \n        \n        The potential temperature of a parcel of fluid at pressure P is the\n        temperature that the parcel would attain if adiabatically brought\n        to a standard reference pressure.\n\n        Equation:\n            theta = T \\* (frac{P}{P_0}) ** (-R / c_p)\n        ";
 static PyMethodDef __pyx_mdef_6amsimp_5moist_5Moist_11potential_temperature = {"potential_temperature", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_6amsimp_5moist_5Moist_11potential_temperature, METH_VARARGS|METH_KEYWORDS, __pyx_doc_6amsimp_5moist_5Moist_10potential_temperature};
 static PyObject *__pyx_pw_6amsimp_5moist_5Moist_11potential_temperature(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_moist = 0;
@@ -4287,7 +4280,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_10potential_temperature(struct _
   return __pyx_r;
 }
 
-/* "amsimp/moist.pyx":227
+/* "amsimp/moist.pyx":228
  * # -----------------------------------------------------------------------------------------#
  * 
  *     def __mixing_ratio(self, pressure, vapor_pressure):             # <<<<<<<<<<<<<<
@@ -4331,11 +4324,11 @@ static PyObject *__pyx_pw_6amsimp_5moist_5Moist_13__mixing_ratio(PyObject *__pyx
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_vapor_pressure)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__mixing_ratio", 1, 2, 2, 1); __PYX_ERR(0, 227, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__mixing_ratio", 1, 2, 2, 1); __PYX_ERR(0, 228, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__mixing_ratio") < 0)) __PYX_ERR(0, 227, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__mixing_ratio") < 0)) __PYX_ERR(0, 228, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -4348,7 +4341,7 @@ static PyObject *__pyx_pw_6amsimp_5moist_5Moist_13__mixing_ratio(PyObject *__pyx
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__mixing_ratio", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 227, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__mixing_ratio", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 228, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("amsimp.moist.Moist.__mixing_ratio", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -4374,41 +4367,41 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_12__mixing_ratio(CYTHON_UNUSED s
   int __pyx_clineno = 0;
   __Pyx_TraceFrameInit(__pyx_codeobj__7)
   __Pyx_RefNannySetupContext("__mixing_ratio", 0);
-  __Pyx_TraceCall("__mixing_ratio", __pyx_f[0], 227, 0, __PYX_ERR(0, 227, __pyx_L1_error));
+  __Pyx_TraceCall("__mixing_ratio", __pyx_f[0], 228, 0, __PYX_ERR(0, 228, __pyx_L1_error));
 
-  /* "amsimp/moist.pyx":232
+  /* "amsimp/moist.pyx":233
  *         amsimp.Water.precipitable_water() method.
  *         """
  *         y = (0.622 * vapor_pressure) / (pressure - vapor_pressure)             # <<<<<<<<<<<<<<
  * 
  *         return y
  */
-  __Pyx_TraceLine(232,0,__PYX_ERR(0, 232, __pyx_L1_error))
-  __pyx_t_1 = PyNumber_Multiply(__pyx_float_0_622, __pyx_v_vapor_pressure); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 232, __pyx_L1_error)
+  __Pyx_TraceLine(233,0,__PYX_ERR(0, 233, __pyx_L1_error))
+  __pyx_t_1 = PyNumber_Multiply(__pyx_float_0_622, __pyx_v_vapor_pressure); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 233, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyNumber_Subtract(__pyx_v_pressure, __pyx_v_vapor_pressure); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 232, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Subtract(__pyx_v_pressure, __pyx_v_vapor_pressure); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 233, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 232, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 233, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_y = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/moist.pyx":234
+  /* "amsimp/moist.pyx":235
  *         y = (0.622 * vapor_pressure) / (pressure - vapor_pressure)
  * 
  *         return y             # <<<<<<<<<<<<<<
  * 
  *     cpdef np.ndarray precipitable_water(self, sum_pwv=True):
  */
-  __Pyx_TraceLine(234,0,__PYX_ERR(0, 234, __pyx_L1_error))
+  __Pyx_TraceLine(235,0,__PYX_ERR(0, 235, __pyx_L1_error))
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(__pyx_v_y);
   __pyx_r = __pyx_v_y;
   goto __pyx_L0;
 
-  /* "amsimp/moist.pyx":227
+  /* "amsimp/moist.pyx":228
  * # -----------------------------------------------------------------------------------------#
  * 
  *     def __mixing_ratio(self, pressure, vapor_pressure):             # <<<<<<<<<<<<<<
@@ -4431,7 +4424,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_12__mixing_ratio(CYTHON_UNUSED s
   return __pyx_r;
 }
 
-/* "amsimp/moist.pyx":236
+/* "amsimp/moist.pyx":237
  *         return y
  * 
  *     cpdef np.ndarray precipitable_water(self, sum_pwv=True):             # <<<<<<<<<<<<<<
@@ -4482,7 +4475,7 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
   int __pyx_clineno = 0;
   __Pyx_TraceFrameInit(__pyx_codeobj__8)
   __Pyx_RefNannySetupContext("precipitable_water", 0);
-  __Pyx_TraceCall("precipitable_water", __pyx_f[0], 236, 0, __PYX_ERR(0, 236, __pyx_L1_error));
+  __Pyx_TraceCall("precipitable_water", __pyx_f[0], 237, 0, __PYX_ERR(0, 237, __pyx_L1_error));
   if (__pyx_optional_args) {
     if (__pyx_optional_args->__pyx_n > 0) {
       __pyx_v_sum_pwv = __pyx_optional_args->sum_pwv;
@@ -4497,7 +4490,7 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_precipitable_water); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 236, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_precipitable_water); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 237, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_6amsimp_5moist_5Moist_15precipitable_water)) {
         __Pyx_XDECREF(((PyObject *)__pyx_r));
@@ -4514,10 +4507,10 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_4, __pyx_v_sum_pwv) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_sum_pwv);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 236, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 237, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 236, __pyx_L1_error)
+        if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 237, __pyx_L1_error)
         __pyx_r = ((PyArrayObject *)__pyx_t_2);
         __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -4536,24 +4529,24 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
     #endif
   }
 
-  /* "amsimp/moist.pyx":249
+  /* "amsimp/moist.pyx":250
  *         """
  *         # Defining some variables.
  *         cdef np.ndarray pressure = self.pressure_surfaces(dim_3d=True).to(self.units.Pa).value             # <<<<<<<<<<<<<<
  *         pressure = np.transpose(pressure, (2, 1, 0))
  *         cdef np.ndarray vapor_pressure = self.vapor_pressure().to(self.units.Pa)
  */
-  __Pyx_TraceLine(249,0,__PYX_ERR(0, 249, __pyx_L1_error))
+  __Pyx_TraceLine(250,0,__PYX_ERR(0, 250, __pyx_L1_error))
   __pyx_t_5.__pyx_n = 1;
   __pyx_t_5.dim_3d = Py_True;
-  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_5moist_Moist *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base.pressure_surfaces(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, &__pyx_t_5)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 249, __pyx_L1_error)
+  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_5moist_Moist *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base.pressure_surfaces(((struct __pyx_obj_6amsimp_7backend_Backend *)__pyx_v_self), 0, &__pyx_t_5)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 250, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_to); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 249, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_to); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 250, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 249, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 250, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_Pa); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 249, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_Pa); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 250, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -4569,27 +4562,27 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
   __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 249, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 250, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_value); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 249, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_value); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 250, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 249, __pyx_L1_error)
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 250, __pyx_L1_error)
   __pyx_v_pressure = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "amsimp/moist.pyx":250
+  /* "amsimp/moist.pyx":251
  *         # Defining some variables.
  *         cdef np.ndarray pressure = self.pressure_surfaces(dim_3d=True).to(self.units.Pa).value
  *         pressure = np.transpose(pressure, (2, 1, 0))             # <<<<<<<<<<<<<<
  *         cdef np.ndarray vapor_pressure = self.vapor_pressure().to(self.units.Pa)
  *         vapor_pressure = np.transpose(vapor_pressure.value, (2, 1, 0))
  */
-  __Pyx_TraceLine(250,0,__PYX_ERR(0, 250, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 250, __pyx_L1_error)
+  __Pyx_TraceLine(251,0,__PYX_ERR(0, 251, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_transpose); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 250, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_transpose); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = NULL;
@@ -4607,7 +4600,7 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_4)) {
     PyObject *__pyx_temp[3] = {__pyx_t_1, ((PyObject *)__pyx_v_pressure), __pyx_tuple__9};
-    __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 250, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 251, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_GOTREF(__pyx_t_3);
   } else
@@ -4615,13 +4608,13 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
     PyObject *__pyx_temp[3] = {__pyx_t_1, ((PyObject *)__pyx_v_pressure), __pyx_tuple__9};
-    __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 250, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 251, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_GOTREF(__pyx_t_3);
   } else
   #endif
   {
-    __pyx_t_2 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 250, __pyx_L1_error)
+    __pyx_t_2 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 251, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     if (__pyx_t_1) {
       __Pyx_GIVEREF(__pyx_t_1); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1); __pyx_t_1 = NULL;
@@ -4632,31 +4625,31 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
     __Pyx_INCREF(__pyx_tuple__9);
     __Pyx_GIVEREF(__pyx_tuple__9);
     PyTuple_SET_ITEM(__pyx_t_2, 1+__pyx_t_6, __pyx_tuple__9);
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 250, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 251, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 250, __pyx_L1_error)
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_DECREF_SET(__pyx_v_pressure, ((PyArrayObject *)__pyx_t_3));
   __pyx_t_3 = 0;
 
-  /* "amsimp/moist.pyx":251
+  /* "amsimp/moist.pyx":252
  *         cdef np.ndarray pressure = self.pressure_surfaces(dim_3d=True).to(self.units.Pa).value
  *         pressure = np.transpose(pressure, (2, 1, 0))
  *         cdef np.ndarray vapor_pressure = self.vapor_pressure().to(self.units.Pa)             # <<<<<<<<<<<<<<
  *         vapor_pressure = np.transpose(vapor_pressure.value, (2, 1, 0))
  *         cdef g = self.g
  */
-  __Pyx_TraceLine(251,0,__PYX_ERR(0, 251, __pyx_L1_error))
-  __pyx_t_4 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_5moist_Moist *)__pyx_v_self->__pyx_base.__pyx_vtab)->vapor_pressure(__pyx_v_self, 0)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __Pyx_TraceLine(252,0,__PYX_ERR(0, 252, __pyx_L1_error))
+  __pyx_t_4 = ((PyObject *)((struct __pyx_vtabstruct_6amsimp_5moist_Moist *)__pyx_v_self->__pyx_base.__pyx_vtab)->vapor_pressure(__pyx_v_self, 0)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 252, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_to); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_to); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 252, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 252, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_Pa); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_Pa); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 252, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -4672,27 +4665,27 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
   __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_1) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_1);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 251, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 252, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 251, __pyx_L1_error)
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 252, __pyx_L1_error)
   __pyx_v_vapor_pressure = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "amsimp/moist.pyx":252
+  /* "amsimp/moist.pyx":253
  *         pressure = np.transpose(pressure, (2, 1, 0))
  *         cdef np.ndarray vapor_pressure = self.vapor_pressure().to(self.units.Pa)
  *         vapor_pressure = np.transpose(vapor_pressure.value, (2, 1, 0))             # <<<<<<<<<<<<<<
  *         cdef g = self.g
  *         cdef rho_w = 997 * (self.units.kg / self.units.m ** 3)
  */
-  __Pyx_TraceLine(252,0,__PYX_ERR(0, 252, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 252, __pyx_L1_error)
+  __Pyx_TraceLine(253,0,__PYX_ERR(0, 253, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 253, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_transpose); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 252, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_transpose); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 253, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_vapor_pressure), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 252, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_vapor_pressure), __pyx_n_s_value); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 253, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = NULL;
   __pyx_t_6 = 0;
@@ -4709,7 +4702,7 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_1)) {
     PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_t_2, __pyx_tuple__9};
-    __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 252, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 253, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -4718,14 +4711,14 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
     PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_t_2, __pyx_tuple__9};
-    __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 252, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 253, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   } else
   #endif
   {
-    __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 252, __pyx_L1_error)
+    __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 253, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     if (__pyx_t_4) {
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -4736,232 +4729,212 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
     __Pyx_GIVEREF(__pyx_tuple__9);
     PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, __pyx_tuple__9);
     __pyx_t_2 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 252, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 253, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 252, __pyx_L1_error)
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 253, __pyx_L1_error)
   __Pyx_DECREF_SET(__pyx_v_vapor_pressure, ((PyArrayObject *)__pyx_t_3));
   __pyx_t_3 = 0;
 
-  /* "amsimp/moist.pyx":253
+  /* "amsimp/moist.pyx":254
  *         cdef np.ndarray vapor_pressure = self.vapor_pressure().to(self.units.Pa)
  *         vapor_pressure = np.transpose(vapor_pressure.value, (2, 1, 0))
  *         cdef g = self.g             # <<<<<<<<<<<<<<
  *         cdef rho_w = 997 * (self.units.kg / self.units.m ** 3)
  * 
  */
-  __Pyx_TraceLine(253,0,__PYX_ERR(0, 253, __pyx_L1_error))
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_g); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 253, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_TraceLine(254,0,__PYX_ERR(0, 254, __pyx_L1_error))
+  __pyx_t_3 = __pyx_v_self->__pyx_base.g;
+  __Pyx_INCREF(__pyx_t_3);
   __pyx_v_g = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/moist.pyx":254
+  /* "amsimp/moist.pyx":255
  *         vapor_pressure = np.transpose(vapor_pressure.value, (2, 1, 0))
  *         cdef g = self.g
  *         cdef rho_w = 997 * (self.units.kg / self.units.m ** 3)             # <<<<<<<<<<<<<<
  * 
  *         # Integrate the mixing ratio with respect to pressure between the
  */
-  __Pyx_TraceLine(254,0,__PYX_ERR(0, 254, __pyx_L1_error))
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 254, __pyx_L1_error)
+  __Pyx_TraceLine(255,0,__PYX_ERR(0, 255, __pyx_L1_error))
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 255, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_kg); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 254, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_kg); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 255, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 254, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 255, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_m); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 254, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_m); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 255, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Power(__pyx_t_7, __pyx_int_3, Py_None); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 254, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Power(__pyx_t_7, __pyx_int_3, Py_None); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 255, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 254, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 255, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Multiply(__pyx_int_997, __pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 254, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Multiply(__pyx_int_997, __pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 255, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_v_rho_w = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "amsimp/moist.pyx":258
+  /* "amsimp/moist.pyx":259
  *         # Integrate the mixing ratio with respect to pressure between the
  *         # pressure boundaries of p1, and p2.
  *         cdef list list_precipitablewater = []             # <<<<<<<<<<<<<<
  *         cdef list pwv_lat, pwv_alt
  *         cdef tuple integration_term
  */
-  __Pyx_TraceLine(258,0,__PYX_ERR(0, 258, __pyx_L1_error))
-  __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 258, __pyx_L1_error)
+  __Pyx_TraceLine(259,0,__PYX_ERR(0, 259, __pyx_L1_error))
+  __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 259, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_v_list_precipitablewater = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "amsimp/moist.pyx":263
+  /* "amsimp/moist.pyx":264
  *         cdef float p1, p2, e, Pwv_intergrationterm
  *         cdef P_wv
  *         cdef int len_pressurelong = len(pressure)             # <<<<<<<<<<<<<<
  *         cdef int len_pressurelat = len(pressure[0])
  *         cdef int len_pressurealt = len(pressure[0][0]) - 1
  */
-  __Pyx_TraceLine(263,0,__PYX_ERR(0, 263, __pyx_L1_error))
-  __pyx_t_8 = PyObject_Length(((PyObject *)__pyx_v_pressure)); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 263, __pyx_L1_error)
+  __Pyx_TraceLine(264,0,__PYX_ERR(0, 264, __pyx_L1_error))
+  __pyx_t_8 = PyObject_Length(((PyObject *)__pyx_v_pressure)); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 264, __pyx_L1_error)
   __pyx_v_len_pressurelong = __pyx_t_8;
 
-  /* "amsimp/moist.pyx":264
+  /* "amsimp/moist.pyx":265
  *         cdef P_wv
  *         cdef int len_pressurelong = len(pressure)
  *         cdef int len_pressurelat = len(pressure[0])             # <<<<<<<<<<<<<<
  *         cdef int len_pressurealt = len(pressure[0][0]) - 1
  *         cdef int i, n, k
  */
-  __Pyx_TraceLine(264,0,__PYX_ERR(0, 264, __pyx_L1_error))
-  __pyx_t_3 = __Pyx_GetItemInt(((PyObject *)__pyx_v_pressure), 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __Pyx_TraceLine(265,0,__PYX_ERR(0, 265, __pyx_L1_error))
+  __pyx_t_3 = __Pyx_GetItemInt(((PyObject *)__pyx_v_pressure), 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 265, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_8 = PyObject_Length(__pyx_t_3); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_t_8 = PyObject_Length(__pyx_t_3); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 265, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_len_pressurelat = __pyx_t_8;
 
-  /* "amsimp/moist.pyx":265
+  /* "amsimp/moist.pyx":266
  *         cdef int len_pressurelong = len(pressure)
  *         cdef int len_pressurelat = len(pressure[0])
  *         cdef int len_pressurealt = len(pressure[0][0]) - 1             # <<<<<<<<<<<<<<
  *         cdef int i, n, k
  *         i = 0
  */
-  __Pyx_TraceLine(265,0,__PYX_ERR(0, 265, __pyx_L1_error))
-  __pyx_t_3 = __Pyx_GetItemInt(((PyObject *)__pyx_v_pressure), 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 265, __pyx_L1_error)
+  __Pyx_TraceLine(266,0,__PYX_ERR(0, 266, __pyx_L1_error))
+  __pyx_t_3 = __Pyx_GetItemInt(((PyObject *)__pyx_v_pressure), 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 265, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_8 = PyObject_Length(__pyx_t_7); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 265, __pyx_L1_error)
+  __pyx_t_8 = PyObject_Length(__pyx_t_7); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_v_len_pressurealt = (__pyx_t_8 - 1);
 
-  /* "amsimp/moist.pyx":267
+  /* "amsimp/moist.pyx":268
  *         cdef int len_pressurealt = len(pressure[0][0]) - 1
  *         cdef int i, n, k
  *         i = 0             # <<<<<<<<<<<<<<
  *         while i < len_pressurelong:
  *             pwv_lat = []
  */
-  __Pyx_TraceLine(267,0,__PYX_ERR(0, 267, __pyx_L1_error))
+  __Pyx_TraceLine(268,0,__PYX_ERR(0, 268, __pyx_L1_error))
   __pyx_v_i = 0;
 
-  /* "amsimp/moist.pyx":268
+  /* "amsimp/moist.pyx":269
  *         cdef int i, n, k
  *         i = 0
  *         while i < len_pressurelong:             # <<<<<<<<<<<<<<
  *             pwv_lat = []
  * 
  */
-  __Pyx_TraceLine(268,0,__PYX_ERR(0, 268, __pyx_L1_error))
+  __Pyx_TraceLine(269,0,__PYX_ERR(0, 269, __pyx_L1_error))
   while (1) {
     __pyx_t_9 = ((__pyx_v_i < __pyx_v_len_pressurelong) != 0);
     if (!__pyx_t_9) break;
 
-    /* "amsimp/moist.pyx":269
+    /* "amsimp/moist.pyx":270
  *         i = 0
  *         while i < len_pressurelong:
  *             pwv_lat = []             # <<<<<<<<<<<<<<
  * 
  *             n = 0
  */
-    __Pyx_TraceLine(269,0,__PYX_ERR(0, 269, __pyx_L1_error))
-    __pyx_t_7 = PyList_New(0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 269, __pyx_L1_error)
+    __Pyx_TraceLine(270,0,__PYX_ERR(0, 270, __pyx_L1_error))
+    __pyx_t_7 = PyList_New(0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 270, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_XDECREF_SET(__pyx_v_pwv_lat, ((PyObject*)__pyx_t_7));
     __pyx_t_7 = 0;
 
-    /* "amsimp/moist.pyx":271
+    /* "amsimp/moist.pyx":272
  *             pwv_lat = []
  * 
  *             n = 0             # <<<<<<<<<<<<<<
  *             while n < len_pressurelat:
  *                 pwv_alt = []
  */
-    __Pyx_TraceLine(271,0,__PYX_ERR(0, 271, __pyx_L1_error))
+    __Pyx_TraceLine(272,0,__PYX_ERR(0, 272, __pyx_L1_error))
     __pyx_v_n = 0;
 
-    /* "amsimp/moist.pyx":272
+    /* "amsimp/moist.pyx":273
  * 
  *             n = 0
  *             while n < len_pressurelat:             # <<<<<<<<<<<<<<
  *                 pwv_alt = []
  * 
  */
-    __Pyx_TraceLine(272,0,__PYX_ERR(0, 272, __pyx_L1_error))
+    __Pyx_TraceLine(273,0,__PYX_ERR(0, 273, __pyx_L1_error))
     while (1) {
       __pyx_t_9 = ((__pyx_v_n < __pyx_v_len_pressurelat) != 0);
       if (!__pyx_t_9) break;
 
-      /* "amsimp/moist.pyx":273
+      /* "amsimp/moist.pyx":274
  *             n = 0
  *             while n < len_pressurelat:
  *                 pwv_alt = []             # <<<<<<<<<<<<<<
  * 
  *                 k = 0
  */
-      __Pyx_TraceLine(273,0,__PYX_ERR(0, 273, __pyx_L1_error))
-      __pyx_t_7 = PyList_New(0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 273, __pyx_L1_error)
+      __Pyx_TraceLine(274,0,__PYX_ERR(0, 274, __pyx_L1_error))
+      __pyx_t_7 = PyList_New(0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 274, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_XDECREF_SET(__pyx_v_pwv_alt, ((PyObject*)__pyx_t_7));
       __pyx_t_7 = 0;
 
-      /* "amsimp/moist.pyx":275
+      /* "amsimp/moist.pyx":276
  *                 pwv_alt = []
  * 
  *                 k = 0             # <<<<<<<<<<<<<<
  *                 while k < len_pressurealt:
  *                     p1 = pressure[i][n][k]
  */
-      __Pyx_TraceLine(275,0,__PYX_ERR(0, 275, __pyx_L1_error))
+      __Pyx_TraceLine(276,0,__PYX_ERR(0, 276, __pyx_L1_error))
       __pyx_v_k = 0;
 
-      /* "amsimp/moist.pyx":276
+      /* "amsimp/moist.pyx":277
  * 
  *                 k = 0
  *                 while k < len_pressurealt:             # <<<<<<<<<<<<<<
  *                     p1 = pressure[i][n][k]
  *                     p2 = pressure[i][n][k + 1]
  */
-      __Pyx_TraceLine(276,0,__PYX_ERR(0, 276, __pyx_L1_error))
+      __Pyx_TraceLine(277,0,__PYX_ERR(0, 277, __pyx_L1_error))
       while (1) {
         __pyx_t_9 = ((__pyx_v_k < __pyx_v_len_pressurealt) != 0);
         if (!__pyx_t_9) break;
 
-        /* "amsimp/moist.pyx":277
+        /* "amsimp/moist.pyx":278
  *                 k = 0
  *                 while k < len_pressurealt:
  *                     p1 = pressure[i][n][k]             # <<<<<<<<<<<<<<
  *                     p2 = pressure[i][n][k + 1]
  *                     e = (vapor_pressure[i][n][k] + vapor_pressure[i][n][k + 1]) / 2
- */
-        __Pyx_TraceLine(277,0,__PYX_ERR(0, 277, __pyx_L1_error))
-        __pyx_t_7 = __Pyx_GetItemInt(((PyObject *)__pyx_v_pressure), __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 277, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_7, __pyx_v_n, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 277, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_3);
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_3, __pyx_v_k, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 277, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_7);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_10 = __pyx_PyFloat_AsFloat(__pyx_t_7); if (unlikely((__pyx_t_10 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 277, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        __pyx_v_p1 = __pyx_t_10;
-
-        /* "amsimp/moist.pyx":278
- *                 while k < len_pressurealt:
- *                     p1 = pressure[i][n][k]
- *                     p2 = pressure[i][n][k + 1]             # <<<<<<<<<<<<<<
- *                     e = (vapor_pressure[i][n][k] + vapor_pressure[i][n][k + 1]) / 2
- * 
  */
         __Pyx_TraceLine(278,0,__PYX_ERR(0, 278, __pyx_L1_error))
         __pyx_t_7 = __Pyx_GetItemInt(((PyObject *)__pyx_v_pressure), __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 278, __pyx_L1_error)
@@ -4969,67 +4942,87 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
         __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_7, __pyx_v_n, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 278, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        __pyx_t_11 = (__pyx_v_k + 1);
-        __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_3, __pyx_t_11, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 278, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_3, __pyx_v_k, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 278, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_t_10 = __pyx_PyFloat_AsFloat(__pyx_t_7); if (unlikely((__pyx_t_10 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 278, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        __pyx_v_p2 = __pyx_t_10;
+        __pyx_v_p1 = __pyx_t_10;
 
         /* "amsimp/moist.pyx":279
+ *                 while k < len_pressurealt:
+ *                     p1 = pressure[i][n][k]
+ *                     p2 = pressure[i][n][k + 1]             # <<<<<<<<<<<<<<
+ *                     e = (vapor_pressure[i][n][k] + vapor_pressure[i][n][k + 1]) / 2
+ * 
+ */
+        __Pyx_TraceLine(279,0,__PYX_ERR(0, 279, __pyx_L1_error))
+        __pyx_t_7 = __Pyx_GetItemInt(((PyObject *)__pyx_v_pressure), __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 279, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_7);
+        __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_7, __pyx_v_n, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 279, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __pyx_t_11 = (__pyx_v_k + 1);
+        __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_3, __pyx_t_11, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 279, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_7);
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __pyx_t_10 = __pyx_PyFloat_AsFloat(__pyx_t_7); if (unlikely((__pyx_t_10 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 279, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __pyx_v_p2 = __pyx_t_10;
+
+        /* "amsimp/moist.pyx":280
  *                     p1 = pressure[i][n][k]
  *                     p2 = pressure[i][n][k + 1]
  *                     e = (vapor_pressure[i][n][k] + vapor_pressure[i][n][k + 1]) / 2             # <<<<<<<<<<<<<<
  * 
  *                     integration_term = quad(self.__mixing_ratio, p1, p2, args=(e,))
  */
-        __Pyx_TraceLine(279,0,__PYX_ERR(0, 279, __pyx_L1_error))
-        __pyx_t_7 = __Pyx_GetItemInt(((PyObject *)__pyx_v_vapor_pressure), __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 279, __pyx_L1_error)
+        __Pyx_TraceLine(280,0,__PYX_ERR(0, 280, __pyx_L1_error))
+        __pyx_t_7 = __Pyx_GetItemInt(((PyObject *)__pyx_v_vapor_pressure), __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 280, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_7, __pyx_v_n, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 279, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_7, __pyx_v_n, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 280, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_3, __pyx_v_k, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 279, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_3, __pyx_v_k, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 280, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_GetItemInt(((PyObject *)__pyx_v_vapor_pressure), __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 279, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_GetItemInt(((PyObject *)__pyx_v_vapor_pressure), __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 280, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, __pyx_v_n, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 279, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, __pyx_v_n, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_t_11 = (__pyx_v_k + 1);
-        __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, __pyx_t_11, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 279, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, __pyx_t_11, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 280, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_1 = PyNumber_Add(__pyx_t_7, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 279, __pyx_L1_error)
+        __pyx_t_1 = PyNumber_Add(__pyx_t_7, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_PyInt_TrueDivideObjC(__pyx_t_1, __pyx_int_2, 2, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 279, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyInt_TrueDivideObjC(__pyx_t_1, __pyx_int_2, 2, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 280, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_10 = __pyx_PyFloat_AsFloat(__pyx_t_3); if (unlikely((__pyx_t_10 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 279, __pyx_L1_error)
+        __pyx_t_10 = __pyx_PyFloat_AsFloat(__pyx_t_3); if (unlikely((__pyx_t_10 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 280, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_v_e = __pyx_t_10;
 
-        /* "amsimp/moist.pyx":281
+        /* "amsimp/moist.pyx":282
  *                     e = (vapor_pressure[i][n][k] + vapor_pressure[i][n][k + 1]) / 2
  * 
  *                     integration_term = quad(self.__mixing_ratio, p1, p2, args=(e,))             # <<<<<<<<<<<<<<
  *                     Pwv_intergrationterm = integration_term[0]
  *                     pwv_alt.append(Pwv_intergrationterm)
  */
-        __Pyx_TraceLine(281,0,__PYX_ERR(0, 281, __pyx_L1_error))
-        __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_quad); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 281, __pyx_L1_error)
+        __Pyx_TraceLine(282,0,__PYX_ERR(0, 282, __pyx_L1_error))
+        __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_quad); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 282, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_mixing_ratio_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 281, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_mixing_ratio_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 282, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_7 = PyFloat_FromDouble(__pyx_v_p1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 281, __pyx_L1_error)
+        __pyx_t_7 = PyFloat_FromDouble(__pyx_v_p1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 282, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_2 = PyFloat_FromDouble(__pyx_v_p2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 281, __pyx_L1_error)
+        __pyx_t_2 = PyFloat_FromDouble(__pyx_v_p2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 282, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_4 = PyTuple_New(3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 281, __pyx_L1_error)
+        __pyx_t_4 = PyTuple_New(3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 282, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_GIVEREF(__pyx_t_1);
         PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_1);
@@ -5040,90 +5033,90 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
         __pyx_t_1 = 0;
         __pyx_t_7 = 0;
         __pyx_t_2 = 0;
-        __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 281, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 282, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_7 = PyFloat_FromDouble(__pyx_v_e); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 281, __pyx_L1_error)
+        __pyx_t_7 = PyFloat_FromDouble(__pyx_v_e); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 282, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 281, __pyx_L1_error)
+        __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 282, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_GIVEREF(__pyx_t_7);
         PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_7);
         __pyx_t_7 = 0;
-        if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_args, __pyx_t_1) < 0) __PYX_ERR(0, 281, __pyx_L1_error)
+        if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_args, __pyx_t_1) < 0) __PYX_ERR(0, 282, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 281, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 282, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        if (!(likely(PyTuple_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "tuple", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 281, __pyx_L1_error)
+        if (!(likely(PyTuple_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "tuple", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 282, __pyx_L1_error)
         __Pyx_XDECREF_SET(__pyx_v_integration_term, ((PyObject*)__pyx_t_1));
         __pyx_t_1 = 0;
 
-        /* "amsimp/moist.pyx":282
+        /* "amsimp/moist.pyx":283
  * 
  *                     integration_term = quad(self.__mixing_ratio, p1, p2, args=(e,))
  *                     Pwv_intergrationterm = integration_term[0]             # <<<<<<<<<<<<<<
  *                     pwv_alt.append(Pwv_intergrationterm)
  * 
  */
-        __Pyx_TraceLine(282,0,__PYX_ERR(0, 282, __pyx_L1_error))
+        __Pyx_TraceLine(283,0,__PYX_ERR(0, 283, __pyx_L1_error))
         if (unlikely(__pyx_v_integration_term == Py_None)) {
           PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 282, __pyx_L1_error)
+          __PYX_ERR(0, 283, __pyx_L1_error)
         }
-        __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v_integration_term, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 282, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v_integration_term, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 283, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_10 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_10 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 282, __pyx_L1_error)
+        __pyx_t_10 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_10 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 283, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         __pyx_v_Pwv_intergrationterm = __pyx_t_10;
 
-        /* "amsimp/moist.pyx":283
+        /* "amsimp/moist.pyx":284
  *                     integration_term = quad(self.__mixing_ratio, p1, p2, args=(e,))
  *                     Pwv_intergrationterm = integration_term[0]
  *                     pwv_alt.append(Pwv_intergrationterm)             # <<<<<<<<<<<<<<
  * 
  *                     k += 1
  */
-        __Pyx_TraceLine(283,0,__PYX_ERR(0, 283, __pyx_L1_error))
-        __pyx_t_1 = PyFloat_FromDouble(__pyx_v_Pwv_intergrationterm); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 283, __pyx_L1_error)
+        __Pyx_TraceLine(284,0,__PYX_ERR(0, 284, __pyx_L1_error))
+        __pyx_t_1 = PyFloat_FromDouble(__pyx_v_Pwv_intergrationterm); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 284, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_pwv_alt, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 283, __pyx_L1_error)
+        __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_pwv_alt, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 284, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "amsimp/moist.pyx":285
+        /* "amsimp/moist.pyx":286
  *                     pwv_alt.append(Pwv_intergrationterm)
  * 
  *                     k += 1             # <<<<<<<<<<<<<<
  * 
  *                 if sum_pwv:
  */
-        __Pyx_TraceLine(285,0,__PYX_ERR(0, 285, __pyx_L1_error))
+        __Pyx_TraceLine(286,0,__PYX_ERR(0, 286, __pyx_L1_error))
         __pyx_v_k = (__pyx_v_k + 1);
       }
 
-      /* "amsimp/moist.pyx":287
+      /* "amsimp/moist.pyx":288
  *                     k += 1
  * 
  *                 if sum_pwv:             # <<<<<<<<<<<<<<
  *                     P_wv = np.sum(pwv_alt)
  *                 else:
  */
-      __Pyx_TraceLine(287,0,__PYX_ERR(0, 287, __pyx_L1_error))
-      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_v_sum_pwv); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 287, __pyx_L1_error)
+      __Pyx_TraceLine(288,0,__PYX_ERR(0, 288, __pyx_L1_error))
+      __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_v_sum_pwv); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 288, __pyx_L1_error)
       if (__pyx_t_9) {
 
-        /* "amsimp/moist.pyx":288
+        /* "amsimp/moist.pyx":289
  * 
  *                 if sum_pwv:
  *                     P_wv = np.sum(pwv_alt)             # <<<<<<<<<<<<<<
  *                 else:
  *                     P_wv = pwv_alt
  */
-        __Pyx_TraceLine(288,0,__PYX_ERR(0, 288, __pyx_L1_error))
-        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 288, __pyx_L1_error)
+        __Pyx_TraceLine(289,0,__PYX_ERR(0, 289, __pyx_L1_error))
+        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 289, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_sum); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 288, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_sum); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 289, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __pyx_t_2 = NULL;
@@ -5138,13 +5131,13 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
         }
         __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_2, __pyx_v_pwv_alt) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_pwv_alt);
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 288, __pyx_L1_error)
+        if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 289, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         __Pyx_XDECREF_SET(__pyx_v_P_wv, __pyx_t_1);
         __pyx_t_1 = 0;
 
-        /* "amsimp/moist.pyx":287
+        /* "amsimp/moist.pyx":288
  *                     k += 1
  * 
  *                 if sum_pwv:             # <<<<<<<<<<<<<<
@@ -5154,73 +5147,73 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
         goto __pyx_L9;
       }
 
-      /* "amsimp/moist.pyx":290
+      /* "amsimp/moist.pyx":291
  *                     P_wv = np.sum(pwv_alt)
  *                 else:
  *                     P_wv = pwv_alt             # <<<<<<<<<<<<<<
  * 
  *                 pwv_lat.append(P_wv)
  */
-      __Pyx_TraceLine(290,0,__PYX_ERR(0, 290, __pyx_L1_error))
+      __Pyx_TraceLine(291,0,__PYX_ERR(0, 291, __pyx_L1_error))
       /*else*/ {
         __Pyx_INCREF(__pyx_v_pwv_alt);
         __Pyx_XDECREF_SET(__pyx_v_P_wv, __pyx_v_pwv_alt);
       }
       __pyx_L9:;
 
-      /* "amsimp/moist.pyx":292
+      /* "amsimp/moist.pyx":293
  *                     P_wv = pwv_alt
  * 
  *                 pwv_lat.append(P_wv)             # <<<<<<<<<<<<<<
  * 
  *                 n += 1
  */
-      __Pyx_TraceLine(292,0,__PYX_ERR(0, 292, __pyx_L1_error))
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_pwv_lat, __pyx_v_P_wv); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 292, __pyx_L1_error)
+      __Pyx_TraceLine(293,0,__PYX_ERR(0, 293, __pyx_L1_error))
+      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_pwv_lat, __pyx_v_P_wv); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 293, __pyx_L1_error)
 
-      /* "amsimp/moist.pyx":294
+      /* "amsimp/moist.pyx":295
  *                 pwv_lat.append(P_wv)
  * 
  *                 n += 1             # <<<<<<<<<<<<<<
  * 
  *             list_precipitablewater.append(pwv_lat)
  */
-      __Pyx_TraceLine(294,0,__PYX_ERR(0, 294, __pyx_L1_error))
+      __Pyx_TraceLine(295,0,__PYX_ERR(0, 295, __pyx_L1_error))
       __pyx_v_n = (__pyx_v_n + 1);
     }
 
-    /* "amsimp/moist.pyx":296
+    /* "amsimp/moist.pyx":297
  *                 n += 1
  * 
  *             list_precipitablewater.append(pwv_lat)             # <<<<<<<<<<<<<<
  *             i += 1
  * 
  */
-    __Pyx_TraceLine(296,0,__PYX_ERR(0, 296, __pyx_L1_error))
-    __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_list_precipitablewater, __pyx_v_pwv_lat); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 296, __pyx_L1_error)
+    __Pyx_TraceLine(297,0,__PYX_ERR(0, 297, __pyx_L1_error))
+    __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_list_precipitablewater, __pyx_v_pwv_lat); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 297, __pyx_L1_error)
 
-    /* "amsimp/moist.pyx":297
+    /* "amsimp/moist.pyx":298
  * 
  *             list_precipitablewater.append(pwv_lat)
  *             i += 1             # <<<<<<<<<<<<<<
  * 
  *         precipitable_water = np.asarray(list_precipitablewater) * self.units.Pa
  */
-    __Pyx_TraceLine(297,0,__PYX_ERR(0, 297, __pyx_L1_error))
+    __Pyx_TraceLine(298,0,__PYX_ERR(0, 298, __pyx_L1_error))
     __pyx_v_i = (__pyx_v_i + 1);
   }
 
-  /* "amsimp/moist.pyx":299
+  /* "amsimp/moist.pyx":300
  *             i += 1
  * 
  *         precipitable_water = np.asarray(list_precipitablewater) * self.units.Pa             # <<<<<<<<<<<<<<
  * 
  *         if np.shape(precipitable_water) == (len_pressurelong, len_pressurelat):
  */
-  __Pyx_TraceLine(299,0,__PYX_ERR(0, 299, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 299, __pyx_L1_error)
+  __Pyx_TraceLine(300,0,__PYX_ERR(0, 300, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 300, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_asarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 299, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_asarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 300, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -5235,32 +5228,32 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
   }
   __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_v_list_precipitablewater) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_list_precipitablewater);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 299, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 300, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 299, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 300, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_Pa); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 299, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_Pa); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 300, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyNumber_Multiply(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 299, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Multiply(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 300, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_precipitable_water = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "amsimp/moist.pyx":301
+  /* "amsimp/moist.pyx":302
  *         precipitable_water = np.asarray(list_precipitablewater) * self.units.Pa
  * 
  *         if np.shape(precipitable_water) == (len_pressurelong, len_pressurelat):             # <<<<<<<<<<<<<<
  *             precipitable_water = np.transpose(precipitable_water)
  *         else:
  */
-  __Pyx_TraceLine(301,0,__PYX_ERR(0, 301, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __Pyx_TraceLine(302,0,__PYX_ERR(0, 302, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 302, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 302, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -5275,14 +5268,14 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
   }
   __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_4, __pyx_v_precipitable_water) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_precipitable_water);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 301, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 302, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_len_pressurelong); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_len_pressurelong); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 302, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_len_pressurelat); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_len_pressurelat); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 302, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 302, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
@@ -5290,24 +5283,24 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
   PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_4);
   __pyx_t_1 = 0;
   __pyx_t_4 = 0;
-  __pyx_t_4 = PyObject_RichCompare(__pyx_t_2, __pyx_t_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __pyx_t_4 = PyObject_RichCompare(__pyx_t_2, __pyx_t_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 302, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 302, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   if (__pyx_t_9) {
 
-    /* "amsimp/moist.pyx":302
+    /* "amsimp/moist.pyx":303
  * 
  *         if np.shape(precipitable_water) == (len_pressurelong, len_pressurelat):
  *             precipitable_water = np.transpose(precipitable_water)             # <<<<<<<<<<<<<<
  *         else:
  *             precipitable_water = np.transpose(precipitable_water, (2, 1, 0))
  */
-    __Pyx_TraceLine(302,0,__PYX_ERR(0, 302, __pyx_L1_error))
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 302, __pyx_L1_error)
+    __Pyx_TraceLine(303,0,__PYX_ERR(0, 303, __pyx_L1_error))
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 303, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_transpose); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 302, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_transpose); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 303, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_3 = NULL;
@@ -5322,13 +5315,13 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
     }
     __pyx_t_4 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_v_precipitable_water) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_precipitable_water);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 302, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 303, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF_SET(__pyx_v_precipitable_water, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "amsimp/moist.pyx":301
+    /* "amsimp/moist.pyx":302
  *         precipitable_water = np.asarray(list_precipitablewater) * self.units.Pa
  * 
  *         if np.shape(precipitable_water) == (len_pressurelong, len_pressurelat):             # <<<<<<<<<<<<<<
@@ -5338,18 +5331,18 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
     goto __pyx_L10;
   }
 
-  /* "amsimp/moist.pyx":304
+  /* "amsimp/moist.pyx":305
  *             precipitable_water = np.transpose(precipitable_water)
  *         else:
  *             precipitable_water = np.transpose(precipitable_water, (2, 1, 0))             # <<<<<<<<<<<<<<
  * 
  *         # Multiplication term by integration.
  */
-  __Pyx_TraceLine(304,0,__PYX_ERR(0, 304, __pyx_L1_error))
+  __Pyx_TraceLine(305,0,__PYX_ERR(0, 305, __pyx_L1_error))
   /*else*/ {
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 304, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 305, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_transpose); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 304, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_transpose); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 305, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_t_2 = NULL;
@@ -5367,7 +5360,7 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v_precipitable_water, __pyx_tuple__9};
-      __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 304, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 305, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_4);
     } else
@@ -5375,13 +5368,13 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v_precipitable_water, __pyx_tuple__9};
-      __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 304, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 305, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_4);
     } else
     #endif
     {
-      __pyx_t_1 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 304, __pyx_L1_error)
+      __pyx_t_1 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 305, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       if (__pyx_t_2) {
         __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_2); __pyx_t_2 = NULL;
@@ -5392,7 +5385,7 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
       __Pyx_INCREF(__pyx_tuple__9);
       __Pyx_GIVEREF(__pyx_tuple__9);
       PyTuple_SET_ITEM(__pyx_t_1, 1+__pyx_t_6, __pyx_tuple__9);
-      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_1, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 304, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_1, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 305, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     }
@@ -5402,37 +5395,37 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
   }
   __pyx_L10:;
 
-  /* "amsimp/moist.pyx":307
+  /* "amsimp/moist.pyx":308
  * 
  *         # Multiplication term by integration.
  *         precipitable_water *= -1 / (rho_w * g)             # <<<<<<<<<<<<<<
  * 
  *         precipitable_water = precipitable_water.to(self.units.mm)
  */
-  __Pyx_TraceLine(307,0,__PYX_ERR(0, 307, __pyx_L1_error))
-  __pyx_t_4 = PyNumber_Multiply(__pyx_v_rho_w, __pyx_v_g); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 307, __pyx_L1_error)
+  __Pyx_TraceLine(308,0,__PYX_ERR(0, 308, __pyx_L1_error))
+  __pyx_t_4 = PyNumber_Multiply(__pyx_v_rho_w, __pyx_v_g); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 308, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_int_neg_1, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 307, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_int_neg_1, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 308, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_InPlaceMultiply(__pyx_v_precipitable_water, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 307, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_InPlaceMultiply(__pyx_v_precipitable_water, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 308, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF_SET(__pyx_v_precipitable_water, __pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "amsimp/moist.pyx":309
+  /* "amsimp/moist.pyx":310
  *         precipitable_water *= -1 / (rho_w * g)
  * 
  *         precipitable_water = precipitable_water.to(self.units.mm)             # <<<<<<<<<<<<<<
  *         return precipitable_water
  */
-  __Pyx_TraceLine(309,0,__PYX_ERR(0, 309, __pyx_L1_error))
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_precipitable_water, __pyx_n_s_to); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 309, __pyx_L1_error)
+  __Pyx_TraceLine(310,0,__PYX_ERR(0, 310, __pyx_L1_error))
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_precipitable_water, __pyx_n_s_to); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 310, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 309, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_units); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 310, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_mm); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 309, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_mm); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 310, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = NULL;
@@ -5448,25 +5441,25 @@ static PyArrayObject *__pyx_f_6amsimp_5moist_5Moist_precipitable_water(struct __
   __pyx_t_4 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_1, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2);
   __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 309, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 310, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF_SET(__pyx_v_precipitable_water, __pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "amsimp/moist.pyx":310
+  /* "amsimp/moist.pyx":311
  * 
  *         precipitable_water = precipitable_water.to(self.units.mm)
  *         return precipitable_water             # <<<<<<<<<<<<<<
  */
-  __Pyx_TraceLine(310,0,__PYX_ERR(0, 310, __pyx_L1_error))
+  __Pyx_TraceLine(311,0,__PYX_ERR(0, 311, __pyx_L1_error))
   __Pyx_XDECREF(((PyObject *)__pyx_r));
-  if (!(likely(((__pyx_v_precipitable_water) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_precipitable_water, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 310, __pyx_L1_error)
+  if (!(likely(((__pyx_v_precipitable_water) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_precipitable_water, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 311, __pyx_L1_error)
   __Pyx_INCREF(__pyx_v_precipitable_water);
   __pyx_r = ((PyArrayObject *)__pyx_v_precipitable_water);
   goto __pyx_L0;
 
-  /* "amsimp/moist.pyx":236
+  /* "amsimp/moist.pyx":237
  *         return y
  * 
  *     cpdef np.ndarray precipitable_water(self, sum_pwv=True):             # <<<<<<<<<<<<<<
@@ -5534,7 +5527,7 @@ static PyObject *__pyx_pw_6amsimp_5moist_5Moist_15precipitable_water(PyObject *_
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "precipitable_water") < 0)) __PYX_ERR(0, 236, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "precipitable_water") < 0)) __PYX_ERR(0, 237, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -5548,7 +5541,7 @@ static PyObject *__pyx_pw_6amsimp_5moist_5Moist_15precipitable_water(PyObject *_
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("precipitable_water", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 236, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("precipitable_water", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 237, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("amsimp.moist.Moist.precipitable_water", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -5572,11 +5565,11 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_14precipitable_water(struct __py
   int __pyx_clineno = 0;
   __Pyx_TraceFrameInit(__pyx_codeobj__8)
   __Pyx_RefNannySetupContext("precipitable_water", 0);
-  __Pyx_TraceCall("precipitable_water (wrapper)", __pyx_f[0], 236, 0, __PYX_ERR(0, 236, __pyx_L1_error));
+  __Pyx_TraceCall("precipitable_water (wrapper)", __pyx_f[0], 237, 0, __PYX_ERR(0, 237, __pyx_L1_error));
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_2.__pyx_n = 1;
   __pyx_t_2.sum_pwv = __pyx_v_sum_pwv;
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_6amsimp_5moist_Moist->precipitable_water(__pyx_v_self, 1, &__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 236, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_6amsimp_5moist_Moist->precipitable_water(__pyx_v_self, 1, &__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 237, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5639,7 +5632,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   /* "(tree fragment)":5
  *     cdef object _dict
  *     cdef bint use_setstate
- *     state = (self.ai, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files)             # <<<<<<<<<<<<<<
+ *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files, self.sidereal_day)             # <<<<<<<<<<<<<<
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:
  */
@@ -5652,55 +5645,82 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.epochs); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyTuple_New(17); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(26); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.G);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.G);
+  PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_v_self->__pyx_base.G);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.M);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.M);
+  PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_v_self->__pyx_base.M);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.R);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.R);
+  PyTuple_SET_ITEM(__pyx_t_5, 2, __pyx_v_self->__pyx_base.R);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.Upomega);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.Upomega);
+  PyTuple_SET_ITEM(__pyx_t_5, 3, __pyx_v_self->__pyx_base.Upomega);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.a);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.a);
+  PyTuple_SET_ITEM(__pyx_t_5, 4, __pyx_v_self->__pyx_base.a);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->__pyx_base.ai));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->__pyx_base.ai));
-  PyTuple_SET_ITEM(__pyx_t_5, 0, ((PyObject *)__pyx_v_self->__pyx_base.ai));
+  PyTuple_SET_ITEM(__pyx_t_5, 5, ((PyObject *)__pyx_v_self->__pyx_base.ai));
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.c_p);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.c_p);
+  PyTuple_SET_ITEM(__pyx_t_5, 6, __pyx_v_self->__pyx_base.c_p);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.constants);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.constants);
+  PyTuple_SET_ITEM(__pyx_t_5, 7, __pyx_v_self->__pyx_base.constants);
   __Pyx_GIVEREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_5, 8, __pyx_t_1);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.date);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.date);
-  PyTuple_SET_ITEM(__pyx_t_5, 2, __pyx_v_self->__pyx_base.date);
+  PyTuple_SET_ITEM(__pyx_t_5, 9, __pyx_v_self->__pyx_base.date);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyTuple_SET_ITEM(__pyx_t_5, 3, __pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_5, 10, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_3);
-  PyTuple_SET_ITEM(__pyx_t_5, 4, __pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_5, 11, __pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_4);
-  PyTuple_SET_ITEM(__pyx_t_5, 5, __pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_5, 12, __pyx_t_4);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.g);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.g);
+  PyTuple_SET_ITEM(__pyx_t_5, 13, __pyx_v_self->__pyx_base.g);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->__pyx_base.input_data));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->__pyx_base.input_data));
-  PyTuple_SET_ITEM(__pyx_t_5, 6, ((PyObject *)__pyx_v_self->__pyx_base.input_data));
+  PyTuple_SET_ITEM(__pyx_t_5, 14, ((PyObject *)__pyx_v_self->__pyx_base.input_data));
   __Pyx_INCREF(__pyx_v_self->__pyx_base.input_date);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.input_date);
-  PyTuple_SET_ITEM(__pyx_t_5, 7, __pyx_v_self->__pyx_base.input_date);
+  PyTuple_SET_ITEM(__pyx_t_5, 15, __pyx_v_self->__pyx_base.input_date);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.input_height);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.input_height);
-  PyTuple_SET_ITEM(__pyx_t_5, 8, __pyx_v_self->__pyx_base.input_height);
+  PyTuple_SET_ITEM(__pyx_t_5, 16, __pyx_v_self->__pyx_base.input_height);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.input_rh);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.input_rh);
-  PyTuple_SET_ITEM(__pyx_t_5, 9, __pyx_v_self->__pyx_base.input_rh);
+  PyTuple_SET_ITEM(__pyx_t_5, 17, __pyx_v_self->__pyx_base.input_rh);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.input_temp);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.input_temp);
-  PyTuple_SET_ITEM(__pyx_t_5, 10, __pyx_v_self->__pyx_base.input_temp);
+  PyTuple_SET_ITEM(__pyx_t_5, 18, __pyx_v_self->__pyx_base.input_temp);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.input_u);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.input_u);
-  PyTuple_SET_ITEM(__pyx_t_5, 11, __pyx_v_self->__pyx_base.input_u);
+  PyTuple_SET_ITEM(__pyx_t_5, 19, __pyx_v_self->__pyx_base.input_u);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.input_v);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.input_v);
-  PyTuple_SET_ITEM(__pyx_t_5, 12, __pyx_v_self->__pyx_base.input_v);
+  PyTuple_SET_ITEM(__pyx_t_5, 20, __pyx_v_self->__pyx_base.input_v);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.lat);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.lat);
-  PyTuple_SET_ITEM(__pyx_t_5, 13, __pyx_v_self->__pyx_base.lat);
+  PyTuple_SET_ITEM(__pyx_t_5, 21, __pyx_v_self->__pyx_base.lat);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.lon);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.lon);
-  PyTuple_SET_ITEM(__pyx_t_5, 14, __pyx_v_self->__pyx_base.lon);
+  PyTuple_SET_ITEM(__pyx_t_5, 22, __pyx_v_self->__pyx_base.lon);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.psurfaces);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.psurfaces);
-  PyTuple_SET_ITEM(__pyx_t_5, 15, __pyx_v_self->__pyx_base.psurfaces);
+  PyTuple_SET_ITEM(__pyx_t_5, 23, __pyx_v_self->__pyx_base.psurfaces);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->__pyx_base.remove_files));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->__pyx_base.remove_files));
-  PyTuple_SET_ITEM(__pyx_t_5, 16, ((PyObject *)__pyx_v_self->__pyx_base.remove_files));
+  PyTuple_SET_ITEM(__pyx_t_5, 24, ((PyObject *)__pyx_v_self->__pyx_base.remove_files));
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.sidereal_day);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.sidereal_day);
+  PyTuple_SET_ITEM(__pyx_t_5, 25, __pyx_v_self->__pyx_base.sidereal_day);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
   __pyx_t_3 = 0;
@@ -5710,7 +5730,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
 
   /* "(tree fragment)":6
  *     cdef bint use_setstate
- *     state = (self.ai, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files)
+ *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files, self.sidereal_day)
  *     _dict = getattr(self, '__dict__', None)             # <<<<<<<<<<<<<<
  *     if _dict is not None:
  *         state += (_dict,)
@@ -5722,7 +5742,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   __pyx_t_5 = 0;
 
   /* "(tree fragment)":7
- *     state = (self.ai, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files)
+ *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files, self.sidereal_day)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -5757,13 +5777,13 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
  *         state += (_dict,)
  *         use_setstate = True             # <<<<<<<<<<<<<<
  *     else:
- *         use_setstate = self.ai is not None or self.date is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
  */
     __Pyx_TraceLine(9,0,__PYX_ERR(1, 9, __pyx_L1_error))
     __pyx_v_use_setstate = 1;
 
     /* "(tree fragment)":7
- *     state = (self.ai, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files)
+ *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files, self.sidereal_day)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -5775,20 +5795,76 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   /* "(tree fragment)":11
  *         use_setstate = True
  *     else:
- *         use_setstate = self.ai is not None or self.date is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None             # <<<<<<<<<<<<<<
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None             # <<<<<<<<<<<<<<
  *     if use_setstate:
- *         return __pyx_unpickle_Moist, (type(self), 0x81df381, None), state
+ *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, None), state
  */
   __Pyx_TraceLine(11,0,__PYX_ERR(1, 11, __pyx_L1_error))
   /*else*/ {
-    __pyx_t_6 = (((PyObject *)__pyx_v_self->__pyx_base.ai) != Py_None);
+    __pyx_t_6 = (__pyx_v_self->__pyx_base.G != Py_None);
     __pyx_t_8 = (__pyx_t_6 != 0);
     if (!__pyx_t_8) {
     } else {
       __pyx_t_7 = __pyx_t_8;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_8 = (__pyx_v_self->__pyx_base.date != Py_None);
+    __pyx_t_8 = (__pyx_v_self->__pyx_base.M != Py_None);
+    __pyx_t_6 = (__pyx_t_8 != 0);
+    if (!__pyx_t_6) {
+    } else {
+      __pyx_t_7 = __pyx_t_6;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_6 = (__pyx_v_self->__pyx_base.R != Py_None);
+    __pyx_t_8 = (__pyx_t_6 != 0);
+    if (!__pyx_t_8) {
+    } else {
+      __pyx_t_7 = __pyx_t_8;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_8 = (__pyx_v_self->__pyx_base.Upomega != Py_None);
+    __pyx_t_6 = (__pyx_t_8 != 0);
+    if (!__pyx_t_6) {
+    } else {
+      __pyx_t_7 = __pyx_t_6;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_6 = (__pyx_v_self->__pyx_base.a != Py_None);
+    __pyx_t_8 = (__pyx_t_6 != 0);
+    if (!__pyx_t_8) {
+    } else {
+      __pyx_t_7 = __pyx_t_8;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_8 = (((PyObject *)__pyx_v_self->__pyx_base.ai) != Py_None);
+    __pyx_t_6 = (__pyx_t_8 != 0);
+    if (!__pyx_t_6) {
+    } else {
+      __pyx_t_7 = __pyx_t_6;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_6 = (__pyx_v_self->__pyx_base.c_p != Py_None);
+    __pyx_t_8 = (__pyx_t_6 != 0);
+    if (!__pyx_t_8) {
+    } else {
+      __pyx_t_7 = __pyx_t_8;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_8 = (__pyx_v_self->__pyx_base.constants != ((PyObject*)Py_None));
+    __pyx_t_6 = (__pyx_t_8 != 0);
+    if (!__pyx_t_6) {
+    } else {
+      __pyx_t_7 = __pyx_t_6;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_6 = (__pyx_v_self->__pyx_base.date != Py_None);
+    __pyx_t_8 = (__pyx_t_6 != 0);
+    if (!__pyx_t_8) {
+    } else {
+      __pyx_t_7 = __pyx_t_8;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_8 = (__pyx_v_self->__pyx_base.g != Py_None);
     __pyx_t_6 = (__pyx_t_8 != 0);
     if (!__pyx_t_6) {
     } else {
@@ -5867,7 +5943,14 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
     }
     __pyx_t_6 = (((PyObject *)__pyx_v_self->__pyx_base.remove_files) != Py_None);
     __pyx_t_8 = (__pyx_t_6 != 0);
-    __pyx_t_7 = __pyx_t_8;
+    if (!__pyx_t_8) {
+    } else {
+      __pyx_t_7 = __pyx_t_8;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_8 = (__pyx_v_self->__pyx_base.sidereal_day != Py_None);
+    __pyx_t_6 = (__pyx_t_8 != 0);
+    __pyx_t_7 = __pyx_t_6;
     __pyx_L4_bool_binop_done:;
     __pyx_v_use_setstate = __pyx_t_7;
   }
@@ -5875,9 +5958,9 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
 
   /* "(tree fragment)":12
  *     else:
- *         use_setstate = self.ai is not None or self.date is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_Moist, (type(self), 0x81df381, None), state
+ *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, None), state
  *     else:
  */
   __Pyx_TraceLine(12,0,__PYX_ERR(1, 12, __pyx_L1_error))
@@ -5885,11 +5968,11 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   if (__pyx_t_7) {
 
     /* "(tree fragment)":13
- *         use_setstate = self.ai is not None or self.date is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
  *     if use_setstate:
- *         return __pyx_unpickle_Moist, (type(self), 0x81df381, None), state             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, None), state             # <<<<<<<<<<<<<<
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0x81df381, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, state)
  */
     __Pyx_TraceLine(13,0,__PYX_ERR(1, 13, __pyx_L1_error))
     __Pyx_XDECREF(__pyx_r);
@@ -5900,9 +5983,9 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     PyTuple_SET_ITEM(__pyx_t_5, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_136180609);
-    __Pyx_GIVEREF(__pyx_int_136180609);
-    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_136180609);
+    __Pyx_INCREF(__pyx_int_119408128);
+    __Pyx_GIVEREF(__pyx_int_119408128);
+    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_119408128);
     __Pyx_INCREF(Py_None);
     __Pyx_GIVEREF(Py_None);
     PyTuple_SET_ITEM(__pyx_t_5, 2, Py_None);
@@ -5923,17 +6006,17 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
 
     /* "(tree fragment)":12
  *     else:
- *         use_setstate = self.ai is not None or self.date is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_Moist, (type(self), 0x81df381, None), state
+ *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, None), state
  *     else:
  */
   }
 
   /* "(tree fragment)":15
- *         return __pyx_unpickle_Moist, (type(self), 0x81df381, None), state
+ *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, None), state
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0x81df381, state)             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, state)             # <<<<<<<<<<<<<<
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
@@ -5947,9 +6030,9 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     PyTuple_SET_ITEM(__pyx_t_5, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_136180609);
-    __Pyx_GIVEREF(__pyx_int_136180609);
-    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_136180609);
+    __Pyx_INCREF(__pyx_int_119408128);
+    __Pyx_GIVEREF(__pyx_int_119408128);
+    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_119408128);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
     PyTuple_SET_ITEM(__pyx_t_5, 2, __pyx_v_state);
@@ -5992,7 +6075,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
 
 /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0x81df381, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
@@ -6024,7 +6107,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_18__setstate_cython__(struct __p
   __Pyx_TraceCall("__setstate_cython__", __pyx_f[1], 16, 0, __PYX_ERR(1, 16, __pyx_L1_error));
 
   /* "(tree fragment)":17
- *         return __pyx_unpickle_Moist, (type(self), 0x81df381, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, state)
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)             # <<<<<<<<<<<<<<
  */
@@ -6036,7 +6119,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_18__setstate_cython__(struct __p
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0x81df381, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
@@ -6159,19 +6242,19 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
   /* "(tree fragment)":4
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0x81df381:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0x71e0600:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  */
   __Pyx_TraceLine(4,0,__PYX_ERR(1, 4, __pyx_L1_error))
-  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0x81df381) != 0);
+  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0x71e0600) != 0);
   if (__pyx_t_1) {
 
     /* "(tree fragment)":5
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0x81df381:
+ *     if __pyx_checksum != 0x71e0600:
  *         from pickle import PickleError as __pyx_PickleError             # <<<<<<<<<<<<<<
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  *     __pyx_result = Moist.__new__(__pyx_type)
  */
     __Pyx_TraceLine(5,0,__PYX_ERR(1, 5, __pyx_L1_error))
@@ -6191,16 +6274,16 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":6
- *     if __pyx_checksum != 0x81df381:
+ *     if __pyx_checksum != 0x71e0600:
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))" % __pyx_checksum)             # <<<<<<<<<<<<<<
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)             # <<<<<<<<<<<<<<
  *     __pyx_result = Moist.__new__(__pyx_type)
  *     if __pyx_state is not None:
  */
     __Pyx_TraceLine(6,0,__PYX_ERR(1, 6, __pyx_L1_error))
     __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v___pyx_checksum); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 6, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0x81, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 6, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0x71, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 6, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_INCREF(__pyx_v___pyx_PickleError);
@@ -6227,15 +6310,15 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
     /* "(tree fragment)":4
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0x81df381:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0x71e0600:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  */
   }
 
   /* "(tree fragment)":7
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  *     __pyx_result = Moist.__new__(__pyx_type)             # <<<<<<<<<<<<<<
  *     if __pyx_state is not None:
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
@@ -6262,7 +6345,7 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
   __pyx_t_3 = 0;
 
   /* "(tree fragment)":8
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  *     __pyx_result = Moist.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
@@ -6287,7 +6370,7 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":8
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x81df381 = (ai, data_size, date, delta_latitude, delta_longitude, epochs, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  *     __pyx_result = Moist.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
@@ -6300,7 +6383,7 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
  *     return __pyx_result             # <<<<<<<<<<<<<<
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
  */
   __Pyx_TraceLine(10,0,__PYX_ERR(1, 10, __pyx_L1_error))
   __Pyx_XDECREF(__pyx_r);
@@ -6335,8 +6418,8 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]
- *     if len(__pyx_state) > 17 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
+ *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
  */
 
 static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct __pyx_obj_6amsimp_5moist_Moist *__pyx_v___pyx_result, PyObject *__pyx_v___pyx_state) {
@@ -6361,9 +6444,9 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
   /* "(tree fragment)":12
  *     return __pyx_result
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]             # <<<<<<<<<<<<<<
- *     if len(__pyx_state) > 17 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[17])
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]             # <<<<<<<<<<<<<<
+ *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[26])
  */
   __Pyx_TraceLine(12,0,__PYX_ERR(1, 12, __pyx_L1_error))
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
@@ -6371,6 +6454,61 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
   __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.G);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.G);
+  __pyx_v___pyx_result->__pyx_base.G = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.M);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.M);
+  __pyx_v___pyx_result->__pyx_base.M = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.R);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.R);
+  __pyx_v___pyx_result->__pyx_base.R = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.Upomega);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.Upomega);
+  __pyx_v___pyx_result->__pyx_base.Upomega = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.a);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.a);
+  __pyx_v___pyx_result->__pyx_base.a = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 5, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_7cpython_4bool_bool))))) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
@@ -6382,7 +6520,30 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 6, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.c_p);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.c_p);
+  __pyx_v___pyx_result->__pyx_base.c_p = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 7, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (!(likely(PyDict_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "dict", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.constants);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.constants);
+  __pyx_v___pyx_result->__pyx_base.constants = ((PyObject*)__pyx_t_1);
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 8, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -6391,7 +6552,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 9, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.date);
@@ -6402,7 +6563,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 10, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -6411,7 +6572,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 11, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -6420,7 +6581,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 5, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 12, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -6429,7 +6590,18 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 6, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 13, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.g);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.g);
+  __pyx_v___pyx_result->__pyx_base.g = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 14, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_7cpython_4bool_bool))))) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
@@ -6441,7 +6613,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 7, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 15, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.input_date);
@@ -6452,7 +6624,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 8, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 16, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.input_height);
@@ -6463,7 +6635,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 9, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 17, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.input_rh);
@@ -6474,7 +6646,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 10, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 18, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.input_temp);
@@ -6485,7 +6657,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 11, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 19, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.input_u);
@@ -6496,7 +6668,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 12, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 20, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.input_v);
@@ -6507,7 +6679,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 13, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 21, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.lat);
@@ -6518,7 +6690,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 14, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 22, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.lon);
@@ -6529,7 +6701,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 15, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 23, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.psurfaces);
@@ -6540,7 +6712,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 16, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 24, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_7cpython_4bool_bool))))) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
@@ -6548,12 +6720,23 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
   __Pyx_DECREF(((PyObject *)__pyx_v___pyx_result->__pyx_base.remove_files));
   __pyx_v___pyx_result->__pyx_base.remove_files = ((PyBoolObject *)__pyx_t_1);
   __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 25, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.sidereal_day);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.sidereal_day);
+  __pyx_v___pyx_result->__pyx_base.sidereal_day = __pyx_t_1;
+  __pyx_t_1 = 0;
 
   /* "(tree fragment)":13
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]
- *     if len(__pyx_state) > 17 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[17])
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
+ *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[26])
  */
   __Pyx_TraceLine(13,0,__PYX_ERR(1, 13, __pyx_L1_error))
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
@@ -6561,7 +6744,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     __PYX_ERR(1, 13, __pyx_L1_error)
   }
   __pyx_t_4 = PyTuple_GET_SIZE(__pyx_v___pyx_state); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(1, 13, __pyx_L1_error)
-  __pyx_t_5 = ((__pyx_t_4 > 17) != 0);
+  __pyx_t_5 = ((__pyx_t_4 > 26) != 0);
   if (__pyx_t_5) {
   } else {
     __pyx_t_3 = __pyx_t_5;
@@ -6574,9 +6757,9 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
   if (__pyx_t_3) {
 
     /* "(tree fragment)":14
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]
- *     if len(__pyx_state) > 17 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[17])             # <<<<<<<<<<<<<<
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
+ *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[26])             # <<<<<<<<<<<<<<
  */
     __Pyx_TraceLine(14,0,__PYX_ERR(1, 14, __pyx_L1_error))
     __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v___pyx_result), __pyx_n_s_dict); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
@@ -6588,7 +6771,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(1, 14, __pyx_L1_error)
     }
-    __pyx_t_7 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 17, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 26, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_9 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
@@ -6610,9 +6793,9 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
 
     /* "(tree fragment)":13
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]
- *     if len(__pyx_state) > 17 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[17])
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
+ *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[26])
  */
   }
 
@@ -6620,8 +6803,8 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]
- *     if len(__pyx_state) > 17 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
+ *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
  */
 
   /* function exit code */
@@ -9445,7 +9628,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_Format_string_allocated_too_shor, __pyx_k_Format_string_allocated_too_shor, sizeof(__pyx_k_Format_string_allocated_too_shor), 0, 1, 0, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
-  {&__pyx_kp_s_Incompatible_checksums_s_vs_0x81, __pyx_k_Incompatible_checksums_s_vs_0x81, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x81), 0, 0, 1, 0},
+  {&__pyx_kp_s_Incompatible_checksums_s_vs_0x71, __pyx_k_Incompatible_checksums_s_vs_0x71, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x71), 0, 0, 1, 0},
   {&__pyx_n_s_K, __pyx_k_K, sizeof(__pyx_k_K), 0, 0, 1, 1},
   {&__pyx_n_s_Moist, __pyx_k_Moist, sizeof(__pyx_k_Moist), 0, 0, 1, 1},
   {&__pyx_n_s_Moist___mixing_ratio, __pyx_k_Moist___mixing_ratio, sizeof(__pyx_k_Moist___mixing_ratio), 0, 0, 1, 1},
@@ -9461,7 +9644,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_Non_native_byte_order_not_suppor, __pyx_k_Non_native_byte_order_not_suppor, sizeof(__pyx_k_Non_native_byte_order_not_suppor), 0, 1, 0, 0},
   {&__pyx_n_s_Pa, __pyx_k_Pa, sizeof(__pyx_k_Pa), 0, 0, 1, 1},
   {&__pyx_n_s_PickleError, __pyx_k_PickleError, sizeof(__pyx_k_PickleError), 0, 0, 1, 1},
-  {&__pyx_n_s_R, __pyx_k_R, sizeof(__pyx_k_R), 0, 0, 1, 1},
   {&__pyx_n_s_RuntimeError, __pyx_k_RuntimeError, sizeof(__pyx_k_RuntimeError), 0, 0, 1, 1},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
   {&__pyx_n_s__20, __pyx_k__20, sizeof(__pyx_k__20), 0, 0, 1, 1},
@@ -9471,7 +9653,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_amsimp_moist_pyx, __pyx_k_amsimp_moist_pyx, sizeof(__pyx_k_amsimp_moist_pyx), 0, 0, 1, 0},
   {&__pyx_n_s_args, __pyx_k_args, sizeof(__pyx_k_args), 0, 0, 1, 1},
   {&__pyx_n_s_asarray, __pyx_k_asarray, sizeof(__pyx_k_asarray), 0, 0, 1, 1},
-  {&__pyx_n_s_c_p, __pyx_k_c_p, sizeof(__pyx_k_c_p), 0, 0, 1, 1},
   {&__pyx_n_s_cartopy_crs, __pyx_k_cartopy_crs, sizeof(__pyx_k_cartopy_crs), 0, 0, 1, 1},
   {&__pyx_n_s_cartopy_util, __pyx_k_cartopy_util, sizeof(__pyx_k_cartopy_util), 0, 0, 1, 1},
   {&__pyx_n_s_ccrs, __pyx_k_ccrs, sizeof(__pyx_k_ccrs), 0, 0, 1, 1},
@@ -9482,7 +9663,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_exner_function, __pyx_k_exner_function, sizeof(__pyx_k_exner_function), 0, 0, 1, 1},
   {&__pyx_n_s_exp, __pyx_k_exp, sizeof(__pyx_k_exp), 0, 0, 1, 1},
   {&__pyx_n_s_format, __pyx_k_format, sizeof(__pyx_k_format), 0, 0, 1, 1},
-  {&__pyx_n_s_g, __pyx_k_g, sizeof(__pyx_k_g), 0, 0, 1, 1},
   {&__pyx_n_s_getstate, __pyx_k_getstate, sizeof(__pyx_k_getstate), 0, 0, 1, 1},
   {&__pyx_n_s_hPa, __pyx_k_hPa, sizeof(__pyx_k_hPa), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
@@ -9560,14 +9740,14 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "amsimp/moist.pyx":250
+  /* "amsimp/moist.pyx":251
  *         # Defining some variables.
  *         cdef np.ndarray pressure = self.pressure_surfaces(dim_3d=True).to(self.units.Pa).value
  *         pressure = np.transpose(pressure, (2, 1, 0))             # <<<<<<<<<<<<<<
  *         cdef np.ndarray vapor_pressure = self.vapor_pressure().to(self.units.Pa)
  *         vapor_pressure = np.transpose(vapor_pressure.value, (2, 1, 0))
  */
-  __pyx_tuple__9 = PyTuple_Pack(3, __pyx_int_2, __pyx_int_1, __pyx_int_0); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 250, __pyx_L1_error)
+  __pyx_tuple__9 = PyTuple_Pack(3, __pyx_int_2, __pyx_int_1, __pyx_int_0); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
 
@@ -9713,36 +9893,36 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *     cpdef np.ndarray potential_temperature(self, moist=False):             # <<<<<<<<<<<<<<
  *         """
- *         Generates a NumPy array of potential temperature. The potential
+ *         Generates a NumPy array of potential temperature.
  */
   __pyx_tuple__26 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_moist); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(0, 179, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__26);
   __Pyx_GIVEREF(__pyx_tuple__26);
   __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__26, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_amsimp_moist_pyx, __pyx_n_s_potential_temperature, 179, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 179, __pyx_L1_error)
 
-  /* "amsimp/moist.pyx":227
+  /* "amsimp/moist.pyx":228
  * # -----------------------------------------------------------------------------------------#
  * 
  *     def __mixing_ratio(self, pressure, vapor_pressure):             # <<<<<<<<<<<<<<
  *         """
  *         This method is solely utilised for integration in the
  */
-  __pyx_tuple__27 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_pressure, __pyx_n_s_vapor_pressure, __pyx_n_s_y); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(0, 227, __pyx_L1_error)
+  __pyx_tuple__27 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_pressure, __pyx_n_s_vapor_pressure, __pyx_n_s_y); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(0, 228, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__27);
   __Pyx_GIVEREF(__pyx_tuple__27);
-  __pyx_codeobj__7 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__27, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_amsimp_moist_pyx, __pyx_n_s_mixing_ratio_2, 227, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__7)) __PYX_ERR(0, 227, __pyx_L1_error)
+  __pyx_codeobj__7 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__27, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_amsimp_moist_pyx, __pyx_n_s_mixing_ratio_2, 228, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__7)) __PYX_ERR(0, 228, __pyx_L1_error)
 
-  /* "amsimp/moist.pyx":236
+  /* "amsimp/moist.pyx":237
  *         return y
  * 
  *     cpdef np.ndarray precipitable_water(self, sum_pwv=True):             # <<<<<<<<<<<<<<
  *         """
  *         Generates a NumPy array of saturated precipitable water vapor.
  */
-  __pyx_tuple__28 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_sum_pwv); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(0, 236, __pyx_L1_error)
+  __pyx_tuple__28 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_sum_pwv); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(0, 237, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__28);
   __Pyx_GIVEREF(__pyx_tuple__28);
-  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__28, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_amsimp_moist_pyx, __pyx_n_s_precipitable_water, 236, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) __PYX_ERR(0, 236, __pyx_L1_error)
+  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__28, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_amsimp_moist_pyx, __pyx_n_s_precipitable_water, 237, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) __PYX_ERR(0, 237, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
@@ -9756,7 +9936,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0x81df381, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
@@ -9795,7 +9975,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   __pyx_int_3 = PyInt_FromLong(3); if (unlikely(!__pyx_int_3)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_100 = PyInt_FromLong(100); if (unlikely(!__pyx_int_100)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_997 = PyInt_FromLong(997); if (unlikely(!__pyx_int_997)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_136180609 = PyInt_FromLong(136180609L); if (unlikely(!__pyx_int_136180609)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_int_119408128 = PyInt_FromLong(119408128L); if (unlikely(!__pyx_int_119408128)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_neg_1 = PyInt_FromLong(-1); if (unlikely(!__pyx_int_neg_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
@@ -10368,7 +10548,7 @@ if (!__Pyx_RefNanny) {
  * 
  *     cpdef np.ndarray potential_temperature(self, moist=False):             # <<<<<<<<<<<<<<
  *         """
- *         Generates a NumPy array of potential temperature. The potential
+ *         Generates a NumPy array of potential temperature.
  */
   __Pyx_TraceLine(179,0,__PYX_ERR(0, 179, __pyx_L1_error))
 
@@ -10378,32 +10558,32 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   PyType_Modified(__pyx_ptype_6amsimp_5moist_Moist);
 
-  /* "amsimp/moist.pyx":227
+  /* "amsimp/moist.pyx":228
  * # -----------------------------------------------------------------------------------------#
  * 
  *     def __mixing_ratio(self, pressure, vapor_pressure):             # <<<<<<<<<<<<<<
  *         """
  *         This method is solely utilised for integration in the
  */
-  __Pyx_TraceLine(227,0,__PYX_ERR(0, 227, __pyx_L1_error))
-  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_6amsimp_5moist_5Moist_13__mixing_ratio, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_Moist___mixing_ratio, NULL, __pyx_n_s_amsimp_moist, __pyx_d, ((PyObject *)__pyx_codeobj__7)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 227, __pyx_L1_error)
+  __Pyx_TraceLine(228,0,__PYX_ERR(0, 228, __pyx_L1_error))
+  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_6amsimp_5moist_5Moist_13__mixing_ratio, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_Moist___mixing_ratio, NULL, __pyx_n_s_amsimp_moist, __pyx_d, ((PyObject *)__pyx_codeobj__7)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 228, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_6amsimp_5moist_Moist->tp_dict, __pyx_n_s_mixing_ratio_2, __pyx_t_1) < 0) __PYX_ERR(0, 227, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_6amsimp_5moist_Moist->tp_dict, __pyx_n_s_mixing_ratio_2, __pyx_t_1) < 0) __PYX_ERR(0, 228, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   PyType_Modified(__pyx_ptype_6amsimp_5moist_Moist);
 
-  /* "amsimp/moist.pyx":236
+  /* "amsimp/moist.pyx":237
  *         return y
  * 
  *     cpdef np.ndarray precipitable_water(self, sum_pwv=True):             # <<<<<<<<<<<<<<
  *         """
  *         Generates a NumPy array of saturated precipitable water vapor.
  */
-  __Pyx_TraceLine(236,0,__PYX_ERR(0, 236, __pyx_L1_error))
+  __Pyx_TraceLine(237,0,__PYX_ERR(0, 237, __pyx_L1_error))
 
-  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_6amsimp_5moist_5Moist_15precipitable_water, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_Moist_precipitable_water, NULL, __pyx_n_s_amsimp_moist, __pyx_d, ((PyObject *)__pyx_codeobj__8)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 236, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_6amsimp_5moist_5Moist_15precipitable_water, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_Moist_precipitable_water, NULL, __pyx_n_s_amsimp_moist, __pyx_d, ((PyObject *)__pyx_codeobj__8)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 237, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_6amsimp_5moist_Moist->tp_dict, __pyx_n_s_precipitable_water, __pyx_t_1) < 0) __PYX_ERR(0, 236, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_6amsimp_5moist_Moist->tp_dict, __pyx_n_s_precipitable_water, __pyx_t_1) < 0) __PYX_ERR(0, 237, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   PyType_Modified(__pyx_ptype_6amsimp_5moist_Moist);
 
@@ -10421,7 +10601,7 @@ if (!__Pyx_RefNanny) {
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0x81df381, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
@@ -10447,8 +10627,8 @@ if (!__Pyx_RefNanny) {
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.ai = __pyx_state[0]; __pyx_result.data_size = __pyx_state[1]; __pyx_result.date = __pyx_state[2]; __pyx_result.delta_latitude = __pyx_state[3]; __pyx_result.delta_longitude = __pyx_state[4]; __pyx_result.epochs = __pyx_state[5]; __pyx_result.input_data = __pyx_state[6]; __pyx_result.input_date = __pyx_state[7]; __pyx_result.input_height = __pyx_state[8]; __pyx_result.input_rh = __pyx_state[9]; __pyx_result.input_temp = __pyx_state[10]; __pyx_result.input_u = __pyx_state[11]; __pyx_result.input_v = __pyx_state[12]; __pyx_result.lat = __pyx_state[13]; __pyx_result.lon = __pyx_state[14]; __pyx_result.psurfaces = __pyx_state[15]; __pyx_result.remove_files = __pyx_state[16]
- *     if len(__pyx_state) > 17 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
+ *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
  */
   __Pyx_TraceLine(11,0,__PYX_ERR(1, 11, __pyx_L1_error))
 
