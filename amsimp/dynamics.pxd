@@ -35,4 +35,11 @@ cdef class Dynamics(RNN):
     cdef forecast_length, delta_t
     
     cpdef tuple forecast_period(self)
-    cpdef simulate(self, bool save_file=?)
+    cpdef simulate(
+        self,
+        bool save_file=?, 
+        perturbations_temperature=?, 
+        perturbations_zonalwind=?, 
+        perturbations_meridionalwind=?, 
+        perturbations_mixingratio=?
+    )

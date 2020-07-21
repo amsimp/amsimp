@@ -45,7 +45,6 @@ from iris.coord_systems import GeogCS
 
 # -----------------------------------------------------------------------------------------#
 
-
 cdef class Backend(Download):
     """
     AMSIMP Backend Class - This is the base class for AMSIMP, as such, all
@@ -137,8 +136,9 @@ cdef class Backend(Download):
                 "angular_rotation_rate": ((2 * np.pi) / ((23 + (56 / 60)) * 3600)),
                 "planet_radius": constant.R_earth.value,
                 "planet_mass": constant.M_earth.value,
-                "specific_heat_capacity_psurface": 1004,
-                "gravitational_acceleration": 9.80665 
+                "specific_heat_capacity_psurface": 718,
+                "gravitational_acceleration": 9.80665,
+                "planet": "Earth"
             }
         ):
         """
@@ -395,6 +395,10 @@ cdef class Backend(Download):
             constants["gravitational_acceleration"] = constants["gravitational_acceleration"] * (
                 units.m / (units.s ** 2)
             )
+        # Planet
+        planet = constants["planet"].lower()
+        planet = planet.replace(" ", "")
+        planet = planet.capitalize()
 
         # Make the input data variables available else where in the class.
         self.psurfaces = psurfaces
@@ -424,6 +428,8 @@ cdef class Backend(Download):
         self.c_p = self.constants["specific_heat_capacity_psurface"]
         # Gravitational acceleration.
         self.g = self.constants["gravitational_acceleration"]
+        # Planet
+        self.planet = self.constants["planet"]
 
         # Function to check for an internet connection.
         def is_connected():
@@ -479,6 +485,8 @@ cdef class Backend(Download):
                     self.ai
                 )
             )
+
+# -----------------------------------------------------------------------------------------#
 
     cpdef np.ndarray latitude_lines(self):
         """
@@ -548,10 +556,16 @@ cdef class Backend(Download):
         pressure_surfaces *= self.units.hPa
         return pressure_surfaces
 
+# -----------------------------------------------------------------------------------------#
+
     cpdef np.ndarray gradient_x(self, parameter=None):
         """
         Explain here.
         """
+        # Determine gradient with respect to longitude.
+        cdef np.ndarray longitude = np.radians(self.longitude_lines().value)
+        parameter = np.gradient(parameter, longitude, axis=2)
+
         cdef np.ndarray latitude = np.radians(self.latitude_lines().value)
         parameter = np.transpose(parameter, (1, 0, 2))
 
@@ -830,7 +844,7 @@ cdef class Backend(Download):
         This is calculated by looking at the vertical temperature profile in
         the method, amsimp.Backend.temperature().
 
-
+        Explain here.
         """
         cdef np.ndarray temperature = self.temperature().value
         grad_temperature = np.gradient(temperature)
@@ -876,133 +890,138 @@ cdef class Backend(Download):
         If you would like a particular atmospheric process to
         be added to this method, either create an issue on
         GitHub or send an email to support@amsimp.com.
-        """        
-        # Ensure, which, is a string.
-        if not isinstance(which, str):
-            raise Exception(
-                "which must be a string of the name of the atmospheric parameter of interest."
-            )
-
-        # Index of the nearest pressure surface in amsimp.Backend.pressure_surfaces()
-        indx_psurface = (np.abs(self.pressure_surfaces().value - psurface)).argmin()
-        
-        # Defines the axes, and the data.
-        latitude, longitude = np.meshgrid(
-            self.latitude_lines().value,
-            self.longitude_lines().value
-        )
-
-        if which == "temperature" or which == "air_temperature":
-            data = self.temperature()[indx_psurface, :, :]
-            data_type = "Air Temperature"
-            unit = " (K)"
-        elif which == "geopotential_height" or which == "height":
-            data = self.geopotential_height()[indx_psurface, :, :]
-            data_type = "Geopotential Height"
-            unit = " (m)"
-        elif which == "density" or which == "atmospheric_density":
-            data = self.density()[indx_psurface, :, :]
-            data_type = "Atmospheric Density"
-            unit = " ($\\frac{kg}{m^3}$)"
-        elif which == "humidity" or which == "relative_humidity":
-            data = self.relative_humidity()[indx_psurface, :, :]
-            data_type = "Relative Humidity"
-            unit = " (%)"
-        elif which == "virtual_temperature":
-            data = self.virtual_temperature()[indx_psurface, :, :]
-            data_type = "Virtual Temperature"
-            unit = " (K)"
-        elif which == "vapor_pressure":
-            data = self.vapor_pressure()[indx_psurface, :, :]
-            data_type = "Vapor Pressure"
-            unit = " (hPa)"
-        elif which == "potential_temperature":
-            data = self.potential_temperature()[indx_psurface, :, :]
-            data_type = "Potential Temperature"
-            unit = " (K)"
-        elif which == "precipitable_water" or which == "precipitable_water_vapor":
-            data = self.precipitable_water()
-            data_type = "Precipitable Water Vapor"
-            unit = " (mm)"
-        elif which == "zonal_wind":
-            data = self.wind()[0][indx_psurface, :, :]
-            data_type = "Zonal Wind"
-            unit = " ($\\frac{m}{s}$)"
-        elif which == "meridional_wind":
-            data = self.wind()[1][indx_psurface, :, :]
-            data_type = "Meridional Wind"
-            unit = " ($\\frac{m}{s}$)"
-        elif which == "wind":
-            data = self.wind()
-            data = np.sqrt(data[0]**2 + data[1]**2)[indx_psurface, :, :]
-            data_type = "Wind"
-            unit = " ($\\frac{m}{s}$)"
-        elif which == "mixing_ratio":
-            data = self.mixing_ratio()[indx_psurface, :, :]
-            data_type = "Mixing Ratio"
-            unit = " (Dimensionless)"
-        else:
-            raise Exception(
-                "Invalid keyword. which must be a string of an atmospheric parameter included with AMSIMP."
-            )
-
-        if psurface < self.pressure_surfaces()[-1].value or psurface > self.pressure_surfaces()[0].value:
-            raise Exception(
-                "psurface must be a real number within the isobaric boundaries. The value of psurface was: {}".format(
-                    psurface
+        """
+        if self.planet == "Earth":        
+            # Ensure, which, is a string.
+            if not isinstance(which, str):
+                raise Exception(
+                    "which must be a string of the name of the atmospheric parameter of interest."
                 )
+
+            # Index of the nearest pressure surface in amsimp.Backend.pressure_surfaces()
+            indx_psurface = (np.abs(self.pressure_surfaces().value - psurface)).argmin()
+            
+            # Defines the axes, and the data.
+            latitude, longitude = np.meshgrid(
+                self.latitude_lines().value,
+                self.longitude_lines().value
             )
 
-        # EckertIII projection details.
-        ax = plt.axes(projection=ccrs.EckertIII())
-        ax.set_global()
-        ax.coastlines()
-        ax.gridlines()
+            if which == "temperature" or which == "air_temperature":
+                data = self.temperature()[indx_psurface, :, :]
+                data_type = "Air Temperature"
+                unit = " (K)"
+            elif which == "geopotential_height" or which == "height":
+                data = self.geopotential_height()[indx_psurface, :, :]
+                data_type = "Geopotential Height"
+                unit = " (m)"
+            elif which == "density" or which == "atmospheric_density":
+                data = self.density()[indx_psurface, :, :]
+                data_type = "Atmospheric Density"
+                unit = " ($\\frac{kg}{m^3}$)"
+            elif which == "humidity" or which == "relative_humidity":
+                data = self.relative_humidity()[indx_psurface, :, :]
+                data_type = "Relative Humidity"
+                unit = " (%)"
+            elif which == "virtual_temperature":
+                data = self.virtual_temperature()[indx_psurface, :, :]
+                data_type = "Virtual Temperature"
+                unit = " (K)"
+            elif which == "vapor_pressure":
+                data = self.vapor_pressure()[indx_psurface, :, :]
+                data_type = "Vapor Pressure"
+                unit = " (hPa)"
+            elif which == "potential_temperature":
+                data = self.potential_temperature()[indx_psurface, :, :]
+                data_type = "Potential Temperature"
+                unit = " (K)"
+            elif which == "precipitable_water" or which == "precipitable_water_vapor":
+                data = self.precipitable_water()
+                data_type = "Precipitable Water Vapor"
+                unit = " (mm)"
+            elif which == "zonal_wind":
+                data = self.wind()[0][indx_psurface, :, :]
+                data_type = "Zonal Wind"
+                unit = " ($\\frac{m}{s}$)"
+            elif which == "meridional_wind":
+                data = self.wind()[1][indx_psurface, :, :]
+                data_type = "Meridional Wind"
+                unit = " ($\\frac{m}{s}$)"
+            elif which == "wind":
+                data = self.wind()
+                data = np.sqrt(data[0]**2 + data[1]**2)[indx_psurface, :, :]
+                data_type = "Wind"
+                unit = " ($\\frac{m}{s}$)"
+            elif which == "mixing_ratio":
+                data = self.mixing_ratio()[indx_psurface, :, :]
+                data_type = "Mixing Ratio"
+                unit = " (Dimensionless)"
+            else:
+                raise Exception(
+                    "Invalid keyword. which must be a string of an atmospheric parameter included with AMSIMP."
+                )
 
-        # Contourf plotting.
-        minimum = data.min()
-        maximum = data.max()
-        levels = np.linspace(minimum, maximum, 21)
-        data, lon = add_cyclic_point(data, coord=self.longitude_lines().value)
-        contour = plt.contourf(
-            lon,
-            self.latitude_lines().value,
-            data,
-            transform=ccrs.PlateCarree(),
-            levels=levels,
-        )
+            if psurface < self.pressure_surfaces()[-1].value or psurface > self.pressure_surfaces()[0].value:
+                raise Exception(
+                    "psurface must be a real number within the isobaric boundaries. The value of psurface was: {}".format(
+                        psurface
+                    )
+                )
 
-        # Add SALT.
-        plt.xlabel("Latitude ($\phi$)")
-        plt.ylabel("Longitude ($\lambda$)")
-        if not self.input_data:
-            title = (
-                data_type + " ("
-                + str(self.date.year) + '-' + str(self.date.month) + '-'
-                + str(self.date.day) + " " + str(self.date.hour)
-                + ":00 h)"
+            # EckertIII projection details.
+            ax = plt.axes(projection=ccrs.EckertIII())
+            ax.set_global()
+            ax.coastlines()
+            ax.gridlines()
+
+            # Contourf plotting.
+            minimum = data.min()
+            maximum = data.max()
+            levels = np.linspace(minimum, maximum, 21)
+            data, lon = add_cyclic_point(data, coord=self.longitude_lines().value)
+            contour = plt.contourf(
+                lon,
+                self.latitude_lines().value,
+                data,
+                transform=ccrs.PlateCarree(),
+                levels=levels,
             )
+
+            # Add SALT.
+            plt.xlabel("Latitude ($\phi$)")
+            plt.ylabel("Longitude ($\lambda$)")
+            if not self.input_data:
+                title = (
+                    data_type + " ("
+                    + str(self.date.year) + '-' + str(self.date.month) + '-'
+                    + str(self.date.day) + " " + str(self.date.hour)
+                    + ":00 h)"
+                )
+            else:
+                title = data_type
+        
+            if which != "surface_temperature" and which != "precipitable_water" and which != "precipitable_water_vapor":
+                title = (
+                    title + " (" + "Pressure Surface = " + str(self.pressure_surfaces()[indx_psurface]) +")"
+                )
+
+            plt.title(title)
+
+            # Colorbar creation.
+            colorbar = plt.colorbar()
+            tick_locator = ticker.MaxNLocator(nbins=15)
+            colorbar.locator = tick_locator
+            colorbar.update_ticks()
+            colorbar.set_label(
+                data_type + unit
+            )
+
+            plt.show()
+            plt.close()
         else:
-            title = data_type
-    
-        if which != "surface_temperature" and which != "precipitable_water" and which != "precipitable_water_vapor":
-            title = (
-                title + " (" + "Pressure Surface = " + str(self.pressure_surfaces()[indx_psurface]) +")"
+            raise NotImplementedError(
+                "Visualisations for planetary bodies other than Earth is not currently implemented."
             )
-
-        plt.title(title)
-
-        # Colorbar creation.
-        colorbar = plt.colorbar()
-        tick_locator = ticker.MaxNLocator(nbins=15)
-        colorbar.locator = tick_locator
-        colorbar.update_ticks()
-        colorbar.set_label(
-            data_type + unit
-        )
-
-        plt.show()
-        plt.close()
     
     def psurface_contourf(self, which="air_temperature", central_long=352.3079):
         """
@@ -1147,65 +1166,70 @@ cdef class Backend(Download):
         For the raw data, please use the amsimp.Backend.pressure_thickness()
         method.
         """
-        # Defines the axes, and the data.
-        latitude, longitude = self.latitude_lines().value, self.longitude_lines().value
+        if self.planet == "Earth":
+            # Defines the axes, and the data.
+            latitude, longitude = self.latitude_lines().value, self.longitude_lines().value
 
-        cdef np.ndarray pressure_thickness = self.pressure_thickness(p1=p1, p2=p2)
+            pressure_thickness = self.pressure_thickness(p1=p1, p2=p2)
 
-        # EckertIII projection details.
-        ax = plt.axes(projection=ccrs.EckertIII())
-        ax.set_global()
-        ax.coastlines()
-        ax.gridlines()
+            # EckertIII projection details.
+            ax = plt.axes(projection=ccrs.EckertIII())
+            ax.set_global()
+            ax.coastlines()
+            ax.gridlines()
 
-        # Contourf plotting.
-        minimum = pressure_thickness.min()
-        maximum = pressure_thickness.max()
-        levels = np.linspace(minimum, maximum, 21)
-        pressure_thickness, longitude = add_cyclic_point(
-            pressure_thickness, coord=longitude
-        )
-        contour = plt.contourf(
-            longitude,
-            latitude,
-            pressure_thickness,
-            transform=ccrs.PlateCarree(),
-            levels=levels,
-        )
-
-        # Index of the rain / snow line
-        indx_snowline = (np.abs(levels.value - 5400)).argmin()
-        contour.collections[indx_snowline].set_color('black')
-        contour.collections[indx_snowline].set_linewidth(1) 
-
-        # Add SALT.
-        plt.xlabel("Latitude ($\phi$)")
-        plt.ylabel("Longitude ($\lambda$)")
-        if not self.input_data:
-            plt.title("Pressure Thickness ("
-                + str(self.date.year) + '-' + str(self.date.month) + '-'
-                + str(self.date.day) + " " + str(self.date.hour) + ":00 h" + ")"
+            # Contourf plotting.
+            minimum = pressure_thickness.min()
+            maximum = pressure_thickness.max()
+            levels = np.linspace(minimum, maximum, 21)
+            pressure_thickness, longitude = add_cyclic_point(
+                pressure_thickness, coord=longitude
             )
+            contour = plt.contourf(
+                longitude,
+                latitude,
+                pressure_thickness,
+                transform=ccrs.PlateCarree(),
+                levels=levels,
+            )
+
+            # Index of the rain / snow line
+            indx_snowline = (np.abs(levels.value - 5400)).argmin()
+            contour.collections[indx_snowline].set_color('black')
+            contour.collections[indx_snowline].set_linewidth(1) 
+
+            # Add SALT.
+            plt.xlabel("Latitude ($\phi$)")
+            plt.ylabel("Longitude ($\lambda$)")
+            if not self.input_data:
+                plt.title("Pressure Thickness ("
+                    + str(self.date.year) + '-' + str(self.date.month) + '-'
+                    + str(self.date.day) + " " + str(self.date.hour) + ":00 h" + ")"
+                )
+            else:
+                plt.title("Pressure Thickness")
+
+            # Colorbar creation.
+            colorbar = plt.colorbar()
+            tick_locator = ticker.MaxNLocator(nbins=15)
+            colorbar.locator = tick_locator
+            colorbar.update_ticks()
+            colorbar.set_label(
+                "Pressure Thickness (" + str(p1) + " hPa - " + str(p2) + " hPa) (m)"
+            )
+
+            # Footnote
+            if p1 == 1000 and p2 == 500:
+                plt.figtext(
+                    0.99,
+                    0.01,
+                    "Rain / Snow Line is marked by the black line (5,400 m).",
+                    horizontalalignment="right",
+                )
+
+            plt.show()
+            plt.close()
         else:
-            plt.title("Pressure Thickness")
-
-        # Colorbar creation.
-        colorbar = plt.colorbar()
-        tick_locator = ticker.MaxNLocator(nbins=15)
-        colorbar.locator = tick_locator
-        colorbar.update_ticks()
-        colorbar.set_label(
-            "Pressure Thickness (" + str(p1) + " hPa - " + str(p2) + " hPa) (m)"
-        )
-
-        # Footnote
-        if p1 == 1000 and p2 == 500:
-            plt.figtext(
-                0.99,
-                0.01,
-                "Rain / Snow Line is marked by the black line (5,400 m).",
-                horizontalalignment="right",
+            raise NotImplementedError(
+                "Visualisations for planetary bodies other than Earth is not currently implemented."
             )
-
-        plt.show()
-        plt.close()

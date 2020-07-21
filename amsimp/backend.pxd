@@ -36,7 +36,7 @@ cdef class Backend(Download):
     cdef int data_size, epochs
     cdef bool input_data
     cpdef dict constants
-    cpdef sidereal_day, Upomega, R, a, G, M, c_p, g
+    cpdef sidereal_day, Upomega, R, a, G, M, c_p, g, planet
     cdef input_date, date, psurfaces, lat, lon, input_height, input_rh
     cdef input_temp, input_u, input_v
 
