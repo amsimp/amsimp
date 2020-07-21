@@ -163,10 +163,10 @@ cdef class Wind(Moist):
         
         # Determine the LHS pf the equation by calculating the derivatives.
         # Change in meridional wind with respect to latitude.
-        v_dy = self.gradient_y(parameter=v)
+        v_dy = self.gradient_latitude(parameter=v)
 
         # Change in zonal wind with respect to longitude.
-        u_dx = self.gradient_x(parameter=u)
+        u_dx = self.gradient_longitude(parameter=u)
 
         LHS = u_dx + v_dy
         LHS *= -1

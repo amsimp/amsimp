@@ -48,6 +48,8 @@ from iris.cube import Cube, CubeList
 from iris import save
 from progress.bar import IncrementalBar
 from metpy.calc import smooth_gaussian
+import cv2
+import glob
 
 # -----------------------------------------------------------------------------------------#
 
@@ -127,6 +129,12 @@ cdef class RNN(Wind):
         max_bar = self.data_size * 4
         bar = IncrementalBar('Downloading Historical Data', max=max_bar)
 
+        # Check if the parameter, input_data, is set to True.
+        if self.input_data:
+            raise NotImplementedError(
+                "Currently, it is not possible to train the neural network on user defined datasets."
+            ) 
+
         # Remove initial conditions file.
         try:
             os.remove("initial_conditions.nc")
@@ -139,7 +147,6 @@ cdef class RNN(Wind):
             config = Wind(
                 delta_latitude=self.delta_latitude,
                 delta_longitude=self.delta_longitude,
-                remove_files=self.remove_files,
                 input_date=date,
             )
 
@@ -418,8 +425,7 @@ cdef class Dynamics(RNN):
     def __cinit__(
             self,
             int delta_latitude=5,
-            int delta_longitude=5, 
-            bool remove_files=False, 
+            int delta_longitude=5,
             forecast_length=72, 
             delta_t=2, 
             bool ai=True, 
@@ -465,7 +471,6 @@ cdef class Dynamics(RNN):
         # Declare class variables.
         super().__init__(delta_latitude)
         super().__init__(delta_longitude)
-        super().__init__(remove_files)
         self.forecast_length = forecast_length
         self.delta_t = delta_t
         self.ai = ai
@@ -558,7 +563,9 @@ cdef class Dynamics(RNN):
         files can be opened by using the Iris library, which can
         be downloaded via Anaconda Cloud.
         """
-        # Error checking.    
+        # Error checking.
+        np.seterr(all='raise')
+
         # Ensure save_file is a boolean value.
         if not isinstance(save_file, bool):
             raise Exception(
@@ -582,6 +589,9 @@ cdef class Dynamics(RNN):
         cdef np.ndarray longitude = self.longitude_lines().value
         cdef np.ndarray pressure = self.pressure_surfaces()
         cdef np.ndarray pressure_3d = self.pressure_surfaces(dim_3d=True)
+        cdef np.ndarray interpolate_pressure = np.insert(
+            pressure, 0, pressure[0] + np.abs(pressure[0] - pressure[1])
+        )
         cdef time = self.forecast_period()[0]
         
         # The Coriolis parameter at various latitudes of the Earth's surface,
@@ -648,7 +658,7 @@ cdef class Dynamics(RNN):
         # Booleans.
         cdef bool break_loop
         # Ints / Floats.
-        cdef int len_p = len(pressure) - 1
+        cdef int len_p = len(pressure)
         cdef int i
         # Tuples.
         cdef tuple shape, shape_2d
@@ -700,7 +710,6 @@ cdef class Dynamics(RNN):
         config = Wind(
             delta_latitude=self.delta_latitude,
             delta_longitude=self.delta_longitude,
-            remove_files=self.remove_files,
             input_data=True,
             psurfaces=self.pressure_surfaces(),
             lat=self.latitude_lines(),
@@ -713,32 +722,85 @@ cdef class Dynamics(RNN):
             constants=self.constants 
         )
 
+        # Define the coordinates for the cubes. 
+        # Latitude.
+        lat = DimCoord(
+            latitude,
+            standard_name='latitude',
+            units='degrees'
+        )
+        # Longitude
+        lon = DimCoord(
+            longitude,
+            standard_name='longitude', 
+            units='degrees'
+        )
+        # Pressure Surfaces.
+        p = DimCoord(
+            pressure,
+            long_name='pressure', 
+            units='hPa'
+        )
+        # Time.
+        forecast_period = DimCoord(
+            time,
+            standard_name='forecast_period', 
+            units='hours'
+        )
+        # Forecast reference time.
+        ref_time = AuxCoord(
+            self.date.strftime("%Y-%m-%d %H:%M:%S"),
+            standard_name='forecast_reference_time'
+        )
+
+        # Determine geopotential height of lowest constant pressure surface for
+        # the integration of the Hydrostatic Equation. 
+        # Define grid to interpolate onto.
+        grid_points = [
+            ('pressure',  interpolate_pressure.value),
+            ('latitude',  latitude),
+            ('longitude', longitude),
+        ]
+
+        # Define cube.
+        z = Cube(height.value,
+            standard_name='geopotential_height',
+            units='m',
+            dim_coords_and_dims=[
+                (p, 0), (lat, 1), (lon, 2)
+            ],
+        )
+
+        # Interpolation of geopotential height based on new grid.
+        z = z.interpolate(grid_points, iris.analysis.Linear())
+        z_0 = np.asarray(z.data.tolist())[0] * height.unit
+
         cdef int nt = 1
         try:
             while t < forecast_length.value:
                 # Wind
                 # Scalar gradients of geopotential height.
-                dz_dx = self.gradient_x(parameter=height)
-                dz_dy = self.gradient_y(parameter=height)
+                dz_dx = self.gradient_longitude(parameter=height)
+                dz_dy = self.gradient_latitude(parameter=height)
 
                 # Zonal Wind.
                 # Scalar gradients of zonal wind.
-                du_dx = self.gradient_x(parameter=u)
-                du_dy = self.gradient_y(parameter=u)
-                du_dp = self.gradient_p(parameter=u)
+                du_dx = self.gradient_longitude(parameter=u)
+                du_dy = self.gradient_latitude(parameter=u)
+                du_dp = self.gradient_pressure(parameter=u)
 
                 # Laplace operator of zonal wind.
-                d2u_dx2 = self.gradient_x(parameter=du_dx)
-                d2u_dy2 = self.gradient_y(parameter=du_dy)
-                d2u_dp2 = self.gradient_p(parameter=du_dp)
+                d2u_dx2 = self.gradient_longitude(parameter=du_dx)
+                d2u_dy2 = self.gradient_latitude(parameter=du_dy)
+                d2u_dp2 = self.gradient_pressure(parameter=du_dp)
 
                 # Second order terms.
-                d2u_dxdy = self.gradient_y(parameter=du_dx)
-                d2u_dxdp = self.gradient_p(parameter=du_dx)
-                d2u_dydx = self.gradient_x(parameter=du_dy)
-                d2u_dydp = self.gradient_p(parameter=du_dy)
-                d2u_dpdx = self.gradient_x(parameter=du_dp)
-                d2u_dpdy = self.gradient_y(parameter=du_dp)
+                d2u_dxdy = self.gradient_latitude(parameter=du_dx)
+                d2u_dxdp = self.gradient_pressure(parameter=du_dx)
+                d2u_dydx = self.gradient_longitude(parameter=du_dy)
+                d2u_dydp = self.gradient_pressure(parameter=du_dy)
+                d2u_dpdx = self.gradient_longitude(parameter=du_dp)
+                d2u_dpdy = self.gradient_latitude(parameter=du_dp)
 
                 # Determine each term in the zonal momentum equation.
                 A1 = -u * du_dx
@@ -763,7 +825,7 @@ cdef class Dynamics(RNN):
                 if perturbations_zonalwind != None:
                     perturbations = perturbations_zonalwind(config)
                 else:
-                    perturbations = np.zeros(u.value.shape) * u.unit
+                    perturbations = np.zeros(u.value.shape) * E.unit
 
                 # Sum the RHS terms and multiple by the time step.
                 RHS = (A + B + C + D + E + perturbations) * delta_t
@@ -773,27 +835,27 @@ cdef class Dynamics(RNN):
                 # of weights). Used to control nonlinear instability.
                 u_n = smooth_gaussian(
                     scalar_grid=u_n.value,
-                    n=2,
+                    n=3,
                 ).magnitude * u_n.unit
 
                 # Meridional Wind.
                 # Scalar gradients of meridional wind.
-                dv_dx = self.gradient_x(parameter=v)
-                dv_dy = self.gradient_y(parameter=v)
-                dv_dp = self.gradient_p(parameter=v)
+                dv_dx = self.gradient_longitude(parameter=v)
+                dv_dy = self.gradient_latitude(parameter=v)
+                dv_dp = self.gradient_pressure(parameter=v)
 
                 # Laplace operator of meridional wind.
-                d2v_dx2 = self.gradient_x(parameter=dv_dx)
-                d2v_dy2 = self.gradient_y(parameter=dv_dy)
-                d2v_dp2 = self.gradient_p(parameter=dv_dp)
+                d2v_dx2 = self.gradient_longitude(parameter=dv_dx)
+                d2v_dy2 = self.gradient_latitude(parameter=dv_dy)
+                d2v_dp2 = self.gradient_pressure(parameter=dv_dp)
 
                 # Second order terms.
-                d2v_dxdy = self.gradient_y(parameter=dv_dx)
-                d2v_dxdp = self.gradient_p(parameter=dv_dx)
-                d2v_dydx = self.gradient_x(parameter=dv_dy)
-                d2v_dydp = self.gradient_p(parameter=dv_dy)
-                d2v_dpdx = self.gradient_x(parameter=dv_dp)
-                d2v_dpdy = self.gradient_y(parameter=dv_dp)
+                d2v_dxdy = self.gradient_latitude(parameter=dv_dx)
+                d2v_dxdp = self.gradient_pressure(parameter=dv_dx)
+                d2v_dydx = self.gradient_longitude(parameter=dv_dy)
+                d2v_dydp = self.gradient_pressure(parameter=dv_dy)
+                d2v_dpdx = self.gradient_longitude(parameter=dv_dp)
+                d2v_dpdy = self.gradient_latitude(parameter=dv_dp)
 
                 # Determine each term in the meridional momentum equation.
                 A1 = -u * dv_dx
@@ -818,7 +880,7 @@ cdef class Dynamics(RNN):
                 if perturbations_meridionalwind != None:
                     perturbations = perturbations_meridionalwind(config)
                 else:
-                    perturbations = np.zeros(v.value.shape) * u.unit
+                    perturbations = np.zeros(v.value.shape) * E.unit
 
                 # Sum the RHS terms and multiple by the time step.
                 RHS = (A + B + C + D + E + perturbations) * delta_t
@@ -828,28 +890,28 @@ cdef class Dynamics(RNN):
                 # of weights). Used to control nonlinear instability.
                 v_n = smooth_gaussian(
                     scalar_grid=v_n.value,
-                    n=2,
+                    n=3,
                 ).magnitude * v_n.unit
 
                 # Temperature.
                 # Air Temperature.
                 # Scalar gradients of air temperature.
-                dT_dx = self.gradient_x(parameter=T)
-                dT_dy = self.gradient_y(parameter=T)
-                dT_dp = self.gradient_p(parameter=T)
+                dT_dx = self.gradient_longitude(parameter=T)
+                dT_dy = self.gradient_latitude(parameter=T)
+                dT_dp = self.gradient_pressure(parameter=T)
 
                 # Laplace operator of air temperature.
-                d2T_dx2 = self.gradient_x(parameter=dT_dx)
-                d2T_dy2 = self.gradient_y(parameter=dT_dy)
-                d2T_dp2 = self.gradient_p(parameter=dT_dp)
+                d2T_dx2 = self.gradient_longitude(parameter=dT_dx)
+                d2T_dy2 = self.gradient_latitude(parameter=dT_dy)
+                d2T_dp2 = self.gradient_pressure(parameter=dT_dp)
 
                 # Second order terms.
-                d2T_dxdy = self.gradient_y(parameter=dT_dx)
-                d2T_dxdp = self.gradient_p(parameter=dT_dx)
-                d2T_dydx = self.gradient_x(parameter=dT_dy)
-                d2T_dydp = self.gradient_p(parameter=dT_dy)
-                d2T_dpdx = self.gradient_x(parameter=dT_dp)
-                d2T_dpdy = self.gradient_y(parameter=dT_dp)
+                d2T_dxdy = self.gradient_latitude(parameter=dT_dx)
+                d2T_dxdp = self.gradient_pressure(parameter=dT_dx)
+                d2T_dydx = self.gradient_longitude(parameter=dT_dy)
+                d2T_dydp = self.gradient_pressure(parameter=dT_dy)
+                d2T_dpdx = self.gradient_longitude(parameter=dT_dp)
+                d2T_dpdy = self.gradient_latitude(parameter=dT_dp)
 
                 # Thermodynamic Equation.
                 A1 = -u * dT_dx
@@ -873,7 +935,7 @@ cdef class Dynamics(RNN):
                 if perturbations_temperature != None:
                     perturbations = perturbations_temperature(config)
                 else:
-                    perturbations = np.zeros(T.value.shape) * T.unit
+                    perturbations = np.zeros(T.value.shape) * D.unit
                 
                 # Sum the RHS terms and multiple by the time step.
                 RHS = (A + B + C + D + perturbations) * delta_t
@@ -888,22 +950,22 @@ cdef class Dynamics(RNN):
 
                 # Mixing ratio
                 # The scalar gradients of the mixing ratio.
-                dq_dx = self.gradient_x(parameter=q)
-                dq_dy = self.gradient_y(parameter=q)
-                dq_dp = self.gradient_p(parameter=q)
+                dq_dx = self.gradient_longitude(parameter=q)
+                dq_dy = self.gradient_latitude(parameter=q)
+                dq_dp = self.gradient_pressure(parameter=q)
 
                 # Laplace operator of mixing ratio.
-                d2q_dx2 = self.gradient_x(parameter=dq_dx)
-                d2q_dy2 = self.gradient_y(parameter=dq_dy)
-                d2q_dp2 = self.gradient_p(parameter=dq_dp)
+                d2q_dx2 = self.gradient_longitude(parameter=dq_dx)
+                d2q_dy2 = self.gradient_latitude(parameter=dq_dy)
+                d2q_dp2 = self.gradient_pressure(parameter=dq_dp)
 
                 # Second order terms.
-                d2q_dxdy = self.gradient_y(parameter=dq_dx)
-                d2q_dxdp = self.gradient_p(parameter=dq_dx)
-                d2q_dydx = self.gradient_x(parameter=dq_dy)
-                d2q_dydp = self.gradient_p(parameter=dq_dy)
-                d2q_dpdx = self.gradient_x(parameter=dq_dp)
-                d2q_dpdy = self.gradient_y(parameter=dq_dp)
+                d2q_dxdy = self.gradient_latitude(parameter=dq_dx)
+                d2q_dxdp = self.gradient_pressure(parameter=dq_dx)
+                d2q_dydx = self.gradient_longitude(parameter=dq_dy)
+                d2q_dydp = self.gradient_pressure(parameter=dq_dy)
+                d2q_dpdx = self.gradient_longitude(parameter=dq_dp)
+                d2q_dpdy = self.gradient_latitude(parameter=dq_dp)
 
                 # Advect mixing ratio via wind.
                 A1 = -u * dq_dx
@@ -926,7 +988,7 @@ cdef class Dynamics(RNN):
                 if perturbations_mixingratio != None:
                     perturbations = perturbations_mixingratio(config)
                 else:
-                    perturbations = np.zeros(q.value.shape) * q.unit
+                    perturbations = np.zeros(q.value.shape) * C.unit
                 
                 # Sum the RHS terms and multiple by the time step.
                 RHS = (A + B + C + perturbations) * delta_t
@@ -962,38 +1024,47 @@ cdef class Dynamics(RNN):
                 )
 
                 # Geopotential Height (Hydrostatic Balance).
-                z2 = height[-1]
-                Tv = T_v[::-1, :, :]
-                p_height = pressure[::-1]
-                height_down = np.zeros(Tv.value.shape) * height.unit
-                height_down[0, :, :] = z2
+                # Define variables.
+                z_1 = z_0
+                height_n = np.zeros(height.value.shape) * height.unit
 
-                z_1 = height[0]
-                height_up = np.zeros(T_v.value.shape) * height.unit
-                height_up[0, :, :] = z_1
+                # Interpolation of virtual temperature.
+                # Define cube.
+                cube = Cube(T_v.value,
+                    standard_name='virtual_temperature',
+                    units='K',
+                    dim_coords_and_dims=[
+                        (p, 0), (lat, 1), (lon, 2)
+                    ],
+                )
+                # Interpolate.
+                cube = cube.interpolate(grid_points, iris.analysis.Linear())
+                # Convert to NumPy array
+                Tv_layers = np.asarray(cube.data.tolist()) * T_v.unit
 
                 for i in range(len_p):
-                    # Top, down.
-                    Tv_mean = (Tv[i+1, :, :] + Tv[i, :, :]) / 2
-                    z1 = z2 - (
-                        (
-                            (self.R * Tv_mean) / g
-                        ) * np.log(p_height[i+1] / p_height[i])
-                    )
-                    height_down[i+1, :, :] = z1
-                    z2 = z1
+                    # Virtual temperature layer.
+                    Tv_layer = Tv_layers[i:i+2, :, :]
 
-                    # Bottom, up.
-                    Tv_mean = (T_v[i, :, :] + T_v[i+1, :, :]) / 2
-                    z_2 = z_1 + (
-                        (
-                            (self.R * Tv_mean) / g
-                        ) * np.log(pressure[i] / pressure[i+1])
+                    # Log pressure of layer.
+                    log_pressure_layer = np.log(interpolate_pressure[i:i+2].value)
+
+                    # Determine thickness of layer.
+                    h = (
+                        -self.R / self.g * np.trapz(
+                            Tv_layer, x=log_pressure_layer, axis=0
+                        )
                     )
-                    height_up[i+1, :, :] = z_2
+
+                    # Determine geopotential height of constant pressure
+                    # surface.
+                    z_2 = z_1 + h
+
+                    # Redefine bottom pressure surface.
                     z_1 = z_2
 
-                height_n = (height_down[::-1, :, :] + height_up) / 2
+                    # Add to NumPy array.
+                    height_n[i, :, :] = z_2
 
                 # Recurrent Neural Network.
                 if self.ai:
@@ -1016,7 +1087,6 @@ cdef class Dynamics(RNN):
                         config = Wind(
                             delta_latitude=self.delta_latitude,
                             delta_longitude=self.delta_longitude,
-                            remove_files=self.remove_files,
                             input_data=True,
                             psurfaces=self.pressure_surfaces(),
                             lat=self.latitude_lines(),
@@ -1035,13 +1105,6 @@ cdef class Dynamics(RNN):
                 # Define other prognostic variables.
                 # Precipitable Water.
                 pwv = config.precipitable_water()
-
-                print("")
-                print("T: " + str(T.min()) + ", " + str(T.max()))
-                print("u: " + str(u.min()) + ", " + str(u.max()))
-                print("v: " + str(v.min()) + ", " + str(v.max()))
-                print("q: " + str(q.min()) + ", " + str(q.max()))
-                print("height (sea level): " + str(height[0].min()) + ", " + str(height[0].max()))
 
                 # Add predictions to NumPy arrays.
                 # Geopotential Height.
@@ -1077,37 +1140,6 @@ cdef class Dynamics(RNN):
 
         # Finish progress bar.
         bar.finish()
-
-        # Define the coordinates for the cube. 
-        # Latitude.
-        lat = DimCoord(
-            latitude,
-            standard_name='latitude',
-            units='degrees'
-        )
-        # Longitude
-        lon = DimCoord(
-            longitude,
-            standard_name='longitude', 
-            units='degrees'
-        )
-        # Pressure Surfaces.
-        p = DimCoord(
-            pressure,
-            long_name='pressure', 
-            units='hPa'
-        )
-        # Time.
-        forecast_period = DimCoord(
-            time,
-            standard_name='forecast_period', 
-            units='hours'
-        )
-        # Forecast reference time.
-        ref_time = AuxCoord(
-            self.date.strftime("%Y-%m-%d %H:%M:%S"),
-            standard_name='forecast_reference_time'
-        )
 
         # Cubes
         # Geopotential Height Cube.
@@ -1237,7 +1269,7 @@ cdef class Dynamics(RNN):
             data=None,
             plot=[
                 "air_temperature",
-                "zonal_wind",
+                "geopotential_height",
                 "precipitable_water",
                 "relative_humidity"
             ],
@@ -1476,9 +1508,18 @@ cdef class Dynamics(RNN):
 
                 # Title
                 title = (
-                    "Motus Aeris @ AMSIMP (" + date + ", +" + str(np.round(time[i], 2)) + time_unit + ")"
+                    "Motus Aeris @ AMSIMP (" + date + ", +" + str(np.round(time[i], 2)) + time_unit + ", " + str(pressure[indx_psurface]) + " hPa)"
                 )
                 fig.suptitle(title)
+
+                # Check if folder needs to created, and if so create one.
+                try:
+                    os.mkdir('visualisations')
+                except OSError:
+                    pass
+
+                # Save image to folder.
+                plt.savefig('visualisations/timestep_' + str(i), dpi=300)
 
                 # Displaying simualtion.
                 plt.show()
@@ -1489,7 +1530,28 @@ cdef class Dynamics(RNN):
                     ax3.clear()
                     ax4.clear()
                 else:
-                    plt.pause(10)
+                    # Compile photos into video.
+                    img_array = []
+
+                    # Fetch all the image file names and read them.
+                    for filename in glob.glob('visualisations/*.png'):
+                        img = cv2.imread(filename)
+                        height, width, layers = img.shape
+                        size = (width,height)
+                        img_array.append(img)
+                    
+                    # Create a VideoWriter object.
+                    out = cv2.VideoWriter('visualisation.avi',cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
+
+                    # Save the images to video file.
+                    for i in range(len(img_array)):
+                        out.write(img_array[i])
+
+                    # Release the VideoWriter and destroy all windows.
+                    out.release()
+
+                    # Delete the images.
+                    os.remove("visualisations")
         else:
             raise NotImplementedError(
                 "Visualisations for planetary bodies other than Earth is not currently implemented."
