@@ -166,8 +166,7 @@ cdef class Wind(Moist):
         v_dy = self.gradient_y(parameter=v)
 
         # Change in zonal wind with respect to longitude.
-        u_dx = np.gradient(u, longitude, axis=2)
-        u_dx = self.gradient_x(parameter=u_dx)
+        u_dx = self.gradient_x(parameter=u)
 
         LHS = u_dx + v_dy
         LHS *= -1
@@ -221,121 +220,126 @@ cdef class Wind(Moist):
         The NumPy method, seterr, is used to suppress a weird RunTime warning
         error.
         """
-        # Ensure central_lat is between -90 and 90.
-        if central_lat < -90 or central_lat > 90:
-            raise Exception(
-                "central_lat must be a real number between -90 and 90. The value of central_lat was: {}".format(
-                    central_lat
+        if self.planet == "Earth":
+            # Ensure central_lat is between -90 and 90.
+            if central_lat < -90 or central_lat > 90:
+                raise Exception(
+                    "central_lat must be a real number between -90 and 90. The value of central_lat was: {}".format(
+                        central_lat
+                    )
+                )
+
+            # Ensure central_long is between 0 and 359.
+            if central_long < 0 or central_long > 359:
+                raise Exception(
+                    "central_long must be a real number between 0 and 359. The value of central_long was: {}".format(
+                        central_long
+                    )
+                )
+            
+            # Ensure psurface is between 1000 and 1 hPa above sea level.
+            if psurface < 1 or psurface > 1000:
+                raise Exception(
+                    "psurface must be a real number between 1 and 1,000. The value of psurface was: {}".format(
+                        psurface
+                    )
+                )
+            
+            # Index of the nearest alt in amsimp.Backend.altitude_level()
+            indx_psurface = (np.abs(self.pressure_surfaces().value - psurface)).argmin()
+
+            # Ignore NumPy errors.
+            np.seterr(all="ignore")
+
+            # Define the axes, and the data.
+            latitude = self.latitude_lines().value
+            longitude = self.longitude_lines().value
+
+            wind = self.wind()
+            u = wind[0][indx_psurface, :, :]
+            v = wind[1][indx_psurface, :, :]
+            title = "Wind"
+
+            u_norm = u / np.sqrt(u ** 2 + v ** 2)
+            v_norm = v / np.sqrt(u ** 2 + v ** 2)
+
+            geostrophic_wind = np.sqrt(u ** 2 + v ** 2)
+
+            ax = plt.axes(
+                projection=ccrs.NearsidePerspective(
+                    central_longitude=central_long, central_latitude=central_lat
                 )
             )
 
-        # Ensure central_long is between 0 and 359.
-        if central_long < 0 or central_long > 359:
-            raise Exception(
-                "central_long must be a real number between 0 and 359. The value of central_long was: {}".format(
-                    central_long
+            # Add latitudinal and longitudinal grid lines, as well as, 
+            # coastlines to the globe.
+            ax.set_global()
+            ax.coastlines()
+            ax.gridlines()
+
+            # Contour plotting.
+            minimum = geostrophic_wind.min()
+            maximum = geostrophic_wind.max()
+            levels = np.linspace(minimum, maximum, 21)
+            geostrophic_wind, lon = add_cyclic_point(geostrophic_wind, coord=longitude)
+            contourf = plt.contourf(
+                lon,
+                latitude,
+                geostrophic_wind,
+                transform=ccrs.PlateCarree(),
+                levels=levels,
+            )
+            
+            # Reduce density of wind vectors.
+            skip_lat = latitude.shape[0] / 23
+            skip_lat = int(np.round(skip_lat))
+            skip_lon = longitude.shape[0] / 23
+            skip_lon = int(np.round(skip_lat))
+
+            # Add geostrophic wind vectors.
+            plt.quiver(
+                longitude[::skip_lon],
+                latitude[::skip_lat],
+                u_norm.value[::skip_lat, ::skip_lon],
+                v_norm.value[::skip_lat, ::skip_lon],
+                transform=ccrs.PlateCarree(),   
+            )
+
+            # Add SALT.
+            plt.xlabel("Latitude ($\phi$)")
+            plt.ylabel("Longitude ($\lambda$)")
+            if not self.input_data:
+                plt.title(title + " ("
+                    + str(self.date.year) + '-' + str(self.date.month) + '-'
+                    + str(self.date.day) + " " + str(self.date.hour)
+                    + ":00 h, Pressure Surface = "
+                    + str(self.pressure_surfaces()[indx_psurface]) +")"
                 )
-            )
-        
-        # Ensure psurface is between 1000 and 1 hPa above sea level.
-        if psurface < 1 or psurface > 1000:
-            raise Exception(
-                "psurface must be a real number between 1 and 1,000. The value of psurface was: {}".format(
-                    psurface
+            else:
+                plt.title(title + " ("
+                    + "Pressure Surface = "
+                    + str(self.pressure_surfaces()[indx_psurface]) +")"
                 )
-            )
-        
-        # Index of the nearest alt in amsimp.Backend.altitude_level()
-        indx_psurface = (np.abs(self.pressure_surfaces().value - psurface)).argmin()
 
-        # Ignore NumPy errors.
-        np.seterr(all="ignore")
+            # Add colorbar.
+            colorbar = plt.colorbar(contourf)
+            tick_locator = ticker.MaxNLocator(nbins=15)
+            colorbar.locator = tick_locator
+            colorbar.update_ticks()
+            colorbar.set_label("Velocity ($\\frac{m}{s}$)")
 
-        # Define the axes, and the data.
-        latitude = self.latitude_lines().value
-        longitude = self.longitude_lines().value
+            # Footnote
+            if which_wind == 1:
+                plt.figtext(
+                    0.99,
+                    0.01,
+                    "Note: Geostrophic balance does not hold near the equator.",
+                    horizontalalignment="right",
+                )
 
-        wind = self.wind()
-        u = wind[0][indx_psurface, :, :]
-        v = wind[1][indx_psurface, :, :]
-        title = "Wind"
-
-        u_norm = u / np.sqrt(u ** 2 + v ** 2)
-        v_norm = v / np.sqrt(u ** 2 + v ** 2)
-
-        geostrophic_wind = np.sqrt(u ** 2 + v ** 2)
-
-        ax = plt.axes(
-            projection=ccrs.NearsidePerspective(
-                central_longitude=central_long, central_latitude=central_lat
-            )
-        )
-
-        # Add latitudinal and longitudinal grid lines, as well as, 
-        # coastlines to the globe.
-        ax.set_global()
-        ax.coastlines()
-        ax.gridlines()
-
-        # Contour plotting.
-        minimum = geostrophic_wind.min()
-        maximum = geostrophic_wind.max()
-        levels = np.linspace(minimum, maximum, 21)
-        geostrophic_wind, lon = add_cyclic_point(geostrophic_wind, coord=longitude)
-        contourf = plt.contourf(
-            lon,
-            latitude,
-            geostrophic_wind,
-            transform=ccrs.PlateCarree(),
-            levels=levels,
-        )
-        
-        # Reduce density of wind vectors.
-        skip_lat = latitude.shape[0] / 23
-        skip_lat = int(np.round(skip_lat))
-        skip_lon = longitude.shape[0] / 23
-        skip_lon = int(np.round(skip_lat))
-
-        # Add geostrophic wind vectors.
-        plt.quiver(
-            longitude[::skip_lon],
-            latitude[::skip_lat],
-            u_norm.value[::skip_lat, ::skip_lon],
-            v_norm.value[::skip_lat, ::skip_lon],
-            transform=ccrs.PlateCarree(),   
-        )
-
-        # Add SALT.
-        plt.xlabel("Latitude ($\phi$)")
-        plt.ylabel("Longitude ($\lambda$)")
-        if not self.input_data:
-            plt.title(title + " ("
-                + str(self.date.year) + '-' + str(self.date.month) + '-'
-                + str(self.date.day) + " " + str(self.date.hour)
-                + ":00 h, Pressure Surface = "
-                + str(self.pressure_surfaces()[indx_psurface]) +")"
-            )
+            plt.show()
+            plt.close()
         else:
-            plt.title(title + " ("
-                + "Pressure Surface = "
-                + str(self.pressure_surfaces()[indx_psurface]) +")"
+            raise NotImplementedError(
+                "Visualisations for planetary bodies other than Earth is not currently implemented."
             )
-
-        # Add colorbar.
-        colorbar = plt.colorbar(contourf)
-        tick_locator = ticker.MaxNLocator(nbins=15)
-        colorbar.locator = tick_locator
-        colorbar.update_ticks()
-        colorbar.set_label("Velocity ($\\frac{m}{s}$)")
-
-        # Footnote
-        if which_wind == 1:
-            plt.figtext(
-                0.99,
-                0.01,
-                "Note: Geostrophic balance does not hold near the equator.",
-                horizontalalignment="right",
-            )
-
-        plt.show()
-        plt.close()

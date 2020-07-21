@@ -1257,6 +1257,7 @@ struct __pyx_obj_6amsimp_7backend_Backend {
   PyObject *M;
   PyObject *c_p;
   PyObject *g;
+  PyObject *planet;
   PyObject *input_date;
   PyObject *date;
   PyObject *psurfaces;
@@ -2386,7 +2387,7 @@ static const char __pyx_k_AMSIMP_Moist_Thermodynamics_Cla[] = "\nAMSIMP Moist Th
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
 static const char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static const char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
-static const char __pyx_k_Incompatible_checksums_s_vs_0x71[] = "Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))";
+static const char __pyx_k_Incompatible_checksums_s_vs_0xe5[] = "Incompatible checksums (%s vs 0xe530c38 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, planet, psurfaces, remove_files, sidereal_day))";
 static const char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
 static const char __pyx_k_moist_must_be_a_boolean_value_Th[] = "moist must be a boolean value. The value of moist was: {}";
 static const char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not Fortran contiguous";
@@ -2396,7 +2397,7 @@ static PyObject *__pyx_n_s_Backend;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
 static PyObject *__pyx_n_s_ImportError;
-static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x71;
+static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0xe5;
 static PyObject *__pyx_n_s_K;
 static PyObject *__pyx_n_s_Moist;
 static PyObject *__pyx_n_s_Moist___mixing_ratio;
@@ -2518,7 +2519,7 @@ static PyObject *__pyx_int_2;
 static PyObject *__pyx_int_3;
 static PyObject *__pyx_int_100;
 static PyObject *__pyx_int_997;
-static PyObject *__pyx_int_119408128;
+static PyObject *__pyx_int_240323640;
 static PyObject *__pyx_int_neg_1;
 static PyObject *__pyx_codeobj_;
 static PyObject *__pyx_tuple__9;
@@ -5632,7 +5633,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   /* "(tree fragment)":5
  *     cdef object _dict
  *     cdef bint use_setstate
- *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files, self.sidereal_day)             # <<<<<<<<<<<<<<
+ *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.planet, self.psurfaces, self.remove_files, self.sidereal_day)             # <<<<<<<<<<<<<<
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:
  */
@@ -5645,7 +5646,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->__pyx_base.epochs); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyTuple_New(26); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(27); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.G);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.G);
@@ -5712,15 +5713,18 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   __Pyx_INCREF(__pyx_v_self->__pyx_base.lon);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.lon);
   PyTuple_SET_ITEM(__pyx_t_5, 22, __pyx_v_self->__pyx_base.lon);
+  __Pyx_INCREF(__pyx_v_self->__pyx_base.planet);
+  __Pyx_GIVEREF(__pyx_v_self->__pyx_base.planet);
+  PyTuple_SET_ITEM(__pyx_t_5, 23, __pyx_v_self->__pyx_base.planet);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.psurfaces);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.psurfaces);
-  PyTuple_SET_ITEM(__pyx_t_5, 23, __pyx_v_self->__pyx_base.psurfaces);
+  PyTuple_SET_ITEM(__pyx_t_5, 24, __pyx_v_self->__pyx_base.psurfaces);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->__pyx_base.remove_files));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->__pyx_base.remove_files));
-  PyTuple_SET_ITEM(__pyx_t_5, 24, ((PyObject *)__pyx_v_self->__pyx_base.remove_files));
+  PyTuple_SET_ITEM(__pyx_t_5, 25, ((PyObject *)__pyx_v_self->__pyx_base.remove_files));
   __Pyx_INCREF(__pyx_v_self->__pyx_base.sidereal_day);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.sidereal_day);
-  PyTuple_SET_ITEM(__pyx_t_5, 25, __pyx_v_self->__pyx_base.sidereal_day);
+  PyTuple_SET_ITEM(__pyx_t_5, 26, __pyx_v_self->__pyx_base.sidereal_day);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
   __pyx_t_3 = 0;
@@ -5730,7 +5734,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
 
   /* "(tree fragment)":6
  *     cdef bint use_setstate
- *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files, self.sidereal_day)
+ *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.planet, self.psurfaces, self.remove_files, self.sidereal_day)
  *     _dict = getattr(self, '__dict__', None)             # <<<<<<<<<<<<<<
  *     if _dict is not None:
  *         state += (_dict,)
@@ -5742,7 +5746,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   __pyx_t_5 = 0;
 
   /* "(tree fragment)":7
- *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files, self.sidereal_day)
+ *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.planet, self.psurfaces, self.remove_files, self.sidereal_day)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -5777,13 +5781,13 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
  *         state += (_dict,)
  *         use_setstate = True             # <<<<<<<<<<<<<<
  *     else:
- *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.planet is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
  */
     __Pyx_TraceLine(9,0,__PYX_ERR(1, 9, __pyx_L1_error))
     __pyx_v_use_setstate = 1;
 
     /* "(tree fragment)":7
- *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.psurfaces, self.remove_files, self.sidereal_day)
+ *     state = (self.G, self.M, self.R, self.Upomega, self.a, self.ai, self.c_p, self.constants, self.data_size, self.date, self.delta_latitude, self.delta_longitude, self.epochs, self.g, self.input_data, self.input_date, self.input_height, self.input_rh, self.input_temp, self.input_u, self.input_v, self.lat, self.lon, self.planet, self.psurfaces, self.remove_files, self.sidereal_day)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -5795,9 +5799,9 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   /* "(tree fragment)":11
  *         use_setstate = True
  *     else:
- *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None             # <<<<<<<<<<<<<<
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.planet is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None             # <<<<<<<<<<<<<<
  *     if use_setstate:
- *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, None), state
+ *         return __pyx_unpickle_Moist, (type(self), 0xe530c38, None), state
  */
   __Pyx_TraceLine(11,0,__PYX_ERR(1, 11, __pyx_L1_error))
   /*else*/ {
@@ -5934,23 +5938,30 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
       __pyx_t_7 = __pyx_t_8;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_8 = (__pyx_v_self->__pyx_base.psurfaces != Py_None);
+    __pyx_t_8 = (__pyx_v_self->__pyx_base.planet != Py_None);
     __pyx_t_6 = (__pyx_t_8 != 0);
     if (!__pyx_t_6) {
     } else {
       __pyx_t_7 = __pyx_t_6;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_6 = (((PyObject *)__pyx_v_self->__pyx_base.remove_files) != Py_None);
+    __pyx_t_6 = (__pyx_v_self->__pyx_base.psurfaces != Py_None);
     __pyx_t_8 = (__pyx_t_6 != 0);
     if (!__pyx_t_8) {
     } else {
       __pyx_t_7 = __pyx_t_8;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_8 = (__pyx_v_self->__pyx_base.sidereal_day != Py_None);
+    __pyx_t_8 = (((PyObject *)__pyx_v_self->__pyx_base.remove_files) != Py_None);
     __pyx_t_6 = (__pyx_t_8 != 0);
-    __pyx_t_7 = __pyx_t_6;
+    if (!__pyx_t_6) {
+    } else {
+      __pyx_t_7 = __pyx_t_6;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_6 = (__pyx_v_self->__pyx_base.sidereal_day != Py_None);
+    __pyx_t_8 = (__pyx_t_6 != 0);
+    __pyx_t_7 = __pyx_t_8;
     __pyx_L4_bool_binop_done:;
     __pyx_v_use_setstate = __pyx_t_7;
   }
@@ -5958,9 +5969,9 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
 
   /* "(tree fragment)":12
  *     else:
- *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.planet is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, None), state
+ *         return __pyx_unpickle_Moist, (type(self), 0xe530c38, None), state
  *     else:
  */
   __Pyx_TraceLine(12,0,__PYX_ERR(1, 12, __pyx_L1_error))
@@ -5968,11 +5979,11 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
   if (__pyx_t_7) {
 
     /* "(tree fragment)":13
- *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.planet is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
  *     if use_setstate:
- *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, None), state             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_Moist, (type(self), 0xe530c38, None), state             # <<<<<<<<<<<<<<
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0xe530c38, state)
  */
     __Pyx_TraceLine(13,0,__PYX_ERR(1, 13, __pyx_L1_error))
     __Pyx_XDECREF(__pyx_r);
@@ -5983,9 +5994,9 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     PyTuple_SET_ITEM(__pyx_t_5, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_119408128);
-    __Pyx_GIVEREF(__pyx_int_119408128);
-    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_119408128);
+    __Pyx_INCREF(__pyx_int_240323640);
+    __Pyx_GIVEREF(__pyx_int_240323640);
+    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_240323640);
     __Pyx_INCREF(Py_None);
     __Pyx_GIVEREF(Py_None);
     PyTuple_SET_ITEM(__pyx_t_5, 2, Py_None);
@@ -6006,17 +6017,17 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
 
     /* "(tree fragment)":12
  *     else:
- *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
+ *         use_setstate = self.G is not None or self.M is not None or self.R is not None or self.Upomega is not None or self.a is not None or self.ai is not None or self.c_p is not None or self.constants is not None or self.date is not None or self.g is not None or self.input_data is not None or self.input_date is not None or self.input_height is not None or self.input_rh is not None or self.input_temp is not None or self.input_u is not None or self.input_v is not None or self.lat is not None or self.lon is not None or self.planet is not None or self.psurfaces is not None or self.remove_files is not None or self.sidereal_day is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, None), state
+ *         return __pyx_unpickle_Moist, (type(self), 0xe530c38, None), state
  *     else:
  */
   }
 
   /* "(tree fragment)":15
- *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, None), state
+ *         return __pyx_unpickle_Moist, (type(self), 0xe530c38, None), state
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, state)             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_Moist, (type(self), 0xe530c38, state)             # <<<<<<<<<<<<<<
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
@@ -6030,9 +6041,9 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     PyTuple_SET_ITEM(__pyx_t_5, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_119408128);
-    __Pyx_GIVEREF(__pyx_int_119408128);
-    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_119408128);
+    __Pyx_INCREF(__pyx_int_240323640);
+    __Pyx_GIVEREF(__pyx_int_240323640);
+    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_int_240323640);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
     PyTuple_SET_ITEM(__pyx_t_5, 2, __pyx_v_state);
@@ -6075,7 +6086,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_16__reduce_cython__(struct __pyx
 
 /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0xe530c38, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
@@ -6107,7 +6118,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_18__setstate_cython__(struct __p
   __Pyx_TraceCall("__setstate_cython__", __pyx_f[1], 16, 0, __PYX_ERR(1, 16, __pyx_L1_error));
 
   /* "(tree fragment)":17
- *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0xe530c38, state)
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)             # <<<<<<<<<<<<<<
  */
@@ -6119,7 +6130,7 @@ static PyObject *__pyx_pf_6amsimp_5moist_5Moist_18__setstate_cython__(struct __p
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0xe530c38, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
@@ -6242,19 +6253,19 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
   /* "(tree fragment)":4
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0x71e0600:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0xe530c38:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xe530c38 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, planet, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  */
   __Pyx_TraceLine(4,0,__PYX_ERR(1, 4, __pyx_L1_error))
-  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0x71e0600) != 0);
+  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0xe530c38) != 0);
   if (__pyx_t_1) {
 
     /* "(tree fragment)":5
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0x71e0600:
+ *     if __pyx_checksum != 0xe530c38:
  *         from pickle import PickleError as __pyx_PickleError             # <<<<<<<<<<<<<<
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xe530c38 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, planet, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  *     __pyx_result = Moist.__new__(__pyx_type)
  */
     __Pyx_TraceLine(5,0,__PYX_ERR(1, 5, __pyx_L1_error))
@@ -6274,16 +6285,16 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":6
- *     if __pyx_checksum != 0x71e0600:
+ *     if __pyx_checksum != 0xe530c38:
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)             # <<<<<<<<<<<<<<
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xe530c38 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, planet, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)             # <<<<<<<<<<<<<<
  *     __pyx_result = Moist.__new__(__pyx_type)
  *     if __pyx_state is not None:
  */
     __Pyx_TraceLine(6,0,__PYX_ERR(1, 6, __pyx_L1_error))
     __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v___pyx_checksum); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 6, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0x71, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 6, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0xe5, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 6, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_INCREF(__pyx_v___pyx_PickleError);
@@ -6310,15 +6321,15 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
     /* "(tree fragment)":4
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
- *     if __pyx_checksum != 0x71e0600:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0xe530c38:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xe530c38 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, planet, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  */
   }
 
   /* "(tree fragment)":7
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xe530c38 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, planet, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  *     __pyx_result = Moist.__new__(__pyx_type)             # <<<<<<<<<<<<<<
  *     if __pyx_state is not None:
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
@@ -6345,7 +6356,7 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
   __pyx_t_3 = 0;
 
   /* "(tree fragment)":8
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xe530c38 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, planet, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  *     __pyx_result = Moist.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
@@ -6370,7 +6381,7 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":8
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x71e0600 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xe530c38 = (G, M, R, Upomega, a, ai, c_p, constants, data_size, date, delta_latitude, delta_longitude, epochs, g, input_data, input_date, input_height, input_rh, input_temp, input_u, input_v, lat, lon, planet, psurfaces, remove_files, sidereal_day))" % __pyx_checksum)
  *     __pyx_result = Moist.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
@@ -6383,7 +6394,7 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
  *     return __pyx_result             # <<<<<<<<<<<<<<
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):
- *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.planet = __pyx_state[23]; __pyx_result.psurfaces = __pyx_state[24]; __pyx_result.remove_files = __pyx_state[25]; __pyx_result.sidereal_day = __pyx_state[26]
  */
   __Pyx_TraceLine(10,0,__PYX_ERR(1, 10, __pyx_L1_error))
   __Pyx_XDECREF(__pyx_r);
@@ -6418,8 +6429,8 @@ static PyObject *__pyx_pf_6amsimp_5moist___pyx_unpickle_Moist(CYTHON_UNUSED PyOb
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
- *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.planet = __pyx_state[23]; __pyx_result.psurfaces = __pyx_state[24]; __pyx_result.remove_files = __pyx_state[25]; __pyx_result.sidereal_day = __pyx_state[26]
+ *     if len(__pyx_state) > 27 and hasattr(__pyx_result, '__dict__'):
  */
 
 static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct __pyx_obj_6amsimp_5moist_Moist *__pyx_v___pyx_result, PyObject *__pyx_v___pyx_state) {
@@ -6444,9 +6455,9 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
   /* "(tree fragment)":12
  *     return __pyx_result
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):
- *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]             # <<<<<<<<<<<<<<
- *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[26])
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.planet = __pyx_state[23]; __pyx_result.psurfaces = __pyx_state[24]; __pyx_result.remove_files = __pyx_state[25]; __pyx_result.sidereal_day = __pyx_state[26]             # <<<<<<<<<<<<<<
+ *     if len(__pyx_state) > 27 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[27])
  */
   __Pyx_TraceLine(12,0,__PYX_ERR(1, 12, __pyx_L1_error))
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
@@ -6704,6 +6715,17 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
   __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 23, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.planet);
+  __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.planet);
+  __pyx_v___pyx_result->__pyx_base.planet = __pyx_t_1;
+  __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 12, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 24, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.psurfaces);
   __Pyx_DECREF(__pyx_v___pyx_result->__pyx_base.psurfaces);
   __pyx_v___pyx_result->__pyx_base.psurfaces = __pyx_t_1;
@@ -6712,7 +6734,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 24, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 25, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_7cpython_4bool_bool))))) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
@@ -6724,7 +6746,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 12, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 25, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 26, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->__pyx_base.sidereal_day);
@@ -6734,9 +6756,9 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
 
   /* "(tree fragment)":13
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):
- *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
- *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[26])
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.planet = __pyx_state[23]; __pyx_result.psurfaces = __pyx_state[24]; __pyx_result.remove_files = __pyx_state[25]; __pyx_result.sidereal_day = __pyx_state[26]
+ *     if len(__pyx_state) > 27 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[27])
  */
   __Pyx_TraceLine(13,0,__PYX_ERR(1, 13, __pyx_L1_error))
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
@@ -6744,7 +6766,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
     __PYX_ERR(1, 13, __pyx_L1_error)
   }
   __pyx_t_4 = PyTuple_GET_SIZE(__pyx_v___pyx_state); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(1, 13, __pyx_L1_error)
-  __pyx_t_5 = ((__pyx_t_4 > 26) != 0);
+  __pyx_t_5 = ((__pyx_t_4 > 27) != 0);
   if (__pyx_t_5) {
   } else {
     __pyx_t_3 = __pyx_t_5;
@@ -6757,9 +6779,9 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
   if (__pyx_t_3) {
 
     /* "(tree fragment)":14
- *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
- *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[26])             # <<<<<<<<<<<<<<
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.planet = __pyx_state[23]; __pyx_result.psurfaces = __pyx_state[24]; __pyx_result.remove_files = __pyx_state[25]; __pyx_result.sidereal_day = __pyx_state[26]
+ *     if len(__pyx_state) > 27 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[27])             # <<<<<<<<<<<<<<
  */
     __Pyx_TraceLine(14,0,__PYX_ERR(1, 14, __pyx_L1_error))
     __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v___pyx_result), __pyx_n_s_dict); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
@@ -6771,7 +6793,7 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(1, 14, __pyx_L1_error)
     }
-    __pyx_t_7 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 26, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 27, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 14, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_9 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
@@ -6793,9 +6815,9 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
 
     /* "(tree fragment)":13
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):
- *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
- *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[26])
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.planet = __pyx_state[23]; __pyx_result.psurfaces = __pyx_state[24]; __pyx_result.remove_files = __pyx_state[25]; __pyx_result.sidereal_day = __pyx_state[26]
+ *     if len(__pyx_state) > 27 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[27])
  */
   }
 
@@ -6803,8 +6825,8 @@ static PyObject *__pyx_f_6amsimp_5moist___pyx_unpickle_Moist__set_state(struct _
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
- *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.planet = __pyx_state[23]; __pyx_result.psurfaces = __pyx_state[24]; __pyx_result.remove_files = __pyx_state[25]; __pyx_result.sidereal_day = __pyx_state[26]
+ *     if len(__pyx_state) > 27 and hasattr(__pyx_result, '__dict__'):
  */
 
   /* function exit code */
@@ -9628,7 +9650,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_Format_string_allocated_too_shor, __pyx_k_Format_string_allocated_too_shor, sizeof(__pyx_k_Format_string_allocated_too_shor), 0, 1, 0, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
-  {&__pyx_kp_s_Incompatible_checksums_s_vs_0x71, __pyx_k_Incompatible_checksums_s_vs_0x71, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x71), 0, 0, 1, 0},
+  {&__pyx_kp_s_Incompatible_checksums_s_vs_0xe5, __pyx_k_Incompatible_checksums_s_vs_0xe5, sizeof(__pyx_k_Incompatible_checksums_s_vs_0xe5), 0, 0, 1, 0},
   {&__pyx_n_s_K, __pyx_k_K, sizeof(__pyx_k_K), 0, 0, 1, 1},
   {&__pyx_n_s_Moist, __pyx_k_Moist, sizeof(__pyx_k_Moist), 0, 0, 1, 1},
   {&__pyx_n_s_Moist___mixing_ratio, __pyx_k_Moist___mixing_ratio, sizeof(__pyx_k_Moist___mixing_ratio), 0, 0, 1, 1},
@@ -9936,7 +9958,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0xe530c38, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
@@ -9975,7 +9997,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   __pyx_int_3 = PyInt_FromLong(3); if (unlikely(!__pyx_int_3)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_100 = PyInt_FromLong(100); if (unlikely(!__pyx_int_100)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_997 = PyInt_FromLong(997); if (unlikely(!__pyx_int_997)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_119408128 = PyInt_FromLong(119408128L); if (unlikely(!__pyx_int_119408128)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_int_240323640 = PyInt_FromLong(240323640L); if (unlikely(!__pyx_int_240323640)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_neg_1 = PyInt_FromLong(-1); if (unlikely(!__pyx_int_neg_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
@@ -10601,7 +10623,7 @@ if (!__Pyx_RefNanny) {
 
   /* "(tree fragment)":16
  *     else:
- *         return __pyx_unpickle_Moist, (type(self), 0x71e0600, state)
+ *         return __pyx_unpickle_Moist, (type(self), 0xe530c38, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Moist__set_state(self, __pyx_state)
  */
@@ -10627,8 +10649,8 @@ if (!__Pyx_RefNanny) {
  *         __pyx_unpickle_Moist__set_state(<Moist> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Moist__set_state(Moist __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.psurfaces = __pyx_state[23]; __pyx_result.remove_files = __pyx_state[24]; __pyx_result.sidereal_day = __pyx_state[25]
- *     if len(__pyx_state) > 26 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.G = __pyx_state[0]; __pyx_result.M = __pyx_state[1]; __pyx_result.R = __pyx_state[2]; __pyx_result.Upomega = __pyx_state[3]; __pyx_result.a = __pyx_state[4]; __pyx_result.ai = __pyx_state[5]; __pyx_result.c_p = __pyx_state[6]; __pyx_result.constants = __pyx_state[7]; __pyx_result.data_size = __pyx_state[8]; __pyx_result.date = __pyx_state[9]; __pyx_result.delta_latitude = __pyx_state[10]; __pyx_result.delta_longitude = __pyx_state[11]; __pyx_result.epochs = __pyx_state[12]; __pyx_result.g = __pyx_state[13]; __pyx_result.input_data = __pyx_state[14]; __pyx_result.input_date = __pyx_state[15]; __pyx_result.input_height = __pyx_state[16]; __pyx_result.input_rh = __pyx_state[17]; __pyx_result.input_temp = __pyx_state[18]; __pyx_result.input_u = __pyx_state[19]; __pyx_result.input_v = __pyx_state[20]; __pyx_result.lat = __pyx_state[21]; __pyx_result.lon = __pyx_state[22]; __pyx_result.planet = __pyx_state[23]; __pyx_result.psurfaces = __pyx_state[24]; __pyx_result.remove_files = __pyx_state[25]; __pyx_result.sidereal_day = __pyx_state[26]
+ *     if len(__pyx_state) > 27 and hasattr(__pyx_result, '__dict__'):
  */
   __Pyx_TraceLine(11,0,__PYX_ERR(1, 11, __pyx_L1_error))
 

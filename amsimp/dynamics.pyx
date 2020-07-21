@@ -48,7 +48,6 @@ from iris.cube import Cube, CubeList
 from iris import save
 from progress.bar import IncrementalBar
 from metpy.calc import smooth_gaussian
-from numpy.random import random_sample
 
 # -----------------------------------------------------------------------------------------#
 
@@ -128,6 +127,12 @@ cdef class RNN(Wind):
         max_bar = self.data_size * 4
         bar = IncrementalBar('Downloading Historical Data', max=max_bar)
 
+        # Remove initial conditions file.
+        try:
+            os.remove("initial_conditions.nc")
+        except OSError:
+            pass
+
         for i in range(max_bar):
             # Configure the Wind class, so, that it aligns with the
             # paramaters defined by the user.
@@ -161,7 +166,7 @@ cdef class RNN(Wind):
             date = date + timedelta(hours=+6)
 
             # Remove download file.
-            self.remove_all_files()
+            os.remove("initial_conditions.nc")
 
             # Increment progress bar.
             bar.next()
@@ -435,8 +440,9 @@ cdef class Dynamics(RNN):
                 "angular_rotation_rate": ((2 * np.pi) / ((23 + (56 / 60)) * 3600)),
                 "planet_radius": constant.R_earth.value,
                 "planet_mass": constant.M_earth.value,
-                "specific_heat_capacity_psurface": 1004,
-                "gravitational_acceleration": 9.80665 
+                "specific_heat_capacity_psurface": 718,
+                "gravitational_acceleration": 9.80665,
+                "planet": "Earth"
             }
         ):
         """
@@ -507,21 +513,52 @@ cdef class Dynamics(RNN):
 
         return forecast_period, delta_t
 
-    cpdef simulate(self, bool save_file=False):
+    def __perturbations_errorcheck(self, input_perturbation):
+        """
+        Explain here.
+        """
+        if input_perturbation != None:                
+            # Check if first index of tuple is a function.
+            if not callable(input_perturbation):
+                raise Exception(
+                    "perturbations must be callable functions."
+                )
+
+    cpdef simulate(
+            self, 
+            bool save_file=False,
+            perturbations_temperature=None,
+            perturbations_zonalwind=None,
+            perturbations_meridionalwind=None,
+            perturbations_mixingratio=None
+        ):
         """
         Generates a simulation of tropospheric and stratsopheric dynamics.
         Predictions are made by numerically solving the Primitive
-        Equations (they are coupled set of nonlinear PDEs). Depending on the
-        parameter specifed in the initialisation of the class, a recurrent 
-        neural network may be incorpated in the output.
+        Equations. Depending on the parameter specifed in the initialisation
+        of the class, a recurrent neural network may be incorpated in
+        the output.
         
-        Explain here (Primitive Equations).
+        The Primitive Equations are a set of nonlinear partial differential
+        equations that are used to approximate global atmospheric flow and
+        are used in most atmospheric models. They consist of three main sets
+        of balance equations: a continuity equation, conservation of
+        momentum, and a thermal energy equation.
+
+        The Lax-Wendroff scheme is used to numerically solve the Primitive
+        Equations within the software. It is is a numerical method for the
+        solution of hyperbolic partial differential equations, based on
+        finite differences. It is second-order accurate in both space and
+        time. This method is an example of explicit time integration where
+        the function that defines the governing equation is evaluated at
+        the current time.
 
         The parameter, save_file, may be utilised to save the output of
         this class. The output will be saved as a NetCDF file. These
         files can be opened by using the Iris library, which can
         be downloaded via Anaconda Cloud.
-        """    
+        """
+        # Error checking.    
         # Ensure save_file is a boolean value.
         if not isinstance(save_file, bool):
             raise Exception(
@@ -529,11 +566,20 @@ cdef class Dynamics(RNN):
                     save_file
                 )
             )
+        
+        # Perturbations error checking.
+        # Air temperature.
+        self.__perturbations_errorcheck(perturbations_temperature)
+        # Zonal wind.
+        self.__perturbations_errorcheck(perturbations_zonalwind)
+        # Meridional wind.
+        self.__perturbations_errorcheck(perturbations_meridionalwind)
+        # Mixing Ratio.
+        self.__perturbations_errorcheck(perturbations_mixingratio)
 
         # Define variables that do not vary with respect to time.
-        cdef lat = self.latitude_lines().value
-        cdef np.ndarray latitude = np.radians(lat)
-        cdef np.ndarray longitude = np.radians(self.longitude_lines().value)
+        cdef np.ndarray latitude = self.latitude_lines().value
+        cdef np.ndarray longitude = self.longitude_lines().value
         cdef np.ndarray pressure = self.pressure_surfaces()
         cdef np.ndarray pressure_3d = self.pressure_surfaces(dim_3d=True)
         cdef time = self.forecast_period()[0]
@@ -546,8 +592,6 @@ cdef class Dynamics(RNN):
 
         # Define the change with respect to time.
         cdef delta_t = self.forecast_period()[1]
-        cdef delta_2t = delta_t * 2
-        cdef delta_halfstep = delta_t / 2
         # Forecast length.
         cdef forecast_length = self.forecast_length.to(self.units.s)
         cdef int t = 0
@@ -561,25 +605,19 @@ cdef class Dynamics(RNN):
         cdef tuple wind = self.wind()
         # Zonal Wind.
         cdef np.ndarray u = wind[0]
-        cdef np.ndarray u_i = u
         # Meridional Wind.
         cdef np.ndarray v = wind[1]
-        cdef np.ndarray v_i = v
         # Vertical Motion.
         cdef np.ndarray omega = self.vertical_motion()
-        # Static Stability.
-        cdef np.ndarray sigma = self.static_stability()
         # Temperature.
         # Air Temperature.
         cdef np.ndarray T = self.temperature()
-        cdef np.ndarray T_i = T
         # Virtual Temperature.
         cdef np.ndarray T_v = self.virtual_temperature()
         # Relative Humidity.
         cdef np.ndarray rh = self.relative_humidity()
         # Mixing Ratio.
         cdef np.ndarray q = self.mixing_ratio()
-        cdef np.ndarray q_i = q
         # Precipitable Water.
         cdef np.ndarray pwv = self.precipitable_water()
 
@@ -595,13 +633,18 @@ cdef class Dynamics(RNN):
 
         # Define extra variable types.
         # Numy Arrays.
-        cdef np.ndarray T_0, T_n, q_0, q_n, u_0, u_n, v_0, v_n, dT_dx, dT_dy, dT_dp
-        cdef np.ndarray du_dx, du_dy, du_dp, dv_dx, dv_dy, dv_dp, A, B 
-        cdef np.ndarray C, D, E, RHS, dq_dx, dq_dy, dq_dp, e, T_c, sat_vapor_pressure
+        cdef np.ndarray T_n, q_n, u_n, v_n, height_n, dT_dx, dT_dy, dT_dp
+        cdef np.ndarray d2T_dx2, d2T_dy2, du_dx, du_dy, du_dp, dv_dx, dv_dy, dv_dp
+        cdef np.ndarray A1, A2, A3, A4, A, B1, B2, B3, B4, B, C1, C2, C, D1, D2, D3, D4
+        cdef np.ndarray D, E, d2T_dxdy, d2T_dxdp, d2T_dydx, d2T_dydp, d2T_dpdx, d2T_dpdy
+        cdef np.ndarray d2u_dxdy, d2u_dxdp, d2u_dydx, d2u_dydp, d2u_dpdx, d2u_dpdy
+        cdef np.ndarray d2v_dxdy, d2v_dxdp, d2v_dydx, d2v_dydp, d2v_dpdx, d2v_dpdy
+        cdef np.ndarray d2q_dxdy, d2q_dxdp, d2q_dydx, d2q_dydp, d2q_dpdx, d2q_dpdy
+        cdef np.ndarray RHS, dq_dx, dq_dy, dq_dp, e, T_c, sat_vapor_pressure
         cdef np.ndarray geopotential_height, temperature, virtual_temperature
         cdef np.ndarray zonal_wind, meridional_wind, static_stability 
         cdef np.ndarray relative_humidity, mixing_ratio, precipitable_water
-        cdef np.ndarray height_new, z2, z1, p_height, Tv, Tv_mean
+        cdef np.ndarray height_down, z2, z1, p_height, Tv, Tv_mean
         # Booleans.
         cdef bool break_loop
         # Ints / Floats.
@@ -624,8 +667,9 @@ cdef class Dynamics(RNN):
         geopotential_height[0, :, :, :] = height
         # Temperature.
         # Air Temperature.
-        temperature = np.zeros(shape) * T_i.unit
-        temperature[0, :, :, :] = T_i 
+        temperature = np.zeros(shape) * T.unit
+        temperature[0, :, :, :] = T
+        T_n = T.copy()
         # Virtual Temperature.
         virtual_temperature = np.zeros(shape) * T_v.unit
         virtual_temperature[0, :, :, :] = T_v 
@@ -633,249 +677,266 @@ cdef class Dynamics(RNN):
         # Zonal Wind.
         zonal_wind = np.zeros(shape) * u.unit
         zonal_wind[0, :, :, :] = u
+        u_n = u.copy()
         # Meridional Wind.
         meridional_wind = np.zeros(shape) * v.unit
         meridional_wind[0, :, :, :] = v
+        v_n = v.copy()
         # Vertical Motion.
         vertical_motion = np.zeros(shape) * omega.unit
         vertical_motion[0, :, :, :] = omega
-        # Static Stability.
-        static_stability = np.zeros(shape) * sigma.unit
-        static_stability[0, :, :, :] = sigma
         # Relative Humidity.
         relative_humidity = np.zeros(shape) * rh.unit
         relative_humidity[0, :, :, :] = rh
         # Mixing Ratio.
-        mixing_ratio = np.zeros(shape) * q_i.unit
-        mixing_ratio[0, :, :, :] = q_i
+        mixing_ratio = np.zeros(shape) * q.unit
+        mixing_ratio[0, :, :, :] = q
+        q_n = q.copy()
         # Precipitable Water.
         precipitable_water = np.zeros(shape_2d) * pwv.unit
         precipitable_water[0, :, :] = pwv
 
-        cdef int n = 0
-        cdef int len_t = 1
-        cdef int smooth = 4
+        # Define the initial state for the perturbation functions.
+        config = Wind(
+            delta_latitude=self.delta_latitude,
+            delta_longitude=self.delta_longitude,
+            remove_files=self.remove_files,
+            input_data=True,
+            psurfaces=self.pressure_surfaces(),
+            lat=self.latitude_lines(),
+            lon=self.longitude_lines(),
+            height=height, 
+            temp=T, 
+            rh=rh,
+            u=u,
+            v=v,
+            constants=self.constants 
+        )
 
-        # Smoothing operator (filter with normal distribution
-        # of weights) on initial conditions.
-        # Zonal Wind.
-        u_i = smooth_gaussian(
-            scalar_grid=u_i.value,
-            n=smooth,
-        ).magnitude * u_i.unit
-        # Meridional Wind.
-        v_i = smooth_gaussian(
-            scalar_grid=v_i.value,
-            n=smooth,
-        ).magnitude * v_i.unit
-        # Air Temperature.
-        T_i = smooth_gaussian(
-            scalar_grid=T_i.value,
-            n=smooth,
-        ).magnitude * T.unit
-        # Mixing Ratio.
-        q_i = smooth_gaussian(
-            scalar_grid=q_i.value,
-            n=smooth,
-        ).magnitude * q_i.unit
+        cdef int nt = 1
         try:
             while t < forecast_length.value:
-                # Wind.
-                # Zonal Wind.
-                if n > 2:
-                    u_0 = u
-                    u = u_n
-
-                # Meridional Wind.
-                if n > 2:
-                    v_0 = v
-                    v = v_n
-
-                # Temperature.
-                if n > 2:
-                    T_0 = T
-                    T = T_n
-                
-                # Mixing ratio.
-                if n > 2:
-                    q_0 = q
-                    q = q_n
-
                 # Wind
                 # Scalar gradients of geopotential height.
-                dz_dx = self.gradient_x(
-                    parameter=np.gradient(
-                        height, longitude, axis=2
-                    )
-                )
+                dz_dx = self.gradient_x(parameter=height)
                 dz_dy = self.gradient_y(parameter=height)
 
                 # Zonal Wind.
-                # Scalar gradients of wind wind.
-                du_dx = self.gradient_x(
-                    parameter=np.gradient(
-                        u, longitude, axis=2
-                    )
-                )
+                # Scalar gradients of zonal wind.
+                du_dx = self.gradient_x(parameter=u)
                 du_dy = self.gradient_y(parameter=u)
                 du_dp = self.gradient_p(parameter=u)
 
+                # Laplace operator of zonal wind.
+                d2u_dx2 = self.gradient_x(parameter=du_dx)
+                d2u_dy2 = self.gradient_y(parameter=du_dy)
+                d2u_dp2 = self.gradient_p(parameter=du_dp)
+
+                # Second order terms.
+                d2u_dxdy = self.gradient_y(parameter=du_dx)
+                d2u_dxdp = self.gradient_p(parameter=du_dx)
+                d2u_dydx = self.gradient_x(parameter=du_dy)
+                d2u_dydp = self.gradient_p(parameter=du_dy)
+                d2u_dpdx = self.gradient_x(parameter=du_dp)
+                d2u_dpdy = self.gradient_y(parameter=du_dp)
+
                 # Determine each term in the zonal momentum equation.
-                A = -u * du_dx
-                B = -v * du_dy
-                C = -omega * du_dp
+                A1 = -u * du_dx
+                A2 = ((u**2 * delta_t) / 2) * d2u_dx2
+                A3 = ((u*v * delta_t) / 2) * d2u_dxdy
+                A4 = ((u*omega * delta_t) / 2) * d2u_dxdp
+                A = A1 + A2 + A3 + A4
+                B1 = -v * du_dy
+                B2 = ((v**2 * delta_t) / 2) * d2u_dy2
+                B3 = ((v*u * delta_t) / 2) * d2u_dydx
+                B4 = ((v*omega * delta_t) / 2) * d2u_dydp
+                B = B1 + B2 + B3 + B4
+                C1 = -omega * du_dp
+                C2 = ((omega**2 * delta_t) / 2) * d2u_dp2
+                C3 = ((omega*u * delta_t) / 2) * d2u_dpdx
+                C4 = ((omega*v * delta_t) / 2) * d2u_dpdy
+                C = C1 + C2 + C3 + C4
                 D = -g * dz_dx
                 E = f * v
 
-                # Sum the RHS terms and multiple by the time step.
-                if n == 0:
-                    RHS = (A + B + C + D + E) * delta_halfstep
+                # Add any perturbations of zonal wind defined by the user.
+                if perturbations_zonalwind != None:
+                    perturbations = perturbations_zonalwind(config)
                 else:
-                    RHS = (A + B + C + D + E) * delta_2t
+                    perturbations = np.zeros(u.value.shape) * u.unit
 
-                if n == 0:
-                    u = u_i + RHS
-                elif n == 1:
-                    u = u_i + RHS
-                elif n == 2:
-                    u_n = u_i + RHS
-                else:
-                    u_n[:, 1:-1, 1:-1] = u_0[:, 1:-1, 1:-1] + RHS[:, 1:-1, 1:-1]
-                    # Apply Robert-Asselin time filter.
-                    u = u + 0.5 * (u_n - 2*u + u_0)
+                # Sum the RHS terms and multiple by the time step.
+                RHS = (A + B + C + D + E + perturbations) * delta_t
+                u_n[:, 1:-1, :] = u[:, 1:-1, :] + RHS[:, 1:-1, :]
 
                 # Smoothing operator (filter with normal distribution
-                # of weights).
-                u = smooth_gaussian(
-                    scalar_grid=u.value,
-                    n=smooth,
-                ).magnitude * u.unit
+                # of weights). Used to control nonlinear instability.
+                u_n = smooth_gaussian(
+                    scalar_grid=u_n.value,
+                    n=2,
+                ).magnitude * u_n.unit
 
                 # Meridional Wind.
-                # Scalar gradients of wind wind.
-                dv_dx = self.gradient_x(
-                    parameter=np.gradient(
-                        v, longitude, axis=2
-                    )
-                )
+                # Scalar gradients of meridional wind.
+                dv_dx = self.gradient_x(parameter=v)
                 dv_dy = self.gradient_y(parameter=v)
                 dv_dp = self.gradient_p(parameter=v)
 
+                # Laplace operator of meridional wind.
+                d2v_dx2 = self.gradient_x(parameter=dv_dx)
+                d2v_dy2 = self.gradient_y(parameter=dv_dy)
+                d2v_dp2 = self.gradient_p(parameter=dv_dp)
+
+                # Second order terms.
+                d2v_dxdy = self.gradient_y(parameter=dv_dx)
+                d2v_dxdp = self.gradient_p(parameter=dv_dx)
+                d2v_dydx = self.gradient_x(parameter=dv_dy)
+                d2v_dydp = self.gradient_p(parameter=dv_dy)
+                d2v_dpdx = self.gradient_x(parameter=dv_dp)
+                d2v_dpdy = self.gradient_y(parameter=dv_dp)
+
                 # Determine each term in the meridional momentum equation.
-                A = -u * dv_dx
-                B = -v * dv_dy
-                C = -omega * dv_dp
+                A1 = -u * dv_dx
+                A2 = ((u**2 * delta_t) / 2) * d2v_dx2
+                A3 = ((u*v * delta_t) / 2) * d2v_dxdy
+                A4 = ((u*omega * delta_t) / 2) * d2v_dxdp
+                A = A1 + A2 + A3 + A4
+                B1 = -v * dv_dy
+                B2 = ((v**2 * delta_t) / 2) * d2v_dy2
+                B3 = ((v*u * delta_t) / 2) * d2v_dydx
+                B4 = ((v*omega * delta_t)) * d2v_dydp
+                B = B1 + B2 + B3 + B4
+                C1 = -omega * dv_dp
+                C2 = ((omega**2 * delta_t) / 2) * d2v_dp2
+                C3 = ((omega*u * delta_t) / 2) * d2v_dpdx
+                C4 = ((omega*v * delta_t) / 2) * d2v_dpdy
+                C = C1 + C2 + C3 + C4
                 D = -g * dz_dy
                 E = -f * u
 
-                # Sum the RHS terms and multiple by the time step.
-                if n == 0:
-                    RHS = (A + B + C + D + E) * delta_halfstep
+                # Add any perturbations of meridional wind defined by the user.
+                if perturbations_meridionalwind != None:
+                    perturbations = perturbations_meridionalwind(config)
                 else:
-                    RHS = (A + B + C + D + E) * delta_2t
+                    perturbations = np.zeros(v.value.shape) * u.unit
 
-                if n == 0:
-                    v = v_i + RHS
-                elif n == 1:
-                    v = v_i + RHS
-                elif n == 2:
-                    v_n = v_i + RHS
-                else:
-                    v_n[:, 1:-1, 1:-1] = v_0[:, 1:-1, 1:-1] + RHS[:, 1:-1, 1:-1]
-                    # Apply Robert-Asselin time filter.
-                    v = v + 0.5 * (v_n - 2*v + v_0)
+                # Sum the RHS terms and multiple by the time step.
+                RHS = (A + B + C + D + E + perturbations) * delta_t
+                v_n[:, 1:-1, :] = v[:, 1:-1, :] + RHS[:, 1:-1, :]
 
                 # Smoothing operator (filter with normal distribution
-                # of weights).
-                v = smooth_gaussian(
-                    scalar_grid=v.value,
-                    n=smooth,
-                ).magnitude * v.unit
+                # of weights). Used to control nonlinear instability.
+                v_n = smooth_gaussian(
+                    scalar_grid=v_n.value,
+                    n=2,
+                ).magnitude * v_n.unit
 
                 # Temperature.
                 # Air Temperature.
-                # Scalar gradients of temperature.
-                dT_dx = self.gradient_x(
-                    parameter=np.gradient(
-                        T, longitude, axis=2
-                    )
-                )
-
+                # Scalar gradients of air temperature.
+                dT_dx = self.gradient_x(parameter=T)
                 dT_dy = self.gradient_y(parameter=T)
                 dT_dp = self.gradient_p(parameter=T)
 
-                # Thermodynamic Equation.
-                A = -u * dT_dx
-                B = -v * dT_dy
-                C = -omega * dT_dp
-                D = omega * ((self.R * T) / (pressure_3d * self.c_p))
-                
-                if n == 0:
-                    RHS = (A + B + C + D) * delta_halfstep
-                else:
-                    RHS = (A + B + C + D) * delta_2t
+                # Laplace operator of air temperature.
+                d2T_dx2 = self.gradient_x(parameter=dT_dx)
+                d2T_dy2 = self.gradient_y(parameter=dT_dy)
+                d2T_dp2 = self.gradient_p(parameter=dT_dp)
 
-                if n == 0:
-                    T = T_i + RHS
-                elif n == 1:
-                    T = T_i + RHS
-                elif n == 2:
-                    T_n = T_i + RHS
+                # Second order terms.
+                d2T_dxdy = self.gradient_y(parameter=dT_dx)
+                d2T_dxdp = self.gradient_p(parameter=dT_dx)
+                d2T_dydx = self.gradient_x(parameter=dT_dy)
+                d2T_dydp = self.gradient_p(parameter=dT_dy)
+                d2T_dpdx = self.gradient_x(parameter=dT_dp)
+                d2T_dpdy = self.gradient_y(parameter=dT_dp)
+
+                # Thermodynamic Equation.
+                A1 = -u * dT_dx
+                A2 = ((u**2 * delta_t) / 2) * d2T_dx2
+                A3 = ((u*v * delta_t) / 2) * d2T_dxdy
+                A4 = ((u*omega * delta_t) / 2) * d2T_dxdp
+                A = A1 + A2 + A3 + A4
+                B1 = -v * dT_dy
+                B2 = ((v**2 * delta_t) / 2) * d2T_dy2
+                B3 = ((v*u * delta_t) / 2) * d2T_dydx
+                B4 = ((v*omega * delta_t) / 2) * d2T_dydp
+                B = B1 + B2 + B3 + B4
+                C1 = -omega * dT_dp
+                C2 = ((omega**2 * delta_t) / 2) * d2T_dp2
+                C3 = ((omega*u * delta_t) / 2) * d2T_dpdx
+                C4 = ((omega*v * delta_t) / 2) * d2T_dpdy
+                C = C1 + C2 + C3 + C4
+                D = omega * ((self.R * T) / (pressure_3d * self.c_p))
+
+                # Add any perturbations of air temperature defined by the user.
+                if perturbations_temperature != None:
+                    perturbations = perturbations_temperature(config)
                 else:
-                    T_n[:, 1:-1, 1:-1] = T_0[:, 1:-1, 1:-1] + RHS[:, 1:-1, 1:-1]
-                    # Apply Robert-Asselin time filter.
-                    T = T + 0.5 * (T_n - 2*T + T_0)
+                    perturbations = np.zeros(T.value.shape) * T.unit
                 
+                # Sum the RHS terms and multiple by the time step.
+                RHS = (A + B + C + D + perturbations) * delta_t
+                T_n[:, 1:-1, :] = T[:, 1:-1, :] + RHS[:, 1:-1, :]
+
                 # Smoothing operator (filter with normal distribution
-                # of weights).
-                T = smooth_gaussian(
-                    scalar_grid=T.value,
-                    n=smooth,
-                ).magnitude * T.unit
+                # of weights). Used to control nonlinear instability.
+                T_n = smooth_gaussian(
+                    scalar_grid=T_n.value,
+                    n=2,
+                ).magnitude * T_n.unit
 
                 # Mixing ratio
                 # The scalar gradients of the mixing ratio.
-                dq_dx = self.gradient_x(
-                    parameter=np.gradient(
-                        q, longitude, axis=2
-                    )
-                )
+                dq_dx = self.gradient_x(parameter=q)
                 dq_dy = self.gradient_y(parameter=q)
                 dq_dp = self.gradient_p(parameter=q)
 
+                # Laplace operator of mixing ratio.
+                d2q_dx2 = self.gradient_x(parameter=dq_dx)
+                d2q_dy2 = self.gradient_y(parameter=dq_dy)
+                d2q_dp2 = self.gradient_p(parameter=dq_dp)
+
+                # Second order terms.
+                d2q_dxdy = self.gradient_y(parameter=dq_dx)
+                d2q_dxdp = self.gradient_p(parameter=dq_dx)
+                d2q_dydx = self.gradient_x(parameter=dq_dy)
+                d2q_dydp = self.gradient_p(parameter=dq_dy)
+                d2q_dpdx = self.gradient_x(parameter=dq_dp)
+                d2q_dpdy = self.gradient_y(parameter=dq_dp)
+
                 # Advect mixing ratio via wind.
-                A = -u * dq_dx
-                B = -v * dq_dy
-                C = -omega * dq_dp
+                A1 = -u * dq_dx
+                A2 = ((u**2 * delta_t) / 2) * d2q_dx2
+                A3 = ((u*v * delta_t) / 2) * d2q_dxdy
+                A4 = ((u*omega * delta_t) / 2) * d2q_dxdp
+                A = A1 + A2 + A3 + A4
+                B1 = -v * dq_dy
+                B2 = ((v**2 * delta_t) / 2) * d2q_dy2
+                B3 = ((v*u * delta_t) / 2) * d2q_dydx
+                B4 = ((v*omega * delta_t) / 2) * d2q_dydp
+                B = B1 + B2 + B3 + B4
+                C1 = -omega * dq_dp
+                C2 = ((omega**2 * delta_t) / 2) * d2q_dp2
+                C3 = ((omega*u * delta_t) / 2) * d2q_dpdx
+                C4 = ((omega*v * delta_t) / 2) * d2q_dpdy
+                C = C1 + C2 + C3 + C4
+
+                # Add any perturbations of mixing ratio defined by the user.
+                if perturbations_mixingratio != None:
+                    perturbations = perturbations_mixingratio(config)
+                else:
+                    perturbations = np.zeros(q.value.shape) * q.unit
                 
-                if n == 0:
-                    RHS = (A + B + C) * delta_halfstep
-                else:
-                    RHS = (A + B + C) * delta_2t
-
-                if n == 0:
-                    q = q_i + RHS
-                elif n == 1:
-                    q =q_i + RHS
-                elif n == 2:
-                    q_n = q_i + RHS
-                else:
-                    q_n[:, 1:-1, 1:-1] = q_0[:, 1:-1, 1:-1] + RHS[:, 1:-1, 1:-1]
-                    # Apply Robert-Asselin time filter.
-                    q = q + 0.5 * (q_n - 2*q + q_0)
-
-                # Smoothing operator (filter with normal distribution
-                # of weights).
-                q = smooth_gaussian(
-                    scalar_grid=q.value,
-                    n=smooth,
-                ).magnitude * q.unit
+                # Sum the RHS terms and multiple by the time step.
+                RHS = (A + B + C + perturbations) * delta_t
+                q_n[:, 1:-1, :] = q[:, 1:-1, :] + RHS[:, 1:-1, :]
 
                 # Vapor pressure.
-                e = pressure_3d * q / (0.622 + q)
+                e = pressure_3d * q_n / (0.622 + q_n)
 
                 # Convert temperature in Kelvin to degrees centigrade.
-                T_c = T.value - 273.15
+                T_c = T_n.value - 273.15
                 # Saturated vapor pressure.
                 sat_vapor_pressure = 0.61121 * np.exp(
                     (
@@ -894,7 +955,7 @@ cdef class Dynamics(RNN):
                 rh *= self.units.percent
 
                 # Virtual Temperature.
-                T_v = T / (
+                T_v = T_n / (
                     1 - (
                     e / pressure_3d
                     ) * (1 - 0.622)
@@ -904,20 +965,35 @@ cdef class Dynamics(RNN):
                 z2 = height[-1]
                 Tv = T_v[::-1, :, :]
                 p_height = pressure[::-1]
-                height_new = np.zeros(Tv.value.shape) * height.unit
-                height_new[0, :, :] = z2
+                height_down = np.zeros(Tv.value.shape) * height.unit
+                height_down[0, :, :] = z2
+
+                z_1 = height[0]
+                height_up = np.zeros(T_v.value.shape) * height.unit
+                height_up[0, :, :] = z_1
 
                 for i in range(len_p):
+                    # Top, down.
                     Tv_mean = (Tv[i+1, :, :] + Tv[i, :, :]) / 2
                     z1 = z2 - (
                         (
                             (self.R * Tv_mean) / g
                         ) * np.log(p_height[i+1] / p_height[i])
                     )
-                    height_new[i+1, :, :] = z1
+                    height_down[i+1, :, :] = z1
                     z2 = z1
 
-                height = height_new[::-1, :, :]
+                    # Bottom, up.
+                    Tv_mean = (T_v[i, :, :] + T_v[i+1, :, :]) / 2
+                    z_2 = z_1 + (
+                        (
+                            (self.R * Tv_mean) / g
+                        ) * np.log(pressure[i] / pressure[i+1])
+                    )
+                    height_up[i+1, :, :] = z_2
+                    z_1 = z_2
+
+                height_n = (height_down[::-1, :, :] + height_up) / 2
 
                 # Recurrent Neural Network.
                 if self.ai:
@@ -945,54 +1021,57 @@ cdef class Dynamics(RNN):
                             psurfaces=self.pressure_surfaces(),
                             lat=self.latitude_lines(),
                             lon=self.longitude_lines(),
-                            height=height, 
-                            temp=T, 
+                            height=height_n, 
+                            temp=T_n, 
                             rh=rh,
-                            u=u,
-                            v=v 
+                            u=u_n,
+                            v=v_n,
+                            constants=self.constants 
                         )
                         break_loop = True
                     except:
                         pass
 
-                # Static Stability.
-                sigma = config.static_stability()
-
-                # Vertical Motion.
-                omega = config.vertical_motion()
-
+                # Define other prognostic variables.
                 # Precipitable Water.
                 pwv = config.precipitable_water()
 
-                # Add predictions to NumPy arrays.
-                if n > 1:
-                    # Geopotential Height.
-                    geopotential_height[len_t, :, :, :] = height
-                    # Geostrophic Wind.
-                    # Zonal Wind.
-                    zonal_wind[len_t, :, :, :] = u
-                    # Meridional Wind.
-                    meridional_wind[len_t, :, :, :] = v
-                    # Static Stability
-                    static_stability[len_t, :, :, :] = sigma
-                    # Temperature.
-                    # Air Temperature.
-                    temperature[len_t, :, :, :] = T
-                    # Virtual Temperature.
-                    virtual_temperature[len_t, :, :, :] = T_v
-                    # Relative Humidity.
-                    relative_humidity[len_t, :, :, :] = rh
-                    # Mixing Ratio.
-                    mixing_ratio[len_t, :, :, :] = q
-                    # Precipitable Water.
-                    precipitable_water[len_t, :, :] = pwv
+                print("")
+                print("T: " + str(T.min()) + ", " + str(T.max()))
+                print("u: " + str(u.min()) + ", " + str(u.max()))
+                print("v: " + str(v.min()) + ", " + str(v.max()))
+                print("q: " + str(q.min()) + ", " + str(q.max()))
+                print("height (sea level): " + str(height[0].min()) + ", " + str(height[0].max()))
 
-                    # Add time step.
-                    t += delta_t.value
-                    len_t += 1
-                    bar.next()
-                
-                n += 1
+                # Add predictions to NumPy arrays.
+                # Geopotential Height.
+                geopotential_height[nt, :, :, :] = height_n
+                height = height_n
+                # Geostrophic Wind.
+                # Zonal Wind.
+                zonal_wind[nt, :, :, :] = u_n
+                u = u_n
+                # Meridional Wind.
+                meridional_wind[nt, :, :, :] = v_n
+                v = v_n
+                # Temperature.
+                # Air Temperature.
+                temperature[nt, :, :, :] = T_n
+                T = T_n
+                # Virtual Temperature.
+                virtual_temperature[nt, :, :, :] = T_v
+                # Relative Humidity.
+                relative_humidity[nt, :, :, :] = rh
+                # Mixing Ratio.
+                mixing_ratio[nt, :, :, :] = q_n
+                q = q_n
+                # Precipitable Water.
+                precipitable_water[nt, :, :] = pwv
+
+                # Add time step.
+                t += delta_t.value
+                nt += 1
+                bar.next()
         except KeyboardInterrupt:
             pass
 
@@ -1002,13 +1081,13 @@ cdef class Dynamics(RNN):
         # Define the coordinates for the cube. 
         # Latitude.
         lat = DimCoord(
-            self.latitude_lines(),
+            latitude,
             standard_name='latitude',
             units='degrees'
         )
         # Longitude
         lon = DimCoord(
-            self.longitude_lines(),
+            longitude,
             standard_name='longitude', 
             units='degrees'
         )
@@ -1068,18 +1147,6 @@ cdef class Dynamics(RNN):
             }
         )
         v_cube.add_aux_coord(ref_time)
-        # Static Stability.
-        sigma_cube = Cube(static_stability,
-            long_name='static_stability',
-            units='J hPa-2 kg-1',
-            dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
-            ],
-            attributes={
-                'source': 'Motus Aeris @ AMSIMP',
-            }
-        )
-        sigma_cube.add_aux_coord(ref_time)
         # Temperature.
         # Air Temperature.
         T_cube = Cube(temperature,
@@ -1146,7 +1213,6 @@ cdef class Dynamics(RNN):
             height_cube,
             u_cube,
             v_cube,
-            sigma_cube,
             T_cube,
             Tv_cube,
             rh_cube,
@@ -1171,7 +1237,7 @@ cdef class Dynamics(RNN):
             data=None,
             plot=[
                 "air_temperature",
-                "geopotential_height",
+                "zonal_wind",
                 "precipitable_water",
                 "relative_humidity"
             ],
@@ -1182,240 +1248,249 @@ cdef class Dynamics(RNN):
 
         Need to fix.
         """
-        # Error checking.
-        # Ensure a dataset is provided.
-        if data == None:
-            raise Exception("The dataset for simulation must be defined.")
-
-        # Pressure Surface.
-        try:
-            pressure = data[0].coords("pressure")[0].points
-        except:
-            pressure = data[1].coords("pressure")[0].points
-        if psurface < pressure[-1] or psurface > pressure[0]:
-            raise Exception(
-                "psurface must be a real number within the isobaric boundaries. The value of psurface was: {}".format(
-                    psurface
-                )
-            )
-
-        # Index of the nearest pressure surface in amsimp.Backend.pressure_surfaces()
-        indx_psurface = (np.abs(pressure - psurface)).argmin()
-
-        # Define the forecast period.
-        cdef np.ndarray time = data[0].coords("forecast_period")[0].points
-        time_unit = str(data[0].coords("forecast_period")[0].units)
-
-        # Grid.
-        cdef np.ndarray lat = data[0].coords("latitude")[0].points
-        cdef np.ndarray lon = data[0].coords("longitude")[0].points
-        cdef np.ndarray longitude = lon
-
-        # Style of graph.
-        style.use("fivethirtyeight")
-
-        # Define layout.
-        gs = gridspec.GridSpec(2, 2)
-        fig = plt.figure(figsize=(18.5, 7.5))
-        fig.subplots_adjust(hspace=0.340, bottom=0.105, top=0.905)
-        plt.ion()
-
-        # Graph 1.
-        ax1 = plt.subplot(gs[0, 0], projection=ccrs.EckertIII())
-        label1 = plot[0]
-        cdef np.ndarray data1 = data.extract(label1)[0].data
-        if data1.ndim == 3: 
-            data1 = data1[:, :, :];
-        else: 
-            data1 = data1[:, indx_psurface, :, :];
-        data1 = np.asarray(data1.tolist())
-        unit1 = " (" + str(data.extract(label1)[0].metadata.units) + ")"
-        label1 = label1.replace("_", " ").title()
-        # Graph 2.
-        ax2 = plt.subplot(gs[1, 0], projection=ccrs.EckertIII())
-        label2 = plot[1]
-        cdef np.ndarray data2 = data.extract(label2)[0].data
-        if data2.ndim == 3:
-            data2 = data2[:, :, :];
-        else: 
-            data2 = data2[:, indx_psurface, :, :];
-        data2 = np.asarray(data2.tolist())
-        unit2 = " (" + str(data.extract(label2)[0].metadata.units) + ")"
-        label2 = label2.replace("_", " ").title()
-        # Graph 3.
-        ax3 = plt.subplot(gs[0, 1], projection=ccrs.EckertIII())
-        label3 = plot[2]
-        cdef np.ndarray data3 = data.extract(label3)[0].data
-        if data3.ndim == 3:
-            data3 = data3[:, :, :];
-        else:
-            data3 = data3[:, indx_psurface, :, :];
-        data3 = np.asarray(data3.tolist())
-        unit3 = " (" + str(data.extract(label3)[0].metadata.units) + ")"
-        label3 = label3.replace("_", " ").title()
-        # Graph 4.
-        ax4 = plt.subplot(gs[1, 1], projection=ccrs.EckertIII())
-        label4 = plot[3]
-        cdef np.ndarray data4 = data.extract(label4)[0].data[:, indx_psurface, :, :]
-        if data4.ndim == 3: 
-            data4 = data4[:, :, :]; 
-        else: 
-            data4 = data4[:, indx_psurface, :, :];
-        data4 = np.asarray(data4.tolist())
-        unit4 = " (" + str(data.extract(label4)[0].metadata.units) + ")"
-        label4 = label4.replace("_", " ").title()
-
-        # Get date.
-        date = data[0].coords("forecast_reference_time")[0].points[0]
-
-        # Define variable types.
+        # Declare variable types.
+        # NumPy arrays
+        cdef np.ndarray time, lat, lon, longitude, data1, data2, data3, data4
         cdef np.ndarray level1, level2, level3, level4
+        # Floats.
         cdef float min1, min2, min3, min4, max1, max2, max3, max4
-        for i in range(len(time)):
-            # Plot 1.
-            # EckertIII projection details.
-            ax1.set_global()
-            ax1.coastlines()
-            ax1.gridlines()
 
-            # Add SALT to the graph.
-            ax1.set_xlabel("Longitude ($\lambda$)")
-            ax1.set_ylabel("Latitude ($\phi$)")
-            ax1.set_title(label1)
+        if self.planet == "Earth":
+            # Error checking.
+            # Ensure a dataset is provided.
+            if data == None:
+                raise Exception("The dataset for simulation must be defined.")
 
-            # Contour plot.
-            cmap1 = plt.get_cmap("hot")
-            min1 = np.min(data1)
-            max1 = np.max(data1)
-            level1 = np.linspace(min1, max1, 21)
-            data1_plot, lon = add_cyclic_point(data1, coord=longitude)
-            contour1 = ax1.contourf(
-                lon,
-                lat,
-                data1_plot[i, :, :],
-                cmap=cmap1,
-                levels=level1,
-                transform=ccrs.PlateCarree()
-            )
+            # Pressure Surface.
+            try:
+                pressure = data[0].coords("pressure")[0].points
+            except:
+                pressure = data[1].coords("pressure")[0].points
+            if psurface < pressure[-1] or psurface > pressure[0]:
+                raise Exception(
+                    "psurface must be a real number within the isobaric boundaries. The value of psurface was: {}".format(
+                        psurface
+                    )
+                )
 
-            # Checks for a colorbar.
-            if i == 0:
-                cb1 = fig.colorbar(contour1, ax=ax1)
-                tick_locator = ticker.MaxNLocator(nbins=10)
-                cb1.locator = tick_locator
-                cb1.update_ticks()
-                cb1.set_label(unit1)
+            # Index of the nearest pressure surface in amsimp.Backend.pressure_surfaces()
+            indx_psurface = (np.abs(pressure - psurface)).argmin()
 
-            # Plot 2.
-            cmap2 = plt.get_cmap("jet")
-            min2 = np.min(data2)
-            max2 = np.max(data2)
-            level2 = np.linspace(min2, max2, 21)
-            data2_plot, lon = add_cyclic_point(data2, coord=longitude)
-            contour2 = ax2.contourf(
-                lon,
-                lat, 
-                data2_plot[i, :, :], 
-                cmap=cmap2, 
-                levels=level2,
-                transform=ccrs.PlateCarree()
-            )
+            # Define the forecast period.
+            time = data[0].coords("forecast_period")[0].points
+            time_unit = str(data[0].coords("forecast_period")[0].units)
 
-            # EckertIII projection details.
-            ax2.set_global()
-            ax2.coastlines()
-            ax2.gridlines()
+            # Grid.
+            lat = data[0].coords("latitude")[0].points
+            lon = data[0].coords("longitude")[0].points
+            longitude = lon
 
-            # Checks for a colorbar.
-            if i == 0:
-                cb2 = fig.colorbar(contour2, ax=ax2)
-                tick_locator = ticker.MaxNLocator(nbins=10)
-                cb2.locator = tick_locator
-                cb2.update_ticks()
-                cb2.set_label(unit2)
+            # Style of graph.
+            style.use("fivethirtyeight")
 
-            # Add SALT to the graph.
-            ax2.set_xlabel("Longitude ($\lambda$)")
-            ax2.set_ylabel("Latitude ($\phi$)")
-            ax2.set_title(label2)
+            # Define layout.
+            gs = gridspec.GridSpec(2, 2)
+            fig = plt.figure(figsize=(18.5, 7.5))
+            fig.subplots_adjust(hspace=0.340, bottom=0.105, top=0.905)
+            plt.ion()
 
-            # Plot 3.
-            cmap3 = plt.get_cmap("seismic")
-            min3 = np.min(data3)
-            max3 = np.max(data3)
-            level3 = np.linspace(min3, max3, 21)
-            data3_plot, lon = add_cyclic_point(data3, coord=longitude)
-            contour3 = ax3.contourf(
-                lon, 
-                lat, 
-                data3_plot[i, :, :], 
-                cmap=cmap3, 
-                levels=level3,
-                transform=ccrs.PlateCarree()
-            )
-
-            # EckertIII projection details.
-            ax3.set_global()
-            ax3.coastlines()
-            ax3.gridlines()
-
-            # Checks for a colorbar.
-            if i == 0:
-                cb3 = fig.colorbar(contour3, ax=ax3)
-                tick_locator = ticker.MaxNLocator(nbins=10)
-                cb3.locator = tick_locator
-                cb3.update_ticks()
-                cb3.set_label(unit3)
-
-            # Add SALT to the graph.
-            ax3.set_xlabel("Longitude ($\lambda$)")
-            ax3.set_ylabel("Latitude ($\phi$)")
-            ax3.set_title(label3)
-
-            # Plot 4.
-            min4 = np.min(data4)
-            max4 = np.max(data4)
-            level4 = np.linspace(min4, max4, 21)
-            data4_plot, lon = add_cyclic_point(data4, coord=longitude)
-            contour4 = ax4.contourf(
-                lon, 
-                lat, 
-                data4_plot[i, :, :], 
-                levels=level4,
-                transform=ccrs.PlateCarree()
-            )
-
-            # EckertIII projection details.
-            ax4.set_global()
-            ax4.coastlines()
-            ax4.gridlines()
-
-            # Checks for a colorbar.
-            if i == 0:
-                cb4 = fig.colorbar(contour4, ax=ax4)
-                tick_locator = ticker.MaxNLocator(nbins=10)
-                cb4.locator = tick_locator
-                cb4.update_ticks()
-                cb4.set_label(unit4)
-
-            # Add SALT to the graph.
-            ax4.set_xlabel("Longitude ($\lambda$)")
-            ax4.set_ylabel("Latitude ($\phi$)")
-            ax4.set_title(label4)
-
-            # Title
-            title = (
-                "Motus Aeris @ AMSIMP (" + date + ", +" + str(np.round(time[i], 2)) + time_unit + ")"
-            )
-            fig.suptitle(title)
-
-            # Displaying simualtion.
-            plt.show()
-            plt.pause(0.01)
-            if i < (len(time) - 1):
-                ax1.clear()
-                ax2.clear()
-                ax3.clear()
-                ax4.clear()
+            # Graph 1.
+            ax1 = plt.subplot(gs[0, 0], projection=ccrs.EckertIII())
+            label1 = plot[0]
+            data1 = data.extract(label1)[0].data
+            if data1.ndim == 3: 
+                data1 = data1;
+            else: 
+                data1 = data1[:, indx_psurface, :, :];
+            data1 = np.asarray(data1.tolist())
+            unit1 = " (" + str(data.extract(label1)[0].metadata.units) + ")"
+            label1 = label1.replace("_", " ").title()
+            # Graph 2.
+            ax2 = plt.subplot(gs[1, 0], projection=ccrs.EckertIII())
+            label2 = plot[1]
+            data2 = data.extract(label2)[0].data
+            if data2.ndim == 3:
+                data2 = data2;
+            else: 
+                data2 = data2[:, indx_psurface, :, :];
+            data2 = np.asarray(data2.tolist())
+            unit2 = " (" + str(data.extract(label2)[0].metadata.units) + ")"
+            label2 = label2.replace("_", " ").title()
+            # Graph 3.
+            ax3 = plt.subplot(gs[0, 1], projection=ccrs.EckertIII())
+            label3 = plot[2]
+            data3 = data.extract(label3)[0].data
+            if data3.ndim == 3:
+                data3 = data3;
             else:
-                plt.pause(10)
+                data3 = data3[:, indx_psurface, :, :];
+            data3 = np.asarray(data3.tolist())
+            unit3 = " (" + str(data.extract(label3)[0].metadata.units) + ")"
+            label3 = label3.replace("_", " ").title()
+            # Graph 4.
+            ax4 = plt.subplot(gs[1, 1], projection=ccrs.EckertIII())
+            label4 = plot[3]
+            data4 = data.extract(label4)[0].data[:, indx_psurface, :, :]
+            if data4.ndim == 3: 
+                data4 = data4; 
+            else: 
+                data4 = data4[:, indx_psurface, :, :];
+            data4 = np.asarray(data4.tolist())
+            unit4 = " (" + str(data.extract(label4)[0].metadata.units) + ")"
+            label4 = label4.replace("_", " ").title()
+
+            # Get date.
+            date = data[0].coords("forecast_reference_time")[0].points[0]
+
+            for i in range(len(time)):
+                # Plot 1.
+                # EckertIII projection details.
+                ax1.set_global()
+                ax1.coastlines()
+                ax1.gridlines()
+
+                # Add SALT to the graph.
+                ax1.set_xlabel("Longitude ($\lambda$)")
+                ax1.set_ylabel("Latitude ($\phi$)")
+                ax1.set_title(label1)
+
+                # Contour plot.
+                cmap1 = plt.get_cmap("hot")
+                min1 = np.min(data1)
+                max1 = np.max(data1)
+                level1 = np.linspace(min1, max1, 21)
+                data1_plot, lon = add_cyclic_point(data1, coord=longitude)
+                contour1 = ax1.contourf(
+                    lon,
+                    lat,
+                    data1_plot[i, :, :],
+                    cmap=cmap1,
+                    levels=level1,
+                    transform=ccrs.PlateCarree()
+                )
+
+                # Checks for a colorbar.
+                if i == 0:
+                    cb1 = fig.colorbar(contour1, ax=ax1)
+                    tick_locator = ticker.MaxNLocator(nbins=10)
+                    cb1.locator = tick_locator
+                    cb1.update_ticks()
+                    cb1.set_label(unit1)
+
+                # Plot 2.
+                cmap2 = plt.get_cmap("jet")
+                min2 = np.min(data2)
+                max2 = np.max(data2)
+                level2 = np.linspace(min2, max2, 21)
+                data2_plot, lon = add_cyclic_point(data2, coord=longitude)
+                contour2 = ax2.contourf(
+                    lon,
+                    lat, 
+                    data2_plot[i, :, :], 
+                    cmap=cmap2, 
+                    levels=level2,
+                    transform=ccrs.PlateCarree()
+                )
+
+                # EckertIII projection details.
+                ax2.set_global()
+                ax2.coastlines()
+                ax2.gridlines()
+
+                # Checks for a colorbar.
+                if i == 0:
+                    cb2 = fig.colorbar(contour2, ax=ax2)
+                    tick_locator = ticker.MaxNLocator(nbins=10)
+                    cb2.locator = tick_locator
+                    cb2.update_ticks()
+                    cb2.set_label(unit2)
+
+                # Add SALT to the graph.
+                ax2.set_xlabel("Longitude ($\lambda$)")
+                ax2.set_ylabel("Latitude ($\phi$)")
+                ax2.set_title(label2)
+
+                # Plot 3.
+                cmap3 = plt.get_cmap("seismic")
+                min3 = np.min(data3)
+                max3 = np.max(data3)
+                level3 = np.linspace(min3, max3, 21)
+                data3_plot, lon = add_cyclic_point(data3, coord=longitude)
+                contour3 = ax3.contourf(
+                    lon, 
+                    lat, 
+                    data3_plot[i, :, :], 
+                    cmap=cmap3, 
+                    levels=level3,
+                    transform=ccrs.PlateCarree()
+                )
+
+                # EckertIII projection details.
+                ax3.set_global()
+                ax3.coastlines()
+                ax3.gridlines()
+
+                # Checks for a colorbar.
+                if i == 0:
+                    cb3 = fig.colorbar(contour3, ax=ax3)
+                    tick_locator = ticker.MaxNLocator(nbins=10)
+                    cb3.locator = tick_locator
+                    cb3.update_ticks()
+                    cb3.set_label(unit3)
+
+                # Add SALT to the graph.
+                ax3.set_xlabel("Longitude ($\lambda$)")
+                ax3.set_ylabel("Latitude ($\phi$)")
+                ax3.set_title(label3)
+
+                # Plot 4.
+                min4 = np.min(data4)
+                max4 = np.max(data4)
+                level4 = np.linspace(min4, max4, 21)
+                data4_plot, lon = add_cyclic_point(data4, coord=longitude)
+                contour4 = ax4.contourf(
+                    lon, 
+                    lat, 
+                    data4_plot[i, :, :], 
+                    levels=level4,
+                    transform=ccrs.PlateCarree()
+                )
+
+                # EckertIII projection details.
+                ax4.set_global()
+                ax4.coastlines()
+                ax4.gridlines()
+
+                # Checks for a colorbar.
+                if i == 0:
+                    cb4 = fig.colorbar(contour4, ax=ax4)
+                    tick_locator = ticker.MaxNLocator(nbins=10)
+                    cb4.locator = tick_locator
+                    cb4.update_ticks()
+                    cb4.set_label(unit4)
+
+                # Add SALT to the graph.
+                ax4.set_xlabel("Longitude ($\lambda$)")
+                ax4.set_ylabel("Latitude ($\phi$)")
+                ax4.set_title(label4)
+
+                # Title
+                title = (
+                    "Motus Aeris @ AMSIMP (" + date + ", +" + str(np.round(time[i], 2)) + time_unit + ")"
+                )
+                fig.suptitle(title)
+
+                # Displaying simualtion.
+                plt.show()
+                plt.pause(0.01)
+                if i < (len(time) - 1):
+                    ax1.clear()
+                    ax2.clear()
+                    ax3.clear()
+                    ax4.clear()
+                else:
+                    plt.pause(10)
+        else:
+            raise NotImplementedError(
+                "Visualisations for planetary bodies other than Earth is not currently implemented."
+            )
