@@ -31,7 +31,6 @@ from amsimp.download cimport Download
 cdef class Backend(Download):
     cdef int delta_latitude
     cdef int delta_longitude
-    cdef bool remove_files
     cdef bool ai
     cdef int data_size, epochs
     cdef bool input_data
@@ -43,10 +42,12 @@ cdef class Backend(Download):
     cpdef np.ndarray latitude_lines(self)
     cpdef np.ndarray longitude_lines(self)
     cpdef np.ndarray pressure_surfaces(self, dim_3d=?)
-    cpdef np.ndarray gradient_x(self, parameter=?)
-    cpdef np.ndarray gradient_y(self, parameter=?)
-    cpdef np.ndarray gradient_p(self, parameter=?)
+
+    cpdef np.ndarray gradient_longitude(self, parameter=?)
+    cpdef np.ndarray gradient_latitude(self, parameter=?)
+    cpdef np.ndarray gradient_pressure(self, parameter=?)
     cpdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)
+    cpdef dict retrieve_constants(self)
 
     cpdef np.ndarray coriolis_parameter(self)
 
