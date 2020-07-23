@@ -2527,7 +2527,6 @@ static const char __pyx_k_fig[] = "fig";
 static const char __pyx_k_fit[] = "fit";
 static const char __pyx_k_hPa[] = "hPa";
 static const char __pyx_k_hot[] = "hot";
-static const char __pyx_k_img[] = "img";
 static const char __pyx_k_ion[] = "ion";
 static const char __pyx_k_jet[] = "jet";
 static const char __pyx_k_kPa[] = "kPa";
@@ -2538,14 +2537,13 @@ static const char __pyx_k_max[] = "max";
 static const char __pyx_k_min[] = "min";
 static const char __pyx_k_mse[] = "mse";
 static const char __pyx_k_new[] = "__new__";
-static const char __pyx_k_out[] = "out";
 static const char __pyx_k_plt[] = "plt";
+static const char __pyx_k_png[] = ".png";
 static const char __pyx_k_sys[] = "sys";
 static const char __pyx_k_top[] = "top";
 static const char __pyx_k_use[] = "use";
 static const char __pyx_k_Adam[] = "Adam";
 static const char __pyx_k_Cube[] = "Cube";
-static const char __pyx_k_DIVX[] = "DIVX";
 static const char __pyx_k_LSTM[] = "LSTM";
 static const char __pyx_k_Wind[] = "Wind";
 static const char __pyx_k_axis[] = "axis";
@@ -2577,7 +2575,6 @@ static const char __pyx_k_relu[] = "relu";
 static const char __pyx_k_save[] = "save";
 static const char __pyx_k_self[] = "self";
 static const char __pyx_k_show[] = "show";
-static const char __pyx_k_size[] = "size";
 static const char __pyx_k_tanh[] = "tanh";
 static const char __pyx_k_temp[] = "temp";
 static const char __pyx_k_test[] = "__test__";
@@ -2609,6 +2606,7 @@ static const char __pyx_k_pause[] = "pause";
 static const char __pyx_k_raise[] = "raise";
 static const char __pyx_k_range[] = "range";
 static const char __pyx_k_rh_sc[] = "rh_sc";
+static const char __pyx_k_rmdir[] = "rmdir";
 static const char __pyx_k_round[] = "round";
 static const char __pyx_k_seq_x[] = "seq_x";
 static const char __pyx_k_seq_y[] = "seq_y";
@@ -2624,8 +2622,6 @@ static const char __pyx_k_unit3[] = "unit3";
 static const char __pyx_k_unit4[] = "unit4";
 static const char __pyx_k_units[] = "units";
 static const char __pyx_k_value[] = "value";
-static const char __pyx_k_width[] = "width";
-static const char __pyx_k_write[] = "write";
 static const char __pyx_k_zeros[] = "zeros";
 static const char __pyx_k_Linear[] = "Linear";
 static const char __pyx_k_T_list[] = "T_list";
@@ -2643,13 +2639,11 @@ static const char __pyx_k_format[] = "format";
 static const char __pyx_k_height[] = "height";
 static const char __pyx_k_hspace[] = "hspace";
 static const char __pyx_k_import[] = "__import__";
-static const char __pyx_k_imread[] = "imread";
 static const char __pyx_k_insert[] = "insert";
 static const char __pyx_k_label1[] = "label1";
 static const char __pyx_k_label2[] = "label2";
 static const char __pyx_k_label3[] = "label3";
 static const char __pyx_k_label4[] = "label4";
-static const char __pyx_k_layers[] = "layers";
 static const char __pyx_k_level1[] = "level1";
 static const char __pyx_k_level2[] = "level2";
 static const char __pyx_k_level3[] = "level3";
@@ -2665,6 +2659,7 @@ static const char __pyx_k_reduce[] = "__reduce__";
 static const char __pyx_k_remove[] = "remove";
 static const char __pyx_k_seterr[] = "seterr";
 static const char __pyx_k_source[] = "source";
+static const char __pyx_k_system[] = "system";
 static const char __pyx_k_ticker[] = "ticker";
 static const char __pyx_k_tolist[] = "tolist";
 static const char __pyx_k_update[] = "update";
@@ -2691,7 +2686,6 @@ static const char __pyx_k_max_bar[] = "max_bar";
 static const char __pyx_k_metrics[] = "metrics";
 static const char __pyx_k_percent[] = "percent";
 static const char __pyx_k_predict[] = "predict";
-static const char __pyx_k_release[] = "release";
 static const char __pyx_k_replace[] = "replace";
 static const char __pyx_k_reshape[] = "reshape";
 static const char __pyx_k_rh_list[] = "rh_list";
@@ -2716,7 +2710,6 @@ static const char __pyx_k_contour4[] = "contour4";
 static const char __pyx_k_contourf[] = "contourf";
 static const char __pyx_k_datetime[] = "datetime";
 static const char __pyx_k_features[] = "features";
-static const char __pyx_k_filename[] = "filename";
 static const char __pyx_k_geo_list[] = "geo_list";
 static const char __pyx_k_get_cmap[] = "get_cmap";
 static const char __pyx_k_getstate[] = "__getstate__";
@@ -2744,7 +2737,6 @@ static const char __pyx_k_constants[] = "constants";
 static const char __pyx_k_data_size[] = "data_size";
 static const char __pyx_k_gridlines[] = "gridlines";
 static const char __pyx_k_height_sc[] = "height_sc";
-static const char __pyx_k_img_array[] = "img_array";
 static const char __pyx_k_iris_cube[] = "iris.cube";
 static const char __pyx_k_long_name[] = "long_name";
 static const char __pyx_k_longitude[] = "longitude";
@@ -2789,7 +2781,6 @@ static const char __pyx_k_ImportError[] = "ImportError";
 static const char __pyx_k_MaxNLocator[] = "MaxNLocator";
 static const char __pyx_k_PickleError[] = "PickleError";
 static const char __pyx_k_PlateCarree[] = "PlateCarree";
-static const char __pyx_k_VideoWriter[] = "VideoWriter";
 static const char __pyx_k_Y_m_d_H_M_S[] = "%Y-%m-%d %H:%M:%S";
 static const char __pyx_k_amsimp_wind[] = "amsimp.wind";
 static const char __pyx_k_cartopy_crs[] = "cartopy.crs";
@@ -2855,15 +2846,12 @@ static const char __pyx_k_inverse_transform[] = "inverse_transform";
 static const char __pyx_k_matplotlib_pyplot[] = "matplotlib.pyplot";
 static const char __pyx_k_motusaeris_amsimp[] = "motusaeris_amsimp_";
 static const char __pyx_k_relative_humidity[] = "relative_humidity";
-static const char __pyx_k_visualisation_avi[] = "visualisation.avi";
 static const char __pyx_k_Dynamics_visualise[] = "Dynamics.visualise";
 static const char __pyx_k_Motus_Aeris_AMSIMP[] = "Motus Aeris @ AMSIMP";
-static const char __pyx_k_VideoWriter_fourcc[] = "VideoWriter_fourcc";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_input_perturbation[] = "input_perturbation";
 static const char __pyx_k_precipitable_water[] = "precipitable_water";
 static const char __pyx_k_predict_temp_input[] = "predict_temp_input";
-static const char __pyx_k_visualisations_png[] = "visualisations/*.png";
 static const char __pyx_k_NotImplementedError[] = "NotImplementedError";
 static const char __pyx_k_RNN___reduce_cython[] = "RNN.__reduce_cython__";
 static const char __pyx_k_RNN_preprocess_data[] = "RNN.preprocess_data";
@@ -2912,6 +2900,7 @@ static const char __pyx_k_Incompatible_checksums_s_vs_0x79[] = "Incompatible che
 static const char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
 static const char __pyx_k_Visualisations_for_planetary_bod[] = "Visualisations for planetary bodies other than Earth is not currently implemented.";
 static const char __pyx_k_ai_must_be_a_boolean_value_The_v[] = "ai must be a boolean value. The value of ai was: {}";
+static const char __pyx_k_ffmpeg_framerate_30_i_visualisat[] = "ffmpeg -framerate 30 -i visualisations/timestep_%d.png -vf format=yuv420p visualise.mp4";
 static const char __pyx_k_forecast_length_must_be_a_positi[] = "forecast_length must be a positive number greater than, or equal to 1. The value of forecast_length was: {}";
 static const char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not Fortran contiguous";
 static const char __pyx_k_no_default___reduce___due_to_non[] = "no default __reduce__ due to non-trivial __cinit__";
@@ -2926,7 +2915,6 @@ static PyObject *__pyx_n_s_Bidirectional;
 static PyObject *__pyx_n_s_Cube;
 static PyObject *__pyx_n_s_CubeList;
 static PyObject *__pyx_kp_u_Currently_it_is_not_possible_to;
-static PyObject *__pyx_n_u_DIVX;
 static PyObject *__pyx_n_s_Dense;
 static PyObject *__pyx_n_s_DimCoord;
 static PyObject *__pyx_kp_u_Downloading_Historical_Data;
@@ -2981,8 +2969,6 @@ static PyObject *__pyx_kp_u_The_dataset_for_simulation_must;
 static PyObject *__pyx_n_s_TimeDistributed;
 static PyObject *__pyx_n_s_TypeError;
 static PyObject *__pyx_n_s_ValueError;
-static PyObject *__pyx_n_s_VideoWriter;
-static PyObject *__pyx_n_s_VideoWriter_fourcc;
 static PyObject *__pyx_kp_u_Visualisations_for_planetary_bod;
 static PyObject *__pyx_n_s_Wind;
 static PyObject *__pyx_n_s_X;
@@ -3083,10 +3069,10 @@ static PyObject *__pyx_n_s_exp;
 static PyObject *__pyx_n_s_extract;
 static PyObject *__pyx_n_s_feature_range;
 static PyObject *__pyx_n_s_features;
+static PyObject *__pyx_kp_u_ffmpeg_framerate_30_i_visualisat;
 static PyObject *__pyx_n_s_fig;
 static PyObject *__pyx_n_s_figsize;
 static PyObject *__pyx_n_s_figure;
-static PyObject *__pyx_n_s_filename;
 static PyObject *__pyx_n_s_finish;
 static PyObject *__pyx_n_s_fit;
 static PyObject *__pyx_n_s_fit_transform;
@@ -3125,10 +3111,7 @@ static PyObject *__pyx_n_u_hours;
 static PyObject *__pyx_n_s_hspace;
 static PyObject *__pyx_kp_u_https_github_com_amsimp_initial;
 static PyObject *__pyx_n_s_i;
-static PyObject *__pyx_n_s_img;
-static PyObject *__pyx_n_s_img_array;
 static PyObject *__pyx_n_s_import;
-static PyObject *__pyx_n_s_imread;
 static PyObject *__pyx_n_s_indx_psurface;
 static PyObject *__pyx_n_s_init;
 static PyObject *__pyx_kp_u_initial_conditions_nc;
@@ -3151,7 +3134,6 @@ static PyObject *__pyx_n_s_label3;
 static PyObject *__pyx_n_s_label4;
 static PyObject *__pyx_n_s_lat;
 static PyObject *__pyx_n_u_latitude;
-static PyObject *__pyx_n_s_layers;
 static PyObject *__pyx_n_s_len_lat;
 static PyObject *__pyx_n_s_len_lon;
 static PyObject *__pyx_n_s_len_pressure;
@@ -3217,7 +3199,6 @@ static PyObject *__pyx_n_s_opt_rh;
 static PyObject *__pyx_n_s_opt_temp;
 static PyObject *__pyx_n_s_optimizer;
 static PyObject *__pyx_n_s_os;
-static PyObject *__pyx_n_s_out;
 static PyObject *__pyx_n_s_out_end_ix;
 static PyObject *__pyx_n_s_output;
 static PyObject *__pyx_n_s_past_history;
@@ -3236,6 +3217,7 @@ static PyObject *__pyx_n_u_planet_mass;
 static PyObject *__pyx_n_u_planet_radius;
 static PyObject *__pyx_n_s_plot;
 static PyObject *__pyx_n_s_plt;
+static PyObject *__pyx_kp_u_png;
 static PyObject *__pyx_n_s_points;
 static PyObject *__pyx_n_u_precipitable_water;
 static PyObject *__pyx_n_s_predict;
@@ -3268,7 +3250,6 @@ static PyObject *__pyx_n_s_reduce_cython;
 static PyObject *__pyx_n_s_reduce_ex;
 static PyObject *__pyx_n_s_relative_humidity;
 static PyObject *__pyx_n_u_relative_humidity;
-static PyObject *__pyx_n_s_release;
 static PyObject *__pyx_n_u_relu;
 static PyObject *__pyx_n_s_remove;
 static PyObject *__pyx_n_s_replace;
@@ -3278,6 +3259,7 @@ static PyObject *__pyx_n_s_rh;
 static PyObject *__pyx_n_s_rh_list;
 static PyObject *__pyx_n_s_rh_model;
 static PyObject *__pyx_n_s_rh_sc;
+static PyObject *__pyx_n_s_rmdir;
 static PyObject *__pyx_n_s_round;
 static PyObject *__pyx_n_s_s;
 static PyObject *__pyx_n_s_save;
@@ -3303,7 +3285,6 @@ static PyObject *__pyx_n_s_show;
 static PyObject *__pyx_n_s_si;
 static PyObject *__pyx_n_u_sidereal_day;
 static PyObject *__pyx_n_s_simulate;
-static PyObject *__pyx_n_s_size;
 static PyObject *__pyx_n_s_sklearn_preprocessing;
 static PyObject *__pyx_n_s_smooth_gaussian;
 static PyObject *__pyx_n_u_source;
@@ -3319,6 +3300,7 @@ static PyObject *__pyx_n_s_subplots_adjust;
 static PyObject *__pyx_n_s_super;
 static PyObject *__pyx_n_s_suptitle;
 static PyObject *__pyx_n_s_sys;
+static PyObject *__pyx_n_s_system;
 static PyObject *__pyx_n_u_tanh;
 static PyObject *__pyx_n_s_temp;
 static PyObject *__pyx_n_s_temp_model;
@@ -3356,13 +3338,9 @@ static PyObject *__pyx_n_s_use_setstate;
 static PyObject *__pyx_n_s_v;
 static PyObject *__pyx_n_s_value;
 static PyObject *__pyx_n_u_virtual_temperature;
-static PyObject *__pyx_kp_u_visualisation_avi;
 static PyObject *__pyx_n_u_visualisations;
-static PyObject *__pyx_kp_u_visualisations_png;
 static PyObject *__pyx_kp_u_visualisations_timestep;
 static PyObject *__pyx_n_s_visualise;
-static PyObject *__pyx_n_s_width;
-static PyObject *__pyx_n_s_write;
 static PyObject *__pyx_n_s_x;
 static PyObject *__pyx_n_s_x_height;
 static PyObject *__pyx_n_s_x_rh;
@@ -3416,7 +3394,6 @@ static PyObject *__pyx_int_3;
 static PyObject *__pyx_int_6;
 static PyObject *__pyx_int_10;
 static PyObject *__pyx_int_13;
-static PyObject *__pyx_int_15;
 static PyObject *__pyx_int_20;
 static PyObject *__pyx_int_21;
 static PyObject *__pyx_int_72;
@@ -18886,14 +18863,6 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_8visualise(struct __pyx_ob
   PyObject *__pyx_v_contour4 = NULL;
   PyObject *__pyx_v_cb4 = NULL;
   PyObject *__pyx_v_title = NULL;
-  PyObject *__pyx_v_img_array = NULL;
-  PyObject *__pyx_v_filename = NULL;
-  PyObject *__pyx_v_img = NULL;
-  PyObject *__pyx_v_height = NULL;
-  PyObject *__pyx_v_width = NULL;
-  CYTHON_UNUSED PyObject *__pyx_v_layers = NULL;
-  PyObject *__pyx_v_size = NULL;
-  PyObject *__pyx_v_out = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_TraceDeclarations
   __Pyx_RefNannyDeclarations
@@ -18916,7 +18885,6 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_8visualise(struct __pyx_ob
   PyObject *(*__pyx_t_17)(PyObject *);
   Py_ssize_t __pyx_t_18;
   PyObject *(*__pyx_t_19)(PyObject *);
-  int __pyx_t_20;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -23875,7 +23843,7 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_8visualise(struct __pyx_ob
  *                     ax3.clear()
  *                     ax4.clear()             # <<<<<<<<<<<<<<
  *                 else:
- *                     # Compile photos into video.
+ *                     # Compile photos into video using ffmeg.
  */
         __Pyx_TraceLine(1531,0,__PYX_ERR(0, 1531, __pyx_L1_error))
         __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_v_ax4, __pyx_n_s_clear); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1531, __pyx_L1_error)
@@ -23909,29 +23877,16 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_8visualise(struct __pyx_ob
 
       /* "amsimp/dynamics.pyx":1534
  *                 else:
- *                     # Compile photos into video.
- *                     img_array = []             # <<<<<<<<<<<<<<
+ *                     # Compile photos into video using ffmeg.
+ *                     os.system("ffmpeg -framerate 30 -i visualisations/timestep_%d.png -vf format=yuv420p visualise.mp4")             # <<<<<<<<<<<<<<
  * 
- *                     # Fetch all the image file names and read them.
+ *                     # Remove images.
  */
       __Pyx_TraceLine(1534,0,__PYX_ERR(0, 1534, __pyx_L1_error))
       /*else*/ {
-        __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1534, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_XDECREF_SET(__pyx_v_img_array, ((PyObject*)__pyx_t_2));
-        __pyx_t_2 = 0;
-
-        /* "amsimp/dynamics.pyx":1537
- * 
- *                     # Fetch all the image file names and read them.
- *                     for filename in glob.glob('visualisations/[inserted by cython to avoid comment start]*.png'):             # <<<<<<<<<<<<<<
- *                         img = cv2.imread(filename)
- *                         height, width, layers = img.shape
- */
-        __Pyx_TraceLine(1537,0,__PYX_ERR(0, 1537, __pyx_L1_error))
-        __Pyx_GetModuleGlobalName(__pyx_t_16, __pyx_n_s_glob); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1537, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_16, __pyx_n_s_os); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1534, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
-        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_glob); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1537, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_system); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1534, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
         __pyx_t_16 = NULL;
@@ -23944,42 +23899,58 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_8visualise(struct __pyx_ob
             __Pyx_DECREF_SET(__pyx_t_7, function);
           }
         }
-        __pyx_t_2 = (__pyx_t_16) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_16, __pyx_kp_u_visualisations_png) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_kp_u_visualisations_png);
+        __pyx_t_2 = (__pyx_t_16) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_16, __pyx_kp_u_ffmpeg_framerate_30_i_visualisat) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_kp_u_ffmpeg_framerate_30_i_visualisat);
         __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1537, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1534, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        if (likely(PyList_CheckExact(__pyx_t_2)) || PyTuple_CheckExact(__pyx_t_2)) {
-          __pyx_t_7 = __pyx_t_2; __Pyx_INCREF(__pyx_t_7); __pyx_t_18 = 0;
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+        /* "amsimp/dynamics.pyx":1537
+ * 
+ *                     # Remove images.
+ *                     for i in range(len(time)):             # <<<<<<<<<<<<<<
+ *                         os.remove("visualisations/timestep_" + str(i) + ".png")
+ * 
+ */
+        __Pyx_TraceLine(1537,0,__PYX_ERR(0, 1537, __pyx_L1_error))
+        __pyx_t_18 = PyObject_Length(((PyObject *)__pyx_v_time)); if (unlikely(__pyx_t_18 == ((Py_ssize_t)-1))) __PYX_ERR(0, 1537, __pyx_L1_error)
+        __pyx_t_2 = PyInt_FromSsize_t(__pyx_t_18); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1537, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1537, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_7);
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        if (likely(PyList_CheckExact(__pyx_t_7)) || PyTuple_CheckExact(__pyx_t_7)) {
+          __pyx_t_2 = __pyx_t_7; __Pyx_INCREF(__pyx_t_2); __pyx_t_18 = 0;
           __pyx_t_19 = NULL;
         } else {
-          __pyx_t_18 = -1; __pyx_t_7 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1537, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_7);
-          __pyx_t_19 = Py_TYPE(__pyx_t_7)->tp_iternext; if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1537, __pyx_L1_error)
+          __pyx_t_18 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1537, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_2);
+          __pyx_t_19 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1537, __pyx_L1_error)
         }
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         for (;;) {
           if (likely(!__pyx_t_19)) {
-            if (likely(PyList_CheckExact(__pyx_t_7))) {
-              if (__pyx_t_18 >= PyList_GET_SIZE(__pyx_t_7)) break;
+            if (likely(PyList_CheckExact(__pyx_t_2))) {
+              if (__pyx_t_18 >= PyList_GET_SIZE(__pyx_t_2)) break;
               #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-              __pyx_t_2 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_18); __Pyx_INCREF(__pyx_t_2); __pyx_t_18++; if (unlikely(0 < 0)) __PYX_ERR(0, 1537, __pyx_L1_error)
+              __pyx_t_7 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_18); __Pyx_INCREF(__pyx_t_7); __pyx_t_18++; if (unlikely(0 < 0)) __PYX_ERR(0, 1537, __pyx_L1_error)
               #else
-              __pyx_t_2 = PySequence_ITEM(__pyx_t_7, __pyx_t_18); __pyx_t_18++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1537, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_2);
+              __pyx_t_7 = PySequence_ITEM(__pyx_t_2, __pyx_t_18); __pyx_t_18++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1537, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_7);
               #endif
             } else {
-              if (__pyx_t_18 >= PyTuple_GET_SIZE(__pyx_t_7)) break;
+              if (__pyx_t_18 >= PyTuple_GET_SIZE(__pyx_t_2)) break;
               #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-              __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_7, __pyx_t_18); __Pyx_INCREF(__pyx_t_2); __pyx_t_18++; if (unlikely(0 < 0)) __PYX_ERR(0, 1537, __pyx_L1_error)
+              __pyx_t_7 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_18); __Pyx_INCREF(__pyx_t_7); __pyx_t_18++; if (unlikely(0 < 0)) __PYX_ERR(0, 1537, __pyx_L1_error)
               #else
-              __pyx_t_2 = PySequence_ITEM(__pyx_t_7, __pyx_t_18); __pyx_t_18++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1537, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_2);
+              __pyx_t_7 = PySequence_ITEM(__pyx_t_2, __pyx_t_18); __pyx_t_18++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1537, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_7);
               #endif
             }
           } else {
-            __pyx_t_2 = __pyx_t_19(__pyx_t_7);
-            if (unlikely(!__pyx_t_2)) {
+            __pyx_t_7 = __pyx_t_19(__pyx_t_2);
+            if (unlikely(!__pyx_t_7)) {
               PyObject* exc_type = PyErr_Occurred();
               if (exc_type) {
                 if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
@@ -23987,387 +23958,163 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_8visualise(struct __pyx_ob
               }
               break;
             }
-            __Pyx_GOTREF(__pyx_t_2);
+            __Pyx_GOTREF(__pyx_t_7);
           }
-          __Pyx_XDECREF_SET(__pyx_v_filename, __pyx_t_2);
-          __pyx_t_2 = 0;
+          __Pyx_DECREF_SET(__pyx_v_i, __pyx_t_7);
+          __pyx_t_7 = 0;
 
           /* "amsimp/dynamics.pyx":1538
- *                     # Fetch all the image file names and read them.
- *                     for filename in glob.glob('visualisations/[inserted by cython to avoid comment start]*.png'):
- *                         img = cv2.imread(filename)             # <<<<<<<<<<<<<<
- *                         height, width, layers = img.shape
- *                         size = (width,height)
+ *                     # Remove images.
+ *                     for i in range(len(time)):
+ *                         os.remove("visualisations/timestep_" + str(i) + ".png")             # <<<<<<<<<<<<<<
+ * 
+ *                     # Remove folder.
  */
           __Pyx_TraceLine(1538,0,__PYX_ERR(0, 1538, __pyx_L1_error))
-          __Pyx_GetModuleGlobalName(__pyx_t_16, __pyx_n_s_cv2); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1538, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_16, __pyx_n_s_os); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1538, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
-          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_imread); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1538, __pyx_L1_error)
+          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_remove); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1538, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_10);
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-          __pyx_t_16 = NULL;
+          __pyx_t_16 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyUnicode_Type)), __pyx_v_i); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1538, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_16);
+          __pyx_t_6 = __Pyx_PyUnicode_Concat(__pyx_kp_u_visualisations_timestep, __pyx_t_16); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1538, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_6);
+          __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
+          __pyx_t_16 = __Pyx_PyUnicode_Concat(__pyx_t_6, __pyx_kp_u_png); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1538, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_16);
+          __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+          __pyx_t_6 = NULL;
           if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_10))) {
-            __pyx_t_16 = PyMethod_GET_SELF(__pyx_t_10);
-            if (likely(__pyx_t_16)) {
+            __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_10);
+            if (likely(__pyx_t_6)) {
               PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_10);
-              __Pyx_INCREF(__pyx_t_16);
+              __Pyx_INCREF(__pyx_t_6);
               __Pyx_INCREF(function);
               __Pyx_DECREF_SET(__pyx_t_10, function);
             }
           }
-          __pyx_t_2 = (__pyx_t_16) ? __Pyx_PyObject_Call2Args(__pyx_t_10, __pyx_t_16, __pyx_v_filename) : __Pyx_PyObject_CallOneArg(__pyx_t_10, __pyx_v_filename);
-          __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
-          if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1538, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_2);
+          __pyx_t_7 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_10, __pyx_t_6, __pyx_t_16) : __Pyx_PyObject_CallOneArg(__pyx_t_10, __pyx_t_16);
+          __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+          __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
+          if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1538, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-          __Pyx_XDECREF_SET(__pyx_v_img, __pyx_t_2);
-          __pyx_t_2 = 0;
-
-          /* "amsimp/dynamics.pyx":1539
- *                     for filename in glob.glob('visualisations/[inserted by cython to avoid comment start]*.png'):
- *                         img = cv2.imread(filename)
- *                         height, width, layers = img.shape             # <<<<<<<<<<<<<<
- *                         size = (width,height)
- *                         img_array.append(img)
- */
-          __Pyx_TraceLine(1539,0,__PYX_ERR(0, 1539, __pyx_L1_error))
-          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_img, __pyx_n_s_shape); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1539, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_2);
-          if ((likely(PyTuple_CheckExact(__pyx_t_2))) || (PyList_CheckExact(__pyx_t_2))) {
-            PyObject* sequence = __pyx_t_2;
-            Py_ssize_t size = __Pyx_PySequence_SIZE(sequence);
-            if (unlikely(size != 3)) {
-              if (size > 3) __Pyx_RaiseTooManyValuesError(3);
-              else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-              __PYX_ERR(0, 1539, __pyx_L1_error)
-            }
-            #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            if (likely(PyTuple_CheckExact(sequence))) {
-              __pyx_t_10 = PyTuple_GET_ITEM(sequence, 0); 
-              __pyx_t_16 = PyTuple_GET_ITEM(sequence, 1); 
-              __pyx_t_6 = PyTuple_GET_ITEM(sequence, 2); 
-            } else {
-              __pyx_t_10 = PyList_GET_ITEM(sequence, 0); 
-              __pyx_t_16 = PyList_GET_ITEM(sequence, 1); 
-              __pyx_t_6 = PyList_GET_ITEM(sequence, 2); 
-            }
-            __Pyx_INCREF(__pyx_t_10);
-            __Pyx_INCREF(__pyx_t_16);
-            __Pyx_INCREF(__pyx_t_6);
-            #else
-            __pyx_t_10 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1539, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_10);
-            __pyx_t_16 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1539, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_16);
-            __pyx_t_6 = PySequence_ITEM(sequence, 2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1539, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_6);
-            #endif
-            __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-          } else {
-            Py_ssize_t index = -1;
-            __pyx_t_9 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 1539, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_9);
-            __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-            __pyx_t_17 = Py_TYPE(__pyx_t_9)->tp_iternext;
-            index = 0; __pyx_t_10 = __pyx_t_17(__pyx_t_9); if (unlikely(!__pyx_t_10)) goto __pyx_L45_unpacking_failed;
-            __Pyx_GOTREF(__pyx_t_10);
-            index = 1; __pyx_t_16 = __pyx_t_17(__pyx_t_9); if (unlikely(!__pyx_t_16)) goto __pyx_L45_unpacking_failed;
-            __Pyx_GOTREF(__pyx_t_16);
-            index = 2; __pyx_t_6 = __pyx_t_17(__pyx_t_9); if (unlikely(!__pyx_t_6)) goto __pyx_L45_unpacking_failed;
-            __Pyx_GOTREF(__pyx_t_6);
-            if (__Pyx_IternextUnpackEndCheck(__pyx_t_17(__pyx_t_9), 3) < 0) __PYX_ERR(0, 1539, __pyx_L1_error)
-            __pyx_t_17 = NULL;
-            __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-            goto __pyx_L46_unpacking_done;
-            __pyx_L45_unpacking_failed:;
-            __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-            __pyx_t_17 = NULL;
-            if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-            __PYX_ERR(0, 1539, __pyx_L1_error)
-            __pyx_L46_unpacking_done:;
-          }
-          __Pyx_XDECREF_SET(__pyx_v_height, __pyx_t_10);
-          __pyx_t_10 = 0;
-          __Pyx_XDECREF_SET(__pyx_v_width, __pyx_t_16);
-          __pyx_t_16 = 0;
-          __Pyx_XDECREF_SET(__pyx_v_layers, __pyx_t_6);
-          __pyx_t_6 = 0;
-
-          /* "amsimp/dynamics.pyx":1540
- *                         img = cv2.imread(filename)
- *                         height, width, layers = img.shape
- *                         size = (width,height)             # <<<<<<<<<<<<<<
- *                         img_array.append(img)
- * 
- */
-          __Pyx_TraceLine(1540,0,__PYX_ERR(0, 1540, __pyx_L1_error))
-          __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1540, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_2);
-          __Pyx_INCREF(__pyx_v_width);
-          __Pyx_GIVEREF(__pyx_v_width);
-          PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_width);
-          __Pyx_INCREF(__pyx_v_height);
-          __Pyx_GIVEREF(__pyx_v_height);
-          PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_v_height);
-          __Pyx_XDECREF_SET(__pyx_v_size, ((PyObject*)__pyx_t_2));
-          __pyx_t_2 = 0;
-
-          /* "amsimp/dynamics.pyx":1541
- *                         height, width, layers = img.shape
- *                         size = (width,height)
- *                         img_array.append(img)             # <<<<<<<<<<<<<<
- * 
- *                     # Create a VideoWriter object.
- */
-          __Pyx_TraceLine(1541,0,__PYX_ERR(0, 1541, __pyx_L1_error))
-          __pyx_t_20 = __Pyx_PyList_Append(__pyx_v_img_array, __pyx_v_img); if (unlikely(__pyx_t_20 == ((int)-1))) __PYX_ERR(0, 1541, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
           /* "amsimp/dynamics.pyx":1537
  * 
- *                     # Fetch all the image file names and read them.
- *                     for filename in glob.glob('visualisations/[inserted by cython to avoid comment start]*.png'):             # <<<<<<<<<<<<<<
- *                         img = cv2.imread(filename)
- *                         height, width, layers = img.shape
+ *                     # Remove images.
+ *                     for i in range(len(time)):             # <<<<<<<<<<<<<<
+ *                         os.remove("visualisations/timestep_" + str(i) + ".png")
+ * 
  */
           __Pyx_TraceLine(1537,0,__PYX_ERR(0, 1537, __pyx_L1_error))
         }
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "amsimp/dynamics.pyx":1544
+        /* "amsimp/dynamics.pyx":1541
  * 
- *                     # Create a VideoWriter object.
- *                     out = cv2.VideoWriter('visualisation.avi',cv2.VideoWriter_fourcc(*'DIVX'), 15, size)             # <<<<<<<<<<<<<<
- * 
- *                     # Save the images to video file.
+ *                     # Remove folder.
+ *                     try:             # <<<<<<<<<<<<<<
+ *                         os.rmdir('visualisations')
+ *                     except OSError:
  */
-        __Pyx_TraceLine(1544,0,__PYX_ERR(0, 1544, __pyx_L1_error))
-        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_cv2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1544, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_VideoWriter); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1544, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_6);
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_cv2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1544, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_VideoWriter_fourcc); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1544, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_16);
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_2 = PySequence_Tuple(__pyx_n_u_DIVX); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1544, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_10 = __Pyx_PyObject_Call(__pyx_t_16, __pyx_t_2, NULL); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1544, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_10);
-        __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        if (unlikely(!__pyx_v_size)) { __Pyx_RaiseUnboundLocalError("size"); __PYX_ERR(0, 1544, __pyx_L1_error) }
-        __pyx_t_2 = NULL;
-        __pyx_t_15 = 0;
-        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
-          __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_6);
-          if (likely(__pyx_t_2)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-            __Pyx_INCREF(__pyx_t_2);
-            __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_6, function);
-            __pyx_t_15 = 1;
-          }
-        }
-        #if CYTHON_FAST_PYCALL
-        if (PyFunction_Check(__pyx_t_6)) {
-          PyObject *__pyx_temp[5] = {__pyx_t_2, __pyx_kp_u_visualisation_avi, __pyx_t_10, __pyx_int_15, __pyx_v_size};
-          __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_15, 4+__pyx_t_15); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1544, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-          __Pyx_GOTREF(__pyx_t_7);
-          __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        } else
-        #endif
-        #if CYTHON_FAST_PYCCALL
-        if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
-          PyObject *__pyx_temp[5] = {__pyx_t_2, __pyx_kp_u_visualisation_avi, __pyx_t_10, __pyx_int_15, __pyx_v_size};
-          __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_15, 4+__pyx_t_15); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1544, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-          __Pyx_GOTREF(__pyx_t_7);
-          __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        } else
-        #endif
+        __Pyx_TraceLine(1541,0,__PYX_ERR(0, 1541, __pyx_L1_error))
         {
-          __pyx_t_16 = PyTuple_New(4+__pyx_t_15); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1544, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_16);
-          if (__pyx_t_2) {
-            __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_16, 0, __pyx_t_2); __pyx_t_2 = NULL;
-          }
-          __Pyx_INCREF(__pyx_kp_u_visualisation_avi);
-          __Pyx_GIVEREF(__pyx_kp_u_visualisation_avi);
-          PyTuple_SET_ITEM(__pyx_t_16, 0+__pyx_t_15, __pyx_kp_u_visualisation_avi);
-          __Pyx_GIVEREF(__pyx_t_10);
-          PyTuple_SET_ITEM(__pyx_t_16, 1+__pyx_t_15, __pyx_t_10);
-          __Pyx_INCREF(__pyx_int_15);
-          __Pyx_GIVEREF(__pyx_int_15);
-          PyTuple_SET_ITEM(__pyx_t_16, 2+__pyx_t_15, __pyx_int_15);
-          __Pyx_INCREF(__pyx_v_size);
-          __Pyx_GIVEREF(__pyx_v_size);
-          PyTuple_SET_ITEM(__pyx_t_16, 3+__pyx_t_15, __pyx_v_size);
-          __pyx_t_10 = 0;
-          __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_16, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1544, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_7);
-          __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-        }
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-        __Pyx_XDECREF_SET(__pyx_v_out, __pyx_t_7);
-        __pyx_t_7 = 0;
+          __Pyx_PyThreadState_declare
+          __Pyx_PyThreadState_assign
+          __Pyx_ExceptionSave(&__pyx_t_3, &__pyx_t_4, &__pyx_t_5);
+          __Pyx_XGOTREF(__pyx_t_3);
+          __Pyx_XGOTREF(__pyx_t_4);
+          __Pyx_XGOTREF(__pyx_t_5);
+          /*try:*/ {
 
-        /* "amsimp/dynamics.pyx":1547
- * 
- *                     # Save the images to video file.
- *                     for i in range(len(img_array)):             # <<<<<<<<<<<<<<
- *                         out.write(img_array[i])
- * 
+            /* "amsimp/dynamics.pyx":1542
+ *                     # Remove folder.
+ *                     try:
+ *                         os.rmdir('visualisations')             # <<<<<<<<<<<<<<
+ *                     except OSError:
+ *                         pass
  */
-        __Pyx_TraceLine(1547,0,__PYX_ERR(0, 1547, __pyx_L1_error))
-        __pyx_t_18 = PyList_GET_SIZE(__pyx_v_img_array); if (unlikely(__pyx_t_18 == ((Py_ssize_t)-1))) __PYX_ERR(0, 1547, __pyx_L1_error)
-        __pyx_t_7 = PyInt_FromSsize_t(__pyx_t_18); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1547, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1547, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_6);
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        if (likely(PyList_CheckExact(__pyx_t_6)) || PyTuple_CheckExact(__pyx_t_6)) {
-          __pyx_t_7 = __pyx_t_6; __Pyx_INCREF(__pyx_t_7); __pyx_t_18 = 0;
-          __pyx_t_19 = NULL;
-        } else {
-          __pyx_t_18 = -1; __pyx_t_7 = PyObject_GetIter(__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1547, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_7);
-          __pyx_t_19 = Py_TYPE(__pyx_t_7)->tp_iternext; if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 1547, __pyx_L1_error)
-        }
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-        for (;;) {
-          if (likely(!__pyx_t_19)) {
-            if (likely(PyList_CheckExact(__pyx_t_7))) {
-              if (__pyx_t_18 >= PyList_GET_SIZE(__pyx_t_7)) break;
-              #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-              __pyx_t_6 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_18); __Pyx_INCREF(__pyx_t_6); __pyx_t_18++; if (unlikely(0 < 0)) __PYX_ERR(0, 1547, __pyx_L1_error)
-              #else
-              __pyx_t_6 = PySequence_ITEM(__pyx_t_7, __pyx_t_18); __pyx_t_18++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1547, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_6);
-              #endif
-            } else {
-              if (__pyx_t_18 >= PyTuple_GET_SIZE(__pyx_t_7)) break;
-              #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-              __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_7, __pyx_t_18); __Pyx_INCREF(__pyx_t_6); __pyx_t_18++; if (unlikely(0 < 0)) __PYX_ERR(0, 1547, __pyx_L1_error)
-              #else
-              __pyx_t_6 = PySequence_ITEM(__pyx_t_7, __pyx_t_18); __pyx_t_18++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1547, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_6);
-              #endif
-            }
-          } else {
-            __pyx_t_6 = __pyx_t_19(__pyx_t_7);
-            if (unlikely(!__pyx_t_6)) {
-              PyObject* exc_type = PyErr_Occurred();
-              if (exc_type) {
-                if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-                else __PYX_ERR(0, 1547, __pyx_L1_error)
+            __Pyx_TraceLine(1542,0,__PYX_ERR(0, 1542, __pyx_L45_error))
+            __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_os); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1542, __pyx_L45_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_rmdir); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1542, __pyx_L45_error)
+            __Pyx_GOTREF(__pyx_t_10);
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+            __pyx_t_7 = NULL;
+            if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_10))) {
+              __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_10);
+              if (likely(__pyx_t_7)) {
+                PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_10);
+                __Pyx_INCREF(__pyx_t_7);
+                __Pyx_INCREF(function);
+                __Pyx_DECREF_SET(__pyx_t_10, function);
               }
-              break;
             }
-            __Pyx_GOTREF(__pyx_t_6);
-          }
-          __Pyx_DECREF_SET(__pyx_v_i, __pyx_t_6);
-          __pyx_t_6 = 0;
+            __pyx_t_2 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_10, __pyx_t_7, __pyx_n_u_visualisations) : __Pyx_PyObject_CallOneArg(__pyx_t_10, __pyx_n_u_visualisations);
+            __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+            if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1542, __pyx_L45_error)
+            __Pyx_GOTREF(__pyx_t_2);
+            __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+            __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-          /* "amsimp/dynamics.pyx":1548
- *                     # Save the images to video file.
- *                     for i in range(len(img_array)):
- *                         out.write(img_array[i])             # <<<<<<<<<<<<<<
+            /* "amsimp/dynamics.pyx":1541
  * 
- *                     # Release the VideoWriter and destroy all windows.
+ *                     # Remove folder.
+ *                     try:             # <<<<<<<<<<<<<<
+ *                         os.rmdir('visualisations')
+ *                     except OSError:
  */
-          __Pyx_TraceLine(1548,0,__PYX_ERR(0, 1548, __pyx_L1_error))
-          __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_v_out, __pyx_n_s_write); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1548, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_16);
-          __pyx_t_10 = __Pyx_PyObject_GetItem(__pyx_v_img_array, __pyx_v_i); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1548, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_10);
-          __pyx_t_2 = NULL;
-          if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_16))) {
-            __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_16);
-            if (likely(__pyx_t_2)) {
-              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_16);
-              __Pyx_INCREF(__pyx_t_2);
-              __Pyx_INCREF(function);
-              __Pyx_DECREF_SET(__pyx_t_16, function);
-            }
           }
-          __pyx_t_6 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_2, __pyx_t_10) : __Pyx_PyObject_CallOneArg(__pyx_t_16, __pyx_t_10);
+          __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+          __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+          goto __pyx_L52_try_end;
+          __pyx_L45_error:;
+          __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+          __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
           __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-          __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-          if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1548, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_6);
-          __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-          __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+          __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+          __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-          /* "amsimp/dynamics.pyx":1547
- * 
- *                     # Save the images to video file.
- *                     for i in range(len(img_array)):             # <<<<<<<<<<<<<<
- *                         out.write(img_array[i])
- * 
- */
-          __Pyx_TraceLine(1547,0,__PYX_ERR(0, 1547, __pyx_L1_error))
-        }
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-
-        /* "amsimp/dynamics.pyx":1551
- * 
- *                     # Release the VideoWriter and destroy all windows.
- *                     out.release()             # <<<<<<<<<<<<<<
- * 
- *                     # Delete the images.
- */
-        __Pyx_TraceLine(1551,0,__PYX_ERR(0, 1551, __pyx_L1_error))
-        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_out, __pyx_n_s_release); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1551, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_6);
-        __pyx_t_16 = NULL;
-        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
-          __pyx_t_16 = PyMethod_GET_SELF(__pyx_t_6);
-          if (likely(__pyx_t_16)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-            __Pyx_INCREF(__pyx_t_16);
-            __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_6, function);
-          }
-        }
-        __pyx_t_7 = (__pyx_t_16) ? __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_16) : __Pyx_PyObject_CallNoArg(__pyx_t_6);
-        __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
-        if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1551, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_7);
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-
-        /* "amsimp/dynamics.pyx":1554
- * 
- *                     # Delete the images.
- *                     os.remove("visualisations")             # <<<<<<<<<<<<<<
+          /* "amsimp/dynamics.pyx":1543
+ *                     try:
+ *                         os.rmdir('visualisations')
+ *                     except OSError:             # <<<<<<<<<<<<<<
+ *                         pass
  *         else:
- *             raise NotImplementedError(
  */
-        __Pyx_TraceLine(1554,0,__PYX_ERR(0, 1554, __pyx_L1_error))
-        __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_os); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1554, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_6);
-        __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_remove); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1554, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_16);
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-        __pyx_t_6 = NULL;
-        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_16))) {
-          __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_16);
-          if (likely(__pyx_t_6)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_16);
-            __Pyx_INCREF(__pyx_t_6);
-            __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_16, function);
+          __Pyx_TraceLine(1543,0,__PYX_ERR(0, 1543, __pyx_L47_except_error))
+          __pyx_t_15 = __Pyx_PyErr_ExceptionMatches(__pyx_builtin_OSError);
+          if (__pyx_t_15) {
+            __Pyx_ErrRestore(0,0,0);
+            goto __pyx_L46_exception_handled;
           }
+          goto __pyx_L47_except_error;
+          __pyx_L47_except_error:;
+
+          /* "amsimp/dynamics.pyx":1541
+ * 
+ *                     # Remove folder.
+ *                     try:             # <<<<<<<<<<<<<<
+ *                         os.rmdir('visualisations')
+ *                     except OSError:
+ */
+          __Pyx_XGIVEREF(__pyx_t_3);
+          __Pyx_XGIVEREF(__pyx_t_4);
+          __Pyx_XGIVEREF(__pyx_t_5);
+          __Pyx_ExceptionReset(__pyx_t_3, __pyx_t_4, __pyx_t_5);
+          goto __pyx_L1_error;
+          __pyx_L46_exception_handled:;
+          __Pyx_XGIVEREF(__pyx_t_3);
+          __Pyx_XGIVEREF(__pyx_t_4);
+          __Pyx_XGIVEREF(__pyx_t_5);
+          __Pyx_ExceptionReset(__pyx_t_3, __pyx_t_4, __pyx_t_5);
+          __pyx_L52_try_end:;
         }
-        __pyx_t_7 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_6, __pyx_n_u_visualisations) : __Pyx_PyObject_CallOneArg(__pyx_t_16, __pyx_n_u_visualisations);
-        __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-        if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1554, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_7);
-        __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
       __pyx_L42:;
 
@@ -24392,20 +24139,20 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_8visualise(struct __pyx_ob
     goto __pyx_L3;
   }
 
-  /* "amsimp/dynamics.pyx":1556
- *                     os.remove("visualisations")
+  /* "amsimp/dynamics.pyx":1546
+ *                         pass
  *         else:
  *             raise NotImplementedError(             # <<<<<<<<<<<<<<
  *                 "Visualisations for planetary bodies other than Earth is not currently implemented."
  *             )
  */
-  __Pyx_TraceLine(1556,0,__PYX_ERR(0, 1556, __pyx_L1_error))
+  __Pyx_TraceLine(1546,0,__PYX_ERR(0, 1546, __pyx_L1_error))
   /*else*/ {
-    __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_NotImplementedError, __pyx_tuple__38, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1556, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_NotImplementedError, __pyx_tuple__38, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1546, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __Pyx_Raise(__pyx_t_8, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __PYX_ERR(0, 1556, __pyx_L1_error)
+    __PYX_ERR(0, 1546, __pyx_L1_error)
   }
   __pyx_L3:;
 
@@ -24479,14 +24226,6 @@ static PyObject *__pyx_pf_6amsimp_8dynamics_8Dynamics_8visualise(struct __pyx_ob
   __Pyx_XDECREF(__pyx_v_contour4);
   __Pyx_XDECREF(__pyx_v_cb4);
   __Pyx_XDECREF(__pyx_v_title);
-  __Pyx_XDECREF(__pyx_v_img_array);
-  __Pyx_XDECREF(__pyx_v_filename);
-  __Pyx_XDECREF(__pyx_v_img);
-  __Pyx_XDECREF(__pyx_v_height);
-  __Pyx_XDECREF(__pyx_v_width);
-  __Pyx_XDECREF(__pyx_v_layers);
-  __Pyx_XDECREF(__pyx_v_size);
-  __Pyx_XDECREF(__pyx_v_out);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_TraceReturn(__pyx_r, 0);
   __Pyx_RefNannyFinishContext();
@@ -28245,7 +27984,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_Cube, __pyx_k_Cube, sizeof(__pyx_k_Cube), 0, 0, 1, 1},
   {&__pyx_n_s_CubeList, __pyx_k_CubeList, sizeof(__pyx_k_CubeList), 0, 0, 1, 1},
   {&__pyx_kp_u_Currently_it_is_not_possible_to, __pyx_k_Currently_it_is_not_possible_to, sizeof(__pyx_k_Currently_it_is_not_possible_to), 0, 1, 0, 0},
-  {&__pyx_n_u_DIVX, __pyx_k_DIVX, sizeof(__pyx_k_DIVX), 0, 1, 0, 1},
   {&__pyx_n_s_Dense, __pyx_k_Dense, sizeof(__pyx_k_Dense), 0, 0, 1, 1},
   {&__pyx_n_s_DimCoord, __pyx_k_DimCoord, sizeof(__pyx_k_DimCoord), 0, 0, 1, 1},
   {&__pyx_kp_u_Downloading_Historical_Data, __pyx_k_Downloading_Historical_Data, sizeof(__pyx_k_Downloading_Historical_Data), 0, 1, 0, 0},
@@ -28300,8 +28038,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_TimeDistributed, __pyx_k_TimeDistributed, sizeof(__pyx_k_TimeDistributed), 0, 0, 1, 1},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
-  {&__pyx_n_s_VideoWriter, __pyx_k_VideoWriter, sizeof(__pyx_k_VideoWriter), 0, 0, 1, 1},
-  {&__pyx_n_s_VideoWriter_fourcc, __pyx_k_VideoWriter_fourcc, sizeof(__pyx_k_VideoWriter_fourcc), 0, 0, 1, 1},
   {&__pyx_kp_u_Visualisations_for_planetary_bod, __pyx_k_Visualisations_for_planetary_bod, sizeof(__pyx_k_Visualisations_for_planetary_bod), 0, 1, 0, 0},
   {&__pyx_n_s_Wind, __pyx_k_Wind, sizeof(__pyx_k_Wind), 0, 0, 1, 1},
   {&__pyx_n_s_X, __pyx_k_X, sizeof(__pyx_k_X), 0, 0, 1, 1},
@@ -28402,10 +28138,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_extract, __pyx_k_extract, sizeof(__pyx_k_extract), 0, 0, 1, 1},
   {&__pyx_n_s_feature_range, __pyx_k_feature_range, sizeof(__pyx_k_feature_range), 0, 0, 1, 1},
   {&__pyx_n_s_features, __pyx_k_features, sizeof(__pyx_k_features), 0, 0, 1, 1},
+  {&__pyx_kp_u_ffmpeg_framerate_30_i_visualisat, __pyx_k_ffmpeg_framerate_30_i_visualisat, sizeof(__pyx_k_ffmpeg_framerate_30_i_visualisat), 0, 1, 0, 0},
   {&__pyx_n_s_fig, __pyx_k_fig, sizeof(__pyx_k_fig), 0, 0, 1, 1},
   {&__pyx_n_s_figsize, __pyx_k_figsize, sizeof(__pyx_k_figsize), 0, 0, 1, 1},
   {&__pyx_n_s_figure, __pyx_k_figure, sizeof(__pyx_k_figure), 0, 0, 1, 1},
-  {&__pyx_n_s_filename, __pyx_k_filename, sizeof(__pyx_k_filename), 0, 0, 1, 1},
   {&__pyx_n_s_finish, __pyx_k_finish, sizeof(__pyx_k_finish), 0, 0, 1, 1},
   {&__pyx_n_s_fit, __pyx_k_fit, sizeof(__pyx_k_fit), 0, 0, 1, 1},
   {&__pyx_n_s_fit_transform, __pyx_k_fit_transform, sizeof(__pyx_k_fit_transform), 0, 0, 1, 1},
@@ -28444,10 +28180,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_hspace, __pyx_k_hspace, sizeof(__pyx_k_hspace), 0, 0, 1, 1},
   {&__pyx_kp_u_https_github_com_amsimp_initial, __pyx_k_https_github_com_amsimp_initial, sizeof(__pyx_k_https_github_com_amsimp_initial), 0, 1, 0, 0},
   {&__pyx_n_s_i, __pyx_k_i, sizeof(__pyx_k_i), 0, 0, 1, 1},
-  {&__pyx_n_s_img, __pyx_k_img, sizeof(__pyx_k_img), 0, 0, 1, 1},
-  {&__pyx_n_s_img_array, __pyx_k_img_array, sizeof(__pyx_k_img_array), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
-  {&__pyx_n_s_imread, __pyx_k_imread, sizeof(__pyx_k_imread), 0, 0, 1, 1},
   {&__pyx_n_s_indx_psurface, __pyx_k_indx_psurface, sizeof(__pyx_k_indx_psurface), 0, 0, 1, 1},
   {&__pyx_n_s_init, __pyx_k_init, sizeof(__pyx_k_init), 0, 0, 1, 1},
   {&__pyx_kp_u_initial_conditions_nc, __pyx_k_initial_conditions_nc, sizeof(__pyx_k_initial_conditions_nc), 0, 1, 0, 0},
@@ -28470,7 +28203,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_label4, __pyx_k_label4, sizeof(__pyx_k_label4), 0, 0, 1, 1},
   {&__pyx_n_s_lat, __pyx_k_lat, sizeof(__pyx_k_lat), 0, 0, 1, 1},
   {&__pyx_n_u_latitude, __pyx_k_latitude, sizeof(__pyx_k_latitude), 0, 1, 0, 1},
-  {&__pyx_n_s_layers, __pyx_k_layers, sizeof(__pyx_k_layers), 0, 0, 1, 1},
   {&__pyx_n_s_len_lat, __pyx_k_len_lat, sizeof(__pyx_k_len_lat), 0, 0, 1, 1},
   {&__pyx_n_s_len_lon, __pyx_k_len_lon, sizeof(__pyx_k_len_lon), 0, 0, 1, 1},
   {&__pyx_n_s_len_pressure, __pyx_k_len_pressure, sizeof(__pyx_k_len_pressure), 0, 0, 1, 1},
@@ -28536,7 +28268,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_opt_temp, __pyx_k_opt_temp, sizeof(__pyx_k_opt_temp), 0, 0, 1, 1},
   {&__pyx_n_s_optimizer, __pyx_k_optimizer, sizeof(__pyx_k_optimizer), 0, 0, 1, 1},
   {&__pyx_n_s_os, __pyx_k_os, sizeof(__pyx_k_os), 0, 0, 1, 1},
-  {&__pyx_n_s_out, __pyx_k_out, sizeof(__pyx_k_out), 0, 0, 1, 1},
   {&__pyx_n_s_out_end_ix, __pyx_k_out_end_ix, sizeof(__pyx_k_out_end_ix), 0, 0, 1, 1},
   {&__pyx_n_s_output, __pyx_k_output, sizeof(__pyx_k_output), 0, 0, 1, 1},
   {&__pyx_n_s_past_history, __pyx_k_past_history, sizeof(__pyx_k_past_history), 0, 0, 1, 1},
@@ -28555,6 +28286,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_u_planet_radius, __pyx_k_planet_radius, sizeof(__pyx_k_planet_radius), 0, 1, 0, 1},
   {&__pyx_n_s_plot, __pyx_k_plot, sizeof(__pyx_k_plot), 0, 0, 1, 1},
   {&__pyx_n_s_plt, __pyx_k_plt, sizeof(__pyx_k_plt), 0, 0, 1, 1},
+  {&__pyx_kp_u_png, __pyx_k_png, sizeof(__pyx_k_png), 0, 1, 0, 0},
   {&__pyx_n_s_points, __pyx_k_points, sizeof(__pyx_k_points), 0, 0, 1, 1},
   {&__pyx_n_u_precipitable_water, __pyx_k_precipitable_water, sizeof(__pyx_k_precipitable_water), 0, 1, 0, 1},
   {&__pyx_n_s_predict, __pyx_k_predict, sizeof(__pyx_k_predict), 0, 0, 1, 1},
@@ -28587,7 +28319,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_reduce_ex, __pyx_k_reduce_ex, sizeof(__pyx_k_reduce_ex), 0, 0, 1, 1},
   {&__pyx_n_s_relative_humidity, __pyx_k_relative_humidity, sizeof(__pyx_k_relative_humidity), 0, 0, 1, 1},
   {&__pyx_n_u_relative_humidity, __pyx_k_relative_humidity, sizeof(__pyx_k_relative_humidity), 0, 1, 0, 1},
-  {&__pyx_n_s_release, __pyx_k_release, sizeof(__pyx_k_release), 0, 0, 1, 1},
   {&__pyx_n_u_relu, __pyx_k_relu, sizeof(__pyx_k_relu), 0, 1, 0, 1},
   {&__pyx_n_s_remove, __pyx_k_remove, sizeof(__pyx_k_remove), 0, 0, 1, 1},
   {&__pyx_n_s_replace, __pyx_k_replace, sizeof(__pyx_k_replace), 0, 0, 1, 1},
@@ -28597,6 +28328,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_rh_list, __pyx_k_rh_list, sizeof(__pyx_k_rh_list), 0, 0, 1, 1},
   {&__pyx_n_s_rh_model, __pyx_k_rh_model, sizeof(__pyx_k_rh_model), 0, 0, 1, 1},
   {&__pyx_n_s_rh_sc, __pyx_k_rh_sc, sizeof(__pyx_k_rh_sc), 0, 0, 1, 1},
+  {&__pyx_n_s_rmdir, __pyx_k_rmdir, sizeof(__pyx_k_rmdir), 0, 0, 1, 1},
   {&__pyx_n_s_round, __pyx_k_round, sizeof(__pyx_k_round), 0, 0, 1, 1},
   {&__pyx_n_s_s, __pyx_k_s, sizeof(__pyx_k_s), 0, 0, 1, 1},
   {&__pyx_n_s_save, __pyx_k_save, sizeof(__pyx_k_save), 0, 0, 1, 1},
@@ -28622,7 +28354,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_si, __pyx_k_si, sizeof(__pyx_k_si), 0, 0, 1, 1},
   {&__pyx_n_u_sidereal_day, __pyx_k_sidereal_day, sizeof(__pyx_k_sidereal_day), 0, 1, 0, 1},
   {&__pyx_n_s_simulate, __pyx_k_simulate, sizeof(__pyx_k_simulate), 0, 0, 1, 1},
-  {&__pyx_n_s_size, __pyx_k_size, sizeof(__pyx_k_size), 0, 0, 1, 1},
   {&__pyx_n_s_sklearn_preprocessing, __pyx_k_sklearn_preprocessing, sizeof(__pyx_k_sklearn_preprocessing), 0, 0, 1, 1},
   {&__pyx_n_s_smooth_gaussian, __pyx_k_smooth_gaussian, sizeof(__pyx_k_smooth_gaussian), 0, 0, 1, 1},
   {&__pyx_n_u_source, __pyx_k_source, sizeof(__pyx_k_source), 0, 1, 0, 1},
@@ -28638,6 +28369,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_super, __pyx_k_super, sizeof(__pyx_k_super), 0, 0, 1, 1},
   {&__pyx_n_s_suptitle, __pyx_k_suptitle, sizeof(__pyx_k_suptitle), 0, 0, 1, 1},
   {&__pyx_n_s_sys, __pyx_k_sys, sizeof(__pyx_k_sys), 0, 0, 1, 1},
+  {&__pyx_n_s_system, __pyx_k_system, sizeof(__pyx_k_system), 0, 0, 1, 1},
   {&__pyx_n_u_tanh, __pyx_k_tanh, sizeof(__pyx_k_tanh), 0, 1, 0, 1},
   {&__pyx_n_s_temp, __pyx_k_temp, sizeof(__pyx_k_temp), 0, 0, 1, 1},
   {&__pyx_n_s_temp_model, __pyx_k_temp_model, sizeof(__pyx_k_temp_model), 0, 0, 1, 1},
@@ -28675,13 +28407,9 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_v, __pyx_k_v, sizeof(__pyx_k_v), 0, 0, 1, 1},
   {&__pyx_n_s_value, __pyx_k_value, sizeof(__pyx_k_value), 0, 0, 1, 1},
   {&__pyx_n_u_virtual_temperature, __pyx_k_virtual_temperature, sizeof(__pyx_k_virtual_temperature), 0, 1, 0, 1},
-  {&__pyx_kp_u_visualisation_avi, __pyx_k_visualisation_avi, sizeof(__pyx_k_visualisation_avi), 0, 1, 0, 0},
   {&__pyx_n_u_visualisations, __pyx_k_visualisations, sizeof(__pyx_k_visualisations), 0, 1, 0, 1},
-  {&__pyx_kp_u_visualisations_png, __pyx_k_visualisations_png, sizeof(__pyx_k_visualisations_png), 0, 1, 0, 0},
   {&__pyx_kp_u_visualisations_timestep, __pyx_k_visualisations_timestep, sizeof(__pyx_k_visualisations_timestep), 0, 1, 0, 0},
   {&__pyx_n_s_visualise, __pyx_k_visualise, sizeof(__pyx_k_visualise), 0, 0, 1, 1},
-  {&__pyx_n_s_width, __pyx_k_width, sizeof(__pyx_k_width), 0, 0, 1, 1},
-  {&__pyx_n_s_write, __pyx_k_write, sizeof(__pyx_k_write), 0, 0, 1, 1},
   {&__pyx_n_s_x, __pyx_k_x, sizeof(__pyx_k_x), 0, 0, 1, 1},
   {&__pyx_n_s_x_height, __pyx_k_x_height, sizeof(__pyx_k_x_height), 0, 0, 1, 1},
   {&__pyx_n_s_x_rh, __pyx_k_x_rh, sizeof(__pyx_k_x_rh), 0, 0, 1, 1},
@@ -28905,14 +28633,14 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__35);
   __Pyx_GIVEREF(__pyx_tuple__35);
 
-  /* "amsimp/dynamics.pyx":1556
- *                     os.remove("visualisations")
+  /* "amsimp/dynamics.pyx":1546
+ *                         pass
  *         else:
  *             raise NotImplementedError(             # <<<<<<<<<<<<<<
  *                 "Visualisations for planetary bodies other than Earth is not currently implemented."
  *             )
  */
-  __pyx_tuple__38 = PyTuple_Pack(1, __pyx_kp_u_Visualisations_for_planetary_bod); if (unlikely(!__pyx_tuple__38)) __PYX_ERR(0, 1556, __pyx_L1_error)
+  __pyx_tuple__38 = PyTuple_Pack(1, __pyx_kp_u_Visualisations_for_planetary_bod); if (unlikely(!__pyx_tuple__38)) __PYX_ERR(0, 1546, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__38);
   __Pyx_GIVEREF(__pyx_tuple__38);
 
@@ -29124,10 +28852,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *             self,
  *             data=None,
  */
-  __pyx_tuple__61 = PyTuple_Pack(68, __pyx_n_s_self, __pyx_n_s_data, __pyx_n_s_plot, __pyx_n_s_psurface, __pyx_n_s_time, __pyx_n_s_lat, __pyx_n_s_lon, __pyx_n_s_longitude, __pyx_n_s_data1, __pyx_n_s_data2, __pyx_n_s_data3, __pyx_n_s_data4, __pyx_n_s_level1, __pyx_n_s_level2, __pyx_n_s_level3, __pyx_n_s_level4, __pyx_n_s_min1, __pyx_n_s_min2, __pyx_n_s_min3, __pyx_n_s_min4, __pyx_n_s_max1, __pyx_n_s_max2, __pyx_n_s_max3, __pyx_n_s_max4, __pyx_n_s_pressure, __pyx_n_s_indx_psurface, __pyx_n_s_time_unit, __pyx_n_s_gs, __pyx_n_s_fig, __pyx_n_s_ax1, __pyx_n_s_label1, __pyx_n_s_unit1, __pyx_n_s_ax2, __pyx_n_s_label2, __pyx_n_s_unit2, __pyx_n_s_ax3, __pyx_n_s_label3, __pyx_n_s_unit3, __pyx_n_s_ax4, __pyx_n_s_label4, __pyx_n_s_unit4, __pyx_n_s_date, __pyx_n_s_i, __pyx_n_s_cmap1, __pyx_n_s_data1_plot, __pyx_n_s_contour1, __pyx_n_s_cb1, __pyx_n_s_tick_locator, __pyx_n_s_cmap2, __pyx_n_s_data2_plot, __pyx_n_s_contour2, __pyx_n_s_cb2, __pyx_n_s_cmap3, __pyx_n_s_data3_plot, __pyx_n_s_contour3, __pyx_n_s_cb3, __pyx_n_s_data4_plot, __pyx_n_s_contour4, __pyx_n_s_cb4, __pyx_n_s_title, __pyx_n_s_img_array, __pyx_n_s_filename, __pyx_n_s_img, __pyx_n_s_height, __pyx_n_s_width, __pyx_n_s_layers, __pyx_n_s_size, __pyx_n_s_out); if (unlikely(!__pyx_tuple__61)) __PYX_ERR(0, 1267, __pyx_L1_error)
+  __pyx_tuple__61 = PyTuple_Pack(60, __pyx_n_s_self, __pyx_n_s_data, __pyx_n_s_plot, __pyx_n_s_psurface, __pyx_n_s_time, __pyx_n_s_lat, __pyx_n_s_lon, __pyx_n_s_longitude, __pyx_n_s_data1, __pyx_n_s_data2, __pyx_n_s_data3, __pyx_n_s_data4, __pyx_n_s_level1, __pyx_n_s_level2, __pyx_n_s_level3, __pyx_n_s_level4, __pyx_n_s_min1, __pyx_n_s_min2, __pyx_n_s_min3, __pyx_n_s_min4, __pyx_n_s_max1, __pyx_n_s_max2, __pyx_n_s_max3, __pyx_n_s_max4, __pyx_n_s_pressure, __pyx_n_s_indx_psurface, __pyx_n_s_time_unit, __pyx_n_s_gs, __pyx_n_s_fig, __pyx_n_s_ax1, __pyx_n_s_label1, __pyx_n_s_unit1, __pyx_n_s_ax2, __pyx_n_s_label2, __pyx_n_s_unit2, __pyx_n_s_ax3, __pyx_n_s_label3, __pyx_n_s_unit3, __pyx_n_s_ax4, __pyx_n_s_label4, __pyx_n_s_unit4, __pyx_n_s_date, __pyx_n_s_i, __pyx_n_s_cmap1, __pyx_n_s_data1_plot, __pyx_n_s_contour1, __pyx_n_s_cb1, __pyx_n_s_tick_locator, __pyx_n_s_cmap2, __pyx_n_s_data2_plot, __pyx_n_s_contour2, __pyx_n_s_cb2, __pyx_n_s_cmap3, __pyx_n_s_data3_plot, __pyx_n_s_contour3, __pyx_n_s_cb3, __pyx_n_s_data4_plot, __pyx_n_s_contour4, __pyx_n_s_cb4, __pyx_n_s_title); if (unlikely(!__pyx_tuple__61)) __PYX_ERR(0, 1267, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__61);
   __Pyx_GIVEREF(__pyx_tuple__61);
-  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(4, 0, 68, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__61, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_amsimp_dynamics_pyx, __pyx_n_s_visualise, 1267, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 1267, __pyx_L1_error)
+  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(4, 0, 60, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__61, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_amsimp_dynamics_pyx, __pyx_n_s_visualise, 1267, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 1267, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
@@ -29191,7 +28919,6 @@ static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   __pyx_int_6 = PyInt_FromLong(6); if (unlikely(!__pyx_int_6)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_10 = PyInt_FromLong(10); if (unlikely(!__pyx_int_10)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_13 = PyInt_FromLong(13); if (unlikely(!__pyx_int_13)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_15 = PyInt_FromLong(15); if (unlikely(!__pyx_int_15)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_20 = PyInt_FromLong(20); if (unlikely(!__pyx_int_20)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_21 = PyInt_FromLong(21); if (unlikely(!__pyx_int_21)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_72 = PyInt_FromLong(72); if (unlikely(!__pyx_int_72)) __PYX_ERR(0, 1, __pyx_L1_error)

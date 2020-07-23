@@ -1530,28 +1530,18 @@ cdef class Dynamics(RNN):
                     ax3.clear()
                     ax4.clear()
                 else:
-                    # Compile photos into video.
-                    img_array = []
-
-                    # Fetch all the image file names and read them.
-                    for filename in glob.glob('visualisations/*.png'):
-                        img = cv2.imread(filename)
-                        height, width, layers = img.shape
-                        size = (width,height)
-                        img_array.append(img)
+                    # Compile photos into video using ffmeg.
+                    os.system("ffmpeg -framerate 30 -i visualisations/timestep_%d.png -vf format=yuv420p visualise.mp4")
                     
-                    # Create a VideoWriter object.
-                    out = cv2.VideoWriter('visualisation.avi',cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
+                    # Remove images.
+                    for i in range(len(time)):
+                        os.remove("visualisations/timestep_" + str(i) + ".png")
 
-                    # Save the images to video file.
-                    for i in range(len(img_array)):
-                        out.write(img_array[i])
-
-                    # Release the VideoWriter and destroy all windows.
-                    out.release()
-
-                    # Delete the images.
-                    os.remove("visualisations")
+                    # Remove folder.
+                    try:
+                        os.rmdir('visualisations')
+                    except OSError:
+                        pass
         else:
             raise NotImplementedError(
                 "Visualisations for planetary bodies other than Earth is not currently implemented."
