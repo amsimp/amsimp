@@ -48,8 +48,6 @@ from iris.cube import Cube, CubeList
 from iris import save
 from progress.bar import IncrementalBar
 from metpy.calc import smooth_gaussian
-import cv2
-import glob
 
 # -----------------------------------------------------------------------------------------#
 
@@ -945,7 +943,7 @@ cdef class Dynamics(RNN):
                 # of weights). Used to control nonlinear instability.
                 T_n = smooth_gaussian(
                     scalar_grid=T_n.value,
-                    n=2,
+                    n=3,
                 ).magnitude * T_n.unit
 
                 # Mixing ratio
