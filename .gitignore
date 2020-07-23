@@ -111,6 +111,3 @@ venv.bak/
 
 # .tmp
 *.tmp
-
-# .npy
-*.npy
