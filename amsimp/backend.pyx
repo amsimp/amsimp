@@ -564,51 +564,79 @@ cdef class Backend(Download):
         """
         # Determine gradient with respect to longitude.
         cdef np.ndarray longitude = np.radians(self.longitude_lines().value)
-        parameter = np.gradient(parameter, longitude, axis=2)
 
-        cdef np.ndarray latitude = np.radians(self.latitude_lines().value)
-        parameter = np.transpose(parameter, (1, 0, 2))
+        # Define variable types.
+        cdef np.ndarray parameter_central, parameter_boundaries
+        cdef np.ndarray parameter_lgmt, parameter_rgmt
+        cdef np.ndarray lon_lgmt, lon_rgmt, lon_boundaries
 
-        cdef int len_latitude = len(latitude)
-        cdef list parameter_list = []
-        cdef int n = 0
-        while n < len_latitude:
-            param = (1 / (self.a * np.cos(latitude[n]))) * parameter[n]
+        # Compute gradient.
+        # Central points.
+        parameter_central = np.gradient(
+            parameter, longitude, axis=2
+        )
 
-            # Store the unit.
-            unit = param.unit
-            unit = unit.si
+        # Boundaries.
+        # Define atmospheric parameter boundaries.
+        parameter_lgmt = parameter[:, :, -3:].value
+        parameter_rgmt = parameter[:, :, :3].value
+        # Define longitude boundaries.
+        lon_lgmt = longitude[-3:]
+        lon_rgmt = longitude[:3]
+        # Concatenate atmospheric parameter boundaries.
+        parameter_boundaries = np.concatenate(
+            (parameter_lgmt, parameter_rgmt), axis=2
+        ) * parameter.unit
+        # Concatenate longitude boundaries.
+        lon_boundaries = np.concatenate((lon_lgmt, lon_rgmt))
+        # Compute gradient at boundaries.
+        parameter_boundaries = np.gradient(
+            parameter_boundaries, lon_boundaries, axis=2
+        )
+        # Redefine parameter as computed gradient.
+        parameter = parameter_central
+        parameter[:, :, -1] = parameter_boundaries[:, :, 2]
+        parameter[:, :, 0] = parameter_boundaries[:, :, 3]
 
-            param = param.value.tolist()
-            parameter_list.append(param)
+        # Make 1d latitude array into a 3d latitude array.
+        cdef np.ndarray latitude = np.radians(self.latitude_lines())
+        latitude = self.make_3dimensional_array(
+            parameter=latitude, axis=1
+        )
 
-            n += 1
+        # Handle longitudinal variation with respect to latitude.
+        gradient_longitude = (
+            (1 / (self.a * np.cos(latitude.value))) * parameter
+        )
 
-        parameter = np.asarray(parameter_list)
-        gradient_x = np.transpose(parameter, (1, 0, 2)) * unit
-
-        return gradient_x
+        return gradient_longitude
 
     cpdef np.ndarray gradient_latitude(self, parameter=None):
         """
         Explain here.
         """
+        # Define variable.
         cdef np.ndarray latitude = np.radians(self.latitude_lines().value)
 
-        gradient_y = np.gradient(
+        # Determine gradient with respect to latitude.
+        gradient_latitude = np.gradient(
             parameter.value, self.a * latitude, axis=1
         ) * (parameter.unit / units.m)
-        return gradient_y
+
+        return gradient_latitude
     
     cpdef np.ndarray gradient_pressure(self, parameter=None):
         """
         Explain here.
         """
+        # Define variable.
         cdef np.ndarray pressure = self.pressure_surfaces()
 
+         # Determine gradient with respect to pressure.
         gradient_pressure = np.gradient(
             parameter.value, pressure, axis=0
         ) * (parameter.unit / pressure.unit)
+
         return gradient_pressure
 
     cpdef np.ndarray make_3dimensional_array(self, parameter=None, axis=1):
