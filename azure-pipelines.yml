@@ -5,35 +5,23 @@ pool:
   vmImage: 'macOS-10.15'
 
 steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.7.8'
 - bash: echo "##vso[task.prependpath]$CONDA/bin"
   displayName: Add conda to PATH
 - bash: sudo chown -R $USER $CONDA
   displayName: Take ownership of conda installation
 - script: conda env create -f environment.yml
-  displayName: Create Anaconda environment
+  displayName: Create Anaconda Environment
 - script: conda env list
-  displayName:  environment installation verification
+  displayName:  Environment Installation Verification
 - task: Bash@3
   inputs:
     targetType: 'inline'
     script: |
       eval "$(conda shell.bash hook)"
       conda activate amsimp
-  displayName: Active
+      conda env list
+  displayName: Activate Environment
 - bash: |
-    python setup.py install
-  displayName: Install Anaconda packages
-- task: PythonScript@0
-  inputs:
-    scriptSource: 'inline'
-    script: |
-      import amsimp
-
-      state = amsimp.Dynamics(ai=False, forecast_length=6)
-
-      state.simulate()
-
-      state.exit()
+    python3.7 setup.py install
+    python3.7 -c "import amsimp; state = amsimp.Dynamics(ai=False, forecast_length=6); state.simulate()"
+  displayName: Install AMSIMP
