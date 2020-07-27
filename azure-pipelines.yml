@@ -12,7 +12,7 @@ steps:
   displayName: Add conda to PATH
 - bash: sudo chown -R $USER $CONDA
   displayName: Take ownership of conda installation
-- bash: conda env create -f environment.yml && conda activate amsimp
+- bash: conda env create -f environment.yml
   displayName: Create Anaconda environment
 - bash: |
     python setup.py install
