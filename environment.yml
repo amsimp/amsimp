@@ -358,5 +358,3 @@ dependencies:
     - werkzeug==1.0.1
     - wget==3.2
     - wrapt==1.12.1
-prefix: /Users/conorcasey/anaconda3
-
