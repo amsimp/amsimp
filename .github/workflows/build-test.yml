@@ -27,9 +27,9 @@ jobs:
         export PATH="$HOME/miniconda/bin:$PATH"
         which python
         conda init
-    - name: Test AMSIMP compilation and installation
-      run: |
         sudo conda env create -f environment.yml
         conda activate amsimp
+    - name: Test AMSIMP compilation and installation
+      run: |
         python setup.py install
         python -c "import amsimp; state = amsimp.Dynamics(ai=False, forecast_length=6); state.simulate()"
