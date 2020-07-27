@@ -14,7 +14,9 @@ steps:
   displayName: Take ownership of conda installation
 - bash: conda create --yes --quiet --name myEnvironment
   displayName: Create Anaconda environment
-- zsh: |
+- bash: |
+    conda init bash
+    source /.bashrc
     conda env create -f environment.yml && conda activate amsimp
     python setup.py install
   displayName: Install Anaconda packages
