@@ -61,8 +61,6 @@ Further information about the required dependencies can be found here:
   TensorFlow is an end-to-end open source platform for machine learning.
 - **Progress** (http://github.com/verigak/progress/) |
   Easy progress reporting for Python.
-- **MetPy** (https://unidata.github.io/MetPy/latest/index.html) |
-  MetPy is a collection of tools in Python for reading, visualizing, and performing calculations with weather data.
 
 Finally, you can the software via install:
 
