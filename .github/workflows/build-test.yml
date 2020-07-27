@@ -1,0 +1,34 @@
+name: Test AMSIMP Compilation and Installation
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install dependencies
+      run: |
+        wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
+        bash miniconda.sh -b -p $HOME/miniconda
+        source "$HOME/miniconda/etc/profile.d/conda.sh"
+        hash -r
+        conda config --set always_yes yes --set changeps1 no
+        conda update -q conda
+        conda info -a
+        export PATH="$HOME/miniconda/bin:$PATH"
+        which python
+        conda init
+    - name: Test AMSIMP compilation and installation
+      run: |
+        conda env create -f environment.yml && conda activate amsimp
+        python setup.py install
+        python -c "import amsimp; state = amsimp.Dynamics(ai=False, forecast_length=6); state.simulate()"
