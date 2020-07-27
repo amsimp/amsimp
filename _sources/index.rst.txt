@@ -9,10 +9,10 @@ AMSIMP
     Please note that it is strongly recommended that you
     install AMSIMP via Anaconda Cloud.
 
-|Azure DevOps builds| |version| |GitHub| |Anaconda-Server
+|GitHub build| |version| |GitHub| |Anaconda-Server
 Badge|
 
-.. |Azure DevOps builds| image:: https://dev.azure.com/16ccasey/AMSIMP/_apis/build/status/amsimp.amsimp?branchName=master
+.. |GitHub build| image:: https://github.com/amsimp/amsimp/workflows/Build%20AMSIMP/badge.svg
 .. |version| image:: https://anaconda.org/amsimp/amsimp/badges/version.svg
 .. |GitHub| image:: https://img.shields.io/github/license/amsimp/amsimp.svg?style=flat-square
 .. |Anaconda-Server Badge| image:: https://anaconda.org/amsimp/amsimp/badges/downloads.svg
