@@ -1,4 +1,4 @@
-name: Test AMSIMP Compilation and Installation
+name: Build AMSIMP
 
 on:
   push:
@@ -29,6 +29,7 @@ jobs:
         conda init
     - name: Test AMSIMP compilation and installation
       run: |
-        conda env create -f environment.yml && conda activate amsimp
+        sudo conda env create -f environment.yml
+        conda activate amsimp
         python setup.py install
         python -c "import amsimp; state = amsimp.Dynamics(ai=False, forecast_length=6); state.simulate()"
