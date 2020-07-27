@@ -1,4 +1,4 @@
-name: base
+name: amsimp
 channels:
   - conda-forge
   - defaults
