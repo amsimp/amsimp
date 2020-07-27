@@ -12,7 +12,7 @@ AMSIMP
 |GitHub build| |version| |GitHub| |Anaconda-Server
 Badge|
 
-.. |GitHub build| image:: https://github.com/amsimp/amsimp/workflows/Build%20AMSIMP/badge.svg
+.. |GitHub build| image:: https://github.com/amsimp/amsimp/workflows/AMSIMP%20Build/badge.svg
 .. |version| image:: https://anaconda.org/amsimp/amsimp/badges/version.svg
 .. |GitHub| image:: https://img.shields.io/github/license/amsimp/amsimp.svg?style=flat-square
 .. |Anaconda-Server Badge| image:: https://anaconda.org/amsimp/amsimp/badges/downloads.svg
