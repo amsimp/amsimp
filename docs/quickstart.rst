@@ -14,41 +14,47 @@ the software by importing it into Python:
 
 Once imported, you can utilise the four classes that
 are available to you. The classes available are:
-:class:`Backend`, :class:`Wind`, :class:`Water`,
+:class:`Backend`, :class:`Wind`, :class:`Moist`,
 and :class:`Dynamics`.
 
 In most situations, you will interact with the
 :class:`Dynamics` class. Once you have chosen
-a particular class, you must then decide on a
-level of simulation detail between 1 and 5. If
-you are interacting with the :class:`Dynamics`
+a particular class, you must then decide on the grid size. 
+If you are interacting with the :class:`Dynamics`
 class, you must also specify the length of
 forecast that will be generated. The forecast
-length, in days, must at least one day in length, and
-can have a maximum length of five. An example
+length, in hours, must at least one hour in length, and
+can have a maximum length of 168 hours. An example
 of the initialisation needed for the :class:`Dynamics`
 class is given below:
 
 .. code-block:: python
 
-    # Choose a level of simulation detail combined with a class you want to use.
+    # Choose a simulation grid size combined with a class you want to use.
     # The forecast length must also be specified.
-    detail = amsimp.Dynamics(5, 3)
-    #    Simulation detail---^  ^---Forecast length
+    detail = amsimp.Dynamics(
+        delta_latitude=10, delta_longitude=10, forecast_length=72
+    )
 
 In this tutorial, I will show you how to
-get a visualisation of a rudimentary
-simulation of tropospheric and stratsopheric
-dynamics on a synoptic scale. To do this,
-you can use the code below:
+generate a ensemble forecast prediction for
+the next 3 days,  with the recurrent neural
+network enabled. Following which, the output
+will be saved as a file on the machine.
 
 .. code-block:: python
 
-    # Visualisation of a rudimentary simulation of tropospheric and stratsopheric
-    # dynamics on a synoptic scale.
-    detail.simulate()
+    # Import package.
+    import amsimp
 
-.. image:: https://github.com/amsimp/papers/raw/master/project-book/Graphs/contour_plots/forecast.png
-  :width: 90%
-  :align: center
-  :alt: Visualisation of a rudimentary simulation of tropospheric and stratsopheric dynamics on a synoptic scale.
+    # Initialise class.
+    detail = amsimp.Dynamics(
+        delta_latitude=10,
+        delta_longitude=10,
+        forecast_length=72,
+        efs=True,
+        ai=True
+    )
+
+    # Generate forecast and save output.
+    detail.atmospheric_prognostic_method(save_file=True)

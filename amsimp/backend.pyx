@@ -1013,9 +1013,13 @@ cdef class Backend(Download):
             maximum = data.max()
             levels = np.linspace(minimum, maximum, 21)
             data, lon = add_cyclic_point(data, coord=self.longitude_lines().value)
+            data, lat = add_cyclic_point(
+                np.transpose(data), coord=self.latitude_lines().value
+            )
+            data = np.transpose(data)
             contour = plt.contourf(
                 lon,
-                self.latitude_lines().value,
+                lat,
                 data,
                 transform=ccrs.PlateCarree(),
                 levels=levels,
@@ -1219,6 +1223,10 @@ cdef class Backend(Download):
             pressure_thickness, longitude = add_cyclic_point(
                 pressure_thickness, coord=longitude
             )
+            pressure_thickness, latitude = add_cyclic_point(
+                np.transpose(pressure_thickness), coord=latitude
+            )
+            pressure_thickness = np.transpose(pressure_thickness)
             contour = plt.contourf(
                 longitude,
                 latitude,

@@ -97,7 +97,7 @@ cdef class Wind(Moist):
         prevent the need to repeatly download the file. For more information,
         visit https://github.com/amsimp/initial-conditions.
 
-        For geostrophic wind, please see the method, geostrophic_wind.
+        For geostrophic wind, please see the method, wind.
         """
         if not self.input_data:
             # Input data.
@@ -263,7 +263,7 @@ cdef class Wind(Moist):
             u_norm = u / np.sqrt(u ** 2 + v ** 2)
             v_norm = v / np.sqrt(u ** 2 + v ** 2)
 
-            geostrophic_wind = np.sqrt(u ** 2 + v ** 2)
+            wind = np.sqrt(u ** 2 + v ** 2)
 
             ax = plt.axes(
                 projection=ccrs.NearsidePerspective(
@@ -278,14 +278,16 @@ cdef class Wind(Moist):
             ax.gridlines()
 
             # Contour plotting.
-            minimum = geostrophic_wind.min()
-            maximum = geostrophic_wind.max()
+            minimum = wind.min()
+            maximum = wind.max()
             levels = np.linspace(minimum, maximum, 21)
-            geostrophic_wind, lon = add_cyclic_point(geostrophic_wind, coord=longitude)
+            wind, lon = add_cyclic_point(wind, coord=longitude)
+            wind, lat = add_cyclic_point(np.transpose(wind), coord=latitude)
+            wind = np.transpose(wind)
             contourf = plt.contourf(
                 lon,
-                latitude,
-                geostrophic_wind,
+                lat,
+                wind,
                 transform=ccrs.PlateCarree(),
                 levels=levels,
             )

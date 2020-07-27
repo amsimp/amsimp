@@ -14,9 +14,9 @@ Wind Class
    :language: cython
    :linenos:
 
-Water Class
+Moist Class
 -----------
-.. literalinclude:: ../amsimp/water.pyx
+.. literalinclude:: ../amsimp/moist.pyx
    :language: cython
    :linenos:
 
