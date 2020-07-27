@@ -15,7 +15,6 @@ steps:
 - bash: conda create --yes --quiet --name myEnvironment
   displayName: Create Anaconda environment
 - bash: |
-    git clone https://github.com/amsimp/amsimp.git && cd amsimp
     conda env create -f environment.yml && conda activate amsimp
     python setup.py install
   displayName: Install Anaconda packages
