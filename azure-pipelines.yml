@@ -15,6 +15,7 @@ steps:
 - bash: conda env create -f environment.yml
   displayName: Create Anaconda environment
 - bash: |
+    conda activate amsimp
     python setup.py install
   displayName: Install Anaconda packages
 - task: PythonScript@0
