@@ -1,6 +1,6 @@
 # AMSIMP - Atmospheric Dynamical Core
 
-![Azure DevOps builds](https://dev.azure.com/16ccasey/AMSIMP/_apis/build/status/amsimp.amsimp?branchName=master)
+![Build AMSIMP](https://github.com/amsimp/amsimp/workflows/Build%20AMSIMP/badge.svg)
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/version.svg)
 ![GitHub](https://img.shields.io/github/license/amsimp/amsimp.svg?style=flat-square)
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/downloads.svg)
