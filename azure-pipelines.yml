@@ -12,10 +12,22 @@ steps:
   displayName: Add conda to PATH
 - bash: sudo chown -R $USER $CONDA
   displayName: Take ownership of conda installation
-- bash: conda env create -f environment.yml
-  displayName: Create Anaconda environment
+- job: build_environment
+    displayName: Build Environment
+    dependsOn: pre_build_setup
+    steps:
+      - script: conda env create -f environment.yml
+        displayName: Create Anaconda environment
+      - script: conda env list
+        displayName:  environment installation verification
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: |
+            eval "$(conda shell.bash hook)"
+            conda activate build_env
+        displayName: Active
 - bash: |
-    conda activate amsimp
     python setup.py install
   displayName: Install Anaconda packages
 - task: PythonScript@0
