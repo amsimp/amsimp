@@ -555,7 +555,7 @@ cdef class Dynamics(RNN):
         of balance equations: a continuity equation, conservation of
         momentum, and a thermal energy equation.
 
-        The Lax–Friedrichs scheme is used to numerically solve the Primitive
+        The Lax–Friedrichs method is used to numerically solve the Primitive
         Equations within the software. It is a numerical method for the
         solution of hyperbolic partial differential equations based on
         finite differences. The method can be described as the 

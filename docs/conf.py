@@ -18,11 +18,11 @@
 # -- Project information -----------------------------------------------------
 
 project = 'AMSIMP'
-copyright = '2020, Conor Casey'
-author = 'Conor Casey'
+copyright = '2020, AMSIMP'
+author = 'AMSIMP'
 
 # The full version, including alpha/beta/rc tags
-release = '0.3.7'
+release = '1.0.0'
 
 
 # -- General configuration ---------------------------------------------------

@@ -131,7 +131,7 @@ state = amsimp.Dynamics(
     ai=False,
     delta_latitude=5,
     delta_longitude=5,
-    forecast_length=72,
+    forecast_length=48,
     delta_t=delta_t,
     input_date=date,
 )

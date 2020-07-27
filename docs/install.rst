@@ -7,18 +7,9 @@ Prerequisites
 To install AMSIMP, you will need to utilise Python 3.7, or later.
 Preferably, you will also want to have an installation of either
 Anaconda, or Miniconda on your machine. For installation instructions,
-please visit `Anaconda's documentation page`_. I strongly discourage
-the use of either PyPI or building from source as some of the packages
-needed for the installation of AMSIMP are extremely difficult to install
-without the use of Anaconda Cloud.
+please visit `Anaconda's documentation page`_.
 
 .. _Anaconda's documentation page: https://docs.anaconda.com/anaconda/install/
-
-Before installation you must install the following packages from PyPI:
-
-.. code:: sh
-
-   $ pip install wget && pip install pynverse
 
 Installing from Anaconda Cloud
 ------------------------------
@@ -30,27 +21,12 @@ AMSIMP is distributed on `Anaconda Cloud <https://anaconda.org/amsimp/amsimp>`_ 
 
 If you run into any issues, you can either create an issue on
 `GitHub <https://github.com/amsimp/amsimp/issues>`_ or
-contact me by `email <support@amsimp.com>`_.
-
-Installing from PyPI
---------------------
-
-AMSIMP is also available on `PyPI <https://pypi.org/project/amsimp/>`_ and can be installed using pip,
-however, as mentioned previously this approach is strongly discouraged:
-
-.. code:: sh
-
-   $ pip install amsimp
-
-Please note: you will also need to have a C compiler installed
-on your machine. On macOS or Linux, you could use GCC and on
-Windows, you could use MinGW.
+contact us by `email <support@amsimp.com>`_.
 
 Installing from Source
 ----------------------
 
-Finally, you can also install AMSIMP from the source code. Again, I
-strongly discourage this approach. First, clone
+You can also install AMSIMP from the source code. First, clone
 the repository off of GitHub:
 
 .. code:: sh
@@ -62,12 +38,33 @@ do this via:
 
 .. code:: sh
 
-   $ pip install -r requirements.txt
+   $ conda env create -f environment.yml && conda activate amsimp
 
-Please note, you may have some difficulty installing some of the
-software requirements, specifically Cartopy and Proj.
+Further information about the required dependencies can be found here:
 
-Finally you can install:
+- **Python** 3.7.x (https://www.python.org/)
+- **NumPy** (https://numpy.org/) |
+  Python package for scientific computing including a powerful N-dimensional array object.
+- **Astropy** (https://www.astropy.org) |
+  A Community Python Library for Astronomy.
+- **Matplotlib** (https://matplotlib.org/) | 
+  Python package for 2D plotting. Python package required for any graphical capabilities.
+- **Cartopy** (https://scitools.org.uk/cartopy/docs/latest/index.html) |
+  Cartopy is a Python package designed for geospatial data processing in order to produce maps and other geospatial data analyses.
+- **Iris** (https://scitools.org.uk/iris/docs/latest/) |
+  A powerful, format-agnostic, community-driven Python library for analysing and visualising Earth science data.
+- **SciPy** (https://www.scipy.org/) |
+  A Python package for scientific computing.
+- **scikit-learn** (https://scikit-learn.org/stable/) |
+  Machine Learning in Python
+- **Tensorflow** 0.2 or later (https://www.tensorflow.org) |
+  TensorFlow is an end-to-end open source platform for machine learning.
+- **Progress** (http://github.com/verigak/progress/) |
+  Easy progress reporting for Python.
+- **MetPy** (https://unidata.github.io/MetPy/latest/index.html) |
+  MetPy is a collection of tools in Python for reading, visualizing, and performing calculations with weather data.
+
+Finally, you can the software via install:
 
 .. code:: sh
 

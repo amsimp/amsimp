@@ -5,28 +5,28 @@ Visualisations
 The software also provides additional visualisations of different
 atmospheric parameters, such as geostrophic wind and precipitable
 water. These visualisations can be found in the :class:`Backend`,
-:class:`Wind`, :class:`Water` classes. In this particular tutorial,
-we will initialise with the :class:`Water` class, as it also
+:class:`Wind`, :class:`Moist` classes. In this particular tutorial,
+we will initialise with the :class:`Wind` class, as it also
 inherits the other classes we are interested in:
 
 .. code-block:: python
 
-    # Initialise the Water class.
-    detail = amsimp.Water(5)
-    # Simulation detail---^
+    # Initialise the Wind class.
+    detail = amsimp.Wind()
 
 Longitude - Latitude Contour Plots
 ----------------------------------
 
 The default altitude at which these longitude - latitude contour plots
-are generated is at sea level, however, a particular altitude, in metres,
-can be specified the majority of the time by doing the following:
+are generated is at a pressure surface of 1000 hectopascals, however,
+a particular pressure surface, in hectopascals, can be specified the
+majority of the time by doing the following:
 
 .. code-block:: python
 
-    # Specify a particular altitude, in metres.
-    detail.method(alt=1000)
-    #   Altitude (m) ---^
+    # Specify a particular pressure surface, in hectopascals.
+    detail.method(psurface=500)
+    # Pressire Surface (hPa) ^ 
 
 Atmospheric Density
 ^^^^^^^^^^^^^^^^^^^
@@ -39,28 +39,31 @@ volume.
     # amsimp.Backend
     # Generate a longitude - latitude contour plot for atmospheric density
     # based on current atmospheric conditions.
-    detail.longitude_contourf(2, alt=0)
+    detail.longitude_contourf(2, psurface=1000)
     #                         ^--This number determines the atmospheric parameter.
 
-.. image:: https://github.com/amsimp/papers/raw/master/project-book/Graphs/contour_plots/density.png
+.. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/density.png
   :width: 90%
   :align: center
 
-Atmospheric Pressure
-^^^^^^^^^^^^^^^^^^^^
+Geopotential Height
+^^^^^^^^^^^^^^^^^^^
 
-Pressure is defined as the flux of momentum component normal to a given
-surface.
+Geopotential Height is the height above sea level of a pressure level.
+For example, if a station reports that the 500 hPa height at its
+location is 5600 m, it means that the level of the atmosphere over
+that station at which the atmospheric pressure is 500 hPa is 5600
+meters above sea level.
 
 .. code-block:: python
 
     # amsimp.Backend
-    # Generate a longitude - latitude contour plot for atmospheric pressure
+    # Generate a longitude - latitude contour plot for geopotential height
     # based on current atmospheric conditions.
-    detail.longitude_contourf(1, alt=0)
+    detail.longitude_contourf(1, psurface=1000)
     #                         ^--This number determines the atmospheric parameter.
 
-.. image:: https://github.com/amsimp/papers/raw/master/project-book/Graphs/contour_plots/pressure.png
+.. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/height.png
   :width: 90%
   :align: center
 
@@ -78,9 +81,9 @@ a `Nearside Projection <https://scitools.org.uk/cartopy/docs/v0.15/crs/projectio
     # amsimp.Wind
     # Generate a longitude - latitude contour plot for geostrophic wind
     # based on current atmospheric conditions.
-    detail.globe(alt=0)
+    detail.globe(psurface=1000)
 
-.. image:: https://github.com/amsimp/papers/raw/master/poster/Images/globe.png
+.. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/globe.png
   :width: 90%
   :align: center
 
@@ -108,11 +111,29 @@ specified levels.
     # based on current atmospheric conditions.
     detail.water_contourf()
 
-.. image:: https://github.com/amsimp/papers/raw/master/project-book/Graphs/contour_plots/precipitable_water.png
+.. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/precipitable_water.png
   :width: 90%
   :align: center
 
-Latitude - Altitude Contour Plots
+Relative Humidity
+^^^^^^^^^^^^^^^^^
+
+Relative Humidity is the amount of water vapour present in air expressed
+as a percentage of the amount needed for saturation at the same temperature.
+
+.. code-block:: python
+
+    # amsimp.Backend
+    # Generate a longitude - latitude contour plot for relative humidity
+    # based on current atmospheric conditions.
+    detail.longitude_contourf(3, psurface=1000)
+    #                         ^--This number determines the atmospheric parameter.
+
+.. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/humidity.png
+  :width: 90%
+  :align: center
+
+Latitude - Pressure Contour Plots
 ---------------------------------
 
 Meridional Wind
@@ -126,12 +147,12 @@ Note: AMSIMP deals solely with geostrophic wind.
 .. code-block:: python
 
     # amsimp.Wind
-    # Generate a latitude - altitude contour plot for meridional wind
+    # Generate a latitude - pressure contour plot for meridional wind
     # based on current atmospheric conditions.
     detail.wind_contourf(1)
     #                    ^--This number determines the atmospheric parameter.
 
-.. image:: https://github.com/amsimp/papers/raw/master/project-book/Graphs/contour_plots/meridional_wind.png
+.. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/meridional_wind.png
   :width: 90%
   :align: center
 
@@ -144,12 +165,12 @@ motion.
 .. code-block:: python
 
     # amsimp.Backend
-    # Generate a latitude - altitude contour plot for temperature
+    # Generate a latitude - pressure contour plot for temperature
     # based on current atmospheric conditions.
-    detail.altitude_contourf(0)
+    detail.psurface_contourf(0)
     #                        ^--This number determines the atmospheric parameter.
 
-.. image:: https://github.com/amsimp/papers/raw/master/project-book/Graphs/contour_plots/temperature.png
+.. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/temp.png
   :width: 90%
   :align: center
 
@@ -164,11 +185,11 @@ solely with geostrophic wind.
 .. code-block:: python
 
     # amsimp.Wind
-    # Generate a latitude - altitude contour plot for zonal wind
+    # Generate a latitude - pressure contour plot for zonal wind
     # based on current atmospheric conditions.
     detail.wind_contourf(0)
     #                    ^--This number determines the atmospheric parameter.
 
-.. image:: https://github.com/amsimp/papers/raw/master/project-book/Graphs/contour_plots/zonal_wind.png
+.. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/zonal_wind.png
   :width: 90%
   :align: center
