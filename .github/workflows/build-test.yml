@@ -3,10 +3,10 @@ name: Test AMSIMP Compilation and Installation
 on:
   push:
     branches:
-      - master
+      - dev
   pull_request:
     branches:
-      - master
+      - dev
 
 jobs:
   build:
