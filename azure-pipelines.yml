@@ -21,7 +21,7 @@ steps:
     targetType: 'inline'
     script: |
       eval "$(conda shell.bash hook)"
-      conda activate build_env
+      conda activate amsimp
   displayName: Active
 - bash: |
     python setup.py install
