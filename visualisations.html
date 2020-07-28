@@ -63,7 +63,6 @@
 <li><a class="reference internal" href="#longitude-latitude-contour-plots">Longitude - Latitude Contour Plots</a><ul>
 <li><a class="reference internal" href="#atmospheric-density">Atmospheric Density</a></li>
 <li><a class="reference internal" href="#geopotential-height">Geopotential Height</a></li>
-<li><a class="reference internal" href="#geostrophic-wind">Geostrophic Wind</a></li>
 <li><a class="reference internal" href="#precipitable-water">Precipitable Water</a></li>
 <li><a class="reference internal" href="#relative-humidity">Relative Humidity</a></li>
 </ul>
@@ -152,8 +151,7 @@ volume.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Backend</span>
 <span class="c1"># Generate a longitude - latitude contour plot for atmospheric density</span>
 <span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">psurface</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="c1">#                         ^--This number determines the atmospheric parameter.</span>
+<span class="n">detail</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">psurface</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/density.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/density.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/density.png" style="width: 90%;" /></a>
@@ -168,34 +166,10 @@ meters above sea level.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Backend</span>
 <span class="c1"># Generate a longitude - latitude contour plot for geopotential height</span>
 <span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">psurface</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="c1">#                         ^--This number determines the atmospheric parameter.</span>
+<span class="n">detail</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="s1">&#39;geopotential_height&#39;</span><span class="p">,</span> <span class="n">psurface</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/height.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/height.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/height.png" style="width: 90%;" /></a>
-</div>
-<div class="section" id="geostrophic-wind">
-<h3>Geostrophic Wind<a class="headerlink" href="#geostrophic-wind" title="Permalink to this headline">¶</a></h3>
-<p>Geostrophic Wind is a theoretical wind that would result from an exact
-balance between the pressure-gradient force, and the Coriolis force. This
-contour plot overlayed by wind vectors, with axes being transformed onto
-a <a class="reference external" href="https://scitools.org.uk/cartopy/docs/v0.15/crs/projections.html">Nearside Projection</a>
-(a perspective view looking directly down at a point on the globe).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Wind</span>
-<span class="c1"># Generate a longitude - latitude contour plot for geostrophic wind</span>
-<span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">globe</span><span class="p">(</span><span class="n">psurface</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/globe.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/globe.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/globe.png" style="width: 90%;" /></a>
-<p>The point at which you are directly look down upon can be specified by
-givng the latitude and longitude lines of interest. The default point
-has coordinates 53.1424, -7.6921 (Dublin City, Ireland):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Specify a particular altitude, in metres.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">globe</span><span class="p">(</span><span class="n">central_lat</span><span class="o">=</span><span class="mf">13.17</span><span class="p">,</span> <span class="n">central_long</span><span class="o">=-</span><span class="mf">8.78</span><span class="p">,</span> <span class="n">alt</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="c1">#         Latitude (deg)---^ Longitude (deg) --^</span>
-</pre></div>
-</div>
 </div>
 <div class="section" id="precipitable-water">
 <h3>Precipitable Water<a class="headerlink" href="#precipitable-water" title="Permalink to this headline">¶</a></h3>
@@ -205,7 +179,7 @@ specified levels.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Water</span>
 <span class="c1"># Generate a longitude - latitude contour plot for precipitable water</span>
 <span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">water_contourf</span><span class="p">()</span>
+<span class="n">detail</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="s1">&#39;precipitable_water&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/precipitable_water.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/precipitable_water.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/precipitable_water.png" style="width: 90%;" /></a>
@@ -217,8 +191,7 @@ as a percentage of the amount needed for saturation at the same temperature.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Backend</span>
 <span class="c1"># Generate a longitude - latitude contour plot for relative humidity</span>
 <span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">psurface</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="c1">#                         ^--This number determines the atmospheric parameter.</span>
+<span class="n">detail</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="s1">&#39;relative_humidity&#39;</span><span class="p">,</span> <span class="n">psurface</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/humidity.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/humidity.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/humidity.png" style="width: 90%;" /></a>
@@ -235,8 +208,7 @@ Note: AMSIMP deals solely with geostrophic wind.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Wind</span>
 <span class="c1"># Generate a latitude - pressure contour plot for meridional wind</span>
 <span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">wind_contourf</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="c1">#                    ^--This number determines the atmospheric parameter.</span>
+<span class="n">detail</span><span class="o">.</span><span class="n">psurface_contourf</span><span class="p">(</span><span class="s1">&#39;meridional_wind&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/meridional_wind.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/meridional_wind.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/meridional_wind.png" style="width: 90%;" /></a>
@@ -248,8 +220,7 @@ motion.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Backend</span>
 <span class="c1"># Generate a latitude - pressure contour plot for temperature</span>
 <span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">psurface_contourf</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="c1">#                        ^--This number determines the atmospheric parameter.</span>
+<span class="n">detail</span><span class="o">.</span><span class="n">psurface_contourf</span><span class="p">(</span><span class="s1">&#39;temperature&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/temp.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/temp.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/temp.png" style="width: 90%;" /></a>
@@ -263,8 +234,7 @@ solely with geostrophic wind.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Wind</span>
 <span class="c1"># Generate a latitude - pressure contour plot for zonal wind</span>
 <span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">wind_contourf</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="c1">#                    ^--This number determines the atmospheric parameter.</span>
+<span class="n">detail</span><span class="o">.</span><span class="n">psurface_contourf</span><span class="p">(</span><span class="s1">&#39;zonal_wind&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/zonal_wind.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/zonal_wind.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/zonal_wind.png" style="width: 90%;" /></a>
