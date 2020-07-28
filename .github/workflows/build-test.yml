@@ -31,6 +31,7 @@ jobs:
       run: |
         export PATH="$HOME/miniconda/bin:$PATH"
         conda init
+        source ~/anaconda3/etc/profile.d/conda.sh
         sudo conda env create -f environment.yml
         conda activate amsimp
         python setup.py install

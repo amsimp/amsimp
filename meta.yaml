@@ -70,7 +70,7 @@ test:
 
 about:
   home: https://amsimp.com
-  license: MIT
+  license: GPL-3.0
   summary: AMSIMP is an easy-to-use atmospheric dynamical core plugin in Python.
   description: An open-source, hydrostatic, atmospheric dynamical core using recurrent neural networks, written in the programming language of Cython. The aim of the software is to be a plugin that can be easily incorporated into weather and climate research projects.
   dev_url: https://github.com/amsimp/amsimp
