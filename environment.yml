@@ -12,5 +12,6 @@ dependencies:
   - pandas
   - scikit-learn
   - iris
+  - progress
   - pip:
     - tensorflow==2.2.0 
