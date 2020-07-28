@@ -103,25 +103,6 @@ as a percentage of the amount needed for saturation at the same temperature.
 Latitude - Pressure Contour Plots
 ---------------------------------
 
-Meridional Wind
-^^^^^^^^^^^^^^^
-
-Merdional flow is a meteorological term regarding atmospheric circulation
-following a general flow pattern along longitudinal lines. A positive
-merdional wind value indiciates that the wind is flowing from south to north.
-Note: AMSIMP deals solely with geostrophic wind.
-
-.. code-block:: python
-
-    # amsimp.Wind
-    # Generate a latitude - pressure contour plot for meridional wind
-    # based on current atmospheric conditions.
-    detail.psurface_contourf('meridional_wind')
-
-.. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/meridional_wind.png
-  :width: 90%
-  :align: center
-
 Temperature
 ^^^^^^^^^^^
 
@@ -136,24 +117,5 @@ motion.
     detail.psurface_contourf('temperature')
 
 .. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/temp.png
-  :width: 90%
-  :align: center
-
-Zonal Wind
-^^^^^^^^^^
-
-Zonal flow is a meteorological term regarding atmospheric circulation following
-a general flow pattern along latitudinal lines. A positive zonal wind value
-indiciates that the wind is flowing from east to west. Note: AMSIMP deals
-solely with geostrophic wind.
-
-.. code-block:: python
-
-    # amsimp.Wind
-    # Generate a latitude - pressure contour plot for zonal wind
-    # based on current atmospheric conditions.
-    detail.psurface_contourf('zonal_wind')
-
-.. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/zonal_wind.png
   :width: 90%
   :align: center
