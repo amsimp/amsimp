@@ -620,7 +620,7 @@ cdef class Backend(Download):
 
         # Determine gradient with respect to latitude.
         gradient_latitude = np.gradient(
-            parameter.value, self.a * latitude, axis=1
+            parameter.value, self.a.value * latitude, axis=1
         ) * (parameter.unit / units.m)
 
         return gradient_latitude
@@ -634,8 +634,8 @@ cdef class Backend(Download):
 
          # Determine gradient with respect to pressure.
         gradient_pressure = np.gradient(
-            parameter.value, pressure, axis=0
-        ) * (parameter.unit / pressure.unit)
+            parameter.value, pressure.value, axis=0
+        ) * (parameter.unit / units.hPa)
 
         return gradient_pressure
 
