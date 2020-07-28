@@ -128,7 +128,7 @@ water. These visualisations can be found in the <code class="xref py py-class do
 we will initialise with the <code class="xref py py-class docutils literal notranslate"><span class="pre">Wind</span></code> class, as it also
 inherits the other classes we are interested in:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialise the Wind class.</span>
-<span class="n">detail</span> <span class="o">=</span> <span class="n">amsimp</span><span class="o">.</span><span class="n">Wind</span><span class="p">()</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">amsimp</span><span class="o">.</span><span class="n">Wind</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="section" id="longitude-latitude-contour-plots">
@@ -138,7 +138,7 @@ are generated is at a pressure surface of 1000 hectopascals, however,
 a particular pressure surface, in hectopascals, can be specified the
 majority of the time by doing the following:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Specify a particular pressure surface, in hectopascals.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="n">psurface</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="n">psurface</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 <span class="c1"># Pressire Surface (hPa) ^</span>
 </pre></div>
 </div>
@@ -149,7 +149,7 @@ volume.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Backend</span>
 <span class="c1"># Generate a longitude - latitude contour plot for atmospheric density</span>
 <span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">psurface</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">psurface</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/density.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/density.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/density.png" style="width: 90%;" /></a>
@@ -164,7 +164,7 @@ meters above sea level.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Backend</span>
 <span class="c1"># Generate a longitude - latitude contour plot for geopotential height</span>
 <span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="s1">&#39;geopotential_height&#39;</span><span class="p">,</span> <span class="n">psurface</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="s1">&#39;geopotential_height&#39;</span><span class="p">,</span> <span class="n">psurface</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/height.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/height.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/height.png" style="width: 90%;" /></a>
@@ -177,7 +177,7 @@ specified levels.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Water</span>
 <span class="c1"># Generate a longitude - latitude contour plot for precipitable water</span>
 <span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="s1">&#39;precipitable_water&#39;</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="s1">&#39;precipitable_water&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/precipitable_water.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/precipitable_water.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/precipitable_water.png" style="width: 90%;" /></a>
@@ -189,7 +189,7 @@ as a percentage of the amount needed for saturation at the same temperature.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Backend</span>
 <span class="c1"># Generate a longitude - latitude contour plot for relative humidity</span>
 <span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="s1">&#39;relative_humidity&#39;</span><span class="p">,</span> <span class="n">psurface</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">longitude_contourf</span><span class="p">(</span><span class="s1">&#39;relative_humidity&#39;</span><span class="p">,</span> <span class="n">psurface</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/humidity.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/humidity.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/humidity.png" style="width: 90%;" /></a>
@@ -204,7 +204,7 @@ motion.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Backend</span>
 <span class="c1"># Generate a latitude - pressure contour plot for temperature</span>
 <span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">psurface_contourf</span><span class="p">(</span><span class="s1">&#39;temperature&#39;</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">psurface_contourf</span><span class="p">(</span><span class="s1">&#39;temperature&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/temp.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/temp.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/temp.png" style="width: 90%;" /></a>

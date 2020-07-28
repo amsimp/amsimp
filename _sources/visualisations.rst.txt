@@ -12,7 +12,7 @@ inherits the other classes we are interested in:
 .. code-block:: python
 
     # Initialise the Wind class.
-    detail = amsimp.Wind()
+    state = amsimp.Wind()
 
 Longitude - Latitude Contour Plots
 ----------------------------------
@@ -25,7 +25,7 @@ majority of the time by doing the following:
 .. code-block:: python
 
     # Specify a particular pressure surface, in hectopascals.
-    detail.method(psurface=500)
+    state.method(psurface=500)
     # Pressire Surface (hPa) ^ 
 
 Atmospheric Density
@@ -39,7 +39,7 @@ volume.
     # amsimp.Backend
     # Generate a longitude - latitude contour plot for atmospheric density
     # based on current atmospheric conditions.
-    detail.longitude_contourf('density', psurface=1000)
+    state.longitude_contourf('density', psurface=1000)
 
 .. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/density.png
   :width: 90%
@@ -59,7 +59,7 @@ meters above sea level.
     # amsimp.Backend
     # Generate a longitude - latitude contour plot for geopotential height
     # based on current atmospheric conditions.
-    detail.longitude_contourf('geopotential_height', psurface=1000)
+    state.longitude_contourf('geopotential_height', psurface=1000)
 
 .. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/height.png
   :width: 90%
@@ -77,7 +77,7 @@ specified levels.
     # amsimp.Water
     # Generate a longitude - latitude contour plot for precipitable water
     # based on current atmospheric conditions.
-    detail.longitude_contourf('precipitable_water')
+    state.longitude_contourf('precipitable_water')
 
 .. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/precipitable_water.png
   :width: 90%
@@ -94,7 +94,7 @@ as a percentage of the amount needed for saturation at the same temperature.
     # amsimp.Backend
     # Generate a longitude - latitude contour plot for relative humidity
     # based on current atmospheric conditions.
-    detail.longitude_contourf('relative_humidity', psurface=1000)
+    state.longitude_contourf('relative_humidity', psurface=1000)
 
 .. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/humidity.png
   :width: 90%
@@ -114,7 +114,7 @@ motion.
     # amsimp.Backend
     # Generate a latitude - pressure contour plot for temperature
     # based on current atmospheric conditions.
-    detail.psurface_contourf('temperature')
+    state.psurface_contourf('temperature')
 
 .. image:: https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/temp.png
   :width: 90%
