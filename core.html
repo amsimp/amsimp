@@ -68,12 +68,6 @@
 <li><a class="reference internal" href="#nonlinear-instability">Nonlinear Instability</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#ensemble-prediction-system">Ensemble Prediction System</a><ul>
-<li><a class="reference internal" href="#introduction-1">Introduction</a></li>
-<li><a class="reference internal" href="#advantages-of-eps">Advantages of EPS</a></li>
-<li><a class="reference internal" href="#global-eps">Global EPS</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#recurrent-neural-network">Recurrent Neural Network</a><ul>
 <li><a class="reference internal" href="#introduction-2">Introduction</a></li>
 <li><a class="reference internal" href="#lstm">LSTM</a></li>
@@ -223,7 +217,7 @@ resolutions, the grid-size is smaller, which corresponds to a greater
 computational burden. As such, there is a trade off between accuracy and
 computational performance. For Eulerian schemes, the typical time step
 is 2 minutes. As such, since the software will use an Eulerian scheme,
-the time step will be 2 minutes <a class="bibtex reference internal" href="refs.html#leapfrog-slides-one" id="id3">[12]</a>.</p>
+the time step will be 2 minutes <a class="bibtex reference internal" href="refs.html#leapfrog-slides-one" id="id3">[7]</a>.</p>
 </div>
 <div class="section" id="ftcs-scheme">
 <span id="ftcs-section"></span><h3>FTCS Scheme<a class="headerlink" href="#ftcs-scheme" title="Permalink to this headline">¶</a></h3>
@@ -286,7 +280,7 @@ the first step will persist. This method, however, still retains an
 error of order <span class="math notranslate nohighlight">\(\mathcal{O}(\Delta t^2)\)</span>. If you also use half of
 the time step for the forward time step, followed by leapfrog time
 steps; this will reduce the error introduced in the first
-step <a class="bibtex reference internal" href="refs.html#leapfrog-slides-two" id="id6">[11]</a>. This will be the method
+step <a class="bibtex reference internal" href="refs.html#leapfrog-slides-two" id="id6">[6]</a>. This will be the method
 utilised within the software.</p>
 </div>
 <div class="section" id="nonlinear-instability">
@@ -294,7 +288,7 @@ utilised within the software.</p>
 <p>A major problem which occurs while dealing with nonlinear partial
 differential equations is nonlinear instability. This is a problem where
 there is a nonlinear interaction between atmospheric
-waves <a class="bibtex reference internal" href="refs.html#nonlinear-instability" id="id7">[22]</a>.</p>
+waves <a class="bibtex reference internal" href="refs.html#nonlinear-instability" id="id7">[13]</a>.</p>
 <p>An atmospheric wave is a periodic disturbance in the fields of
 atmospheric variables (like geopotential height, temperature, or wind
 velocity) which may either propagate (travelling wave) or not (standing
@@ -306,7 +300,7 @@ feedback of energy leads to a catastrophic rise in the kinetic energy of
 wavelengths between <span class="math notranslate nohighlight">\(2 \Delta x\)</span> and <span class="math notranslate nohighlight">\(4 \Delta x\)</span>. Within
 the software, a smoothing operator, which reduces the amplitude of the
 short waves while having little effect on the meteorologically important
-waves, is utilised <a class="bibtex reference internal" href="refs.html#nonlinear-instability" id="id8">[22]</a>.</p>
+waves, is utilised <a class="bibtex reference internal" href="refs.html#nonlinear-instability" id="id8">[13]</a>.</p>
 <p>Another problem to mention before moving on is that for nonlinear
 equations, the leapfrog scheme has a tendency to increase the amplitude
 of the computational mode with time This can separate the space
@@ -314,79 +308,18 @@ dependence between the even and odd time steps. This problem can be
 rectified by applying a Robert-Asselin Time Filter. After
 <span class="math notranslate nohighlight">\(T^{n+1}\)</span> is obtained a slight time smoothing is applied to
 <span class="math notranslate nohighlight">\(T^{n}\)</span>, where <span class="math notranslate nohighlight">\(\gamma\)</span> is on the order of
-0.1 <a class="bibtex reference internal" href="refs.html#leapfrog-slides-two" id="id9">[11]</a>:</p>
+0.1 <a class="bibtex reference internal" href="refs.html#leapfrog-slides-two" id="id9">[6]</a>:</p>
 <div class="math notranslate nohighlight">
 \[T^{n} = T^{n} + \gamma(T^{n+1} - 2 T^{n} + T^{n-1})\]</div>
-</div>
-</div>
-<div class="section" id="ensemble-prediction-system">
-<h2>Ensemble Prediction System<a class="headerlink" href="#ensemble-prediction-system" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="introduction-1">
-<span id="id10"></span><h3>Introduction<a class="headerlink" href="#introduction-1" title="Permalink to this headline">¶</a></h3>
-<p>Ensemble Prediction Systems (EPS) are numerical weather prediction
-systems that allow for the estimation of uncertainty in a weather
-forecast, as well as, providing a better prediction for the future state
-of the atmosphere. Instead of running a atmospheric dynamical simulation
-once (this would be regarded as deterministic), the simulation is run
-many different time with slightly different initial conditions. Due to
-the high computational resources required to run these simulations, they
-are often run at half the resolution of an equivalent deterministic
-simulation. The ensemble prediction system has a control simulation that
-doesn’t have any perturbations to the initial conditions. Each
-simulation that makes up the system is called an ensemble
-member <a class="bibtex reference internal" href="refs.html#intro-efs" id="id11">[17]</a>.</p>
-</div>
-<div class="section" id="advantages-of-eps">
-<h3>Advantages of EPS<a class="headerlink" href="#advantages-of-eps" title="Permalink to this headline">¶</a></h3>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Images/efs.jpg"><img alt="Visualisation of the Advantages of an Ensemble Prediction System" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Images/efs.jpg" style="width: 95%;" /></a>
-</div>
-<p>As a consequence of Chaos Theory, a tiny difference in the initial
-conditions in a large system, such as the atmosphere, can result in
-drastically different forecasted events, so that even with a tiny error,
-it can become a large error in the forecasted future state of the
-atmosphere. Even with the most accurate observations, error cannot be
-avoided. Therefore, it is simply not possible to make a better forecast
-or simulation. This is why an ensemble prediction system is utilised. In
-an ensemble simulation, small perturbations are made to the initial
-conditions, after which, the simulation is re-run. If there is a large
-degree of overlap between the ensemble members, there will be a higher
-degree of confidence in the ensemble forecast, with the opposite also
-holding true <a class="bibtex reference internal" href="refs.html#intro-efs" id="id12">[17]</a>.</p>
-</div>
-<div class="section" id="global-eps">
-<h3>Global EPS<a class="headerlink" href="#global-eps" title="Permalink to this headline">¶</a></h3>
-<p>There are three distinct types of ensemble prediction systems: global,
-regional and convective-scale. Each system address different timescales,
-and different grid-sizes. A global ensemble prediction system is
-designed and used for medium-range forecasting between 3 and 15 days
-into the future. They use synoptic simulation models and are run at
-relatively low resolutions. Although they are primarily designed for use
-in the medium range, their global coverage means that they can also be
-used to provide short-range EPS forecasts in regions of the globe where
-no other EPS are currently available, and may be the only available
-option for certain countries. Considering the software is focused on
-synoptic scale simulations, this will be the system of
-interest <a class="bibtex reference internal" href="refs.html#intro-efs" id="id13">[17]</a>, The default number of ensemble
-members in the software is fifteen, which is typical for a global
-ensemble prediction system. The grid-size, used by the software, can be
-specified by the end-user in order to get a more detailed forecast (this
-will increase the amount of computational resources required to run the
-simulation), however, the default grid-size is of the scale of 1000 km.
-There is also a hard limit of a <span class="math notranslate nohighlight">\(5^{\circ} \times 5^{\circ}\)</span> cell,
-as a smaller cell size would result in inaccurate simulations due to the
-fact that the dynamical equations utilised by the software do not work
-on this scale. This will be discussed at greater depth in chapter
-<a class="reference external" href="#4">[4]</a>.</p>
 </div>
 </div>
 <div class="section" id="recurrent-neural-network">
 <h2>Recurrent Neural Network<a class="headerlink" href="#recurrent-neural-network" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="introduction-2">
-<span id="id14"></span><h3>Introduction<a class="headerlink" href="#introduction-2" title="Permalink to this headline">¶</a></h3>
+<span id="id10"></span><h3>Introduction<a class="headerlink" href="#introduction-2" title="Permalink to this headline">¶</a></h3>
 <p>Weather forecasting has traditionally been done by physical models of
 the atmosphere, which are unstable to perturbations, and thus are
-inaccurate for large periods of time <a class="bibtex reference internal" href="refs.html#why-rnn" id="id15">[13]</a>. Since
+inaccurate for large periods of time <a class="bibtex reference internal" href="refs.html#why-rnn" id="id11">[8]</a>. Since
 machine learning techniques are more robust to perturbations, it would
 be logical to combine a neural network with a physical model. Weather
 forecasting is a sequential data problem, therefore, a recurrent neural
@@ -414,7 +347,7 @@ sequence patterns.</p>
 <p>In a traditional neural network, there is a input layer, hidden layer,
 and a output layer. In a recurrent neural network, a loop is added that
 can be added to pass information forward as seen in the diagram below
-(provided by Towards Data Science) <a class="bibtex reference internal" href="refs.html#intro-rnn" id="id16">[20]</a>:</p>
+(provided by Towards Data Science) <a class="bibtex reference internal" href="refs.html#intro-rnn" id="id12">[11]</a>:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Images/rnn.png"><img alt="Visualisation of a Recurrent Neural Network" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Images/rnn.png" style="width: 20%;" /></a>
 </div>
@@ -433,7 +366,7 @@ As the RNN processes more steps, it has troubles retaining information
 from previous steps. Short-Term memory and the vanishing gradient is due
 to the nature of back-propagation. This can be comprehended through
 understanding how a neural network is
-trained <a class="bibtex reference internal" href="refs.html#intro-rnn" id="id17">[20]</a>.</p>
+trained <a class="bibtex reference internal" href="refs.html#intro-rnn" id="id13">[11]</a>.</p>
 <p>Back-propagation is an algorithm used to train and optimise neural
 networks.</p>
 <p>To train a recurrent neural network, you use an application of
@@ -442,7 +375,7 @@ network has three major steps. First, the relevant data vector is
 normalised between 0 and 1, the vector is feed into the RNN, and it goes
 through an activation function. The activation function utilised in the
 software is the rectified linear activation
-function <a class="bibtex reference internal" href="refs.html#lstm-rnn" id="id18">[19]</a>.</p>
+function <a class="bibtex reference internal" href="refs.html#lstm-rnn" id="id14">[10]</a>.</p>
 <p>The rectified linear activation function is a piece-wise linear function
 that will output the input directly if is positive, otherwise, it will
 output zero.</p>
@@ -452,7 +385,7 @@ training a neural network using back-propagation. Yet, it is a nonlinear
 function as negative values are always output as zero. As a result, the
 rectified function is linear for half of the input domain and nonlinear
 for the other half, it is referred to as a piece-wise linear
-function <a class="bibtex reference internal" href="refs.html#relu" id="id19">[4]</a>. This nonlinear element is extremely
+function <a class="bibtex reference internal" href="refs.html#relu" id="id15">[3]</a>. This nonlinear element is extremely
 important if the system has a nonlinear component, for example in
 predicting the evolution of the future state of the atmosphere.</p>
 <div class="figure align-center">
@@ -494,7 +427,7 @@ to extremely small gradients.</p>
 dependencies across time steps. So not being able to learn on earlier
 time steps causes the network to have a short-term memory. In order to
 combat this, a long short-term memory is
-used <a class="bibtex reference internal" href="refs.html#intro-rnn" id="id20">[20]</a>.</p>
+used <a class="bibtex reference internal" href="refs.html#intro-rnn" id="id16">[11]</a>.</p>
 </div>
 <div class="section" id="lstm">
 <h3>LSTM<a class="headerlink" href="#lstm" title="Permalink to this headline">¶</a></h3>
@@ -520,7 +453,7 @@ processing of the sequence. So even information from the earlier time
 steps can make it’s way to later time steps, reducing the effects of
 short-term memory. As the cell state goes on its journey, information
 get’s added or removed to the cell state via
-gates <a class="bibtex reference internal" href="refs.html#lstm-rnn" id="id21">[19]</a>.</p>
+gates <a class="bibtex reference internal" href="refs.html#lstm-rnn" id="id17">[10]</a>.</p>
 <p>A gate is an electric circuit with an output which depends on the
 combination of several inputs.</p>
 <p>Gates contain the sigmoid activation function. The sigmoid activation
@@ -544,7 +477,7 @@ state to the rectified linear activation function. We multiply the
 rectified linear activation function output with the sigmoid output to
 decide what information the hidden state should carry. The output is the
 hidden state. The new cell state and the new hidden is then carried over
-to the next time step <a class="bibtex reference internal" href="refs.html#lstm-rnn" id="id22">[19]</a>.</p>
+to the next time step <a class="bibtex reference internal" href="refs.html#lstm-rnn" id="id18">[10]</a>.</p>
 </div>
 <div class="section" id="implementation">
 <span id="implement-rnn"></span><h3>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h3>
@@ -563,28 +496,28 @@ thirty days of data and combine this RNN prediction with the physical
 model prediction in an attempt to make a more accurate prediction
 overall. In order to make such predictions, it is necessary to create a
 window of the last 120 (<span class="math notranslate nohighlight">\(30 \times 4\)</span>) observations to train the
-model <a class="bibtex reference internal" href="refs.html#time-series" id="id23">[29]</a>.</p>
+model <a class="bibtex reference internal" href="refs.html#time-series" id="id19">[17]</a>.</p>
 <p>At the start, a seed is set in order to ensure reproducibility. As
 mentioned previously, it is important to scale features before training
 a neural network. Normalisation is a common way of doing this scaling by
 subtracting the mean and dividing by the standard deviation of each
 feature. In order for the most optimal performance, the method
 “MinMaxScaler” from the library, scikit-learn, is utilised within the
-software <a class="bibtex reference internal" href="refs.html#scikit-learn" id="id24">[18]</a>. An LSTM requires a
+software <a class="bibtex reference internal" href="refs.html#scikit-learn" id="id20">[9]</a>. An LSTM requires a
 1-dimensional sequence, however, the atmosphere is a 3-dimensional
 system. Hence, it is necessary to flatten the 3-dimensional vector that
 represents the state of the atmosphere. This is done in order to avoid
 the need of repeatably running the RNN. Batches are then created to
 split the data into manageable sequences. The diagram on the following
 page shows how the data is represented after flattening the data and
-batching it (provided by Tensorflow) <a class="bibtex reference internal" href="refs.html#time-series" id="id25">[29]</a>.</p>
+batching it (provided by Tensorflow) <a class="bibtex reference internal" href="refs.html#time-series" id="id21">[17]</a>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Images/data_rnn.png"><img alt="Visualisation of how the data is represented after flattening and batching." src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Images/data_rnn.png" style="width: 95%;" /></a>
 </div>
 <p>Following this process, the data is feed into the RNN. The LSTM model is
 built using Keras in TensorFlow, which is an free and open-source
 software library for machine learning. It was developed by the Google
-Brain Team <a class="bibtex reference internal" href="refs.html#tensorflow" id="id26">[1]</a>. It is apparent that a
+Brain Team <a class="bibtex reference internal" href="refs.html#tensorflow" id="id22">[1]</a>. It is apparent that a
 multi-step model is needed as the model needs to learn to predict a
 range of future values. The source code for the LSTM model developed for
 the software is shown below:</p>
@@ -659,7 +592,7 @@ system is utilised by the National Center for Environmental Prediction
 for such a purpose. GDAS adds the following types of observations to a
 gridded, 3-D, model space: surface observations, balloon data, wind
 profiler data, aircraft reports, buoy observations, radar observations,
-and satellite observations <a class="bibtex reference internal" href="refs.html#gdas" id="id27">[8]</a>. The initial
+and satellite observations <a class="bibtex reference internal" href="refs.html#gdas" id="id23">[5]</a>. The initial
 conditions provided by the GDAS to the software have a vertical pressure
 co-ordinate, or the vertical co-ordiante is pressure. This co-ordinate
 system is known as isobaric co-ordinates.</p>
@@ -673,17 +606,17 @@ convenient vertical coordinate than altitude. One reason is that until
 recently, radiosondes, which are the primary means of gathering
 observations of weather variables above the earth’s surface, measure and
 reported pressure, temperature, and humidity, but not altitude, as they
-rise through the atmosphere <a class="bibtex reference internal" href="refs.html#isobar-i" id="id28">[5]</a>.</p>
+rise through the atmosphere <a class="bibtex reference internal" href="refs.html#isobar-i" id="id24">[4]</a>.</p>
 <p>A radiosonde is an instrument carried by balloon to various levels of
 the atmosphere and transmitting measurements by radio.</p>
 <p>Another reason is that on scales large enough for the hydrostatic
 approximation to be valid, the pressure-gradient force in
 the equations of motion becomes simpler and density no longer becomes an
-explicit variable in the tendency equations <a class="bibtex reference internal" href="refs.html#isobar-i" id="id29">[5]</a>.
+explicit variable in the tendency equations <a class="bibtex reference internal" href="refs.html#isobar-i" id="id25">[4]</a>.
 Thus,a given geopotential gradient implies the same geostrophic wind at
 any height, whereas a given horizontal pressure gradient implies
 different values of the geostrophic wind depending on the
-density <a class="bibtex reference internal" href="refs.html#isobar-ii" id="id30">[31]</a>.</p>
+density <a class="bibtex reference internal" href="refs.html#isobar-ii" id="id26">[18]</a>.</p>
 <p>From the Global Data Assimilation System, three prognostic variables are
 chosen: geopotential height, air temperature, and relative humidity.</p>
 <p>Geopotential Height is the height above sea level of a pressure level.

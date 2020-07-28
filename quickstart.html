@@ -97,57 +97,7 @@
             
   <div class="section" id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
-<p>Once AMSIMP is successfully installed, you can follow
-this tutorial to get an example use case of the software.
-AMSIMP is a Python package that is written in the
-programming language of Cython, hence, you can utilise
-the software by importing it into Python:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import AMSIMP.</span>
-<span class="kn">import</span> <span class="nn">amsimp</span>
-</pre></div>
-</div>
-<p>Once imported, you can utilise the four classes that
-are available to you. The classes available are:
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Backend</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Wind</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Moist</span></code>,
-and <code class="xref py py-class docutils literal notranslate"><span class="pre">Dynamics</span></code>.</p>
-<p>In most situations, you will interact with the
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Dynamics</span></code> class. Once you have chosen
-a particular class, you must then decide on the grid size.
-If you are interacting with the <code class="xref py py-class docutils literal notranslate"><span class="pre">Dynamics</span></code>
-class, you must also specify the length of
-forecast that will be generated. The forecast
-length, in hours, must at least one hour in length, and
-can have a maximum length of 168 hours. An example
-of the initialisation needed for the <code class="xref py py-class docutils literal notranslate"><span class="pre">Dynamics</span></code>
-class is given below:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Choose a simulation grid size combined with a class you want to use.</span>
-<span class="c1"># The forecast length must also be specified.</span>
-<span class="n">detail</span> <span class="o">=</span> <span class="n">amsimp</span><span class="o">.</span><span class="n">Dynamics</span><span class="p">(</span>
-    <span class="n">delta_latitude</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">delta_longitude</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">forecast_length</span><span class="o">=</span><span class="mi">72</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>In this tutorial, I will show you how to
-generate a ensemble forecast prediction for
-the next 3 days,  with the recurrent neural
-network enabled. Following which, the output
-will be saved as a file on the machine.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import package.</span>
-<span class="kn">import</span> <span class="nn">amsimp</span>
-
-<span class="c1"># Initialise class.</span>
-<span class="n">detail</span> <span class="o">=</span> <span class="n">amsimp</span><span class="o">.</span><span class="n">Dynamics</span><span class="p">(</span>
-    <span class="n">delta_latitude</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-    <span class="n">delta_longitude</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-    <span class="n">forecast_length</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span>
-    <span class="n">efs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">ai</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
-
-<span class="c1"># Generate forecast and save output.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">atmospheric_prognostic_method</span><span class="p">(</span><span class="n">save_file</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
+<p>To be added.</p>
 </div>
 
 

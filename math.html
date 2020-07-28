@@ -60,21 +60,10 @@
     <div class="sidebar-localtoc">
       <ul>
 <li><a class="reference internal" href="#">Mathematics</a><ul>
-<li><a class="reference internal" href="#geostrophic-wind">Geostrophic Wind</a><ul>
-<li><a class="reference internal" href="#pressure-gradient-force">Pressure-Gradient Force</a></li>
-<li><a class="reference internal" href="#coriolis-force">Coriolis Force</a></li>
-<li><a class="reference internal" href="#geostrophic-balance">Geostrophic Balance</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#pressure-thickness">Pressure Thickness</a></li>
 <li><a class="reference internal" href="#precipitable-water">Precipitable Water</a></li>
 <li><a class="reference internal" href="#virtual-temperature">Virtual Temperature</a></li>
-<li><a class="reference internal" href="#quasi-geostrophic-theory">Quasi-Geostrophic Theory</a><ul>
-<li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#thermodynamic-equation">Thermodynamic Equation</a></li>
-<li><a class="reference internal" href="#height-tendency-equation">Height Tendency Equation</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#primitive-equations">Primitive Equations</a></li>
 </ul>
 </li>
 </ul>
@@ -125,145 +114,9 @@
             
   <div class="section" id="mathematics">
 <h1>Mathematics<a class="headerlink" href="#mathematics" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="geostrophic-wind">
-<span id="id1"></span><h2>Geostrophic Wind<a class="headerlink" href="#geostrophic-wind" title="Permalink to this headline">¶</a></h2>
-<p>There are a number of forces that can either change the force or
-direction of wind. Two of the biggest forces of wind vectors are the
-pressure gradient force and the Coriolis force.</p>
-<div class="section" id="pressure-gradient-force">
-<h3>Pressure-Gradient Force<a class="headerlink" href="#pressure-gradient-force" title="Permalink to this headline">¶</a></h3>
-<p>The pressure-gradient force is a force acting on air that is due to
-pressure differences.</p>
-<p>Horizontal variations in pressure create a tendency for movement from
-higher to lower pressure. The atmosphere, like all systems in nature, is
-trying to stay at the lowest energy level possible. Therefore, if there
-is an area of lower pressure nearby, air will freely move from the high
-pressure area to the low pressure area in order to equalise this energy
-gradient. To do this, it will attempt to take the shortest distance
-possible in order to maximise efficiency, which happens to be
-perpendicular to the isobars <a class="bibtex reference internal" href="refs.html#pressuregrad-def" id="id2">[2]</a>. This
-phenomenon is described by equation <a class="reference internal" href="#equation-pressure-grad">(1)</a>,
-where <span class="math notranslate nohighlight">\(P\)</span> is the pressure-gradient force.</p>
-<div class="math notranslate nohighlight" id="equation-pressure-grad">
-<span class="eqno">(1)<a class="headerlink" href="#equation-pressure-grad" title="Permalink to this equation">¶</a></span>\[P = - \vec{\nabla} p\]</div>
-<p>The negative sign at the beginning of the equation designates that we
-move from high to low across the pressure gradient. The greater the
-difference in pressure between the two locations, the greater the
-pressure gradient. A stronger pressure-gradient force usually correlates
-to a stronger wind vector. It must be noted that the pressure-gradient
-force is only one component of the forces acting on the actual wind,
-though, so, air does not normally flow perpendicular to the
-isobars <a class="bibtex reference internal" href="refs.html#pressure-grad" id="id3">[28]</a>.</p>
-</div>
-<div class="section" id="coriolis-force">
-<span id="f-section"></span><h3>Coriolis Force<a class="headerlink" href="#coriolis-force" title="Permalink to this headline">¶</a></h3>
-<p>The Coriolis force is an inertial force that acts on objects that are in
-motion within a frame of reference that rotates with respect to an
-inertial frame.</p>
-<p>The Coriolis force ultimately results in the diversion of the wind’s
-direction within the atmosphere due to the Earth’s rotation. The Earth
-is spinning in a prograde direction. The Earth is a elongated spheroid,
-however, to a reasonable good approximation, it can be considered to be
-a sphere. Due to this fact, all points on the surface of the Earth are
-travelling at the same angular velocity. As a consequence, however, a
-point near the equator must have a higher linear velocity, as it must
-travel a larger distance than a point near the poles. When an object
-moves either closer or further from the equator its original momentum is
-preserved, giving the path a diversion off its original
-course <a class="bibtex reference internal" href="refs.html#corioliseffect-def" id="id4">[15]</a>. If the wind is travelling
-in accordance with the pressure-gradient force, the wind will be
-deflected off its original course by the Coriolis force. It must be
-noted that there isn’t a Coriolis force at the equator, however, it
-increases with intensity as one approaches the poles. The Coriolis force
-is described by equation <a class="reference internal" href="#equation-coriolis-force">(2)</a>.</p>
-<div class="math notranslate nohighlight" id="equation-coriolis-force">
-<span class="eqno">(2)<a class="headerlink" href="#equation-coriolis-force" title="Permalink to this equation">¶</a></span>\[F = \rho U f_0\]</div>
-<p>where <span class="math notranslate nohighlight">\(f_0\)</span> is the Coriolis parameter, and is given by equation
-<a class="reference internal" href="#equation-f">(3)</a>.</p>
-<div class="math notranslate nohighlight" id="equation-f">
-<span class="eqno">(3)<a class="headerlink" href="#equation-f" title="Permalink to this equation">¶</a></span>\[f_0 = 2 \Omega \sin{\phi}\]</div>
-<p>One can therefore deduce that the higher the latitude, the higher the
-Coriolis force. Also, the Coriolis force only acts on air that is
-already set into motion. The Coriolis force will not set wind into
-motion, but will only deflect the direction of wind that is already
-moving. Therefore, it follows that the faster that air is moving, the
-stronger it is affected by the Coriolis
-force <a class="bibtex reference internal" href="refs.html#coriolis-effect" id="id5">[27]</a>.</p>
-<p>Equation <a class="reference internal" href="#equation-f">(3)</a> is known as the f-plane approximation, which can
-be visualised as a tangent plane touching the surface of the sphere at
-this latitude. The beta plane approximation is, however, utilised in the
-quasi-geostrophic theory, which ignores the variation of <span class="math notranslate nohighlight">\(f\)</span> with
-latitude. In this approximation, <span class="math notranslate nohighlight">\(f\)</span> is set to vary linearly in
-space and a value of <span class="math notranslate nohighlight">\(f\)</span> appropriate for a particular latitude is
-used throughout the domain. The equation describing the beta plane
-approximation is as follows:</p>
-<div class="math notranslate nohighlight">
-\[f = f_0 + \beta y\]</div>
-<p>The advantage of the beta plane approximation over more accurate
-formulations is that it does not contribute nonlinear terms to the
-dynamical equations <a class="bibtex reference internal" href="refs.html#beta-approx" id="id6">[30]</a>. <span class="math notranslate nohighlight">\(\beta\)</span> in the
-above equation is the Rossby number, which is discussed in the following
-section <a class="bibtex reference internal" href="refs.html#rossby-number" id="id7">[25]</a>.</p>
-</div>
-<div class="section" id="geostrophic-balance">
-<span id="balance"></span><h3>Geostrophic Balance<a class="headerlink" href="#geostrophic-balance" title="Permalink to this headline">¶</a></h3>
-<p>Geostrophic Balance is an exact balance between the Coriolis force and
-the pressure-gradient force.</p>
-<p>This balance seldom holds true in nature. This concept, however, will
-lead to the development of a theoretical wind, known as geostrophic
-wind. First and foremost, lets introduce the horizontal momentum
-equations.</p>
-<div class="math notranslate nohighlight">
-\[\frac{Du}{Dt} = -\frac{1}{\rho}\frac{\partial p}{\partial x} + f v\]</div>
-<div class="math notranslate nohighlight">
-\[\frac{Dv}{Dt} = -\frac{1}{\rho}\frac{\partial p}{\partial y} - f  u\]</div>
-<p>Assuming geostrophic balance, the system is stationary and the first two
-equations become:</p>
-<div class="math notranslate nohighlight">
-\[u = -\frac{1}{\rho f} \frac{\partial p}{\partial y}\]</div>
-<div class="math notranslate nohighlight">
-\[v = \frac{1}{\rho f} \frac{\partial p}{\partial x}\]</div>
-<p>Geostrophic Wind is the wind that flows parallel to height contours or
-isobars resulting from an exact balance between the Coriolis force and
-the pressure-gradient force.</p>
-<p>The geostrophic wind vector can also be expressed in terms of the
-gradient of the geopotential on a surface of constant pressure. This is
-extremely useful as it also for the calculation of geostrophic wind
-through the utilisation of geopotential height. It also allows for the
-calculation of geostrophic wind in an isobaric co-ordinate system.
-Therefore, the above equations are rewritten as follows:</p>
-<div class="math notranslate nohighlight" id="equation-u-g">
-<span class="eqno">(4)<a class="headerlink" href="#equation-u-g" title="Permalink to this equation">¶</a></span>\[u_g = -\frac{g}{f} \frac{\partial \Phi}{\partial y}\]</div>
-<div class="math notranslate nohighlight" id="equation-v-g">
-<span class="eqno">(5)<a class="headerlink" href="#equation-v-g" title="Permalink to this equation">¶</a></span>\[v_g = \frac{g}{f} \frac{\partial \Phi}{\partial x}\]</div>
-<p>Any spatial derivatives within this equation are replaced by a central
-difference approximation of the derivatives, which results in:</p>
-<div class="math notranslate nohighlight">
-\[u_g = -\frac{g}{f} \frac{\Delta \Phi}{2 \Delta y}\]</div>
-<div class="math notranslate nohighlight">
-\[v_g = \frac{g}{f} \frac{\Delta \Phi}{2 \Delta x}\]</div>
-<p>For the geostrophic flow concept to work, the wind must not be changing
-speed (is unaccelerated or the acceleration is almost zero). The
-question remains whether geostrophic wind is a good approximation for
-the actual wind. The tendency for wind to be accelerated can be measured
-at various scales of circulation. Meanwhile, the Coriolis acceleration
-is only related to the speed of the object and its latitude. Thus, as
-the flow approaches geostrophic the smaller the actual acceleration is
-relative to the Coriolis acceleration <a class="bibtex reference internal" href="refs.html#geo-wind" id="id8">[7]</a>.</p>
-<p>Rossby Number is the ratio of the total acceleration to the Coriolis
-acceleration.</p>
-<p>If the Rossby number is small (less than one), the geostrophic wind is a
-reasonably good approximation for geostrophic wind, neglecting the force
-of friction in this assumption. From table 3.1, generally the
-geostrophic wind is a good approximation if it is determined at a
-synoptic scale <a class="bibtex reference internal" href="refs.html#geo-wind" id="id9">[7]</a>.</p>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="_images/table.png"><img alt="Is geostrophic wind a good approximation for the actual wind?" src="_images/table.png" style="width: 95%;" /></a>
-</div>
-</div>
-</div>
+<p>Not fully fleshed out, more details to be added.</p>
 <div class="section" id="pressure-thickness">
-<span id="id10"></span><h2>Pressure Thickness<a class="headerlink" href="#pressure-thickness" title="Permalink to this headline">¶</a></h2>
+<h2>Pressure Thickness<a class="headerlink" href="#pressure-thickness" title="Permalink to this headline">¶</a></h2>
 <p>Pressure Thickness is the measurement of the distance (in metres)
 between any two constant pressure surfaces.</p>
 <div class="figure align-center">
@@ -285,19 +138,19 @@ thickness value is greater than 540), then it is expected that the
 precipitation will be in a liquid form. The reason one is able to make
 such an expectation is due to the fact that the 540-thickness line
 closely follows the surface freezing temperature of 273
-K <a class="bibtex reference internal" href="refs.html#thickness" id="id11">[24]</a>.</p>
+K <a class="bibtex reference internal" href="refs.html#thickness" id="id1">[15]</a>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Images/rainsnow_line.png"><img alt="Rain/Snow Line (provided by the NWS of the USA)" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Images/rainsnow_line.png" style="width: 95%;" /></a>
 </div>
 <p>To determine the pressure thickness between two constant pressure
 surfaces, the Hypsometric equation is utilised and as shown in equation
-<a class="reference internal" href="#equation-hypsometric">(6)</a>.</p>
+<a class="reference internal" href="#equation-hypsometric">(1)</a>.</p>
 <p>The hypsometric equation relates an atmospheric pressure ratio to the
 equivalent thickness of an atmospheric layer considering the layer mean
 of virtual temperature, gravity, and occasionally wind. It is derived
 from the hydrostatic equation and the ideal gas law.</p>
 <div class="math notranslate nohighlight" id="equation-hypsometric">
-<span class="eqno">(6)<a class="headerlink" href="#equation-hypsometric" title="Permalink to this equation">¶</a></span>\[h = \Phi_2 - \Phi_1 = \frac{R \bar{T_v}}{g} \ln{\frac{p_1}{p_2}}\]</div>
+<span class="eqno">(1)<a class="headerlink" href="#equation-hypsometric" title="Permalink to this equation">¶</a></span>\[h = \Phi_2 - \Phi_1 = \frac{R \bar{T_v}}{g} \ln{\frac{p_1}{p_2}}\]</div>
 </div>
 <div class="section" id="precipitable-water">
 <h2>Precipitable Water<a class="headerlink" href="#precipitable-water" title="Permalink to this headline">¶</a></h2>
@@ -307,22 +160,22 @@ specified pressure levels.</p>
 <p>Based on the definition, precipitable water can be described
 mathematically as being:</p>
 <div class="math notranslate nohighlight" id="equation-pwv-1">
-<span class="eqno">(7)<a class="headerlink" href="#equation-pwv-1" title="Permalink to this equation">¶</a></span>\[W = \int_{0}^{z} \rho_v dz\]</div>
+<span class="eqno">(2)<a class="headerlink" href="#equation-pwv-1" title="Permalink to this equation">¶</a></span>\[W = \int_{0}^{z} \rho_v dz\]</div>
 <p>where <span class="math notranslate nohighlight">\(\rho_v\)</span> is the density of water vapour, and where
 <span class="math notranslate nohighlight">\(\rho_v\)</span> is defined as:</p>
 <div class="math notranslate nohighlight">
 \[\rho_v = \frac{\texttt{mass of vapour}}{\texttt{unit volume}}\]</div>
 <p>Following which, the hydrostatic equation can be applied to equation
-<a class="reference internal" href="#equation-pwv-1">(7)</a> in order to replace <span class="math notranslate nohighlight">\(dz\)</span> with <span class="math notranslate nohighlight">\(dp\)</span>. The
+<a class="reference internal" href="#equation-pwv-1">(2)</a> in order to replace <span class="math notranslate nohighlight">\(dz\)</span> with <span class="math notranslate nohighlight">\(dp\)</span>. The
 reason for doing this is that atmospheric pressure is extremely easier
 to measure, with devices such as weather balloons being readily
 available.</p>
 <div class="math notranslate nohighlight" id="equation-pwv-2">
-<span class="eqno">(8)<a class="headerlink" href="#equation-pwv-2" title="Permalink to this equation">¶</a></span>\[W = -\int_{p_1}^{p_2} \frac{\rho_v}{\rho g} dp\]</div>
+<span class="eqno">(3)<a class="headerlink" href="#equation-pwv-2" title="Permalink to this equation">¶</a></span>\[W = -\int_{p_1}^{p_2} \frac{\rho_v}{\rho g} dp\]</div>
 <p>Where <span class="math notranslate nohighlight">\(p_1\)</span> and <span class="math notranslate nohighlight">\(p_2\)</span> are constant pressure surfaces, and
 where <span class="math notranslate nohighlight">\(p_1 &gt; p_2\)</span>. Substituting in the definition of density,
 <span class="math notranslate nohighlight">\(\rho_v = \frac{m_v}{V}; \rho = \frac{m_{air}}{V}\)</span>, into equation
-<a class="reference internal" href="#equation-pwv-2">(8)</a> results in:</p>
+<a class="reference internal" href="#equation-pwv-2">(3)</a> results in:</p>
 <div class="math notranslate nohighlight">
 \[W = -\int_{p_1}^{p_2} \frac{1}{g} \frac{m_v V}{m_{air} V} dp\]</div>
 <div class="math notranslate nohighlight">
@@ -331,11 +184,11 @@ where <span class="math notranslate nohighlight">\(p_1 &gt; p_2\)</span>. Substi
 the specific humidity, with the units of measurement being
 <span class="math notranslate nohighlight">\(\frac{kg}{kg}\)</span>. The specific humidity can be approximated by the
 mixing ratio, with an error typically around 4
-% <a class="bibtex reference internal" href="refs.html#pwv-def" id="id12">[21]</a>.</p>
+% <a class="bibtex reference internal" href="refs.html#pwv-def" id="id2">[12]</a>.</p>
 <p>Mixing Ratio is the ratio of the mass of a variable atmospheric
 constituent to the mass of dry air.</p>
 <div class="math notranslate nohighlight" id="equation-pwv-derive-fin">
-<span class="eqno">(9)<a class="headerlink" href="#equation-pwv-derive-fin" title="Permalink to this equation">¶</a></span>\[\therefore W = -\frac{1}{g} \int_{p_1}^{p_2} m dp\]</div>
+<span class="eqno">(4)<a class="headerlink" href="#equation-pwv-derive-fin" title="Permalink to this equation">¶</a></span>\[\therefore W = -\frac{1}{g} \int_{p_1}^{p_2} m dp\]</div>
 <p>The units as given by the equation are <span class="math notranslate nohighlight">\(\frac{kg}{m^2}\)</span>
 (dimensionless), but, the preferred unit of measurement for rainfall is
 <span class="math notranslate nohighlight">\(mm\)</span>. The conversion between the two units of measurements is one
@@ -346,12 +199,12 @@ action of convergence that brings into the rainstorm the water vapour
 from a surrounding area that is often quite large. Nevertheless, there
 is general correlation between precipitation amounts in given storms and
 the precipitable water of the air masses involved in those
-storms <a class="bibtex reference internal" href="refs.html#problems-with-pwv" id="id13">[26]</a>.</p>
+storms <a class="bibtex reference internal" href="refs.html#problems-with-pwv" id="id3">[16]</a>.</p>
 <p>For the purposes of numerically calculating the precipitable water for a
 given column of air, equation :eq: pwv_derive_fin is
 commonly rewritten as the following:</p>
 <div class="math notranslate nohighlight" id="equation-pwv">
-<span class="eqno">(10)<a class="headerlink" href="#equation-pwv" title="Permalink to this equation">¶</a></span>\[W = -\frac{1}{\rho g} \int_{p_1}^{p_2} \frac{0.622 e}{p - e} dp\]</div>
+<span class="eqno">(5)<a class="headerlink" href="#equation-pwv" title="Permalink to this equation">¶</a></span>\[W = -\frac{1}{\rho g} \int_{p_1}^{p_2} \frac{0.622 e}{p - e} dp\]</div>
 <p>Vapour Pressure is the pressure exerted by a vapour when the vapour is
 in equilibrium with the liquid or solid form, or both, of the same
 substance. In meteorology, vapour pressure is used almost exclusively to
@@ -361,12 +214,12 @@ defined in section, it is therefore necessary to express vapor pressure
 in terms of the already defined variables. This can be done through the
 utilisation of temperature and relative humidity. First, one must determine
 the saturated vapour pressure. This can be done using the following
-equation <a class="bibtex reference internal" href="refs.html#balton" id="id14">[3]</a>:</p>
+equation <a class="bibtex reference internal" href="refs.html#balton" id="id4">[2]</a>:</p>
 <div class="math notranslate nohighlight">
 \[e_s = 6.112 \exp(\frac{17.67 T}{T + 243.5})\]</div>
 <p>After which, the vapor pressure can be calculated as follows:</p>
 <div class="math notranslate nohighlight" id="equation-vapor-pressure-eq">
-<span class="eqno">(11)<a class="headerlink" href="#equation-vapor-pressure-eq" title="Permalink to this equation">¶</a></span>\[e = \frac{e_{s} r}{100}\]</div>
+<span class="eqno">(6)<a class="headerlink" href="#equation-vapor-pressure-eq" title="Permalink to this equation">¶</a></span>\[e = \frac{e_{s} r}{100}\]</div>
 <p>In wet periods, the precipitable water is particularly close to the
 saturated precipitable water. In situations when the precipitable water
 is close to the saturated precipitable water, the precipitable water
@@ -377,7 +230,7 @@ rather difficult to come by.</p>
 SciPy method, scipy.integrate.quad, is utilised in order to determine
 the definite integral in equation :eq: <cite>pwv</cite>. This method
 integrates the function using a technique from the Fortran library,
-QUADPACK <a class="bibtex reference internal" href="refs.html#scipy-integrate" id="id15">[23]</a>.</p>
+QUADPACK <a class="bibtex reference internal" href="refs.html#scipy-integrate" id="id5">[14]</a>.</p>
 </div>
 <div class="section" id="virtual-temperature">
 <span id="virtual-section"></span><h2>Virtual Temperature<a class="headerlink" href="#virtual-temperature" title="Permalink to this headline">¶</a></h2>
@@ -397,259 +250,14 @@ be seen as follows:</p>
 <div class="math notranslate nohighlight">
 \[T_v = \frac{T}{1 - \frac{0.378 e}{p}}\]</div>
 <p>The equation becomes the following, by substituting equation
-<a class="reference internal" href="#equation-vapor-pressure-eq">(11)</a> in and rearranging for
+<a class="reference internal" href="#equation-vapor-pressure-eq">(6)</a> in and rearranging for
 relative humidity:</p>
 <div class="math notranslate nohighlight">
 \[r = \frac{100 (p T_v - p T)}{0.378 e_s T_v}\]</div>
 </div>
-<div class="section" id="quasi-geostrophic-theory">
-<h2>Quasi-Geostrophic Theory<a class="headerlink" href="#quasi-geostrophic-theory" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="introduction">
-<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
-<p>From numerical weather prediction, the public desires information
-pertaining to the temperature, wind speed, wind direction and humidity
-in their area up to 7 days in advance. This information is largely a
-function of evolving synoptic weather patterns (for example, fronts and
-jet streams). The basic idea of quasi-geostrophic theory is that it
-reveals how hydrostatic balance and geostrophic balance constrain and
-simply atmospheric dynamics, but, in a realistic manner. It provides a
-framework by which an understanding of, and an ability to diagnose, the
-evolution of a three dimensional synoptic-scale weather system. It
-achieves this by providing insights into how mass fields and momentum
-fields interact to create vertical circulations that result in realistic
-synoptic-scale weather patterns.</p>
-</div>
-<div class="section" id="thermodynamic-equation">
-<span id="advection-equation"></span><h3>Thermodynamic Equation<a class="headerlink" href="#thermodynamic-equation" title="Permalink to this headline">¶</a></h3>
-<p>To begin with, the thermodynamic equation will be the primary focus. The
-first thing to examine in the thermodynamic equation is advection. As
-mentioned previously, advection is a horizontal transfer of mass, heat,
-or other property. Accordingly, winds that blow across Earth’s surface
-represent advectional movements of air.</p>
-<p>Differential temperatures drive the mass movement of air seeking
-equilibrium. Advective winds move from areas of higher temperature
-toward areas of lower temperature. In contrast, convection, the vertical
-movement of mass or transfer of heat, manifests itself as air currents.
-Accordingly, winds are a result of advection, while air currents are a
-result of convection. In the atmosphere, advection is the sole process
-of horizontal transfer of mass. In contrast, vertical transfer occurs
-via conduction, convection, and radiation.</p>
-<p>The magnitude of heat transference depends on the rate of heat
-transport, and flux in turn relates the transfer of heat energy in terms
-of area and time <a class="bibtex reference internal" href="refs.html#advection" id="id16">[14]</a>. Advection can be
-represented in vector notation by:</p>
-<div class="math notranslate nohighlight">
-\[\frac{\partial T}{\partial t} + \vec{v} \cdot \nabla_p T = 0\]</div>
-<p>The del operator (<span class="math notranslate nohighlight">\(\nabla_p\)</span>) will be expanded into its components
-as shown in equation <a class="reference internal" href="#equation-del-operator">(12)</a>. The reason for
-doing so is that it makes the equation easier to work with down the
-line.</p>
-<div class="math notranslate nohighlight" id="equation-del-operator">
-<span class="eqno">(12)<a class="headerlink" href="#equation-del-operator" title="Permalink to this equation">¶</a></span>\[\begin{split}\frac{\partial T}{\partial t} + \begin{bmatrix} \vec{v}_x \\ \vec{v}_y \\ \vec{v}_p \end{bmatrix} \cdot \begin{bmatrix} \frac{\partial}{\partial x} \hat{i} \\ \frac{\partial}{\partial y} \hat{j} \\ \frac{\partial}{\partial p} \hat{k} \end{bmatrix} T = 0\end{split}\]</div>
-<p>Taking the dot product results in the following:</p>
-<div class="math notranslate nohighlight">
-\[\frac{\partial T}{\partial t} = - (\vec{v_{x}} \frac{\partial}{\partial x} \hat{i} + \vec{v_{y}} \frac{\partial}{\partial y} \hat{j} + \vec{v_{p}} \frac{\partial}{\partial p} \hat{k}) T\]</div>
-<p>Expanding the brackets results in:</p>
-<div class="math notranslate nohighlight">
-\[\frac{\partial T}{\partial t} = -\vec{v_{x}} \frac{\partial T_{x}}{\partial x} - \vec{v_{y}} \frac{\partial T_{y}}{\partial y} - \vec{v_{p}} \frac{\partial T_{p}}{\partial p}\]</div>
-<div class="math notranslate nohighlight">
-\[\Rightarrow \frac{\partial T}{\partial t} = -u \frac{\partial T}{\partial x} - v \frac{\partial T}{\partial y} - \omega \frac{\partial T}{\partial p}\]</div>
-<p>The terms on the RHS are due to advection within the atmosphere. Each
-<span class="math notranslate nohighlight">\(T\)</span> is actually different and related to its respective plane.
-This is divided by the distance between grid points to get the change in
-temperature with the change in distance. When multiplied by the wind
-velocity on that plane, the units <span class="math notranslate nohighlight">\(K m^{-1}\)</span> and <span class="math notranslate nohighlight">\(m s^{-1}\)</span>
-give <span class="math notranslate nohighlight">\(K s^{-1}\)</span>. The sum of all the changes in temperature due to
-motions in the <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, and <span class="math notranslate nohighlight">\(p\)</span> directions give the
-total change in temperature with
-time <a class="bibtex reference internal" href="refs.html#primitive-equations" id="id17">[6]</a>.</p>
-<p>This is the almost complete version of the thermodynamic equation,
-however, it is also necessary to add an additional term for vertical
-transfer, hence, the above equation becomes the following:</p>
-<div class="math notranslate nohighlight">
-\[\Rightarrow \frac{\partial T}{\partial t} = -u \frac{\partial T}{\partial x} - v \frac{\partial T}{\partial y} - \omega \frac{\partial T}{\partial p} + \omega \frac{R T}{p c_p}\]</div>
-<p>It is then possible to combine the two terms containing vertical motion
-resulting in:</p>
-<div class="math notranslate nohighlight" id="equation-analytic-temp-final">
-<span class="eqno">(13)<a class="headerlink" href="#equation-analytic-temp-final" title="Permalink to this equation">¶</a></span>\[\frac{\partial T}{\partial t} = -u \frac{\partial T}{\partial x} - v \frac{\partial T}{\partial y} + \omega \sigma \frac{p}{R}\]</div>
-<p>This equation describes temperature changing at a particular location
-and height is a function of temperature advection and vertical motion.
-Warm advection causes a temperature increase. Ascent causes adiabatic
-cooling and a temperature decrease, while descent produces adiabatic
-heating. These two terms often oppose each other.</p>
-<p>Adiabatic cooling is the process of reducing heat through a change in
-air pressure caused by volume expansion.</p>
-<p>For example, strong warm advection at a level causes local warming, but
-often ascent as well. The ascent leads to adiabatic cooling opposing the
-warming due to warm advection. Given strong ascent, this can contribute
-to isotherms (lines on a weather showing areas of equal temperature)
-remaining steady or even sinking southward in the face of warm
-advection, which may be very important for heavy precipitation
-production. Models can show this process, which likely will be
-accompanied by areas of strong model upward motion. In borderline
-precipitation phase change situations, the absence of strong ascent can
-result in, for example, drizzle. However, if a burst of vertical motion
-develops in this area, strong adiabatic cooling can temporary cause a
-phase change to snow, with precipitation diminishing and changing back
-to liquid once the enhanced ascent zone moves
-away <a class="bibtex reference internal" href="refs.html#describe-quasi" id="id18">[9]</a>.</p>
-<p>Discretizing equation <a class="reference internal" href="#equation-analytic-temp-final">(13)</a>, results in:</p>
-<div class="math notranslate nohighlight">
-\[\frac{T^{n + 1}_{x, y, z} - T^{n - 1}_{x, y, z}}{2 \Delta t} = -u \frac{T^{n}_{x+1, y, z} - T^{n}_{x-1, y, z}}{2 \Delta x} - v \frac{T^{n}_{x, y+1, z} - T^{n}_{x, y-1, z}}{2 \Delta y} + \omega \sigma \frac{p}{R}\]</div>
-<p>Multiplying both the LHS and the RHS by <span class="math notranslate nohighlight">\(2 \Delta t\)</span> in order to
-isolate the change in temperature with respect to time term results in
-the following:</p>
-<div class="math notranslate nohighlight">
-\[T^{n + 1}_{x, y, z} - T^{n - 1}_{x, y, z} = - u \frac{2 \Delta t}{2 \Delta x} (T^{n}_{x+1, y, z} - T^{n}_{x-1, y, z}) - v \frac{2 \Delta t}{2 \Delta y} (T^{n}_{x, y+1, z} - T^{n}_{x, y-1, z}) + \omega \sigma \frac{p}{R}\]</div>
-<p>Rearranging the equation in order to isolate the
-<span class="math notranslate nohighlight">\(T^{n + 1}_{x, y, z}\)</span> term:</p>
-<div class="math notranslate nohighlight">
-\[T^{n + 1}_{x, y, z} = T^{n - 1}_{x, y, z} - u \frac{2 \Delta t}{2 \Delta x} (T^{n}_{x+1, y, z} - T^{n}_{x-1, y, z}) - v \frac{2 \Delta t}{2 \Delta y} (T^{n}_{x, y+1, z} - T^{n}_{x, y-1, z}) + \omega \sigma \frac{p}{R}\]</div>
-<p>This discretized equation will allow for the calculation of the
-evolution of temperature and virtual temperature. Hence, this will also
-allow for the calculation of the evolution of relative humidity.</p>
-</div>
-<div class="section" id="height-tendency-equation">
-<h3>Height Tendency Equation<a class="headerlink" href="#height-tendency-equation" title="Permalink to this headline">¶</a></h3>
-<p>In order to predict system evolution, it is necessary to examine changes
-in the local height field. Therefore, the goal is to develop a single
-prognostic equation for geopotential height. Although the vertical
-velocity plays an essential role in the dynamics, the evolution of the
-geostrophic circulation can be determined without explicitly determining
-the distribution of the vertical
-velocity <a class="bibtex reference internal" href="refs.html#eq-describe" id="id19">[32]</a>. To do this, it is necessary to
-begin with the definition of geostrophic relative vorticity:</p>
-<div class="math notranslate nohighlight" id="equation-zeta">
-<span class="eqno">(14)<a class="headerlink" href="#equation-zeta" title="Permalink to this equation">¶</a></span>\[\zeta_g = \frac{\partial v_g}{\partial y} - \frac{\partial u_g}{\partial x}\]</div>
-<p>The relative vorticity is the vorticity (a measure of the local rotation
-of a fluid) relative to the Earth induced by the air velocity field. In
-the case of geostrophic relative vorticity, the air velocity field would
-be the geostrophic wind. This air velocity field is modelled as a
-two-dimensional flow parallel to the ground, so that the relative
-vorticity vector is generally a scalar rotation quantity perpendicular
-to the ground. Vorticity is positive, when looking down on the Earth and
-when the wind is turning counterclockwise <a class="bibtex reference internal" href="refs.html#vorticity" id="id20">[16]</a>.
-The following can be shown, by, substituting equations <a class="reference internal" href="#equation-u-g">(4)</a>
-and <a class="reference internal" href="#equation-v-g">(5)</a> into equation <a class="reference internal" href="#equation-zeta">(14)</a>:</p>
-<div class="math notranslate nohighlight">
-\[\zeta_g = \frac{1}{f_0} \nabla^{2}_p \varphi\]</div>
-<p>Geopotential is the potential of the Earth’s gravity field. For
-convenience it is often defined as the negative of the potential energy
-per unit mass, so that the gravity vector is obtained as the gradient of
-this potential, without the negation.</p>
-<p>Redefining the hydrostatic equation in isobaric coordinates results in
-the following:</p>
-<div class="math notranslate nohighlight">
-\[g \frac{\partial \Phi}{\partial p} = - \frac{R T}{p}\]</div>
-<p>Using the definition of geopotential <span class="math notranslate nohighlight">\(\varphi = g \Phi\)</span>, it is
-possible to rearrange the above equation in terms of temperature:</p>
-<div class="math notranslate nohighlight">
-\[T = - \frac{p}{R} \frac{\partial \varphi}{\partial p}\]</div>
-<p>It is now possible to define local changes in vorticity and temperature
-in terms of the local height tendency on constant pressure surfaces:</p>
-<div class="math notranslate nohighlight">
-\[\frac{\partial \zeta_g}{\partial t} = \frac{\partial}{\partial t} (\frac{1}{f_0} \nabla^{2}_p \varphi) = \frac{1}{f_0} \nabla^{2}_p \frac{\partial \varphi}{\partial t}\]</div>
-<div class="math notranslate nohighlight">
-\[\frac{\partial T}{\partial t} = \frac{\partial}{\partial t} (- \frac{p}{R} \frac{\partial \varphi}{\partial p}) = - \frac{p}{R} \frac{\partial (\frac{\partial \varphi)}{\partial t}}{\partial p}\]</div>
-<p>For compactness, <span class="math notranslate nohighlight">\(\frac{\partial \varphi}{\partial t}\)</span> will be
-defined as <span class="math notranslate nohighlight">\(\varphi_t\)</span>, therefore, the above equations become:</p>
-<div class="math notranslate nohighlight" id="equation-zeta-relationship">
-<span class="eqno">(15)<a class="headerlink" href="#equation-zeta-relationship" title="Permalink to this equation">¶</a></span>\[\frac{\partial \zeta_g}{\partial t} = \frac{1}{f_0} \nabla^{2}_p \varphi_t\]</div>
-<div class="math notranslate nohighlight">
-\[\frac{\partial T}{\partial t} = - \frac{p}{R} \frac{\partial \varphi_t}{\partial p}\]</div>
-<p>These two relationships are very powerful and will be used to physically
-interpret the terms in the height tendency. It is now possible to
-substitute the new relationship for temperature into the thermodynamic
-equation, which results in:</p>
-<div class="math notranslate nohighlight">
-\[- \frac{p}{R} \frac{\partial \varphi_t}{\partial p} = -u \frac{\partial T}{\partial x} - v \frac{\partial T}{\partial y} + \omega \sigma \frac{p}{R}\]</div>
-<p>It is also possible to substitute the vorticity relationship into
-something known as the quasi-geostrophic vorticity equation. This
-equation is mathematically defined as the following:</p>
-<div class="math notranslate nohighlight">
-\[\frac{\partial \zeta_g}{\partial t} = -u \frac{\partial \zeta_g}{\partial x} - v \frac{\partial \zeta_g}{\partial y} + f_0 \frac{\partial \omega}{\partial p} - \beta v_g\]</div>
-<p>This equation states that vorticity changes at a location are due to
-vorticity advection and vertical divergence. Positive vorticity
-advection causes geostrophic relative vorticity to increase with time. A
-vertical divergence results in a vorticity increase. It is, therefore,
-possible to see how positive vorticity advection and negative vorticity
-advection affect vorticity at a point <a class="bibtex reference internal" href="refs.html#describe-quasi" id="id21">[9]</a>.
-Therefore, substituting the relationship established in equation
-:eq: <cite>zeta</cite> into the quasi-geostrophic
-vorticity equation results in:</p>
-<div class="math notranslate nohighlight">
-\[\frac{1}{f_0} \nabla^{2}_p \varphi_t = -u \frac{\partial \zeta_g}{\partial x} - v \frac{\partial \zeta_g}{\partial y} + f_0 \frac{\partial \omega}{\partial p} - \beta v_g\]</div>
-<p>It is now possible to derive a single prognostic equation for
-geopotential (diagnostic equation for
-<span class="math notranslate nohighlight">\(\varphi_t\)</span>) <a class="bibtex reference internal" href="refs.html#quasi-geo" id="id22">[10]</a>. To do this, it is
-necessary to eliminate the vertical motion from both equations by:</p>
-<ol class="arabic simple">
-<li><p>Apply the operator
-<span class="math notranslate nohighlight">\(-\frac{f^{2}_0}{\sigma} \frac{\partial}{\partial p} (\frac{R}{p})\)</span>
-to the thermodynamic equation.</p></li>
-<li><p>Multiply the quasi-geostrophic vorticity equation by <span class="math notranslate nohighlight">\(f_0\)</span>.</p></li>
-<li><p>Add the results of the two proceeding steps.</p></li>
-</ol>
-<p>After a lot of tedious mathematics, the following diagnostic equation is
-obtained:</p>
-<div class="math notranslate nohighlight" id="equation-complex-qg">
-<span class="eqno">(16)<a class="headerlink" href="#equation-complex-qg" title="Permalink to this equation">¶</a></span>\[(\nabla^2_p + \frac{f^2_0}{\sigma} \frac{\partial^2}{\partial p^2}) \varphi_t = - f_0 \vec{v_g} \cdot \nabla_p (\zeta_g + f) - \frac{f^2_0}{\sigma} \frac{\partial}{\partial p} (\frac{R}{p} (-\vec{v_g} \cdot \nabla_p T))\]</div>
-<p>To obtain an actual value for <span class="math notranslate nohighlight">\(\varphi_t\)</span>, it would be necessary
-to compute the forcing terms from the three-dimensional wind and
-temperature fields, and then invert the operator on the LHS using
-appropriate boundary conditions. This is not a simple task, and
-forecasters never do this. Rather, for synoptic-scale atmospheric waves,
-this term is proportional to <span class="math notranslate nohighlight">\(-\varphi_t\)</span>. This term can be as the
-local geopotential tendency <a class="bibtex reference internal" href="refs.html#quasi-geo" id="id23">[10]</a>. Therefore,
-equation <a class="reference internal" href="#equation-complex-qg">(16)</a> becomes the following:</p>
-<div class="math notranslate nohighlight">
-\[- \varphi_t = - f_0 \vec{v_g} \cdot \nabla_p (\zeta_g + f) - \frac{f^2_0}{\sigma} \frac{\partial}{\partial p} (\frac{R}{p} (-\vec{v_g} \cdot \nabla_p T))\]</div>
-<div class="math notranslate nohighlight">
-\[\Rightarrow \varphi_t = f_0 \vec{v_g} \cdot \nabla_p (\zeta_g + f) + \frac{f^2_0}{\sigma} \frac{\partial}{\partial p} (\frac{R}{p} (-\vec{v_g} \cdot \nabla_p T))\]</div>
-<div class="math notranslate nohighlight" id="equation-complex-qg-proportional">
-<span class="eqno">(17)<a class="headerlink" href="#equation-complex-qg-proportional" title="Permalink to this equation">¶</a></span>\[\Rightarrow \frac{\partial \varphi}{\partial t} = \underbrace{f_0 \vec{v_g} \cdot \nabla_p (\zeta_g + f)}_{\texttt{Term A}} + \underbrace{\frac{f^2_0}{\sigma} \frac{\partial}{\partial p} (\frac{R}{p} (-\vec{v_g} \cdot \nabla_p T))}_{\texttt{Term B}}\]</div>
-<p>Term A is proportional to the advection of absolute vorticity. For the
-upper troposphere it is usually the dominant term. For short waves we
-have seen that the relative vorticity advection dominates the planetary
-vorticity advection. Term B is proportional to minus the rate of change
-of temperature advection with respect to pressure. It is therefore
-related to plus the rate of change of temperature advection with respect
-to height. This is called the differential temperature advection. The
-magnitude of the temperature advection tends to be largest in the lower
-troposphere <a class="bibtex reference internal" href="refs.html#describe-quasi" id="id24">[9]</a>.</p>
-<p>In order to allow for numerical computation, it is necessary to
-discretize. Based on this, term A becomes
-the following:</p>
-<div class="math notranslate nohighlight">
-\[A = f_0 \vec{v_g} \cdot \nabla_p (\zeta_g + f)\]</div>
-<div class="math notranslate nohighlight">
-\[\Rightarrow A = f_0 (u_g \frac{\partial (\zeta_g + f)}{\partial x} + v_g \frac{\partial (\zeta_g + f)}{\partial y})\]</div>
-<div class="math notranslate nohighlight">
-\[\Rightarrow A = f_0 u_g \frac{\partial (\zeta_g + f)}{\partial x} + f_0 v_g \frac{\partial (\zeta_g + f)}{\partial y}\]</div>
-<div class="math notranslate nohighlight">
-\[\Rightarrow A = f_0 u_g \frac{(\zeta_g + f)^{n}_{x+1, y, z} - (\zeta_g + f)^{n}_{x-1, y, z}}{2 \Delta x} + f_0 v_g \frac{(\zeta_g + f)^{n}_{x, y+1, z} - (\zeta_g + f)^{n}_{x, y-1, z}}{2 \Delta y}\]</div>
-<p>By a similar process, term B becomes the following:</p>
-<div class="math notranslate nohighlight">
-\[B = \frac{f^2_0}{\sigma} \frac{\partial}{\partial p} (\frac{R}{p} (-u_g \frac{\partial T}{\partial x} - v_g \frac{\partial T}{\partial y}))\]</div>
-<div class="math notranslate nohighlight">
-\[\Rightarrow B = \frac{f^2_0}{\sigma} \frac{1}{ 2 \Delta p} (\frac{R}{p} (-u_g \frac{T^{n}_{x+1, y, z} - T^{n}_{x-1, y, z}}{2 \Delta x} - v_g \frac{T^{n}_{x, y+1, z} - T^{n}_{x, y-1, z}}{2 \Delta y})\]</div>
-<p>Substituting these discretized terms into equation <a class="reference internal" href="#equation-complex-qg-proportional">(17)</a>, it becomes the
-following after following a similar discretization process:</p>
-<div class="math notranslate nohighlight">
-\[\frac{\partial \varphi}{\partial t} = A + B\]</div>
-<div class="math notranslate nohighlight">
-\[\Rightarrow \frac{\varphi^{n+1}_{x, y, z} - \varphi^{n-1}_{x, y, z}}{2 \Delta t} = A + B\]</div>
-<div class="math notranslate nohighlight">
-\[\Rightarrow \varphi^{n+1}_{x, y, z} - \varphi^{n-1}_{x, y, z} = 2 \Delta t(A + B)\]</div>
-<div class="math notranslate nohighlight">
-\[\Rightarrow \varphi^{n+1}_{x, y, z} = \varphi^{n-1}_{x, y, z} + 2 \Delta t(A + B)\]</div>
-<p>This discretized equation now allows for the computation of the
-evolution of geopotential. By using the definition of geopotential
-<span class="math notranslate nohighlight">\(\varphi = g \Phi\)</span>, it is possible to determine the geopotential
-height by rearranging the equation to <span class="math notranslate nohighlight">\(\Phi = \frac{\varphi}{g}\)</span>,
-which in turns allows for the computation of the geostrophic wind as
-described in section <a class="bibtex reference internal" href="refs.html#quasi-geo" id="id25">[10]</a>.</p>
-</div>
+<div class="section" id="primitive-equations">
+<h2>Primitive Equations<a class="headerlink" href="#primitive-equations" title="Permalink to this headline">¶</a></h2>
+<p>To be added.</p>
 </div>
 </div>
 
