@@ -34,5 +34,5 @@ jobs:
         source ~/miniconda/etc/profile.d/conda.sh
         sudo conda env create -f environment.yml
         conda activate amsimp
-        python setup.py install
+        python setup.py install --user
         python -c "import amsimp; state = amsimp.Dynamics(ai=False, forecast_length=6); state.simulate()"
