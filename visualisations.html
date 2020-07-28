@@ -68,9 +68,7 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#latitude-pressure-contour-plots">Latitude - Pressure Contour Plots</a><ul>
-<li><a class="reference internal" href="#meridional-wind">Meridional Wind</a></li>
 <li><a class="reference internal" href="#temperature">Temperature</a></li>
-<li><a class="reference internal" href="#zonal-wind">Zonal Wind</a></li>
 </ul>
 </li>
 </ul>
@@ -199,20 +197,6 @@ as a percentage of the amount needed for saturation at the same temperature.</p>
 </div>
 <div class="section" id="latitude-pressure-contour-plots">
 <h2>Latitude - Pressure Contour Plots<a class="headerlink" href="#latitude-pressure-contour-plots" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="meridional-wind">
-<h3>Meridional Wind<a class="headerlink" href="#meridional-wind" title="Permalink to this headline">¶</a></h3>
-<p>Merdional flow is a meteorological term regarding atmospheric circulation
-following a general flow pattern along longitudinal lines. A positive
-merdional wind value indiciates that the wind is flowing from south to north.
-Note: AMSIMP deals solely with geostrophic wind.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Wind</span>
-<span class="c1"># Generate a latitude - pressure contour plot for meridional wind</span>
-<span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">psurface_contourf</span><span class="p">(</span><span class="s1">&#39;meridional_wind&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/meridional_wind.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/meridional_wind.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/meridional_wind.png" style="width: 90%;" /></a>
-</div>
 <div class="section" id="temperature">
 <h3>Temperature<a class="headerlink" href="#temperature" title="Permalink to this headline">¶</a></h3>
 <p>Temperature is defined as the mean kinetic energy density of molecular
@@ -224,20 +208,6 @@ motion.</p>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/temp.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/temp.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/temp.png" style="width: 90%;" /></a>
-</div>
-<div class="section" id="zonal-wind">
-<h3>Zonal Wind<a class="headerlink" href="#zonal-wind" title="Permalink to this headline">¶</a></h3>
-<p>Zonal flow is a meteorological term regarding atmospheric circulation following
-a general flow pattern along latitudinal lines. A positive zonal wind value
-indiciates that the wind is flowing from east to west. Note: AMSIMP deals
-solely with geostrophic wind.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># amsimp.Wind</span>
-<span class="c1"># Generate a latitude - pressure contour plot for zonal wind</span>
-<span class="c1"># based on current atmospheric conditions.</span>
-<span class="n">detail</span><span class="o">.</span><span class="n">psurface_contourf</span><span class="p">(</span><span class="s1">&#39;zonal_wind&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/zonal_wind.png"><img alt="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/zonal_wind.png" class="align-center" src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Graphs/contour_plots/zonal_wind.png" style="width: 90%;" /></a>
 </div>
 </div>
 </div>
