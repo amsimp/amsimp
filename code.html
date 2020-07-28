@@ -2007,7 +2007,7 @@
 
         <span class="c"># Determine gradient with respect to latitude.</span>
         <span class="n">gradient_latitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span>
-            <span class="n">parameter</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mf">1</span>
+            <span class="n">parameter</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mf">1</span>
         <span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">parameter</span><span class="o">.</span><span class="n">unit</span> <span class="o">/</span> <span class="n">units</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">gradient_latitude</span>
@@ -2021,8 +2021,8 @@
 
          <span class="c"># Determine gradient with respect to pressure.</span>
         <span class="n">gradient_pressure</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span>
-            <span class="n">parameter</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mf">0</span>
-        <span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">parameter</span><span class="o">.</span><span class="n">unit</span> <span class="o">/</span> <span class="n">pressure</span><span class="o">.</span><span class="n">unit</span><span class="p">)</span>
+            <span class="n">parameter</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pressure</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mf">0</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">parameter</span><span class="o">.</span><span class="n">unit</span> <span class="o">/</span> <span class="n">units</span><span class="o">.</span><span class="n">hPa</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">gradient_pressure</span>
 
