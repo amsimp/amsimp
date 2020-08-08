@@ -36,7 +36,6 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
-    'matplotlib.sphinxext.plot_directive',
     'sphinxcontrib.bibtex'
 ]
 
