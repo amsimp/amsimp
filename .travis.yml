@@ -13,16 +13,16 @@ install:
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
-  - python3.7 -m pip install sphinx
-  - python3.7 -m pip install guzzle_sphinx_theme
-  - python3.7 -m pip install sphinxcontrib-bibtex
 
 script:
   - export PATH="$HOME/miniconda/bin:$PATH"
   - conda init
   - source ~/miniconda/etc/profile.d/conda.sh
   - conda env create -f environment.yml && conda activate amsimp
-  - python3.7 setup.py install
+  - pip install sphinx
+  - pip install guzzle_sphinx_theme
+  - pip install sphinxcontrib-bibtex
+  - python setup.py install
   - cd docs
   - make html
   - cd _build/html
