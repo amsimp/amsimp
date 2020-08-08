@@ -22,7 +22,7 @@ script:
   - conda init
   - source ~/miniconda/etc/profile.d/conda.sh
   - conda env create -f environment.yml && conda activate amsimp
-  - python3 setup.py install
+  - python3 -m setup.py install
   - cd docs
   - make html
   - cd _build/html
