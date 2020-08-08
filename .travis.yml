@@ -5,8 +5,6 @@ git:
   depth: false
 
 install:
-  - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  - brew upgrade gcc
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
   - bash miniconda.sh -b -p $HOME/miniconda
   - source "$HOME/miniconda/etc/profile.d/conda.sh"
@@ -20,6 +18,7 @@ script:
   - source ~/miniconda/etc/profile.d/conda.sh
   - conda env create -f environment.yml && conda activate amsimp
   - pip install sphinx
+  - pip install autoapi
   - pip install guzzle_sphinx_theme
   - pip install sphinxcontrib-bibtex
   - python setup.py install
