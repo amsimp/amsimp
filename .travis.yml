@@ -23,7 +23,7 @@ script:
   - pip install sphinxcontrib-bibtex
   - python setup.py install
   - cd docs
-  - make html
+  - make clean && make html
   - cd _build/html
   - touch .nojekyll
   - touch CNAME
