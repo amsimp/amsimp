@@ -6,7 +6,7 @@
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/downloads.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/amsimp/amsimp.svg?style=flat-square)
 
-AMSIMP is an easy-to-use atmospheric dynamical core plugin in Python. Read the [paper](https://github.com/amsimp/papers/raw/master/scifest-online/project-book/main.pdf).
+AMSIMP is an easy-to-use atmospheric dynamical core package in Python. Read the [paper](https://github.com/amsimp/papers/raw/master/scifest-online/project-book/main.pdf).
 
 **Features:**
 

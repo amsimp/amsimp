@@ -1,6 +1,7 @@
 #cython: linetrace=True
 #distutils: define_macros=CYTHON_TRACE_NOGIL=1
 #cython: language_level=3
+# cython: embedsignature=True, binding=True
 """
 AMSIMP Recurrent Neural Network and Dynamics Class. For information about
 this class is described below.
@@ -35,6 +36,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from matplotlib import style, ticker, gridspec
 import numpy as np
+from astropy import units
 from astropy import constants as constant
 import cartopy.crs as ccrs
 from cartopy.util import add_cyclic_point
@@ -404,9 +406,10 @@ cdef class Dynamics(RNN):
     AMSIMP Dynamics Class - Also, known as Motus Aeris @ AMSIMP. This class
     generates a simulation of tropospheric and stratsopheric dynamics. 
     Predictions are made by numerically solving the isobaric version of the
-    Primitive Equations (they are coupled set of nonlinear PDEs). The initial conditions
-    are defined in the class methods of Water, Moist, and Backend. For more information
-    on the initial conditions, please see those classes.
+    Primitive Equations (they are coupled set of nonlinear PDEs). The 
+    initial conditions are defined in the class methods of Water, Moist,
+    and Backend. For more information on the initial conditions, please
+    see those classes.
     
     Below is a list of the methods included within this class, with a short
     description of their intended purpose. Please see the relevant class methods
@@ -455,15 +458,15 @@ cdef class Dynamics(RNN):
         The parameter, delta_t, defines the change with respect to time
         (in minutes) defined in the simulation. Defaults to a value of 2.
         
-        For more information, please refer to amsimp.Backend.__cinit__()
+        For more information, please refer to amsimp.Backend.__cinit__
         method.
         """
         # Add units to forecast length variable.
         if type(forecast_length) != Quantity:
-            forecast_length = forecast_length * self.units.h
+            forecast_length = forecast_length * units.h
         # Add units to delta_t variable.
         if type(delta_t) != Quantity:
-            delta_t = delta_t * self.units.min
+            delta_t = delta_t * units.min
 
         # Declare class variables.
         super().__init__(delta_latitude)
@@ -501,7 +504,8 @@ cdef class Dynamics(RNN):
         Generates the period of time over which the forecast will be generated
         for. 
         
-        Explain more.
+        Please also note that this method also outputs the change in time
+        used. Hence, the output is a tuple.
         """
         segments = int((self.forecast_length / self.delta_t).si.value) + 1
 
@@ -511,13 +515,15 @@ cdef class Dynamics(RNN):
         ) * self.forecast_length.unit
 
         # Convert to seconds.
-        delta_t = self.delta_t.to(self.units.s)
+        delta_t = self.delta_t.to(units.s)
 
         return forecast_period, delta_t
 
     def __perturbations_errorcheck(self, input_perturbation):
         """
-        Explain here.
+        This method is solely utilised for determining whether a user
+        defined perturbation in the amsimp.Dynamics.simulate method
+        is a callable function.
         """
         if input_perturbation != None:                
             # Check if first index of tuple is a function.
@@ -528,7 +534,9 @@ cdef class Dynamics(RNN):
 
     def __interpolation_cube(self, input_cube, grid_points):
         """
-        Explain here.
+        This method is solely utilised for interpolating a
+        given cube to a different set of grid points in the
+        amsimp.Dynamics.simulate method.
         """
         output = input_cube.interpolate(grid_points, iris.analysis.Linear())
         
@@ -568,6 +576,9 @@ cdef class Dynamics(RNN):
         this class. The output will be saved as a NetCDF file. These
         files can be opened by using the Iris library, which can
         be downloaded via Anaconda Cloud.
+
+        The perturbation parameters allow the end-user to modify the
+        Primtive Equations used by the software to account.
         """
         # Error checking.
         np.seterr(all='raise')
@@ -603,13 +614,13 @@ cdef class Dynamics(RNN):
         # The Coriolis parameter at various latitudes of the Earth's surface,
         # under various approximations.
         # No approximation.
-        cdef np.ndarray f = self.coriolis_parameter().value / self.units.s
+        cdef np.ndarray f = self.coriolis_parameter().value / units.s
         f = self.make_3dimensional_array(parameter=f, axis=1)
 
         # Define the change with respect to time.
         cdef delta_t = self.forecast_period()[1]
         # Forecast length.
-        cdef forecast_length = self.forecast_length.to(self.units.s)
+        cdef forecast_length = self.forecast_length.to(units.s)
         cdef int t = 0
 
         # Define initial conditions.
@@ -642,9 +653,9 @@ cdef class Dynamics(RNN):
         cdef int iterator_ai
         if self.ai:
             prediction_ai = self.model_prediction()
-            prediction_ai_height = prediction_ai[2] * self.units.m
-            prediction_ai_temp = prediction_ai[0] * self.units.K
-            prediction_ai_rh = prediction_ai[1] * self.units.percent
+            prediction_ai_height = prediction_ai[2] * units.m
+            prediction_ai_temp = prediction_ai[0] * units.K
+            prediction_ai_rh = prediction_ai[1] * units.percent
             iterator_ai = 0
 
         # Define extra variable types.
@@ -904,14 +915,14 @@ cdef class Dynamics(RNN):
                     )
                 ) 
                 # Add units of measurement.
-                sat_vapor_pressure *= self.units.kPa
-                sat_vapor_pressure = sat_vapor_pressure.to(self.units.hPa)
+                sat_vapor_pressure *= units.kPa
+                sat_vapor_pressure = sat_vapor_pressure.to(units.hPa)
 
                 # Relative Humidity.
                 rh = (e.value / sat_vapor_pressure.value) * 100
                 rh[rh > 100] = 100
                 rh[rh < 0] = 0
-                rh *= self.units.percent
+                rh *= units.percent
 
                 # Virtual Temperature.
                 T_v = T_n / (

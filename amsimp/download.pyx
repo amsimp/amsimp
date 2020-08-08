@@ -2,7 +2,10 @@
 #distutils: define_macros=CYTHON_TRACE_NOGIL=1
 #cython: language_level=3
 """
-AMSIMP Download Utility
+AMSIMP Download Utility Class. For information about this class is described below.
+
+Public domain by anatoly techtonik <techtonik@gmail.com>. Also available
+under the terms of MIT license. Copyright (c) 2010-2015 anatoly techtonik
 """
 
 # -----------------------------------------------------------------------------------------#
@@ -18,11 +21,16 @@ import urllib.parse as urlparse
 
 cdef class Download:
     """
-    AMSIMP Download Utility 
+    AMSIMP Download Utility - The initial conditions utilised by the software
+    are from the Global Data Assimilation System (GDAS), which is provided
+    by the National Oceanic and Atmospheric Adminstration in the United States.
+    The primary reason for utilising this data is that it is freely available
+    to the general public. The purpose of this class is to download these initial
+    conditions from the AMSIMP Initial Conditions Data Repository on GitHub.
+    The data stored within this repo is updated every six hours by amsimp-bot.
 
-    Public domain by anatoly techtonik <techtonik@gmail.com>
-    Also available under the terms of MIT license
-    Copyright (c) 2010-2015 anatoly techtonik
+    Public domain by anatoly techtonik <techtonik@gmail.com>. Also available
+    under the terms of MIT license. Copyright (c) 2010-2015 anatoly techtonik
     """
     __current_size = 0
 
@@ -156,7 +164,7 @@ cdef class Download:
 
     def filename_from_url(self, url):
         """
-        :return: detected filename as unicode or None
+        Returns detected filename as unicode or None.
         """
         fname = os.path.basename(urlparse.urlparse(url).path)
         if len(fname.strip(" \n\t.")) == 0:
@@ -166,9 +174,6 @@ cdef class Download:
     def filename_from_headers(self, headers):
         """
         Detect filename from Content-Disposition headers if present.
-
-        :param: headers as dict, list or string
-        :return: filename from content-disposition header or None
         """
         if type(headers) == str:
             headers = headers.splitlines()
@@ -294,18 +299,13 @@ cdef class Download:
 
     def callback_progress(self, blocks, block_size, total_size, bar_function):
         """
-        callback function for urlretrieve that is called when connection is
-        created and when once for each block
+        Callback function for urlretrieve that is called when connection is
+        created and when once for each block.
 
-        draws adaptive progress bar in terminal/console
+        Draws adaptive progress bar in terminal/console.
 
-        use sys.stdout.write() instead of "print,", because it allows one more
-        symbol at the line end without linefeed on Windows
-
-        :param blocks: number of blocks transferred so far
-        :param block_size: in bytes
-        :param total_size: in bytes, can be -1 if server doesn't return it
-        :param bar_function: another callback function to visualize progress
+        Use sys.stdout.write() instead of "print,", because it allows one more
+        symbol at the line end without linefeed on Windows.
         """
         global __current_size
     
@@ -326,7 +326,7 @@ cdef class Download:
     def detect_filename(self, url=None, out=None, headers=None, default="download.wget"):
         """
         Return filename for saving file. If no filename is detected from output
-        argument, url or headers, return default (download.wget)
+        argument, url or headers, return default.
         """
         names = dict(out='', url='', headers='')
         if out:
@@ -342,10 +342,6 @@ cdef class Download:
         High level function, which downloads URL into tmp file in current
         directory and then renames it to filename autodetected from either URL
         or HTTP headers.
-
-        :param bar: function to track download progress (visualize etc.)
-        :param out: output filename or directory
-        :return:    filename where URL is downloaded to
         """
         # Detect of out is a directory.
         outdir = None

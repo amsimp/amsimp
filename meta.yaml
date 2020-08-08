@@ -13,6 +13,7 @@ requirements:
   dependices:
     - cython
     - python=3.7
+    - pip
     - astropy
     - matplotlib
     - numpy
@@ -20,11 +21,13 @@ requirements:
     - pandas
     - scikit-learn
     - iris
+    - progress
     - pip:
-      - tensorflow==2.2.0
+      - tensorflow
   host:
     - cython
     - python=3.7
+    - pip
     - astropy
     - matplotlib
     - numpy
@@ -34,35 +37,35 @@ requirements:
     - iris
     - progress
     - pip:
-      - tensorflow==2.2.0
+      - tensorflow
   build:
     - cython
     - python=3.7
+    - pip
     - astropy
     - matplotlib
     - numpy
     - cartopy
     - pandas
-    - python-wget
     - scikit-learn
     - iris
     - progress
     - pip:
-      - tensorflow==2.2.0
+      - tensorflow
   run:
     - cython
     - python=3.7
+    - pip
     - astropy
     - matplotlib
     - numpy
     - cartopy
     - pandas
-    - python-wget
     - scikit-learn
     - iris
     - progress
     - pip:
-      - tensorflow==2.2.0
+      - tensorflow
 
 test:
   imports:
@@ -71,7 +74,7 @@ test:
 about:
   home: https://amsimp.com
   license: GPL-3.0
-  summary: AMSIMP is an easy-to-use atmospheric dynamical core plugin in Python.
+  summary: AMSIMP is an easy-to-use atmospheric dynamical core package in Python.
   description: An open-source, hydrostatic, atmospheric dynamical core using recurrent neural networks, written in the programming language of Cython. The aim of the software is to be a plugin that can be easily incorporated into weather and climate research projects.
   dev_url: https://github.com/amsimp/amsimp
   doc_url: https://docs.amsimp.com

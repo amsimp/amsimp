@@ -16,6 +16,7 @@ install:
   - python3 -m pip install sphinx
   - python3 -m pip install guzzle_sphinx_theme
   - python3 -m pip install sphinxcontrib-bibtex
+  - python3 setup.py install
 
 script:
   - cd docs

@@ -1,9 +1,8 @@
 #cython: linetrace=True
 #distutils: define_macros=CYTHON_TRACE_NOGIL=1
 #cython: language_level=3
+# cython: embedsignature=True, binding=True
 """
-AMSIMP Moist Thermodynamics Class. For information about this class is described below.
-
 Copyright (C) 2020 AMSIMP
 
 This program is free software: you can redistribute it and/or modify
@@ -17,13 +16,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
+along with this program.  If not, see https://www.gnu.org/licenses/.
 """
 
-# -----------------------------------------------------------------------------------------#
+# ------------------------------------------------------------------------------#
 
 # Importing Dependencies
 import numpy as np
+from astropy import units
 from scipy.integrate import quad
 import cartopy.crs as ccrs
 from cartopy.util import add_cyclic_point
@@ -34,49 +34,30 @@ from amsimp.backend import Backend
 cimport numpy as np
 from cpython cimport bool
 
-# -----------------------------------------------------------------------------------------#
-
+# ------------------------------------------------------------------------------#
 
 cdef class Moist(Backend):
     """
-    AMSIMP Moist Thermodynamics Class - This class is concerned with incorpating
-    moisture into the atmospheric model. This is done through the utilisation of
-    Mosit Thermodynamics. Atmospheric thermodynamics is the study of heat-to-work
-    transformations (and their reverse) that take place in the earth's atmosphere
-    and manifest as weather or climate. Atmospheric thermodynamics use the laws
-    of classical thermodynamics, to describe and explain such phenomena as
-    the properties of moist air
-
-    vapor_pressure ~ generates a NumPy array of saturated vapor pressure.
-    virtual_temperature ~ generates a NumPy array of the virtual temperature.
-    The unit of measurement is Kelvin.
-
-    density ~ generates a NumPy array of the atmospheric density. The unit of
-    measurement is kilograms per cubic metric.
-    exner_function ~ generates a NumPy array of the Exner function (4). This
-    method has no unit of measurement, i.e. it is dimensionless.
-    mixing_ratio ~ generates a NumPy array of the mixing ratio (water vapor).
-    This method has no unit of measurement, i.e. it is dimensionless.
-    potential_temperature ~ outputs a NumPy array of potential temperature.
-    The unit of measurement is Kelvin.
-    
-    precipitable_water ~ generates a NumPy array of precipitable water
-    vapor. The unit of measurement is millimetres.
+    This class is concerned with incorpating moisture into the atmospheric model.
     """
 
     cpdef np.ndarray vapor_pressure(self):
-        """
-        Generates a NumPy array of vapor pressure. 
+        r"""Generates an array of vapor pressure. 
+
+        .. math:: e_s = 6.112 \exp{\frac{17.67 T}{T + 243.15}}
+
+        .. math:: e = \frac{r_h e_s}{100}
+
+        Returns
+        -------
+        `astropy.units.quantity.Quantity`
+            Vapor pressure
         
+        Notes
+        -----
         Vapor pressure, in meteorology, is the partial pressure of water vapor.
         The partial pressure of water vapor is the pressure that water vapor
         contributes to the total atmospheric pressure.
-
-        Equation (Saturated Vapor Pressure):
-            e_s = 6.112 \* \exp((17.67 * T) / (T + 243.15))
-
-        Equation (Vapor Pressure):
-            e = frac{r_h \* e_s}{100}
         """
         # Convert temperature in Kelvin to degrees centigrade.
         cdef np.ndarray temperature = self.temperature().value - 273.15
@@ -90,8 +71,8 @@ cdef class Moist(Backend):
         )
 
         # Add units of measurement.
-        sat_vapor_pressure *= self.units.kPa
-        sat_vapor_pressure = sat_vapor_pressure.to(self.units.hPa)
+        sat_vapor_pressure *= units.kPa
+        sat_vapor_pressure = sat_vapor_pressure.to(units.hPa)
 
         # Vapor pressure, accounting for relative humidity.
         vapor_pressure = self.relative_humidity().value * sat_vapor_pressure
@@ -100,17 +81,26 @@ cdef class Moist(Backend):
         return vapor_pressure
 
     cpdef np.ndarray virtual_temperature(self):
-        """
-        Generates a NumPy array of the virtual temperature. 
+        r"""Generates an array of the virtual temperature.
+
+        .. math:: T_v = \frac{T}{1 - \frac{0.378 e}{p}}
+
+        Returns
+        -------
+        `astropy.units.quantity.Quantity`
+            Virtual temperature
         
+        Notes
+        -----
         The virtual temperature is the temperature at which dry air
         would have the same density as the moist air, at a given
         pressure. In other words, two air samples with the same
         virtual temperature have the same density, regardless
         of their actual temperature or relative humidity.
-        
-        Equation:
-        T_v = frac{T}{1 - frac{0.378 e}{p}}
+
+        See Also
+        --------
+        vapor_pressure
         """
         virtual_temperature = self.temperature() / (
             1 - (
@@ -120,21 +110,29 @@ cdef class Moist(Backend):
 
         return virtual_temperature
 
-# -----------------------------------------------------------------------------------------#
+# ------------------------------------------------------------------------------#
 
     cpdef np.ndarray density(self):
-        """
-        Generates a NumPy array of atmospheric pressure utilising the Ideal
-        Gas Law.
+        r"""Generates an array of atmospheric density.
 
+        .. math:: \rho = \frac{p}{R T_v}
+
+        Returns
+        -------
+        `astropy.units.quantity.Quantity`
+            Atmospheric density
+        
+        Notes
+        -----
         The atmospheric density is the mass of the atmosphere per unit
         volume. The ideal gas equation is the equation of state for the
         atmosphere, and is defined as an equation relating temperature,
         pressure, and specific volume of a system in theromodynamic
         equilibrium.
 
-        Equation:
-            rho = frac{p}{R * T_v}
+        See Also
+        --------
+        virtual_temperature
         """
         cdef np.ndarray pressure_surfaces = self.pressure_surfaces(dim_3d=True)
 
@@ -144,29 +142,25 @@ cdef class Moist(Backend):
         density = density.si
         return density
 
-    cpdef np.ndarray exner_function(self):
-        """
-        Generates a NumPy array of the exner function. 
-        
-        The Exner function can be viewed as non-dimensionalized pressure.
-
-        Equation:
-            \Pi = frac{T}{theta}
-        """
-        exner_function = self.virtual_temperature() / self.potential_temperature()
-
-        return exner_function
-
     cpdef np.ndarray mixing_ratio(self):
-        """"
-        Generates a NumPy array of the mixing ratio.
+        r""""Generates an array of the mixing ratio.
+        
+        .. math:: r = \frac{0.622 e}{p - e}
 
+        Returns
+        -------
+        `astropy.units.quantity.Quantity`
+            Mixing ratio
+
+        Notes
+        -----
         The mixing ratio is the ratio of the mass of a variable atmospheric
         constituent to the mass of dry air. In this particular case, it refers
         to water vapor.
 
-        Equation:
-            q = frac{0.622 * e}{p - e}
+        See Also
+        --------
+        vapor_pressure
         """
         mixing_ratio = (
             0.622 * self.vapor_pressure()
@@ -177,15 +171,29 @@ cdef class Moist(Backend):
         return mixing_ratio
 
     cpdef np.ndarray potential_temperature(self, moist=False):
-        """
-        Generates a NumPy array of potential temperature. 
+        r"""Generates an array of potential temperature.
+
+        .. math:: \theta = T (\frac{p}{p_0})^{-R / c_p}
+
+        Parameters
+        ----------
+        moist: `bool`
+            If true, returns virtual potential temperature
         
+        Returns
+        -------
+        `astropy.units.quantity.Quantity`
+            Potential temperature
+
+        Notes
+        -----
         The potential temperature of a parcel of fluid at pressure P is the
         temperature that the parcel would attain if adiabatically brought
         to a standard reference pressure.
-
-        Equation:
-            theta = T \* (frac{P}{P_0}) ** (-R / c_p)
+        
+        See Also
+        --------
+        virtual_temperature
         """
         # Ensure moist is a boolean value.
         if not isinstance(moist, bool):
@@ -220,39 +228,52 @@ cdef class Moist(Backend):
             n += 1
 
         potential_temperature = np.asarray(list_potentialtemperature)
-        potential_temperature *= self.units.K
+        potential_temperature *= units.K
         return potential_temperature
 
-# -----------------------------------------------------------------------------------------#
+# ------------------------------------------------------------------------------#
 
     def __mixing_ratio(self, pressure, vapor_pressure):
         """
         This method is solely utilised for integration in the
-        amsimp.Water.precipitable_water() method.
+        amsimp.Water.precipitable_water method.
         """
         y = (0.622 * vapor_pressure) / (pressure - vapor_pressure)
 
         return y
 
     cpdef np.ndarray precipitable_water(self, sum_pwv=True):
-        """
-        Generates a NumPy array of saturated precipitable water vapor.
+        r"""Generates an array of precipitable water vapor.
+
+        .. math:: W = \frac{1}{\rho g} \int r dp
+
+        Parameters
+        ----------
+        sum_pwv: `bool`
+            If true, returns 3-dimensional precipitable water vapor array.
+
+        Returns
+        -------
+        `astropy.units.quantity.Quantity`
+            Precipitable water vapor
         
+        Notes
+        -----
         Precipitable water is the total atmospheric water vapor contained in a
         vertical column of unit cross-sectional area extending between any two
-        specified levels. For a contour plot of this data, please use the
-        amsimp.Water.contourf() method.
+        specified levels.
 
-        Equation:
-            PW = frac{1}{rho \* g} \* \int r dp
+        See Also
+        --------
+        vapor_pressure, mixing_ratio
         """
         # Defining some variables.
-        cdef np.ndarray pressure = self.pressure_surfaces(dim_3d=True).to(self.units.Pa).value
+        cdef np.ndarray pressure = self.pressure_surfaces(dim_3d=True).to(units.Pa).value
         pressure = np.transpose(pressure, (2, 1, 0))
-        cdef np.ndarray vapor_pressure = self.vapor_pressure().to(self.units.Pa)
+        cdef np.ndarray vapor_pressure = self.vapor_pressure().to(units.Pa)
         vapor_pressure = np.transpose(vapor_pressure.value, (2, 1, 0))
         cdef g = self.g
-        cdef rho_w = 997 * (self.units.kg / self.units.m ** 3)
+        cdef rho_w = 997 * (units.kg / units.m ** 3)
 
         # Integrate the mixing ratio with respect to pressure between the
         # pressure boundaries of p1, and p2.
@@ -297,7 +318,7 @@ cdef class Moist(Backend):
             list_precipitablewater.append(pwv_lat)
             i += 1
 
-        precipitable_water = np.asarray(list_precipitablewater) * self.units.Pa
+        precipitable_water = np.asarray(list_precipitablewater) * units.Pa
 
         if np.shape(precipitable_water) == (len_pressurelong, len_pressurelat):
             precipitable_water = np.transpose(precipitable_water)
@@ -307,5 +328,5 @@ cdef class Moist(Backend):
         # Multiplication term by integration.
         precipitable_water *= -1 / (rho_w * g)
 
-        precipitable_water = precipitable_water.to(self.units.mm)
+        precipitable_water = precipitable_water.to(units.mm)
         return precipitable_water

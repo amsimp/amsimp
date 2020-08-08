@@ -15,4 +15,4 @@ dependencies:
   - iris
   - progress
   - pip:
-    - tensorflow==2.2.0 
+    - tensorflow
