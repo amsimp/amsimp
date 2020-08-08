@@ -14,5 +14,6 @@ dependencies:
   - scikit-learn
   - iris
   - progress
+  - matplotlib
   - pip:
     - tensorflow
