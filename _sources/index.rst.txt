@@ -19,7 +19,7 @@ Badge|
 
 An open-source, hydrostatic, atmospheric dynamical core using
 recurrent neural networks, written in the programming language
-of Cython. The aim of the software is to be a plugin that can
+of Cython. The aim of the software is to be a package that can
 be easily incorporated into weather and climate research projects.
 Read the `paper <https://github.com/amsimp/papers/raw/master/scifest-online/project-book/main.pdf>`_.
 
@@ -35,4 +35,5 @@ Table of Contents
    core
    math
    refs
+   api/index
    code
