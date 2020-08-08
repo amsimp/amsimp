@@ -16,6 +16,7 @@ install:
   - python3 -m pip install sphinx
   - python3 -m pip install guzzle_sphinx_theme
   - python3 -m pip install sphinxcontrib-bibtex
+  - conda env create -f environment.yml && conda activate amsimp
   - python3 setup.py install
 
 script:
