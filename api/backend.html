@@ -1,10 +1,9 @@
 
 <!DOCTYPE html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Licensed under the Apache 2.0 License -->
   <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
@@ -22,7 +21,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Moist Class" href="moist.html" />
@@ -38,14 +37,16 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="moist.html" title="Moist Class"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Reference Guide"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">AMSIMP 1.0.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Reference Guide</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Backend Class</a></li> 
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Reference Guide</a> &#187;</li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -98,8 +99,434 @@
           
           <div class="document clearer body">
             
-  <div class="section" id="backend-class">
-<h1>Backend Class<a class="headerlink" href="#backend-class" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-amsimp.backend">
+<span id="backend-class"></span><h1>Backend Class<a class="headerlink" href="#module-amsimp.backend" title="Permalink to this headline">¶</a></h1>
+<p>Copyright (C) 2020 AMSIMP</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see <a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+<dl class="class">
+<dt id="amsimp.backend.Backend">
+<em class="property">class </em><code class="sig-prename descclassname">amsimp.backend.</code><code class="sig-name descname">Backend</code><a class="headerlink" href="#amsimp.backend.Backend" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the base class for AMSIMP, as such, all other classes within AMSIMP
+inherit this class, either directly or indirectly.</p>
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.coriolis_parameter">
+<code class="sig-name descname">coriolis_parameter</code><a class="headerlink" href="#amsimp.backend.Backend.coriolis_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an arrray of the Coriolis parameter at various latitudes.</p>
+<div class="math notranslate nohighlight">
+\[f = 2 \Omega \sin{\phi}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Coriolis parameter</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The Coriolis parameter is defined as two times the angular rotation of
+the Earth by the sin of the latitude you are interested in.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.exit">
+<code class="sig-name descname">exit</code><a class="headerlink" href="#amsimp.backend.Backend.exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method deletes any file created by the software.</p>
+<p class="rubric">Notes</p>
+<p>This command will also cause the Python interpreter to close
+and exit. It does not delete any forecast generated and saved
+by the software.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.backend.Backend.geopotential_height" title="amsimp.backend.Backend.geopotential_height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopotential_height</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.relative_humidity" title="amsimp.backend.Backend.relative_humidity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relative_humidity</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.temperature" title="amsimp.backend.Backend.temperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temperature</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.geopotential_height">
+<code class="sig-name descname">geopotential_height</code><a class="headerlink" href="#amsimp.backend.Backend.geopotential_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an arrray of geopotential height.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Geopotential height</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If the user did not define initial conditions on initialisation
+of the class, this data is retrieved from the AMSIMP Initial
+Conditions Data Repository on GitHub. Geopotential Height is the
+height above sea level of a pressure level. For example, if a
+station reports that the 500 hPa height at its location is 5600 m,
+it means that the level of the atmosphere over that station at which
+the atmospheric pressure is 500 hPa is 5600 meters above sea level.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.backend.Backend.relative_humidity" title="amsimp.backend.Backend.relative_humidity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relative_humidity</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.temperature" title="amsimp.backend.Backend.temperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temperature</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.gradient_latitude">
+<code class="sig-name descname">gradient_latitude</code><a class="headerlink" href="#amsimp.backend.Backend.gradient_latitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the gradient of a grid of values with respect to latitude.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parameter</strong> (<cite>astropy.units.quantity.Quantity</cite>) – Array of values of which to calculate the gradient</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gradient calculated with respect to latitude of the original array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The gradient is computed using second order accurate central differences
+in the interior points and either first or second order accurate
+one-sides (forward or backwards) differences at the boundaries.
+The returned gradient hence has the same shape as the input array.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.backend.Backend.gradient_longitude" title="amsimp.backend.Backend.gradient_longitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gradient_longitude</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.gradient_pressure" title="amsimp.backend.Backend.gradient_pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gradient_pressure</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.gradient_longitude">
+<code class="sig-name descname">gradient_longitude</code><a class="headerlink" href="#amsimp.backend.Backend.gradient_longitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the gradient of a grid of values with respect to longitude.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parameter</strong> (<cite>astropy.units.quantity.Quantity</cite>) – Array of values of which to calculate the gradient</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gradient calculated with respect to longitude of the original array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The gradient is computed using second order accurate central differences
+in the interior points. The boundaries are joined together for the purposes
+of this compuation, allowing for the use of second order accurate central
+differences at the boundaries.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.backend.Backend.gradient_latitude" title="amsimp.backend.Backend.gradient_latitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gradient_latitude</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.gradient_pressure" title="amsimp.backend.Backend.gradient_pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gradient_pressure</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.gradient_pressure">
+<code class="sig-name descname">gradient_pressure</code><a class="headerlink" href="#amsimp.backend.Backend.gradient_pressure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the gradient of a grid of values with respect to pressure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parameter</strong> (<cite>astropy.units.quantity.Quantity</cite>) – Array of values of which to calculate the gradient</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gradient calculated with respect to pressure of the original array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The gradient is computed using second order accurate central differences
+in the interior points and either first or second order accurate
+one-sides (forward or backwards) differences at the boundaries.
+The returned gradient hence has the same shape as the input array.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.backend.Backend.gradient_longitude" title="amsimp.backend.Backend.gradient_longitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gradient_longitude</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.gradient_latitude" title="amsimp.backend.Backend.gradient_latitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gradient_latitude</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.latitude_lines">
+<code class="sig-name descname">latitude_lines</code><a class="headerlink" href="#amsimp.backend.Backend.latitude_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an array of latitude lines.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Latitude lines</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.backend.Backend.longitude_lines" title="amsimp.backend.Backend.longitude_lines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">longitude_lines</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.pressure_surfaces" title="amsimp.backend.Backend.pressure_surfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pressure_surfaces</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.longitude_contourf">
+<code class="sig-name descname">longitude_contourf</code><a class="headerlink" href="#amsimp.backend.Backend.longitude_contourf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a desired atmospheric parameter on a contour plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>which</strong> (<cite>str</cite>) – Desired atmospheric parameter</p></li>
+<li><p><strong>psurface</strong> (<cite>int</cite>) – Pressure at which the contour plot is generated</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>For the raw data, please see the other methods found in this class.
+This plot is layed on top of a EckertIII global projection. The
+axes are latitude and longitude. If you would like a particular
+atmospheric parameter to be added to this method, either create
+an issue on GitHub or send an email to <a class="reference external" href="mailto:support&#37;&#52;&#48;amsimp&#46;com">support<span>&#64;</span>amsimp<span>&#46;</span>com</a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.backend.Backend.psurface_contourf" title="amsimp.backend.Backend.psurface_contourf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psurface_contourf</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.thickness_contourf" title="amsimp.backend.Backend.thickness_contourf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thickness_contourf</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.longitude_lines">
+<code class="sig-name descname">longitude_lines</code><a class="headerlink" href="#amsimp.backend.Backend.longitude_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an array of longitude lines.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Longitude lines</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.backend.Backend.latitude_lines" title="amsimp.backend.Backend.latitude_lines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latitude_lines</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.pressure_surfaces" title="amsimp.backend.Backend.pressure_surfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pressure_surfaces</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.make_3dimensional_array">
+<code class="sig-name descname">make_3dimensional_array</code><a class="headerlink" href="#amsimp.backend.Backend.make_3dimensional_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert 1-dimensional array to array with three dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameter</strong> (<cite>astropy.units.quantity.Quantity</cite>) – Input array to be converted</p></li>
+<li><p><strong>axis</strong> (<cite>int</cite>) – Defines the variable over which the given parameter varies</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>3-dimensional version of input array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If axis is set to 0, this variable is constant pressure surfaces.
+If axis is set to 1, this variable is latitude.  If axis is set to
+2, this variable is longitude.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.pressure_surfaces">
+<code class="sig-name descname">pressure_surfaces</code><a class="headerlink" href="#amsimp.backend.Backend.pressure_surfaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an array of constant pressure surfaces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dim_3d</strong> (<cite>bool</cite>) – If true, this will generate a 3-dimensional array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Constant pressure surfaces</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This is the isobaric coordinate system.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.backend.Backend.latitude_lines" title="amsimp.backend.Backend.latitude_lines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">latitude_lines</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.longitude_lines" title="amsimp.backend.Backend.longitude_lines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">longitude_lines</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.pressure_thickness">
+<code class="sig-name descname">pressure_thickness</code><a class="headerlink" href="#amsimp.backend.Backend.pressure_thickness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an array of the thickness of a layer.</p>
+<div class="math notranslate nohighlight">
+\[h = z_2 - z_1\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p1</strong> (<cite>int</cite>) – Bottom of the layer.</p></li>
+<li><p><strong>p2</strong> (<cite>int</cite>) – Top of the layer.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pressure thickness</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Pressure thickness is defined as the distance between two
+pressure surfaces. Pressure thickness is determined through the
+hypsometric equation.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.psurface_contourf">
+<code class="sig-name descname">psurface_contourf</code><a class="headerlink" href="#amsimp.backend.Backend.psurface_contourf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a desired atmospheric parameter on a contour plot, with the axes
+being latitude, and pressure surfaces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>which</strong> (<cite>str</cite>) – Desired atmospheric parameter</p></li>
+<li><p><strong>central_long</strong> (<cite>int</cite>) – Line of longitude at which the contour plot is generated</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>For the raw data, please see the other methods found in this class.
+This plot is layed on top of a EckertIII global projection. The
+axes are pressure and latitude. If you would like a particular
+atmospheric parameter to be added to this method, either create
+an issue on GitHub or send an email to <a class="reference external" href="mailto:support&#37;&#52;&#48;amsimp&#46;com">support<span>&#64;</span>amsimp<span>&#46;</span>com</a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.backend.Backend.longitude_contourf" title="amsimp.backend.Backend.longitude_contourf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">longitude_contourf</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.thickness_contourf" title="amsimp.backend.Backend.thickness_contourf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thickness_contourf</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.relative_humidity">
+<code class="sig-name descname">relative_humidity</code><a class="headerlink" href="#amsimp.backend.Backend.relative_humidity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an arrray of relative humidity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Relative humidity</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If the user did not define initial conditions on initialisation
+of the class, this data is retrieved from the AMSIMP Initial
+Conditions Data Repository on GitHub. Relative Humidity is the amount
+of water vapour present in air expressed as a percentage of the amount
+needed for saturation at the same temperature.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.backend.Backend.geopotential_height" title="amsimp.backend.Backend.geopotential_height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopotential_height</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.temperature" title="amsimp.backend.Backend.temperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temperature</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.retrieve_constants">
+<code class="sig-name descname">retrieve_constants</code><a class="headerlink" href="#amsimp.backend.Backend.retrieve_constants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the collection of meteorologically significant constants.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Collection of meteorologically significant constants</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>dict</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>These constants may be defined by the user via the
+parameter, constants, on the initialisation of the class.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.temperature">
+<code class="sig-name descname">temperature</code><a class="headerlink" href="#amsimp.backend.Backend.temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an arrray of temperature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Temperature</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If the user did not define initial conditions on initialisation
+of the class, this data is retrieved from the AMSIMP Initial
+Conditions Data Repository on GitHub. Temperature is defined as
+the mean kinetic energy density of molecular motion.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.backend.Backend.geopotential_height" title="amsimp.backend.Backend.geopotential_height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopotential_height</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.relative_humidity" title="amsimp.backend.Backend.relative_humidity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relative_humidity</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.thickness_contourf">
+<code class="sig-name descname">thickness_contourf</code><a class="headerlink" href="#amsimp.backend.Backend.thickness_contourf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the thickness of a layer on a contour plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p1</strong> (<cite>int</cite>) – Bottom of the layer</p></li>
+<li><p><strong>p2</strong> (<cite>int</cite>) – Top of the layer</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This plot is layed on top of a EckertIII global projection. If you
+would like a particular atmospheric parameter to be added to
+this method, either create an issue on GitHub or send an email
+to <a class="reference external" href="mailto:support&#37;&#52;&#48;amsimp&#46;com">support<span>&#64;</span>amsimp<span>&#46;</span>com</a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.backend.Backend.pressure_thickness" title="amsimp.backend.Backend.pressure_thickness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pressure_thickness</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.longitude_contourf" title="amsimp.backend.Backend.longitude_contourf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">longitude_contourf</span></code></a>, <a class="reference internal" href="#amsimp.backend.Backend.psurface_contourf" title="amsimp.backend.Backend.psurface_contourf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psurface_contourf</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.backend.Backend.troposphere_boundaryline">
+<code class="sig-name descname">troposphere_boundaryline</code><a class="headerlink" href="#amsimp.backend.Backend.troposphere_boundaryline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an array of the troposphere - stratosphere boundary line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Troposphere - stratosphere boundary line</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The atmosphere is divided into four distinct layers: the troposphere,
+the stratosphere, the mesosphere, and the thermosphere. These layers
+are defined and  characterised by their vertical temperature profile.
+In the troposphere, temperature decreases with altitude; while in the
+stratosphere, temperature increases with altitude. This method
+determines the point at which temperature starts to increase with
+altitude (the boundary line between these two layers).</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.backend.Backend.temperature" title="amsimp.backend.Backend.temperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temperature</span></code></a></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -127,14 +554,16 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="moist.html" title="Moist Class"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Reference Guide"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">AMSIMP 1.0.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Reference Guide</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Backend Class</a></li> 
+          <li class="nav-item nav-item-1"><a href="index.html" >Reference Guide</a> &#187;</li> 
       </ul>
     </div>
 <script type="text/javascript">

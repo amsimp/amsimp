@@ -1,10 +1,9 @@
 
 <!DOCTYPE html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Licensed under the Apache 2.0 License -->
   <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
@@ -22,7 +21,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Wind Class" href="wind.html" />
@@ -38,14 +37,16 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="wind.html" title="Wind Class"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="backend.html" title="Backend Class"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">AMSIMP 1.0.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Reference Guide</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Moist Class</a></li> 
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Reference Guide</a> &#187;</li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -98,8 +99,177 @@
           
           <div class="document clearer body">
             
-  <div class="section" id="moist-class">
-<h1>Moist Class<a class="headerlink" href="#moist-class" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-amsimp.moist">
+<span id="moist-class"></span><h1>Moist Class<a class="headerlink" href="#module-amsimp.moist" title="Permalink to this headline">¶</a></h1>
+<p>Copyright (C) 2020 AMSIMP</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see <a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+<dl class="class">
+<dt id="amsimp.moist.Moist">
+<em class="property">class </em><code class="sig-prename descclassname">amsimp.moist.</code><code class="sig-name descname">Moist</code><a class="headerlink" href="#amsimp.moist.Moist" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is concerned with incorpating moisture into the atmospheric model.</p>
+<dl class="attribute">
+<dt id="amsimp.moist.Moist.density">
+<code class="sig-name descname">density</code><a class="headerlink" href="#amsimp.moist.Moist.density" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an array of atmospheric density.</p>
+<div class="math notranslate nohighlight">
+\[\rho = \frac{p}{R T_v}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Atmospheric density</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The atmospheric density is the mass of the atmosphere per unit
+volume. The ideal gas equation is the equation of state for the
+atmosphere, and is defined as an equation relating temperature,
+pressure, and specific volume of a system in theromodynamic
+equilibrium.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.moist.Moist.virtual_temperature" title="amsimp.moist.Moist.virtual_temperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">virtual_temperature</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.moist.Moist.mixing_ratio">
+<code class="sig-name descname">mixing_ratio</code><a class="headerlink" href="#amsimp.moist.Moist.mixing_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>“Generates an array of the mixing ratio.</p>
+<div class="math notranslate nohighlight">
+\[r = \frac{0.622 e}{p - e}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Mixing ratio</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The mixing ratio is the ratio of the mass of a variable atmospheric
+constituent to the mass of dry air. In this particular case, it refers
+to water vapor.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.moist.Moist.vapor_pressure" title="amsimp.moist.Moist.vapor_pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vapor_pressure</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.moist.Moist.potential_temperature">
+<code class="sig-name descname">potential_temperature</code><a class="headerlink" href="#amsimp.moist.Moist.potential_temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an array of potential temperature.</p>
+<div class="math notranslate nohighlight">
+\[\theta = T (\frac{p}{p_0})^{-R / c_p}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>moist</strong> (<cite>bool</cite>) – If true, returns virtual potential temperature</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Potential temperature</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The potential temperature of a parcel of fluid at pressure P is the
+temperature that the parcel would attain if adiabatically brought
+to a standard reference pressure.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.moist.Moist.virtual_temperature" title="amsimp.moist.Moist.virtual_temperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">virtual_temperature</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.moist.Moist.precipitable_water">
+<code class="sig-name descname">precipitable_water</code><a class="headerlink" href="#amsimp.moist.Moist.precipitable_water" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an array of precipitable water vapor.</p>
+<div class="math notranslate nohighlight">
+\[W = \frac{1}{\rho g} \int r dp\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sum_pwv</strong> (<cite>bool</cite>) – If true, returns 3-dimensional precipitable water vapor array.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Precipitable water vapor</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Precipitable water is the total atmospheric water vapor contained in a
+vertical column of unit cross-sectional area extending between any two
+specified levels.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.moist.Moist.vapor_pressure" title="amsimp.moist.Moist.vapor_pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vapor_pressure</span></code></a>, <a class="reference internal" href="#amsimp.moist.Moist.mixing_ratio" title="amsimp.moist.Moist.mixing_ratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mixing_ratio</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.moist.Moist.vapor_pressure">
+<code class="sig-name descname">vapor_pressure</code><a class="headerlink" href="#amsimp.moist.Moist.vapor_pressure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an array of vapor pressure.</p>
+<div class="math notranslate nohighlight">
+\[e_s = 6.112 \exp{\frac{17.67 T}{T + 243.15}}\]</div>
+<div class="math notranslate nohighlight">
+\[e = \frac{r_h e_s}{100}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Vapor pressure</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Vapor pressure, in meteorology, is the partial pressure of water vapor.
+The partial pressure of water vapor is the pressure that water vapor
+contributes to the total atmospheric pressure.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.moist.Moist.virtual_temperature">
+<code class="sig-name descname">virtual_temperature</code><a class="headerlink" href="#amsimp.moist.Moist.virtual_temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an array of the virtual temperature.</p>
+<div class="math notranslate nohighlight">
+\[T_v = \frac{T}{1 - \frac{0.378 e}{p}}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Virtual temperature</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The virtual temperature is the temperature at which dry air
+would have the same density as the moist air, at a given
+pressure. In other words, two air samples with the same
+virtual temperature have the same density, regardless
+of their actual temperature or relative humidity.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.moist.Moist.vapor_pressure" title="amsimp.moist.Moist.vapor_pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vapor_pressure</span></code></a></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -127,14 +297,16 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="wind.html" title="Wind Class"
              >next</a> |</li>
         <li class="right" >
           <a href="backend.html" title="Backend Class"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">AMSIMP 1.0.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Reference Guide</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Moist Class</a></li> 
+          <li class="nav-item nav-item-1"><a href="index.html" >Reference Guide</a> &#187;</li> 
       </ul>
     </div>
 <script type="text/javascript">

@@ -1,10 +1,9 @@
 
 <!DOCTYPE html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Licensed under the Apache 2.0 License -->
   <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
@@ -22,7 +21,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Source Code" href="../code.html" />
@@ -38,14 +37,16 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="../code.html" title="Source Code"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="moist.html" title="Moist Class"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">AMSIMP 1.0.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Reference Guide</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Wind Class</a></li> 
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Reference Guide</a> &#187;</li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -98,8 +99,118 @@
           
           <div class="document clearer body">
             
-  <div class="section" id="wind-class">
-<h1>Wind Class<a class="headerlink" href="#wind-class" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-amsimp.wind">
+<span id="wind-class"></span><h1>Wind Class<a class="headerlink" href="#module-amsimp.wind" title="Permalink to this headline">¶</a></h1>
+<p>Copyright (C) 2020 AMSIMP</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see <a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+<dl class="class">
+<dt id="amsimp.wind.Wind">
+<em class="property">class </em><code class="sig-prename descclassname">amsimp.wind.</code><code class="sig-name descname">Wind</code><a class="headerlink" href="#amsimp.wind.Wind" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is concerned with calculating numerical values for wind.</p>
+<dl class="attribute">
+<dt id="amsimp.wind.Wind.globe">
+<code class="sig-name descname">globe</code><a class="headerlink" href="#amsimp.wind.Wind.globe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a wind vector plot over a contour plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>which</strong> (<cite>str</cite>) – Desired atmospheric parameter</p></li>
+<li><p><strong>central_latitude</strong> (<cite>float</cite>) – The line of latitude at which the view is looking directly down at</p></li>
+<li><p><strong>central_longitude</strong> (<cite>float</cite>) – The line of longitude at which the view is looking directly down at</p></li>
+<li><p><strong>psurface</strong> (<cite>int</cite>) – Pressure at which the contour plot is generated</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>It overlays both of these elements onto a Nearside Perspective projection
+of the Earth. By default, the perspective view is looking directly
+down at the city of Dublin in the country of Ireland. If you would
+like a particular atmospheric parameter to be added to this method,
+either create an issue on GitHub or send an email to <a class="reference external" href="mailto:support&#37;&#52;&#48;amsimp&#46;com">support<span>&#64;</span>amsimp<span>&#46;</span>com</a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.wind.Wind.wind" title="amsimp.wind.Wind.wind"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wind</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.wind.Wind.static_stability">
+<code class="sig-name descname">static_stability</code><a class="headerlink" href="#amsimp.wind.Wind.static_stability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an array of the the static stability.</p>
+<div class="math notranslate nohighlight">
+\[\sigma = - \frac{R T}{p \theta} \frac{\partial \theta}{\partial p}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Static stability</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Static stability is defined as the stability of the
+atmosphere in hydrostatic equilibrium with respect to vertical
+displacements.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.wind.Wind.vertical_motion">
+<code class="sig-name descname">vertical_motion</code><a class="headerlink" href="#amsimp.wind.Wind.vertical_motion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an array of the vertical motion.</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} \
+= - \frac{\partial \omega}{\partial p}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Vertical motion</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>astropy.units.quantity.Quantity</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Typical large-scale vertical motions in the atmosphere
+are of the order of 0.01 – 0.1 <span class="math notranslate nohighlight">\(\frac{m}{s}\)</span>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.wind.Wind.wind" title="amsimp.wind.Wind.wind"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wind</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="amsimp.wind.Wind.wind">
+<code class="sig-name descname">wind</code><a class="headerlink" href="#amsimp.wind.Wind.wind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an arrray of wind.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Wind (zonal and meridional components)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>tuple</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If the user did not define initial conditions on initialisation
+of the class, this data is retrieved from the AMSIMP Initial
+Conditions Data Repository on GitHub. Wind is the flow of gases
+on a large scale. Wind consists of the bulk movement of air.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.wind.Wind.vertical_motion" title="amsimp.wind.Wind.vertical_motion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vertical_motion</span></code></a></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -127,14 +238,16 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="../code.html" title="Source Code"
              >next</a> |</li>
         <li class="right" >
           <a href="moist.html" title="Moist Class"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">AMSIMP 1.0.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Reference Guide</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Wind Class</a></li> 
+          <li class="nav-item nav-item-1"><a href="index.html" >Reference Guide</a> &#187;</li> 
       </ul>
     </div>
 <script type="text/javascript">
