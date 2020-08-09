@@ -17,7 +17,7 @@ script:
   - conda init
   - source ~/miniconda/etc/profile.d/conda.sh
   - conda env create -f environment.yml && conda activate amsimp
-  - pip install sphinx
+  - pip install Sphinx==2.4.4
   - pip install autoapi
   - pip install guzzle_sphinx_theme
   - pip install sphinxcontrib-bibtex
