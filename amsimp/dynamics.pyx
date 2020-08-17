@@ -35,6 +35,7 @@ from tensorflow.keras.optimizers import Adam
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from matplotlib import style, ticker, gridspec
+import matplotlib.animation as animation
 import numpy as np
 from astropy import units
 from astropy import constants as constant
@@ -1150,6 +1151,19 @@ cdef class Dynamics(RNN):
         rh_cube = self.__interpolation_cube(
             input_cube=rh_cube, grid_points=grid_points
         )
+        relative_humidity = rh_cube.data
+        relative_humidity[relative_humidity > 100] = 100
+        relative_humidity[relative_humidity < 0] = 0
+        rh_cube = Cube(relative_humidity,
+            standard_name='relative_humidity',
+            units='%',
+            dim_coords_and_dims=[
+                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+            ],
+            attributes={
+                'source': 'Motus Aeris @ AMSIMP',
+            }
+        )
         rh_cube.add_aux_coord(ref_time)
         # Mixing Ratio.
         q_cube = Cube(mixing_ratio[:, 1:-1, 1:-1, 1:-1],
@@ -1217,7 +1231,8 @@ cdef class Dynamics(RNN):
                 "precipitable_water",
                 "relative_humidity"
             ],
-            psurface=1000
+            psurface=1000,
+            animation_time=5
         ):
         """
         Explain here.
@@ -1242,7 +1257,8 @@ cdef class Dynamics(RNN):
                 pressure = data[0].coords("pressure")[0].points
             except:
                 pressure = data[1].coords("pressure")[0].points
-            if psurface < pressure[-1] or psurface > pressure[0]:
+
+            if psurface < pressure.min() or psurface > pressure.max():
                 raise Exception(
                     "psurface must be a real number within the isobaric boundaries. The value of psurface was: {}".format(
                         psurface
@@ -1318,7 +1334,11 @@ cdef class Dynamics(RNN):
             # Get date.
             date = data[0].coords("forecast_reference_time")[0].points[0]
 
-            for i in range(len(time)):
+            # Source of forecast (title).
+            source = data[0].attributes['source']
+
+            # Define draw function.
+            def draw(frame, colorbar):
                 # Plot 1.
                 # EckertIII projection details.
                 ax1.set_global()
@@ -1339,14 +1359,14 @@ cdef class Dynamics(RNN):
                 contour1 = ax1.contourf(
                     lon,
                     lat,
-                    data1_plot[i, :, :],
+                    data1_plot[frame, :, :],
                     cmap=cmap1,
                     levels=level1,
                     transform=ccrs.PlateCarree()
                 )
 
                 # Checks for a colorbar.
-                if i == 0:
+                if colorbar:
                     cb1 = fig.colorbar(contour1, ax=ax1)
                     tick_locator = ticker.MaxNLocator(nbins=10)
                     cb1.locator = tick_locator
@@ -1362,7 +1382,7 @@ cdef class Dynamics(RNN):
                 contour2 = ax2.contourf(
                     lon,
                     lat, 
-                    data2_plot[i, :, :], 
+                    data2_plot[frame, :, :], 
                     cmap=cmap2, 
                     levels=level2,
                     transform=ccrs.PlateCarree()
@@ -1374,7 +1394,7 @@ cdef class Dynamics(RNN):
                 ax2.gridlines()
 
                 # Checks for a colorbar.
-                if i == 0:
+                if colorbar:
                     cb2 = fig.colorbar(contour2, ax=ax2)
                     tick_locator = ticker.MaxNLocator(nbins=10)
                     cb2.locator = tick_locator
@@ -1395,7 +1415,7 @@ cdef class Dynamics(RNN):
                 contour3 = ax3.contourf(
                     lon, 
                     lat, 
-                    data3_plot[i, :, :], 
+                    data3_plot[frame, :, :], 
                     cmap=cmap3, 
                     levels=level3,
                     transform=ccrs.PlateCarree()
@@ -1407,7 +1427,7 @@ cdef class Dynamics(RNN):
                 ax3.gridlines()
 
                 # Checks for a colorbar.
-                if i == 0:
+                if colorbar:
                     cb3 = fig.colorbar(contour3, ax=ax3)
                     tick_locator = ticker.MaxNLocator(nbins=10)
                     cb3.locator = tick_locator
@@ -1427,7 +1447,7 @@ cdef class Dynamics(RNN):
                 contour4 = ax4.contourf(
                     lon, 
                     lat, 
-                    data4_plot[i, :, :], 
+                    data4_plot[frame, :, :], 
                     levels=level4,
                     transform=ccrs.PlateCarree()
                 )
@@ -1438,7 +1458,7 @@ cdef class Dynamics(RNN):
                 ax4.gridlines()
 
                 # Checks for a colorbar.
-                if i == 0:
+                if colorbar:
                     cb4 = fig.colorbar(contour4, ax=ax4)
                     tick_locator = ticker.MaxNLocator(nbins=10)
                     cb4.locator = tick_locator
@@ -1451,42 +1471,39 @@ cdef class Dynamics(RNN):
                 ax4.set_title(label4)
 
                 # Title
+                time_title = '%.2f' % time[frame]
                 title = (
-                    "Motus Aeris @ AMSIMP (" + date + ", +" + str(np.round(time[i], 2)) + time_unit + ", " + str(pressure[indx_psurface]) + " hPa)"
+                    source + " (" + date + ", +" + time_title 
+                    + time_unit + ", " + str(pressure[indx_psurface]) 
+                    + " hPa)"
                 )
                 fig.suptitle(title)
 
-                # Check if folder needs to created, and if so create one.
-                try:
-                    os.mkdir('visualisations')
-                except OSError:
-                    pass
+                return fig
+                
+            # Define init function
+            def init():
+                return draw(0, colorbar=True)
 
-                # Save image to folder.
-                plt.savefig('visualisations/timestep_' + str(i), dpi=300)
-
-                # Displaying simualtion.
-                plt.show()
-                plt.pause(0.01)
-                if i < (len(time) - 1):
-                    ax1.clear()
-                    ax2.clear()
-                    ax3.clear()
-                    ax4.clear()
-                else:
-                    # Compile photos into video using ffmeg.
-                    os.system("ffmpeg -framerate 30 -i visualisations/timestep_%d.png -vf format=yuv420p visualise.mp4")
-                    
-                    # Remove images.
-                    for i in range(len(time)):
-                        os.remove("visualisations/timestep_" + str(i) + ".png")
-
-                    # Remove folder.
-                    try:
-                        os.rmdir('visualisations')
-                    except OSError:
-                        pass
+            # Define animate function.
+            def animate(frame):
+                return draw(frame, colorbar=False)
+            
+            # Define animation and save it.
+            frames = data1.shape[0]
+            interval = np.ceil((animation_time * 1000) / frames)
+            ani = animation.FuncAnimation(
+                fig, 
+                animate, 
+                frames, 
+                interval=interval, 
+                blit=False, 
+                init_func=init, 
+                repeat=False
+            )
+            ani.save('animation.mp4')
         else:
             raise NotImplementedError(
-                "Visualisations for planetary bodies other than Earth is not currently implemented."
+                "Visualisations for planetary bodies other than Earth"
+                + " is not currently implemented."
             )
