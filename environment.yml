@@ -15,5 +15,6 @@ dependencies:
   - iris
   - progress
   - matplotlib
+  - tqdm
   - pip:
     - tensorflow

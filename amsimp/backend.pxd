@@ -31,8 +31,8 @@ from amsimp.download cimport Download
 cdef class Backend(Download):
     cdef int delta_latitude
     cdef int delta_longitude
-    cdef bool ai
-    cdef int data_size, epochs
+    cdef forecast_length
+    cdef historical_data
     cdef bool input_data
     cpdef dict constants
     cpdef sidereal_day, Upomega, R, a, G, M, c_p, g, planet
@@ -51,9 +51,9 @@ cdef class Backend(Download):
 
     cpdef np.ndarray coriolis_parameter(self)
 
-    cpdef np.ndarray geopotential_height(self)
-    cpdef np.ndarray relative_humidity(self)
-    cpdef np.ndarray temperature(self)
+    cpdef geopotential_height(self, bool cube=?)
+    cpdef relative_humidity(self, bool cube=?)
+    cpdef temperature(self, bool cube=?)
     cpdef exit(self)
     
     cpdef np.ndarray pressure_thickness(self, p1=?, p2=?)

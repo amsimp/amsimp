@@ -106,15 +106,15 @@ venv.bak/
 # VSCode
 .vscode/
 
-# .nc
+# *.nc
 *.nc
 
 # .tmp
 *.tmp
 
-# Visualisations folder.
-visualisations/*
+# Variables folder.
+amsimp/rnn/variables
 
 # .icloud.
 *.icloud
-ifuckedup.py
+

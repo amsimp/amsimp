@@ -22,6 +22,7 @@ requirements:
     - scikit-learn
     - iris
     - progress
+    - tqdm
     - pip:
       - tensorflow
   host:
@@ -36,6 +37,7 @@ requirements:
     - scikit-learn
     - iris
     - progress
+    - tqdm
     - pip:
       - tensorflow
   build:
@@ -50,8 +52,7 @@ requirements:
     - scikit-learn
     - iris
     - progress
-    - pip:
-      - tensorflow
+    - tqdm
   run:
     - cython
     - python=3.7
@@ -64,18 +65,22 @@ requirements:
     - scikit-learn
     - iris
     - progress
-    - pip:
-      - tensorflow
+    - tqdm
 
 test:
   imports:
     - amsimp
 
+outputs:
+  - name: amsimp-models
+    files:
+      - amsimp/rnn/models
+
 about:
   home: https://amsimp.com
   license: GPL-3.0
-  summary: AMSIMP is an easy-to-use atmospheric dynamical core package in Python.
-  description: An open-source, hydrostatic, atmospheric dynamical core using recurrent neural networks, written in the programming language of Cython. The aim of the software is to be a plugin that can be easily incorporated into weather and climate research projects.
+  summary: Numerical Weather Prediction using Machine Learning
+  description: AMSIMP is an open-source solution that leverages machine learning to improve numerical weather prediction.
   dev_url: https://github.com/amsimp/amsimp
   doc_url: https://docs.amsimp.com
   doc_source_url: https://github.com/amsimp/amsimp/tree/dev/docs

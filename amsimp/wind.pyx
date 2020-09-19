@@ -34,6 +34,7 @@ import numpy as np
 from amsimp.moist cimport Moist
 from amsimp.moist import Moist
 cimport numpy as np
+from cpython cimport bool
 
 # ------------------------------------------------------------------------------#
 
@@ -69,7 +70,7 @@ cdef class Wind(Moist):
         )
         return static_stability
 
-    cpdef tuple wind(self):
+    cpdef tuple wind(self, bool cube=False):
         r"""Generates an arrray of wind.
         
         Returns
@@ -113,16 +114,17 @@ cdef class Wind(Moist):
                 grid_points, iris.analysis.Linear()
             )
 
-            # Get data.
-            # Zonal.
-            u = u.data
-            u = np.asarray(u.tolist())
-            # Meridional.
-            v = v.data
-            v = np.asarray(v.tolist())
+            if not cube:
+                # Get data.
+                # Zonal.
+                u = u.data
+                u = np.asarray(u.tolist())
+                # Meridional.
+                v = v.data
+                v = np.asarray(v.tolist())
 
-            u *= units.m / units.s
-            v *= units.m / units.s
+                u *= units.m / units.s
+                v *= units.m / units.s
         else:
             # Zonal.
             u = self.input_u

@@ -21,9 +21,9 @@ extensions = [
     include_dirs=['amsimp/']),
     Extension("amsimp.moist", ["amsimp/moist"+ext], language='c',
     include_dirs=['amsimp/']),
-    Extension("amsimp.dynamics", ["amsimp/dynamics"+ext], language='c',
+    Extension("amsimp.weather", ["amsimp/weather"+ext], language='c',
     include_dirs=['amsimp/']),
-    ]
+]
 
 if USE_CYTHON:
     from Cython.Build import cythonize
@@ -34,9 +34,9 @@ setup(
     ext_modules=extensions,
     include_dirs=[numpy.get_include()],
     version="1.0.0",
-    author="Conor Casey",
+    author="AMSIMP",
     author_email="support@amsimp.com",
-    description="Simulator for Atmospheric Dynamics",
+    description="Numerical Weather Prediction using Machine Learning",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://amsimp.com",

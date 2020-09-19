@@ -23,7 +23,7 @@ along with this program.  If not, see https://www.gnu.org/licenses/.
 
 # Importing Dependencies
 import os, sys, socket
-from datetime import datetime
+from datetime import datetime, timedelta
 from amsimp.download cimport Download
 from amsimp.download import Download
 import numpy as np
@@ -51,14 +51,10 @@ cdef class Backend(Download):
 
     def __cinit__(
             self,
-            int delta_latitude=5,
-            int delta_longitude=5,
-            forecast_length=72, 
-            delta_t=2, 
-            bool ai=True, 
-            data_size=150, 
-            epochs=200, 
-            input_date=None, 
+            int delta_latitude=3,
+            int delta_longitude=3,
+            forecast_length=120,
+            historical_data=None, 
             bool input_data=False,
             psurfaces=None,
             lat=None,
@@ -76,7 +72,9 @@ cdef class Backend(Download):
                 "specific_heat_capacity_psurface": 718,
                 "gravitational_acceleration": 9.80665,
                 "planet": "Earth"
-            }
+            },
+            delta_t=2,
+            input_date=None
         ):
         """
         The parameters, delta_latitude and delta_longitude, defines the
@@ -108,23 +106,46 @@ cdef class Backend(Download):
         self.delta_longitude = delta_longitude
         self.input_date = input_date
         self.input_data = input_data
+        self.historical_data = historical_data
+
+        # Add units to forecast length variable.
+        if type(forecast_length) != Quantity:
+            forecast_length = forecast_length * units.h
+        # Add units to delta_t variable.
+        if type(delta_t) != Quantity:
+            delta_t = delta_t * units.min
+
+        # Ensure self.forecast_length is greater than, or equal to 1.
+        self.forecast_length = forecast_length
+        if self.forecast_length.value <= 0:
+            raise Exception(
+                "forecast_length must be a positive number greater than, or equal to 1. The value of forecast_length was: {}".format(
+                    self.forecast_length
+                )
+            )
 
         # The date at which the initial conditions was gathered (i.e. how
         # recent the data is).
         if self.input_date == None:
-            data_date_file = self.download(
-                "https://github.com/amsimp/initial-conditions/raw/master/date.npy", 
-                bar=False,
-            )
-            data_date = np.load(data_date_file)
-            os.remove(data_date_file)
-            date = datetime(
-                int(data_date[2]),
-                int(data_date[1]),
-                int(data_date[0]),
-                int(data_date[3]),
-            )
-            self.date = date
+            try:
+                time = self.historical_data[0][-1].coord('time')
+                date = [cell.point for cell in time.cells()]
+                date = date[0] + timedelta(hours=+2)
+                self.date = date 
+            except:
+                data_date_file = self.download(
+                    "https://github.com/amsimp/initial-conditions/raw/master/date.npy", 
+                    bar=False,
+                )
+                data_date = np.load(data_date_file)
+                os.remove(data_date_file)
+                date = datetime(
+                    int(data_date[2]),
+                    int(data_date[1]),
+                    int(data_date[0]),
+                    int(data_date[3]),
+                )
+                self.date = date
         else:        
             # Ensure input_date is of the type "datetime.datetime".
             if type(self.input_date) != datetime:
@@ -244,23 +265,6 @@ cdef class Backend(Download):
 
         # Ensure self.delta_latitude is between 1 and 10 degrees.
         if not input_data:
-            if self.delta_latitude > 10 or self.delta_latitude < 1:
-                raise Exception(
-                    "delta_latitude must be a positive integer between 1 and 10."
-                    + " The value of delta_latitude was: {}".format(
-                        self.delta_latitude
-                    )
-                )
-
-            # Ensure self.delta_longitude is between 1 and 10 degrees.
-            if self.delta_longitude > 10 or self.delta_longitude < 1:
-                raise Exception(
-                    "delta_longitude must be a positive integer between 1 and 10."
-                    + " The value of delta_longitude was: {}".format(
-                        self.delta_longitude
-                    )
-                )
-
             folder = "https://github.com/amsimp/initial-conditions/raw/master/"
             folder += "initial_conditions/"
 
@@ -297,7 +301,7 @@ cdef class Backend(Download):
             try:
                 cube = iris.load("initial_conditions.nc")
             except OSError:  
-                fname = self.download(url)
+                fname = self.download(url, bar=None)
                 cube = iris.load(fname)
             
             height = cube.extract("geopotential_height")[0]
@@ -395,46 +399,6 @@ cdef class Backend(Download):
                     "You must connect to the internet in order to utilise AMSIMP."
                     + " Apologies for any inconvenience caused."
                 )
-
-        # RNN.
-        self.epochs = epochs
-        self.data_size = data_size
-
-        # Ensure epochs is an integer value.
-        if not isinstance(self.epochs, int):
-            raise Exception(
-                "epochs must be a integer value."
-                + " The value of epochs was: {}".format(
-                    self.ai
-                )
-            )
-
-        # Ensure epochs is a natural number.
-        if not self.epochs > 0:
-            raise Exception(
-                "epochs must be a integer value."
-                + " The value of epochs was: {}".format(
-                    self.ai
-                )
-            )
-
-        # Ensure data_size is an integer value.
-        if not isinstance(self.data_size, int):
-            raise Exception(
-                "data_size must be a integer value."
-                + " The value of data_size was: {}".format(
-                    self.ai
-                )
-            )
-
-        # Ensure data_size is a natural number and is greater than 14.
-        if not self.data_size > 14:
-            raise Exception(
-                "data_size must be a integer value."
-                + " The value of data_size was: {}".format(
-                    self.ai
-                )
-            )
 
 # ------------------------------------------------------------------------------#
 
@@ -767,7 +731,7 @@ cdef class Backend(Download):
 
 # ------------------------------------------------------------------------------#
 
-    cpdef np.ndarray geopotential_height(self):
+    cpdef geopotential_height(self, bool cube=False):
         r"""Generates an arrray of geopotential height.
         
         Returns
@@ -802,21 +766,22 @@ cdef class Backend(Download):
             ]
 
             # Interpolation
-            height = height.interpolate(
+            geopotential_height = height.interpolate(
                 grid_points, iris.analysis.Linear()
             )
 
-            # Get data.
-            geopotential_height = height.data
-            geopotential_height = np.asarray(geopotential_height.tolist())
+            if not cube:
+                # Get data.
+                geopotential_height = height.data
+                geopotential_height = np.asarray(geopotential_height.tolist())
 
-            geopotential_height *= units.m
+                geopotential_height *= units.m
         else:
             geopotential_height = self.input_height
         
         return geopotential_height
 
-    cpdef np.ndarray relative_humidity(self):
+    cpdef relative_humidity(self, bool cube=False):
         r"""Generates an arrray of relative humidity.
         
         Returns
@@ -849,21 +814,22 @@ cdef class Backend(Download):
             ]
 
             # Interpolation
-            rh = rh.interpolate(
+            relative_humidity = rh.interpolate(
                 grid_points, iris.analysis.Linear()
             )
+            
+            if not cube:
+                # Get data.
+                relative_humidity = rh.data
+                relative_humidity = np.asarray(relative_humidity.tolist())
 
-            # Get data.
-            relative_humidity = rh.data
-            relative_humidity = np.asarray(relative_humidity.tolist())
-
-            relative_humidity *= units.percent
+                relative_humidity *= units.percent
         else:
             relative_humidity = self.input_rh
         
         return relative_humidity
 
-    cpdef np.ndarray temperature(self):
+    cpdef temperature(self, bool cube=False):
         r"""Generates an arrray of temperature.
         
         Returns
@@ -895,15 +861,16 @@ cdef class Backend(Download):
             ]
 
             # Interpolation
-            temp = temp.interpolate(
+            temperature = temp.interpolate(
                 grid_points, iris.analysis.Linear()
             )
 
-            # Get data.
-            temperature = temp.data
-            temperature = np.asarray(temperature.tolist())
+            if not cube:
+                # Get data.
+                temperature = temp.data
+                temperature = np.asarray(temperature.tolist())
 
-            temperature *= units.K
+                temperature *= units.K
         else:
             temperature = self.input_temp
         

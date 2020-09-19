@@ -1,7 +1,6 @@
 """
-AMSIMP - An Open Source Implementation to Simulating Atmospheric
-Dynamics in the Troposphere and the Stratosphere, written in
-the programming language of Cython.
+AMSIMP - An open-source solution that leverages machine learning to improve
+numerical weather prediction.
 """
 import sys
 
@@ -29,11 +28,11 @@ from amsimp.wind import Wind
 # Moist Module.
 from amsimp.moist import Moist
 
-# Dynamics Module.
-from amsimp.dynamics import Dynamics
+# Weather Forecasting Module.
+from amsimp.weather import Weather
 
-# RNN Module.
-from amsimp.dynamics import RNN
+# Dynamics Module.
+from amsimp.weather import Dynamics
 
 def get_version():
     """

@@ -1,3 +1,4 @@
+#cython: language_level=3
 """
 AMSIMP Download Utility Class. For information about this class, please see
 the file: download.pyx.

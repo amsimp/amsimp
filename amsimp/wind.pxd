@@ -23,11 +23,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Importing Dependencies
 cimport numpy as np
+from cpython cimport bool
 from amsimp.moist cimport Moist
 
 # -----------------------------------------------------------------------------------------#
 
 cdef class Wind(Moist):
-    cpdef tuple wind(self)
+    cpdef tuple wind(self, bool cube=?)
     cpdef np.ndarray vertical_motion(self)
     cpdef np.ndarray static_stability(self)

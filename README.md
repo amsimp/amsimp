@@ -1,4 +1,4 @@
-# AMSIMP - Atmospheric Dynamical Core
+# AMSIMP - Numerical Weather Prediction using Machine Learning
 
 ![AMSIMP Build](https://github.com/amsimp/amsimp/workflows/AMSIMP%20Build/badge.svg)
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/version.svg)
@@ -6,13 +6,12 @@
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/downloads.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/amsimp/amsimp.svg?style=flat-square)
 
-AMSIMP is an easy-to-use atmospheric dynamical core package in Python. Read the [paper](https://github.com/amsimp/papers/raw/master/scifest-online/project-book/main.pdf).
+AMSIMP is an open-source solution that leverages machine learning to improve numerical weather prediction. Read the [paper](https://github.com/amsimp/papers/raw/master/scifest-online/project-book/main.pdf).
 
 **Features:**
 
 * Fast and accurate, AMSIMP's recurrent neural networks provide high quality dynamical forecasts and predictions.
 * AMSIMP offers a wide variety of exquisite atmospheric contour and vector plots, fit for any academic journal.
-* AMSIMP takes advantage of the Primitive Equations, providing a solid physics based foundation.
 * The core of AMSIMP is well-optimized Cython code. Enjoy the flexibility of Python with the speed of compiled C code.
 * AMSIMP's high level and intuitive syntax makes it accessible for programmers and atmospheric scientists of any experience level.
 * Distributed under the [GNU General Public License v3.0](https://github.com/amsimp/amsimp/blob/master/LICENSE), AMSIMP is developed [publicly on GitHub](https://github.com/amsimp/amsimp).
