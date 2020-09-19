@@ -130,7 +130,7 @@ cdef class Backend(Download):
             try:
                 time = self.historical_data[0][-1].coord('time')
                 date = [cell.point for cell in time.cells()]
-                date = date[0] + timedelta(hours=+2)
+                date = date[0]
                 self.date = date 
             except:
                 data_date_file = self.download(

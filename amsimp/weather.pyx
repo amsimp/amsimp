@@ -102,7 +102,7 @@ cdef class Weather(Wind):
         # Temperature.
         cdef np.ndarray temperature = np.asarray(
             data.extract('air_temperature')[0].data
-        )
+        )[:, ::-1, :, :]
         shape_space = (
             temperature.shape[1] * temperature.shape[2] * temperature.shape[3]
         )
@@ -113,7 +113,7 @@ cdef class Weather(Wind):
         # Geopotential.
         cdef np.ndarray geopotential = np.asarray(
             data.extract('geopotential')[0].data
-        )
+        )[:, ::-1, :, :]
         geopotential = geopotential.reshape(
             geopotential.shape[0], shape_space
         )
@@ -121,7 +121,7 @@ cdef class Weather(Wind):
         # Relative Humidity.
         cdef np.ndarray relative_humidity = np.asarray(
             data.extract('relative_humidity')[0].data
-        )
+        )[:, ::-1, :, :]
         relative_humidity = relative_humidity.reshape(
             relative_humidity.shape[0], shape_space
         )
@@ -130,7 +130,7 @@ cdef class Weather(Wind):
         # Zonal Wind.
         cdef np.ndarray zonal_wind = np.asarray(
             data.extract('x_wind')[0].data
-        )
+        )[:, ::-1, :, :]
         zonal_wind = zonal_wind.reshape(
             zonal_wind.shape[0], shape_space
         )
@@ -138,7 +138,7 @@ cdef class Weather(Wind):
         # Meridional Wind.
         cdef np.ndarray meridional_wind = np.asarray(
             data.extract('y_wind')[0].data
-        )
+        )[:, ::-1, :, :]
         meridional_wind = meridional_wind.reshape(
             meridional_wind.shape[0], shape_space
         )
@@ -470,8 +470,6 @@ cdef class Weather(Wind):
                 -89, 89, 3
             )
         ]
-        latitude = np.asarray(latitude) * -1
-        latitude = latitude[::-1]
 
         # Longitude.
         longitude = [

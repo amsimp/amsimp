@@ -115,6 +115,9 @@ venv.bak/
 # Variables folder.
 amsimp/rnn/variables
 
+# Historical data folder.
+benchmarking/scifest-national/historial-data
+
 # .icloud.
 *.icloud
 
