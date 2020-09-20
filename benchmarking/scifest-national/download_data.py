@@ -53,8 +53,8 @@ for i in range(5):
             'format': 'netcdf',
             'grid': [3.0, 3.0],
             'area': [
-                90, -89, -90,
-                89,
+                89, -180, -89,
+                180,
             ],
         },
         'historical-data/'+var[i]+'.nc')

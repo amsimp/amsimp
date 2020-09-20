@@ -89,47 +89,12 @@ cdef class Wind(Moist):
         --------
         vertical_motion
         """
-        if not self.input_data:
-            # Input data.
-            # Zonal.
-            u = self.input_u
-            # Meridional.
-            v = self.input_v
-
-            pressure = self.pressure_surfaces().to(units.Pa)
-            # Grid.
-            grid_points = [
-                ('pressure',  pressure.value),
-                ('latitude',  self.latitude_lines().value),
-                ('longitude', self.longitude_lines().value),                
-            ]
-
-            # Interpolation
-            # Zonal.
-            u = u.interpolate(
-                grid_points, iris.analysis.Linear()
-            )
-            # Meridional.
-            v = v.interpolate(
-                grid_points, iris.analysis.Linear()
-            )
-
-            if not cube:
-                # Get data.
-                # Zonal.
-                u = u.data
-                u = np.asarray(u.tolist())
-                # Meridional.
-                v = v.data
-                v = np.asarray(v.tolist())
-
-                u *= units.m / units.s
-                v *= units.m / units.s
-        else:
-            # Zonal.
-            u = self.input_u
-            # Meridional.
-            v = self.input_v
+        # Zonal.
+        u = self.input_u.data
+        u = np.asarray(u) * (units.m / units.s)
+        # Meridional.
+        v = self.input_v.data
+        v = np.asarray(v) * (units.m / units.s)
 
         return u, v
 
@@ -387,15 +352,12 @@ cdef class Wind(Moist):
                 )
 
                 # Add SALT.
-                if not self.input_data:
-                    title = (
-                        data_type + " ("
-                        + str(self.date.year) + '-' + str(self.date.month) + '-'
-                        + str(self.date.day) + " " + str(self.date.hour)
-                        + ":00 h)"
-                    )
-                else:
-                    title = data_type
+                title = (
+                    data_type + " ("
+                    + str(self.date.year) + '-' + str(self.date.month) + '-'
+                    + str(self.date.day) + " " + str(self.date.hour)
+                    + ":00 h)"
+                )
             
                 if which != "precipitable_water" and which != "precipitable_water_vapor":
                     title = (

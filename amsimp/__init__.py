@@ -31,9 +31,6 @@ from amsimp.moist import Moist
 # Weather Forecasting Module.
 from amsimp.weather import Weather
 
-# Dynamics Module.
-from amsimp.weather import Dynamics
-
 def get_version():
     """
     Get AMSIMP's version.

@@ -30,16 +30,3 @@ from cpython cimport bool
 
 cdef class Weather(Wind):
     pass
-
-cdef class Dynamics(Weather):
-    cdef delta_t
-    
-    cpdef tuple forecast_period(self)
-    cpdef simulate(
-        self,
-        bool save_file=?, 
-        perturbations_temperature=?, 
-        perturbations_zonalwind=?, 
-        perturbations_meridionalwind=?, 
-        perturbations_mixingratio=?
-    )

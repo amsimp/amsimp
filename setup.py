@@ -14,7 +14,6 @@ else:
 ext = '.pyx' if USE_CYTHON else '.c'
 
 extensions = [
-    Extension("amsimp.download", ["amsimp/download"+ext], language='c', include_dirs=['amsimp/']),
     Extension("amsimp.backend", ["amsimp/backend"+ext], language='c',
     include_dirs=['amsimp/']),
     Extension("amsimp.wind", ["amsimp/wind"+ext], language='c',

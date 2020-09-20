@@ -24,19 +24,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # Importing Dependencies
 from cpython cimport bool
 cimport numpy as np
-from amsimp.download cimport Download
 
 # -----------------------------------------------------------------------------------------#
 
-cdef class Backend(Download):
-    cdef int delta_latitude
-    cdef int delta_longitude
+cdef class Backend:
     cdef forecast_length
     cdef historical_data
-    cdef bool input_data
-    cpdef dict constants
-    cpdef sidereal_day, Upomega, R, a, G, M, c_p, g, planet
-    cdef input_date, date, psurfaces, lat, lon, input_height, input_rh
+    cdef date, psurfaces, lat, lon, input_geo, input_rh
     cdef input_temp, input_u, input_v
 
     cpdef np.ndarray latitude_lines(self)
@@ -47,7 +41,6 @@ cdef class Backend(Download):
     cpdef np.ndarray gradient_latitude(self, parameter=?)
     cpdef np.ndarray gradient_pressure(self, parameter=?)
     cpdef np.ndarray make_3dimensional_array(self, parameter=?, axis=?)
-    cpdef dict retrieve_constants(self)
 
     cpdef np.ndarray coriolis_parameter(self)
 
