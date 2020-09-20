@@ -2734,6 +2734,7 @@ static const char __pyx_k_figsize[] = "figsize";
 static const char __pyx_k_file_id[] = "file_id";
 static const char __pyx_k_float32[] = "float32";
 static const char __pyx_k_geo_pca[] = "geo_pca";
+static const char __pyx_k_initial[] = "initial";
 static const char __pyx_k_input_u[] = "input_u";
 static const char __pyx_k_input_v[] = "input_v";
 static const char __pyx_k_locator[] = "locator";
@@ -3179,6 +3180,7 @@ static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_indx_psurface;
 static PyObject *__pyx_n_s_init;
 static PyObject *__pyx_n_s_init_func;
+static PyObject *__pyx_n_s_initial;
 static PyObject *__pyx_n_s_input_data;
 static PyObject *__pyx_n_s_input_geo;
 static PyObject *__pyx_n_s_input_geopotential;
@@ -17165,7 +17167,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_7Weather_4visualise(CYTHON_UNUSED str
  *             animate,
  *             tqdm(             # <<<<<<<<<<<<<<
  *                 range(frames),
- *                 desc='Generating animation'
+ *                 initial=1,
  */
   __Pyx_TraceLine(925,0,__PYX_ERR(0, 925, __pyx_L1_error))
   __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_tqdm); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 925, __pyx_L1_error)
@@ -17175,8 +17177,8 @@ static PyObject *__pyx_pf_6amsimp_7weather_7Weather_4visualise(CYTHON_UNUSED str
  *             animate,
  *             tqdm(
  *                 range(frames),             # <<<<<<<<<<<<<<
+ *                 initial=1,
  *                 desc='Generating animation'
- *             ),
  */
   __Pyx_TraceLine(926,0,__PYX_ERR(0, 926, __pyx_L1_error))
   __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_v_frames); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 926, __pyx_L1_error)
@@ -17187,7 +17189,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_7Weather_4visualise(CYTHON_UNUSED str
  *             animate,
  *             tqdm(             # <<<<<<<<<<<<<<
  *                 range(frames),
- *                 desc='Generating animation'
+ *                 initial=1,
  */
   __Pyx_TraceLine(925,0,__PYX_ERR(0, 925, __pyx_L1_error))
   __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 925, __pyx_L1_error)
@@ -17199,13 +17201,14 @@ static PyObject *__pyx_pf_6amsimp_7weather_7Weather_4visualise(CYTHON_UNUSED str
   /* "amsimp/weather.pyx":927
  *             tqdm(
  *                 range(frames),
- *                 desc='Generating animation'             # <<<<<<<<<<<<<<
+ *                 initial=1,             # <<<<<<<<<<<<<<
+ *                 desc='Generating animation'
  *             ),
- *             interval=interval,
  */
   __Pyx_TraceLine(927,0,__PYX_ERR(0, 927, __pyx_L1_error))
-  __pyx_t_7 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 927, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 927, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
+  if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_initial, __pyx_int_1) < 0) __PYX_ERR(0, 927, __pyx_L1_error)
   if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_desc, __pyx_kp_u_Generating_animation) < 0) __PYX_ERR(0, 927, __pyx_L1_error)
 
   /* "amsimp/weather.pyx":925
@@ -17213,7 +17216,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_7Weather_4visualise(CYTHON_UNUSED str
  *             animate,
  *             tqdm(             # <<<<<<<<<<<<<<
  *                 range(frames),
- *                 desc='Generating animation'
+ *                 initial=1,
  */
   __Pyx_TraceLine(925,0,__PYX_ERR(0, 925, __pyx_L1_error))
   __pyx_t_10 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_6, __pyx_t_7); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 925, __pyx_L1_error)
@@ -17242,47 +17245,47 @@ static PyObject *__pyx_pf_6amsimp_7weather_7Weather_4visualise(CYTHON_UNUSED str
   PyTuple_SET_ITEM(__pyx_t_7, 2, __pyx_t_10);
   __pyx_t_10 = 0;
 
-  /* "amsimp/weather.pyx":929
+  /* "amsimp/weather.pyx":930
  *                 desc='Generating animation'
  *             ),
  *             interval=interval,             # <<<<<<<<<<<<<<
  *             blit=False,
  *             init_func=init,
  */
-  __Pyx_TraceLine(929,0,__PYX_ERR(0, 929, __pyx_L1_error))
-  __pyx_t_10 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 929, __pyx_L1_error)
+  __Pyx_TraceLine(930,0,__PYX_ERR(0, 930, __pyx_L1_error))
+  __pyx_t_10 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 930, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  if (PyDict_SetItem(__pyx_t_10, __pyx_n_s_interval, __pyx_v_interval) < 0) __PYX_ERR(0, 929, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_10, __pyx_n_s_interval, __pyx_v_interval) < 0) __PYX_ERR(0, 930, __pyx_L1_error)
 
-  /* "amsimp/weather.pyx":930
+  /* "amsimp/weather.pyx":931
  *             ),
  *             interval=interval,
  *             blit=False,             # <<<<<<<<<<<<<<
  *             init_func=init,
  *             repeat=False
  */
-  __Pyx_TraceLine(930,0,__PYX_ERR(0, 930, __pyx_L1_error))
-  if (PyDict_SetItem(__pyx_t_10, __pyx_n_s_blit, Py_False) < 0) __PYX_ERR(0, 929, __pyx_L1_error)
+  __Pyx_TraceLine(931,0,__PYX_ERR(0, 931, __pyx_L1_error))
+  if (PyDict_SetItem(__pyx_t_10, __pyx_n_s_blit, Py_False) < 0) __PYX_ERR(0, 930, __pyx_L1_error)
 
-  /* "amsimp/weather.pyx":931
+  /* "amsimp/weather.pyx":932
  *             interval=interval,
  *             blit=False,
  *             init_func=init,             # <<<<<<<<<<<<<<
  *             repeat=False
  *         )
  */
-  __Pyx_TraceLine(931,0,__PYX_ERR(0, 931, __pyx_L1_error))
-  if (PyDict_SetItem(__pyx_t_10, __pyx_n_s_init_func, __pyx_v_init) < 0) __PYX_ERR(0, 929, __pyx_L1_error)
+  __Pyx_TraceLine(932,0,__PYX_ERR(0, 932, __pyx_L1_error))
+  if (PyDict_SetItem(__pyx_t_10, __pyx_n_s_init_func, __pyx_v_init) < 0) __PYX_ERR(0, 930, __pyx_L1_error)
 
-  /* "amsimp/weather.pyx":932
+  /* "amsimp/weather.pyx":933
  *             blit=False,
  *             init_func=init,
  *             repeat=False             # <<<<<<<<<<<<<<
  *         )
  *         ani.save(fname)
  */
-  __Pyx_TraceLine(932,0,__PYX_ERR(0, 932, __pyx_L1_error))
-  if (PyDict_SetItem(__pyx_t_10, __pyx_n_s_repeat, Py_False) < 0) __PYX_ERR(0, 929, __pyx_L1_error)
+  __Pyx_TraceLine(933,0,__PYX_ERR(0, 933, __pyx_L1_error))
+  if (PyDict_SetItem(__pyx_t_10, __pyx_n_s_repeat, Py_False) < 0) __PYX_ERR(0, 930, __pyx_L1_error)
 
   /* "amsimp/weather.pyx":922
  *         frames = data1.shape[0]
@@ -17300,13 +17303,13 @@ static PyObject *__pyx_pf_6amsimp_7weather_7Weather_4visualise(CYTHON_UNUSED str
   __pyx_v_ani = __pyx_t_6;
   __pyx_t_6 = 0;
 
-  /* "amsimp/weather.pyx":934
+  /* "amsimp/weather.pyx":935
  *             repeat=False
  *         )
  *         ani.save(fname)             # <<<<<<<<<<<<<<
  */
-  __Pyx_TraceLine(934,0,__PYX_ERR(0, 934, __pyx_L1_error))
-  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_ani, __pyx_n_s_save); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 934, __pyx_L1_error)
+  __Pyx_TraceLine(935,0,__PYX_ERR(0, 935, __pyx_L1_error))
+  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_ani, __pyx_n_s_save); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 935, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   __pyx_t_7 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_10))) {
@@ -17320,7 +17323,7 @@ static PyObject *__pyx_pf_6amsimp_7weather_7Weather_4visualise(CYTHON_UNUSED str
   }
   __pyx_t_6 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_10, __pyx_t_7, __pyx_v_fname) : __Pyx_PyObject_CallOneArg(__pyx_t_10, __pyx_v_fname);
   __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 934, __pyx_L1_error)
+  if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 935, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -20798,6 +20801,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_indx_psurface, __pyx_k_indx_psurface, sizeof(__pyx_k_indx_psurface), 0, 0, 1, 1},
   {&__pyx_n_s_init, __pyx_k_init, sizeof(__pyx_k_init), 0, 0, 1, 1},
   {&__pyx_n_s_init_func, __pyx_k_init_func, sizeof(__pyx_k_init_func), 0, 0, 1, 1},
+  {&__pyx_n_s_initial, __pyx_k_initial, sizeof(__pyx_k_initial), 0, 0, 1, 1},
   {&__pyx_n_s_input_data, __pyx_k_input_data, sizeof(__pyx_k_input_data), 0, 0, 1, 1},
   {&__pyx_n_s_input_geo, __pyx_k_input_geo, sizeof(__pyx_k_input_geo), 0, 0, 1, 1},
   {&__pyx_n_s_input_geopotential, __pyx_k_input_geopotential, sizeof(__pyx_k_input_geopotential), 0, 0, 1, 1},
