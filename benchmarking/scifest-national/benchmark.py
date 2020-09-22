@@ -1,0 +1,235 @@
+# Import packages.
+import amsimp
+import xskillscore as xs
+import xarray as xr
+import iris
+from iris.cube import CubeList
+import numpy as np
+from tqdm import tqdm
+import sys
+import time
+
+# Load data.
+historical_data = iris.load('historical-data/benchmark.nc')
+
+# Load the various parameters as NumPy arrays.
+# Air temperature.
+temperature = historical_data.extract("air_temperature")[0]
+# Relative humidity.
+relative_humidity = historical_data.extract("relative_humidity")[0]
+# Geopotential.
+geopotential = historical_data.extract("geopotential")[0]
+# Wind.
+# Zonal.
+zonal_wind = historical_data.extract("x_wind")[0]
+# Meridional.
+meridional_wind = historical_data.extract("y_wind")[0]
+
+# Function to split data into windows (preprocessing).
+def preprocess_data(dataset, past_history, future_target):
+    X, y = list(), list()
+    for i in range(dataset.shape[0]):
+        # Find the end.
+        end_ix = i + past_history
+        out_end_ix = end_ix + future_target
+        
+        # Determine if we are beyond the dataset.
+        if out_end_ix > dataset.shape[0]:
+            break
+        
+        # Gather the input and output components.
+        seq_x, seq_y = dataset[i:end_ix, :, :, :], dataset[end_ix:out_end_ix, :, :, :]
+
+        # Append to list.
+        X.append(seq_x)
+        y.append(seq_y)
+
+    return X, y
+
+# Define progress bar (preprocessing).
+t = tqdm(total=5, desc='Preprocessing historical data')
+
+# Define the weather forecasting inputs and the observations after the fact.
+# Air temperature.
+input_temperature, obs_temperature = preprocess_data(temperature, (15*12), (5*12))
+t.update(1)
+# Relative humidity.
+input_relativehumidity, obs_relativehumidity = preprocess_data(relative_humidity, (15*12), (5*12))
+t.update(1)
+# Geopotential.
+input_geopotential, obs_geopotential = preprocess_data(geopotential, (15*12), (5*12))
+t.update(1)
+# Wind.
+# Zonal.
+input_zonalwind, obs_zonalwind = preprocess_data(zonal_wind, (15*12), (5*12))
+t.update(1)
+# Meridional.
+input_meridionalwind, obs_meridionalwind = preprocess_data(meridional_wind, (15*12), (5*12))
+t.update(1)
+
+# Progress bar finished (preprocessing).
+t.close()
+
+# Function to determine the skill and accuracy of the 5 day weather forecast produced by
+# the software.
+def accuracy(fct_cube, obs_cube):
+    # Convert cube to xarray.
+    # Forecast.
+    fct_cube = fct_cube[1:, :, :, :]
+    fct_xarray = xr.DataArray.from_iris(fct_cube)
+    # Observations.
+    obs_data = obs_cube.data
+    obs_newcube = fct_cube
+    obs_newcube.data = obs_data
+    obs_newcube.attributes['source'] = 'European Centre for Medium-Range Weather Forecasts'
+    obs_cube = obs_newcube
+    obs_xarray = xr.DataArray.from_iris(obs_cube)
+
+    # Pearson Correlation
+    r = xs.pearson_r(
+        obs_xarray, fct_xarray, dim=["pressure_level", "latitude", "longitude"]
+    )
+    r = r.values
+    # Root Mean Squared Error.
+    rmse = xs.rmse(
+        obs_xarray, fct_xarray, dim=["pressure_level", "latitude", "longitude"]
+    )
+    rmse = rmse.values
+    # Mean Squared Error.
+    mse = xs.mse(
+        obs_xarray, fct_xarray, dim=["pressure_level", "latitude", "longitude"]
+    )
+    mse = mse.values
+    # Mean Absolute Error.
+    mae = xs.mae(
+        obs_xarray, fct_xarray, dim=["pressure_level", "latitude", "longitude"]
+    )
+    mae = mae.values
+
+    return r, rmse, mse, mae
+
+# Determine the amount of time needed to generate a 5 day forecast.
+performance = []
+
+# Define loop length.
+len_test = len(input_temperature)
+
+# Store the skill and accuracy of the 5 day weather forecast produced by the
+# software.
+# Air temperature.
+accuracy_temperature = np.zeros((len_test, 4, (5*12)))
+# Relative humidity.
+accuracy_relativehumidity = np.zeros((len_test, 4, (5*12)))
+# Geopotential.
+accuracy_geopotential = np.zeros((len_test, 4, (5*12)))
+# Wind.
+# Zonal.
+accuracy_zonalwind = np.zeros((len_test, 4, (5*12)))
+# Meridional.
+accuracy_meridionalwind = np.zeros((len_test, 4, (5*12)))
+
+for i in range(len_test):
+    # Define progress bar (generating inputs).
+    t = tqdm(total=5, desc='Generating inputs')
+
+    # Define current input, and the observations after the fact.
+    # Air temperature.
+    input_temp, obs_temp = input_temperature[i], obs_temperature[i]
+    t.update(1)
+    # Relative humidity.
+    input_rh, obs_rh = input_relativehumidity[i], obs_relativehumidity[i]
+    t.update(1)
+    # Geopotential.
+    input_geo, obs_geo = input_geopotential[i], obs_geopotential[i]
+    t.update(1)
+    # Wind.
+    # Zonal.
+    input_u, obs_u = input_zonalwind[i], obs_zonalwind[i]
+    t.update(1)
+    # Meridional.
+    input_v, obs_v = input_meridionalwind[i], obs_meridionalwind[i]
+    t.update(1)
+    
+    # Progress bar finished (generating inputs).
+    t.close()   
+
+    # Create cube list of observations for AMSIMP.
+    input_data = CubeList([input_temp, input_rh, input_geo, input_u, input_v])
+
+    # Define atmospheric state in AMSIMP.
+    state = amsimp.Weather(historical_data=input_data)
+
+    # Generating forecast.
+    start = time.time()
+    fct = state.generate_forecast()
+
+    # Amount of time to generate forecast and append to performance list.
+    runtime = time.time() - start
+    performance.append(runtime)
+
+    # Define the weather forecast for the the various parameters.
+    # Define progress bar (postprocessing).
+    t = tqdm(total=5, desc='Post-processing historical data')
+
+    # Load the various parameters as NumPy arrays.
+    # Air temperature.
+    fct_temp = fct.extract("air_temperature")[0]
+    t.update(1)
+    # Relative humidity.
+    fct_rh = fct.extract("relative_humidity")[0]
+    t.update(1)
+    # Geopotential.
+    fct_geo = fct.extract("geopotential")[0]
+    t.update(1)
+    # Wind.
+    # Zonal.
+    fct_u = fct.extract("x_wind")[0]
+    t.update(1)
+    # Meridional.
+    fct_v = fct.extract("y_wind")[0]
+    t.update(1)
+
+    # Progress bar finished (postprocessing).
+    t.close()
+
+    # Determine the skill and accuracy of the 5 day weather forecast produced by
+    # the software.
+    # Air temperature.
+    temp_r, temp_rmse, temp_mse, temp_mae = accuracy(fct_temp, obs_temp) 
+    accuracy_temp = np.array([temp_r, temp_rmse, temp_mse, temp_mae])
+    accuracy_temperature[i] = accuracy_temp
+    # Relative humidity.
+    rh_r, rh_rmse, rh_mse, rh_mae = accuracy(fct_rh, obs_rh)
+    accuracy_rh = np.array([rh_r, rh_rmse, rh_mse, rh_mae])
+    accuracy_relativehumidity[i] = accuracy_rh
+    # Geopotential.
+    r_geo, rmse_geo, mse_geo, mae_geo = accuracy(fct_geo, obs_geo)
+    accuracy_geo = np.array([r_geo, rmse_geo, mse_geo, mae_geo])
+    accuracy_geopotential[i] = accuracy_geo
+    # Wind.
+    # Zonal.
+    r_u, rmse_u, mse_u, mae_u = accuracy(fct_u, obs_u)
+    accuracy_u = np.array([r_u, rmse_u, mse_u, mae_u])
+    accuracy_zonalwind[i] = accuracy_u
+    # Meridional.
+    r_v, rmse_v, mse_v, mae_v = accuracy(fct_v, obs_v)
+    accuracy_v = np.array([r_v, rmse_v, mse_v, mae_v])
+    accuracy_meridionalwind[i] = accuracy_v
+    
+    print("Progress: " + str(i+1) + "/" + str(len_test))
+
+# Save results.
+# Performance.
+np.save('results/performance.npy', np.asarray(performance))
+# Accuracy.
+# Air temperature.
+np.save('results/temperature.npy', accuracy_temperature)
+# Geopotential.
+np.save('results/geopotential.npy', accuracy_geopotential)
+# Relative humidity.
+np.save('results/relative_humidity.npy', accuracy_relativehumidity)
+# Wind.
+# Zonal.
+np.save('results/zonal_wind.npy', accuracy_zonalwind)
+# Meridional.
+np.save('results/meridional_wind.npy', accuracy_meridionalwind)

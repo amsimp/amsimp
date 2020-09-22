@@ -167,13 +167,20 @@ cdef class Backend:
         
         # Define the grid points.
         # Pressure surfaces.
-        psurfaces = geo.coords('air_pressure')[0].points
+        try:
+            psurfaces = geo.coords('air_pressure')[0].points
+        except:
+            psurfaces = geo.coords('pressure_level')[0].points
+        else:
+            raise
         psurfaces *= units.Pa
         psurfaces = psurfaces.to(units.hPa)
         self.psurfaces = psurfaces
+
         # Latitude.
         lat = geo.coords('latitude')[0].points
         self.lat = lat
+
         # Longitude.
         lon = geo.coords('longitude')[0].points
         self.lon = lon

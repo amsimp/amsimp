@@ -204,7 +204,7 @@ cdef class Weather(Wind):
                     total=total_size, 
                     unit='iB', 
                     unit_scale=True,
-                    desc='Downloading model'
+                    desc='Downloading models'
                 )
                 with open(destination, "wb") as f:
                     for chunk in response.iter_content(CHUNK_SIZE):
@@ -477,7 +477,7 @@ cdef class Weather(Wind):
             n = n + 3
 
         # Define progress bar.
-        t = tqdm(total=6, desc='Post-processing')
+        t = tqdm(total=7, desc='Post-processing')
         
         # Grid.
         # Pressure.
@@ -530,7 +530,7 @@ cdef class Weather(Wind):
         # Pressure Surfaces.
         p = DimCoord(
             pressure,
-            long_name='pressure', 
+            long_name='pressure_level', 
             units='hPa'
         )
         # Time.
@@ -554,6 +554,19 @@ cdef class Weather(Wind):
             ('longitude', self.longitude_lines().value),                
         ]
 
+        # Geopotential Cube.
+        geo_cube = Cube(geopotential_predictions,
+            standard_name='geopotential',
+            units='m2 s-2',
+            dim_coords_and_dims=[
+                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+            ],
+            attributes={
+                'source': 'Motus Aeris @ AMSIMP',
+            }
+        )
+        geo_cube.add_aux_coord(ref_time)
+        t.update(1)
         # Geopotential Height Cube.
         height_cube = Cube(geopotential_predictions / self.g.value,
             standard_name='geopotential_height',
@@ -631,6 +644,7 @@ cdef class Weather(Wind):
 
         # Create Cube list of output parameters.
         output = CubeList([
+            geo_cube,
             height_cube,
             u_cube,
             v_cube,
