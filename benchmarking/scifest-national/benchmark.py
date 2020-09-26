@@ -1,4 +1,5 @@
 # Import packages.
+import time
 import amsimp
 import xskillscore as xs
 import xarray as xr
@@ -6,11 +7,9 @@ import iris
 from iris.cube import CubeList
 import numpy as np
 from tqdm import tqdm
-import sys
-import time
 
 # Load data.
-historical_data = iris.load('historical-data/benchmark.nc')
+historical_data = iris.load('historical-data/*.nc')
 
 # Load the various parameters as NumPy arrays.
 # Air temperature.
@@ -21,9 +20,11 @@ relative_humidity = historical_data.extract("relative_humidity")[0]
 geopotential = historical_data.extract("geopotential")[0]
 # Wind.
 # Zonal.
-zonal_wind = historical_data.extract("x_wind")[0]
+zonal_wind = historical_data.extract("eastward_wind")[0]
+zonal_wind.standard_name = 'x_wind'
 # Meridional.
-meridional_wind = historical_data.extract("y_wind")[0]
+meridional_wind = historical_data.extract("northward_wind")[0]
+meridional_wind.standard_name = 'y_wind'
 
 # Function to split data into windows (preprocessing).
 def preprocess_data(dataset, past_history, future_target):
@@ -78,11 +79,6 @@ def accuracy(fct_cube, obs_cube):
     fct_cube = fct_cube[1:, :, :, :]
     fct_xarray = xr.DataArray.from_iris(fct_cube)
     # Observations.
-    obs_data = obs_cube.data
-    obs_newcube = fct_cube
-    obs_newcube.data = obs_data
-    obs_newcube.attributes['source'] = 'European Centre for Medium-Range Weather Forecasts'
-    obs_cube = obs_newcube
     obs_xarray = xr.DataArray.from_iris(obs_cube)
 
     # Pearson Correlation

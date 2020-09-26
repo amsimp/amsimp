@@ -512,7 +512,11 @@ cdef class Weather(Wind):
         longitude = np.asarray(longitude)
 
         # Time.
-        time = np.linspace(0, forecast_length, int(forecast_length / 2) + 1)
+        forecast_period = np.linspace(0, forecast_length, int(forecast_length / 2) + 1)
+        current_time = self.historical_data[0].coords('time')[0][-1].points[0]
+        time_unit = self.historical_data[0].coords('time')[0].units
+        time = np.zeros_like(forecast_period) + current_time
+        time += forecast_period
 
         # Define the coordinates for the cubes. 
         # Latitude.
@@ -534,10 +538,10 @@ cdef class Weather(Wind):
             units='hPa'
         )
         # Time.
-        forecast_period = DimCoord(
+        time = DimCoord(
             time,
-            standard_name='forecast_period', 
-            units='hours'
+            standard_name='time', 
+            units=time_unit
         )
         # Forecast reference time.
         ref_time = AuxCoord(
@@ -546,20 +550,12 @@ cdef class Weather(Wind):
         )
 
         # Define cubes.
-        # Grid.
-        grid_points = [
-            ('forecast_period', time),
-            ('pressure',  self.pressure_surfaces().value),
-            ('latitude',  self.latitude_lines().value),
-            ('longitude', self.longitude_lines().value),                
-        ]
-
         # Geopotential Cube.
         geo_cube = Cube(geopotential_predictions,
             standard_name='geopotential',
             units='m2 s-2',
             dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+                (time, 0), (p, 1), (lat, 2), (lon, 3)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -572,7 +568,7 @@ cdef class Weather(Wind):
             standard_name='geopotential_height',
             units='m',
             dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+                (time, 0), (p, 1), (lat, 2), (lon, 3)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -586,7 +582,7 @@ cdef class Weather(Wind):
             standard_name='x_wind',
             units='m s-1',
             dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+                (time, 0), (p, 1), (lat, 2), (lon, 3)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -599,7 +595,7 @@ cdef class Weather(Wind):
             standard_name='y_wind',
             units='m s-1',
             dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+                (time, 0), (p, 1), (lat, 2), (lon, 3)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -617,7 +613,7 @@ cdef class Weather(Wind):
             standard_name='air_temperature',
             units='K',
             dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+                (time, 0), (p, 1), (lat, 2), (lon, 3)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -630,7 +626,7 @@ cdef class Weather(Wind):
             standard_name='relative_humidity',
             units='%',
             dim_coords_and_dims=[
-                (forecast_period, 0), (p, 1), (lat, 2), (lon, 3)
+                (time, 0), (p, 1), (lat, 2), (lon, 3)
             ],
             attributes={
                 'source': 'Motus Aeris @ AMSIMP',
@@ -710,8 +706,8 @@ cdef class Weather(Wind):
         indx_psurface = (np.abs(pressure - psurface)).argmin()
 
         # Define the forecast period.
-        time = data[0].coords("forecast_period")[0].points
-        time_unit = str(data[0].coords("forecast_period")[0].units)
+        time = data[0].coords("time")[0].points
+        time_unit = str(data[0].coords("time")[0].units)
 
         # Grid.
         lat = data[0].coords("latitude")[0].points
