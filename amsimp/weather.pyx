@@ -543,11 +543,6 @@ cdef class Weather(Wind):
             standard_name='time', 
             units=time_unit
         )
-        # Forecast reference time.
-        ref_time = AuxCoord(
-            self.date.strftime("%Y-%m-%d %H:%M:%S"),
-            standard_name='forecast_reference_time'
-        )
 
         # Define cubes.
         # Geopotential Cube.
@@ -561,7 +556,6 @@ cdef class Weather(Wind):
                 'source': 'Motus Aeris @ AMSIMP',
             }
         )
-        geo_cube.add_aux_coord(ref_time)
         t.update(1)
         # Geopotential Height Cube.
         height_cube = Cube(geopotential_predictions / self.g.value,
@@ -574,7 +568,6 @@ cdef class Weather(Wind):
                 'source': 'Motus Aeris @ AMSIMP',
             }
         )
-        height_cube.add_aux_coord(ref_time)
         t.update(1)
         # Wind Cubes.
         # Zonal Wind Cube.
@@ -588,7 +581,6 @@ cdef class Weather(Wind):
                 'source': 'Motus Aeris @ AMSIMP',
             }
         )
-        u_cube.add_aux_coord(ref_time)
         t.update(1)
         # Meridional Wind Cube.
         v_cube = Cube(meridionalwind_predictions,
@@ -601,7 +593,6 @@ cdef class Weather(Wind):
                 'source': 'Motus Aeris @ AMSIMP',
             }
         )
-        v_cube.add_aux_coord(ref_time)
         t.update(1)
         # Wind Speed Cube.
         wind_speed = (u_cube**2 + v_cube**2) ** 0.5
@@ -619,7 +610,6 @@ cdef class Weather(Wind):
                 'source': 'Motus Aeris @ AMSIMP',
             }
         )
-        T_cube.add_aux_coord(ref_time)
         t.update(1)
         # Relative Humidity.
         rh_cube = Cube(humidity_predictions,
@@ -634,7 +624,6 @@ cdef class Weather(Wind):
         )
         rh_cube.data[rh_cube.data > 100] = 100
         rh_cube.data[rh_cube.data < 0] = 0
-        rh_cube.add_aux_coord(ref_time)
         t.update(1)
         t.close()
 
