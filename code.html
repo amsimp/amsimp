@@ -1184,9 +1184,7 @@
 1072
 1073
 1074
-1075
-1076
-1077</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c">#cython: linetrace=True</span>
+1075</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c">#cython: linetrace=True</span>
 <span class="c">#distutils: define_macros=CYTHON_TRACE_NOGIL=1</span>
 <span class="c">#cython: language_level=3</span>
 <span class="c"># cython: embedsignature=True, binding=True</span>
@@ -1359,8 +1357,6 @@
             <span class="n">psurfaces</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">coords</span><span class="p">(</span><span class="s">&#39;air_pressure&#39;</span><span class="p">)[</span><span class="mf">0</span><span class="p">]</span><span class="o">.</span><span class="n">points</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="n">psurfaces</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">coords</span><span class="p">(</span><span class="s">&#39;pressure_level&#39;</span><span class="p">)[</span><span class="mf">0</span><span class="p">]</span><span class="o">.</span><span class="n">points</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span>
         <span class="n">psurfaces</span> <span class="o">*=</span> <span class="n">units</span><span class="o">.</span><span class="n">Pa</span>
         <span class="n">psurfaces</span> <span class="o">=</span> <span class="n">psurfaces</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">units</span><span class="o">.</span><span class="n">hPa</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">psurfaces</span> <span class="o">=</span> <span class="n">psurfaces</span>
