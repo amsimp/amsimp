@@ -113,7 +113,9 @@ def accuracy(fct_cube, obs_cube):
     )
     rmse = rmse.values
     # Normalised Root Mean Squared Error.
-    nrmse = rmse / (obs_data.max() - obs_data.min())
+    obs_max = np.resize(np.max(obs_data, axis=0), obs_data.shape)
+    obs_min = np.resize(np.min(obs_data, axis=0), obs_data.shape)
+    nrmse = rmse / (obs_max - obs_min)
     # Mean Squared Error.
     mse = xs.mse(
         obs_xarray, fct_xarray, dim=["pressure_level", "latitude", "longitude"]
