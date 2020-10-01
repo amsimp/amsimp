@@ -80,6 +80,8 @@ t.close()
 # Function to determine the skill and accuracy of the 5 day weather forecast produced by
 # the software.
 def accuracy(fct_cube, obs_cube):
+    naive_data = fct_cube.data[0]
+    
     # Convert cube to xarray.
     # Forecast.
     fct_cube = fct_cube[1:, :, :, :]
@@ -88,11 +90,17 @@ def accuracy(fct_cube, obs_cube):
     obs_cube.coords('pressure_level')[0].var_name = 'pressure_level'
     obs_cube = obs_cube[:, ::-1, ::-1, :]
     obs_data = obs_cube.data
-    obs_newcube = fct_cube
+    obs_newcube = fct_cube.copy()
     obs_newcube.data = obs_data
     obs_newcube.metadata.attributes['source'] = 'ECMWF'
     obs_cube = obs_newcube
     obs_xarray = xr.DataArray.from_iris(obs_cube)
+    # Naïve forecast.
+    naive_data = np.resize(naive_data, obs_data.shape)
+    naive_cube = fct_cube.copy()
+    naive_cube.data = naive_data
+    naive_cube.metadata.attributes['source'] = None
+    naive_xarray = xr.DataArray.from_iris(naive_cube)
 
     # Pearson Correlation
     r = xs.pearson_r(
@@ -116,8 +124,14 @@ def accuracy(fct_cube, obs_cube):
         obs_xarray, fct_xarray, dim=["pressure_level", "latitude", "longitude"]
     )
     mae = mae.values
+    # Mean Absolute Scaled Error.
+    mae_naive = xs.mae(
+        obs_xarray, naive_xarray, dim=["pressure_level", "latitude", "longitude"]
+    )
+    mae_naive = mae_naive.values
+    mase = mae / mae_naive
 
-    return r, rmse, nrmse, mse, mae
+    return r, rmse, nrmse, mse, mae, mase
 
 # Determine the amount of time needed to generate a 5 day forecast.
 performance = []
@@ -128,16 +142,16 @@ len_test = len(input_temperature)
 # Store the skill and accuracy of the 5 day weather forecast produced by the
 # software.
 # Air temperature.
-accuracy_temperature = np.zeros((len_test, 5, (5*12)))
+accuracy_temperature = np.zeros((len_test, 6, (5*12)))
 # Relative humidity.
-accuracy_relativehumidity = np.zeros((len_test, 5, (5*12)))
+accuracy_relativehumidity = np.zeros((len_test, 6, (5*12)))
 # Geopotential.
-accuracy_geopotential = np.zeros((len_test, 5, (5*12)))
+accuracy_geopotential = np.zeros((len_test, 6, (5*12)))
 # Wind.
 # Zonal.
-accuracy_zonalwind = np.zeros((len_test, 5, (5*12)))
+accuracy_zonalwind = np.zeros((len_test, 6, (5*12)))
 # Meridional.
-accuracy_meridionalwind = np.zeros((len_test, 5, (5*12)))
+accuracy_meridionalwind = np.zeros((len_test, 6, (5*12)))
 
 for i in range(len_test):
     # Define progress bar (generating inputs).
@@ -206,25 +220,25 @@ for i in range(len_test):
     # Determine the skill and accuracy of the 5 day weather forecast produced by
     # the software.
     # Air temperature.
-    temp_r, temp_rmse, temp_nrmse, temp_mse, temp_mae = accuracy(fct_temp, obs_temp) 
-    accuracy_temp = np.array([temp_r, temp_rmse, temp_nrmse, temp_mse, temp_mae])
+    temp_r, temp_rmse, temp_nrmse, temp_mse, temp_mae, temp_mase = accuracy(fct_temp, obs_temp) 
+    accuracy_temp = np.array([temp_r, temp_rmse, temp_nrmse, temp_mse, temp_mae, temp_mase])
     accuracy_temperature[i] = accuracy_temp
     # Relative humidity.
-    rh_r, rh_rmse, rh_nrmse, rh_mse, rh_mae = accuracy(fct_rh, obs_rh)
-    accuracy_rh = np.array([rh_r, rh_rmse, rh_nrmse, rh_mse, rh_mae])
+    rh_r, rh_rmse, rh_nrmse, rh_mse, rh_mae, rh_mase = accuracy(fct_rh, obs_rh)
+    accuracy_rh = np.array([rh_r, rh_rmse, rh_nrmse, rh_mse, rh_mae, rh_mase])
     accuracy_relativehumidity[i] = accuracy_rh
     # Geopotential.
-    r_geo, rmse_geo, nrmse_geo, mse_geo, mae_geo = accuracy(fct_geo, obs_geo)
-    accuracy_geo = np.array([r_geo, rmse_geo, nrmse_geo, mse_geo, mae_geo])
+    r_geo, rmse_geo, nrmse_geo, mse_geo, mae_geo, mase_geo = accuracy(fct_geo, obs_geo)
+    accuracy_geo = np.array([r_geo, rmse_geo, nrmse_geo, mse_geo, mae_geo, mase_geo])
     accuracy_geopotential[i] = accuracy_geo
     # Wind.
     # Zonal.
-    r_u, rmse_u, nrmse_u, mse_u, mae_u = accuracy(fct_u, obs_u)
-    accuracy_u = np.array([r_u, rmse_u, nrmse_u, mse_u, mae_u])
+    r_u, rmse_u, nrmse_u, mse_u, mae_u, mase_u = accuracy(fct_u, obs_u)
+    accuracy_u = np.array([r_u, rmse_u, nrmse_u, mse_u, mae_u, mase_u])
     accuracy_zonalwind[i] = accuracy_u
     # Meridional.
-    r_v, rmse_v, nrmse_v, mse_v, mae_v = accuracy(fct_v, obs_v)
-    accuracy_v = np.array([r_v, rmse_v, nrmse_v, mse_v, mae_v])
+    r_v, rmse_v, nrmse_v, mse_v, mae_v, mase_v = accuracy(fct_v, obs_v)
+    accuracy_v = np.array([r_v, rmse_v, nrmse_v, mse_v, mae_v, mase_v])
     accuracy_meridionalwind[i] = accuracy_v
     
     print("Progress: " + str(i+1) + "/" + str(len_test))
