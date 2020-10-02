@@ -109,6 +109,9 @@ venv.bak/
 # *.nc
 *.nc
 
+# *.grb2
+*.grb2
+
 # .tmp
 *.tmp
 
@@ -117,6 +120,9 @@ amsimp/rnn/variables
 
 # Historical data folder.
 benchmarking/scifest-national/historial-data
+
+# GFS forecasts folder.
+benchmarking/scifest-national/gfs-forecasts
 
 # .icloud.
 *.icloud
