@@ -84,7 +84,11 @@ def plot(x, y1, y2, title, metric):
 
     # Define the naïve forecast mean absolute scaled error.
     if metric == 'Mean Absolute Scaled Error':
-        plt.plot([x.min(), x.max()], [1, 1], linestyle='dashdot')
+        plt.plot([x.min(), x.max()], [1, 1], label="Naïve", linestyle='dashdot')
+    
+    # Define the climatological normalised root mean squared error.
+    if metric == "Normalised Root Mean Squared Error":
+        plt.plot([x.min(), x.max()], [1, 1], label="Climatology", linestyle='dashdot')
 
     # Add labels to the axes.
     plt.xlabel("Forecast Period (Hours)")

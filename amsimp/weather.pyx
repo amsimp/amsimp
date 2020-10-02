@@ -481,35 +481,13 @@ cdef class Weather(Wind):
         
         # Grid.
         # Pressure.
-        pressure = np.array(
-            [
-                1, 2, 5,
-                10, 20, 50,
-                100, 200, 300,
-                400, 500, 600,
-                700, 800, 900,
-                950, 1000
-            ]
-        )
-        pressure = pressure[::-1]
+        pressure = self.pressure_surfaces()
 
         # Latitude.
-        latitude = [
-            i
-            for i in np.arange(
-                -89, 89, 3
-            )
-        ]
-        latitude = np.asarray(latitude)
+        latitude = self.latitude_lines()
 
         # Longitude.
-        longitude = [
-            i
-            for i in np.arange(
-                -180, 180, 3
-            )
-        ]
-        longitude = np.asarray(longitude)
+        longitude = self.longitude_lines()
 
         # Time.
         forecast_period = np.linspace(0, forecast_length, int(forecast_length / 2) + 1)

@@ -171,8 +171,7 @@ cdef class Backend:
             psurfaces = geo.coords('air_pressure')[0].points
         except:
             psurfaces = geo.coords('pressure_level')[0].points
-        psurfaces *= units.Pa
-        psurfaces = psurfaces.to(units.hPa)
+        psurfaces *= units.mbar
         self.psurfaces = psurfaces
 
         # Latitude.
