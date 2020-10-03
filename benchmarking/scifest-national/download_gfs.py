@@ -232,5 +232,5 @@ for i in range(it):
     iris.save(DataList, folder + date.strftime('%Y%m%d') + '.nc')
 
     # Print progress.
+    print("")
     print("Date: " + date.strftime('%Y-%m-%d'))
-    sys.exit()
