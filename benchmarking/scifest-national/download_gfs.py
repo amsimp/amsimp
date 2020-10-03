@@ -132,9 +132,6 @@ for i in range(it):
     file = "gfs_3_" + year + month + day
     download_file = folder + file + hour + ".g2.tar"
 
-    # Advance date.
-    date = date + timedelta(days=+2)
-
     # Download file.
     data_file = wget.download(download_file)
 
@@ -235,3 +232,6 @@ for i in range(it):
     # Print progress.
     print("")
     print("Date: " + date.strftime('%Y-%m-%d'))
+
+    # Advance date.
+    date = date + timedelta(days=+2)
