@@ -11,6 +11,7 @@ from tqdm import tqdm
 from astropy import units
 import sys
 import tarfile
+import shutil
 
 # File locations (NOAA).
 file_locations = [
@@ -198,7 +199,7 @@ for i in range(it):
         t += 3
 
     # Remove temporary directory.
-    os.rmdir("temp")
+    shutil.rmtree("temp")
 
     # Merge cubes.
     # Air temperature.
