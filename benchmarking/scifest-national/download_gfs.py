@@ -10,9 +10,26 @@ import numpy as np
 from tqdm import tqdm
 from astropy import units
 import sys
+import tarfile
+
+# File locations (NOAA).
+file_locations = [
+    "HAS011571508", # Jan
+    "HAS011571510", # Feb
+    "HAS011571512", # Mar
+    "HAS011571514", # Apr
+    "HAS011571516", # May
+    "HAS011571518", # Jun
+    "HAS011571521", # Jul
+    "HAS011571524", # Aug
+    "HAS011571526", # Sep
+    "HAS011571531", # Oct
+    "HAS011571533", # Nov
+    "HAS011571535"  # Dec
+]
 
 # Define the start date.
-date = datetime(2019, 6, 1, 0)
+date = datetime(2019, 1, 1, 0)
 end = datetime(2020, 1, 1, 0)
 diff = end - date
 days_diff = diff.days
@@ -110,9 +127,24 @@ for i in range(it):
 
     # Retrieve GFS from the NOAA database.
     # Define current forecast day.
-    file = "https://www.ncei.noaa.gov/data/global-forecast-system/access/historical/forecast/grid-003-1.0-degree/"
-    file += year + month + "/"
-    file += year + month + day + "/"+ "gfs_3_" + year + month + day + "_" + hour + "00"
+    folder = "http://www1.ncdc.noaa.gov/pub/has/model/" + file_locations[date.month-1] + "/"
+    file = "gfs_3_" + year + month + day
+    download_file = hour + folder + file + ".g2.tar"
+
+    # Advance date.
+    date = date + timedelta(days=+2)
+
+    # Download file.
+    data_file = wget.download(download_file)
+
+    # Unzip file.
+    os.mkdir("temp")
+    tar_file = tarfile.open(data_file)
+    tar_file.extractall('temp')
+    tar_file.close()
+    
+    # Remove zip file.
+    os.remove(data_file)
 
     # Define cube lists.
     # Air temperature.
@@ -130,19 +162,12 @@ for i in range(it):
     # Download forecast of 120 hours in length.
     t = 3
     forecast_length = 120
-    bar = tqdm(desc="Downloading forecast", total=int(forecast_length/3))
     while t <= forecast_length:
         # Define file to download.
-        download_file = file + "_" + ('%03d' % t) + ".grb2"
-
-        # Download file.
-        data_file = wget.download(download_file, bar=None)
-
-        # Advance date.
-        date = date + timedelta(hours=+3)
+        fname = "temp/" + file + "_0000_" + ('%03d' % t) + ".grb2"
 
         # Load file.
-        data = iris.load(data_file)
+        data = iris.load(fname)
 
         # Retrieve temperature, wind, relative humidity, and geopotential height data.
         temperature = data.extract('air_temperature')[0]
@@ -169,25 +194,24 @@ for i in range(it):
         geopotential_height = preprocess(geopotential_height)
         geopotentialheight_cubelist.append(geopotential_height)
 
-        # Remove file to prevent clutter.
-        os.remove(data_file)
-
-        # Add time and update progress bar.
+        # Add time.
         t += 3
-        bar.update(1)
+
+    # Remove temporary directory.
+    os.rmdir("temp")
 
     # Merge cubes.
     # Air temperature.
-    temperature_cube = temperature_cubelist.merge()
+    temperature_cube = temperature_cubelist.merge()[0]
     # Wind.
     # Zonal.
-    zonalwind_cube = zonalwind_cubelist.merge()
+    zonalwind_cube = zonalwind_cubelist.merge()[0]
     # Meridional.
-    meridionalwind_cube = meridionalwind_cubelist.merge()
+    meridionalwind_cube = meridionalwind_cubelist.merge()[0]
     # Relative humidity.
-    relativehumidity_cube = relativehumidity_cubelist.merge()
+    relativehumidity_cube = relativehumidity_cubelist.merge()[0]
     # Geopotential height.
-    geopotentialheight_cube = geopotentialheight_cubelist.merge()
+    geopotentialheight_cube = geopotentialheight_cubelist.merge()[0]
 
     # Define output cube list.
     DataList = CubeList(
@@ -208,5 +232,5 @@ for i in range(it):
     iris.save(DataList, folder + date.strftime('%Y%m%d') + '.nc')
 
     # Print progress.
-    print("Progress: " + str(i+1))
+    print("Date: " + date.strftime('%Y-%m-%d'))
     sys.exit()
