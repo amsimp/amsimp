@@ -129,7 +129,7 @@ for i in range(it):
     # Define current forecast day.
     folder = "http://www1.ncdc.noaa.gov/pub/has/model/" + file_locations[date.month-1] + "/"
     file = "gfs_3_" + year + month + day
-    download_file = hour + folder + file + ".g2.tar"
+    download_file = folder + file + hour + ".g2.tar"
 
     # Advance date.
     date = date + timedelta(days=+2)
