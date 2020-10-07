@@ -25,8 +25,8 @@ file_locations = [
     "HAS011571524", # Aug
     "HAS011571526", # Sep
     "HAS011571531", # Oct
-    "HAS011571533", # Nov
-    "HAS011571535"  # Dec
+    "HAS011574341", # Nov
+    "HAS011574343"  # Dec
 ]
 
 # Define the start date.
