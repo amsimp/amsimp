@@ -203,7 +203,7 @@ for i in range(len_test):
     # Define progress bar (postprocessing).
     t = tqdm(total=5, desc='Post-processing historical data')
 
-    # Load the various parameters as NumPy arrays.
+    # Load the various parameters.
     # Air temperature.
     fct_temp = fct.extract("air_temperature")[0]
     t.update(1)
