@@ -128,112 +128,115 @@ for i in range(it):
     year = str(year)
     hour = str(hour)
 
-    # Retrieve GFS from the NOAA database.
-    # Define current forecast day.
-    folder = "http://www1.ncdc.noaa.gov/pub/has/model/" + file_locations[date.month-1] + "/"
-    file = "gfs_3_" + year + month + day
-    download_file = folder + file + hour + ".g2.tar"
+    try:
+        # Retrieve GFS from the NOAA database.
+        # Define current forecast day.
+        folder = "http://www1.ncdc.noaa.gov/pub/has/model/" + file_locations[date.month-1] + "/"
+        file = "gfs_3_" + year + month + day
+        download_file = folder + file + hour + ".g2.tar"
 
-    # Download file.
-    data_file = wget.download(download_file)
+        # Download file.
+        data_file = wget.download(download_file)
 
-    # Unzip file.
-    os.mkdir("temp")
-    tar_file = tarfile.open(data_file)
-    tar_file.extractall('temp')
-    tar_file.close()
-    
-    # Remove zip file.
-    os.remove(data_file)
+        # Unzip file.
+        os.mkdir("temp")
+        tar_file = tarfile.open(data_file)
+        tar_file.extractall('temp')
+        tar_file.close()
+        
+        # Remove zip file.
+        os.remove(data_file)
 
-    # Define cube lists.
-    # Air temperature.
-    temperature_cubelist = CubeList([])
-    # Wind.
-    # Zonal.
-    zonalwind_cubelist = CubeList([])
-    # Meridional.
-    meridionalwind_cubelist = CubeList([])
-    # Relative humidity.
-    relativehumidity_cubelist = CubeList([])
-    # Geopotential height.
-    geopotentialheight_cubelist = CubeList([])
-
-    # Download forecast of 120 hours in length.
-    t = 3
-    forecast_length = 120
-    while t <= forecast_length:
-        # Define file to download.
-        fname = "temp/" + file + "_0000_" + ('%03d' % t) + ".grb2"
-
-        # Load file.
-        data = iris.load(fname)
-
-        # Retrieve temperature, wind, relative humidity, and geopotential height data.
-        temperature = data.extract('air_temperature')[0]
-        rh = data.extract('relative_humidity')[0]
-        geopotential_height = data.extract('geopotential_height')[0]
-        zonal_wind = data.extract('x_wind')[-2]
-        meridional_wind = data.extract('y_wind')[-2]
-
-        # Append cubes to cube list.
-        # Air temperature.
-        temperature = preprocess(temperature)
-        temperature_cubelist.append(temperature)
-        # Relative humidity.
-        rh = preprocess(rh)
-        relativehumidity_cubelist.append(rh)
+        # Define cube lists.
+        # Air temperature.
+        temperature_cubelist = CubeList([])
         # Wind.
         # Zonal.
-        zonal_wind = preprocess(zonal_wind)
-        zonalwind_cubelist.append(zonal_wind)
+        zonalwind_cubelist = CubeList([])
         # Meridional.
-        meridional_wind = preprocess(meridional_wind)
-        meridionalwind_cubelist.append(meridional_wind)
+        meridionalwind_cubelist = CubeList([])
+        # Relative humidity.
+        relativehumidity_cubelist = CubeList([])
         # Geopotential height.
-        geopotential_height = preprocess(geopotential_height)
-        geopotentialheight_cubelist.append(geopotential_height)
+        geopotentialheight_cubelist = CubeList([])
 
-        # Add time.
-        t += 3
+        # Download forecast of 120 hours in length.
+        t = 3
+        forecast_length = 120
+        while t <= forecast_length:
+            # Define file to download.
+            fname = "temp/" + file + "_0000_" + ('%03d' % t) + ".grb2"
 
-    # Remove temporary directory.
-    shutil.rmtree("temp")
+            # Load file.
+            data = iris.load(fname)
 
-    # Merge cubes.
-    # Air temperature.
-    temperature_cube = temperature_cubelist.merge()[0]
-    # Wind.
-    # Zonal.
-    zonalwind_cube = zonalwind_cubelist.merge()[0]
-    # Meridional.
-    meridionalwind_cube = meridionalwind_cubelist.merge()[0]
-    # Relative humidity.
-    relativehumidity_cube = relativehumidity_cubelist.merge()[0]
-    # Geopotential height.
-    geopotentialheight_cube = geopotentialheight_cubelist.merge()[0]
+            # Retrieve temperature, wind, relative humidity, and geopotential height data.
+            temperature = data.extract('air_temperature')[0]
+            rh = data.extract('relative_humidity')[0]
+            geopotential_height = data.extract('geopotential_height')[0]
+            zonal_wind = data.extract('x_wind')[-2]
+            meridional_wind = data.extract('y_wind')[-2]
 
-    # Define output cube list.
-    DataList = CubeList(
-        [
-            temperature_cube,
-            zonalwind_cube,
-            meridionalwind_cube,
-            relativehumidity_cube,
-            geopotentialheight_cube
-        ]
-    )
-    
-    # Save to file.
-    # Define folder.
-    folder = 'gfs-forecasts/' 
+            # Append cubes to cube list.
+            # Air temperature.
+            temperature = preprocess(temperature)
+            temperature_cubelist.append(temperature)
+            # Relative humidity.
+            rh = preprocess(rh)
+            relativehumidity_cubelist.append(rh)
+            # Wind.
+            # Zonal.
+            zonal_wind = preprocess(zonal_wind)
+            zonalwind_cubelist.append(zonal_wind)
+            # Meridional.
+            meridional_wind = preprocess(meridional_wind)
+            meridionalwind_cubelist.append(meridional_wind)
+            # Geopotential height.
+            geopotential_height = preprocess(geopotential_height)
+            geopotentialheight_cubelist.append(geopotential_height)
 
-    # Save forecast in .nc file
-    iris.save(DataList, folder + date.strftime('%Y%m%d') + '.nc')
+            # Add time.
+            t += 3
 
-    # Print progress.
-    print("")
-    print("Date: " + date.strftime('%Y-%m-%d'))
+        # Remove temporary directory.
+        shutil.rmtree("temp")
+
+        # Merge cubes.
+        # Air temperature.
+        temperature_cube = temperature_cubelist.merge()[0]
+        # Wind.
+        # Zonal.
+        zonalwind_cube = zonalwind_cubelist.merge()[0]
+        # Meridional.
+        meridionalwind_cube = meridionalwind_cubelist.merge()[0]
+        # Relative humidity.
+        relativehumidity_cube = relativehumidity_cubelist.merge()[0]
+        # Geopotential height.
+        geopotentialheight_cube = geopotentialheight_cubelist.merge()[0]
+
+        # Define output cube list.
+        DataList = CubeList(
+            [
+                temperature_cube,
+                zonalwind_cube,
+                meridionalwind_cube,
+                relativehumidity_cube,
+                geopotentialheight_cube
+            ]
+        )
+        
+        # Save to file.
+        # Define folder.
+        folder = 'gfs-forecasts/' 
+
+        # Save forecast in .nc file
+        iris.save(DataList, folder + date.strftime('%Y%m%d') + '.nc')
+
+        # Print progress.
+        print("")
+        print("Date: " + date.strftime('%Y-%m-%d'))
+    else:
+        print("Date (failed): " + date.strftime('%Y-%m-%d'))
 
     # Advance date.
     date = date + timedelta(days=+2)
