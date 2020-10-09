@@ -42,7 +42,7 @@ year = date.year
 
 # Retrieve pressure and longitude grid from example.nc file.
 lon = iris.load('example.nc')[0].coord('longitude')
-p = iris.load('example.nc')[0].coord('air_pressure').points
+p = iris.load('example.nc')[0].coord('air_pressure').points * 100
 
 # Function to define coordinates of forecast and preprocess data.
 def preprocess(cube):
@@ -54,11 +54,6 @@ def preprocess(cube):
 
     # Decrease resolution to 3 degrees of latitude and longitude.
     cube = cube[:, ::3, ::3]
-
-    # Convert pressure surfaces to hectopascals.
-    cube.coord('pressure').convert_units('hectopascal')
-    print(cube.coord('pressure'))
-    sys.exit()
 
     # Change longitude coordinate system.
     cube_data = cube.data
