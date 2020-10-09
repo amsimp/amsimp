@@ -118,12 +118,12 @@ def accuracy(fct_cube, obs_cube):
 
     # Pearson Correlation
     r = xs.pearson_r(
-        obs_xarray, fct_xarray, dim=["pressure", "latitude", "longitude"]
+        obs_xarray, fct_xarray, dim=["pressure", "latitude", "lon"]
     )
     r = r.values
     # Root Mean Squared Error.
     rmse = xs.rmse(
-        obs_xarray, fct_xarray, dim=["pressure", "latitude", "longitude"]
+        obs_xarray, fct_xarray, dim=["pressure", "latitude", "lon"]
     )
     rmse = rmse.values
     # Normalised Root Mean Squared Error.
@@ -132,22 +132,22 @@ def accuracy(fct_cube, obs_cube):
     obs_min = np.resize(np.min(obs_data, axis=0), obs_data.shape)
     obs_min = np.mean(np.mean(obs_min, axis=3), axis=2)
     nrmse = xs.rmse(
-        obs_xarray, fct_xarray, dim=["latitude", "longitude"]
+        obs_xarray, fct_xarray, dim=["latitude", "lon"]
     ).values / (obs_max - obs_min)
     nrmse = np.mean(nrmse, axis=1)
     # Mean Squared Error.
     mse = xs.mse(
-        obs_xarray, fct_xarray, dim=["pressure", "latitude", "longitude"]
+        obs_xarray, fct_xarray, dim=["pressure", "latitude", "lon"]
     )
     mse = mse.values
     # Mean Absolute Error.
     mae = xs.mae(
-        obs_xarray, fct_xarray, dim=["pressure", "latitude", "longitude"]
+        obs_xarray, fct_xarray, dim=["pressure", "latitude", "lon"]
     )
     mae = mae.values
     # Mean Absolute Scaled Error.
     mae_naive = xs.mae(
-        obs_xarray, naive_xarray, dim=["pressure", "latitude", "longitude"]
+        obs_xarray, naive_xarray, dim=["pressure", "latitude", "lon"]
     )
     mae_naive = mae_naive.values
     mase = mae / mae_naive
