@@ -204,20 +204,20 @@ while date < end:
 
         # Load the various parameters.
         # Air temperature.
-        fct_temp = fct.extract("air_temperature")[0]
+        fct_temp = fct.extract("air_temperature")[0][::2]
         # Relative humidity.
-        fct_rh = fct.extract("relative_humidity")[0]
+        fct_rh = fct.extract("relative_humidity")[0][::2]
         # Geopotential height. 
-        fct_height = fct.extract("geopotential_height")[0]
+        fct_height = fct.extract("geopotential_height")[0][::2]
         # Geopotential.
         fct_geo = fct_height * g
         fct_geo.standard_name = "geopotential"
         fct_geo.units = geo_unit
         # Wind.
         # Zonal.
-        fct_u = fct.extract("x_wind")[0]
+        fct_u = fct.extract("x_wind")[0][::2]
         # Meridional.
-        fct_v = fct.extract("y_wind")[0]
+        fct_v = fct.extract("y_wind")[0][::2]
 
         # Determine the skill and accuracy of the 5 day weather forecast produced by
         # the software.
@@ -252,13 +252,13 @@ while date < end:
 # Save results.
 # Accuracy.
 # Air temperature.
-np.save('gfs_results/temperature.npy', np.asarray(accuracy_temperature))
+np.save('gfs-results/temperature.npy', np.asarray(accuracy_temperature))
 # Geopotential.
-np.save('gfs_results/geopotential.npy', np.asarray(accuracy_geopotential))
+np.save('gfs-results/geopotential.npy', np.asarray(accuracy_geopotential))
 # Relative humidity.
-np.save('gfs_results/relative_humidity.npy', np.asarray(accuracy_relativehumidity))
+np.save('gfs-results/relative_humidity.npy', np.asarray(accuracy_relativehumidity))
 # Wind.
 # Zonal.
-np.save('gfs_results/zonal_wind.npy', np.asarray(accuracy_zonalwind))
+np.save('gfs-results/zonal_wind.npy', np.asarray(accuracy_zonalwind))
 # Meridional.
-np.save('gfs_results/meridional_wind.npy', np.asarray(accuracy_meridionalwind))
+np.save('gfs-results/meridional_wind.npy', np.asarray(accuracy_meridionalwind))
