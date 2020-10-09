@@ -15,18 +15,18 @@ import shutil
 
 # File locations (NOAA).
 file_locations = [
-    "HAS011575441", # Jan
-    "HAS011571510", # Feb
-    "HAS011571512", # Mar
-    "HAS011571514", # Apr
-    "HAS011571516", # May
-    "HAS011571518", # Jun
-    "HAS011571521", # Jul
-    "HAS011571524", # Aug
-    "HAS011571526", # Sep
-    "HAS011571531", # Oct
-    "HAS011574341", # Nov
-    "HAS011574343"  # Dec
+    "HAS011575468", # Jan
+    "HAS011575470", # Feb
+    "HAS011575472", # Mar
+    "HAS011575474", # Apr
+    "HAS011575476", # May
+    "HAS011575478", # Jun
+    "HAS011575480", # Jul
+    "HAS011575483", # Aug
+    "HAS011575485", # Sep
+    "HAS011575487", # Oct
+    "HAS011575489", # Nov
+    "HAS011575491"  # Dec
 ]
 
 # Define the start date.
@@ -100,6 +100,7 @@ def preprocess(cube):
 
     return cube
 
+unavailable_gfs_dates = []
 for i in range(it):
     # Define the date.
     day = date.day
@@ -232,6 +233,11 @@ for i in range(it):
         print("Date: " + date.strftime('%Y-%m-%d'))
     except:
         print("Date (failed): " + date.strftime('%Y-%m-%d'))
+        str_date = date.strftime('%Y%m%d')
+        unavailable_gfs_dates.append(str_date)
 
     # Advance date.
     date = date + timedelta(days=+2)
+
+    # Save.
+    np.save("gfs-forecasts/unavailable_gfs_dates.npy", np.asarray(unavailable_gfs_dates))
