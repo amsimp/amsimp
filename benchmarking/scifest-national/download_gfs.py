@@ -57,6 +57,8 @@ def preprocess(cube):
 
     # Convert pressure surfaces to hectopascals.
     cube.coord('pressure').convert_units('hectopascal')
+    print(cube.coord('pressure'))
+    sys.exit()
 
     # Change longitude coordinate system.
     cube_data = cube.data

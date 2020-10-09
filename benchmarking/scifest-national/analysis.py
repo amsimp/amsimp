@@ -9,7 +9,7 @@ import os
 folder = "results/"
 
 # AMSIMP.
-# Geopotential Height.
+# Geopotential.
 geo = np.load(folder+"geopotential.npy")
 # Temperature
 # Air Temperature.
@@ -24,19 +24,34 @@ v = np.load(folder+"meridional_wind.npy")
 # Performance
 performace = np.load(folder+"performance.npy")
 
-# Global Forecast System (to be added).
+# Global Forecast System.
+# Folder.
+folder = "gfs-results/"
+
+# Geopotential.
+gfs_geo = np.load(folder+"geopotential.npy")
+# Temperature
+# Air Temperature.
+gfs_temp = np.load(folder+"temperature.npy")
+# Relative Humidity.
+gfs_rh = np.load(folder+"relative_humidity.npy")
+# Wind.
+# Zonal Wind.
+gfs_u = np.load(folder+"zonal_wind.npy")
+# Meridional Wind.
+gfs_v = np.load(folder+"meridional_wind.npy")
 
 # Plotting.
 # Function.
 types = "AMSIMP", "Global Forecast System"
-def plot(x, y1, y2, title, metric):
+def plot(x1, x2, y1, y2, title, metric):
     # Annual mean (AMSIMP).
-    plt.plot(x, np.mean(y1, axis=0), linestyle="-")
-    plt.scatter(x, np.mean(y1, axis=0), label=types[0]+" (Annual Mean)")
+    plt.plot(x1, np.mean(y1, axis=0), linestyle="-")
+    plt.scatter(x1, np.mean(y1, axis=0), label=types[0]+" (Annual Mean)")
 
     # Annual mean (GFS).
-    # plt.plot(x, np.mean(y2, axis=0), linestyle="--")
-    # plt.scatter(x, np.mean(y2, axis=0), label=types[1]+" (Annual Mean)")
+    plt.plot(x2, np.mean(y2, axis=0), linestyle="--")
+    plt.scatter(x2, np.mean(y2, axis=0), label=types[1]+" (Annual Mean)")
 
     # Seasonal variation in performance.
     # Split dataset into the appropriate months.
@@ -48,47 +63,47 @@ def plot(x, y1, y2, title, metric):
 
     # Jan - Mar.
     # AMSIMP.
-    plt.plot(x, np.mean(y1_q1, axis=0), linestyle="-")
-    plt.scatter(x, np.mean(y1_q1, axis=0), label=types[0]+" (Jan-Mar Mean)")
+    plt.plot(x1, np.mean(y1_q1, axis=0), linestyle="-")
+    plt.scatter(x1, np.mean(y1_q1, axis=0), label=types[0]+" (Jan-Mar Mean)")
 
     # GFS.
-    # plt.plot(x, np.mean(y2_q1, axis=0), linestyle="--")
-    # plt.scatter(x, np.mean(y2_q1, axis=0), label=types[1]+" (Jan-Mar Mean)")
+    # plt.plot(x2, np.mean(y2_q1, axis=0), linestyle="--")
+    # plt.scatter(x2, np.mean(y2_q1, axis=0), label=types[1]+" (Jan-Mar Mean)")
 
     # Apr - Jun.
     # AMSIMP.
-    plt.plot(x, np.mean(y1_q2, axis=0), linestyle="-")
-    plt.scatter(x, np.mean(y1_q2, axis=0), label=types[0]+" (Apr-Jun Mean)")
+    plt.plot(x1, np.mean(y1_q2, axis=0), linestyle="-")
+    plt.scatter(x1, np.mean(y1_q2, axis=0), label=types[0]+" (Apr-Jun Mean)")
 
     # GFS.
-    # plt.plot(x, np.mean(y2_q2, axis=0), linestyle="--")
-    # plt.scatter(x, np.mean(y2_q2, axis=0), label=types[1]+" (Apr-Jun Mean)")
+    # plt.plot(x2, np.mean(y2_q2, axis=0), linestyle="--")
+    # plt.scatter(x2, np.mean(y2_q2, axis=0), label=types[1]+" (Apr-Jun Mean)")
 
     # Jul - Sept.
     # AMSIMP.
-    plt.plot(x, np.mean(y1_q3, axis=0), linestyle="-")
-    plt.scatter(x, np.mean(y1_q3, axis=0), label=types[0]+" (Jul-Sept Mean)")
+    plt.plot(x1, np.mean(y1_q3, axis=0), linestyle="-")
+    plt.scatter(x1, np.mean(y1_q3, axis=0), label=types[0]+" (Jul-Sept Mean)")
 
     # GFS.
-    # plt.plot(x, np.mean(y2_q3, axis=0), linestyle="--")
-    # plt.scatter(x, np.mean(y2_q3, axis=0), label=types[1]+" (Jul-Sept Mean)")
+    # plt.plot(x2, np.mean(y2_q3, axis=0), linestyle="--")
+    # plt.scatter(x2, np.mean(y2_q3, axis=0), label=types[1]+" (Jul-Sept Mean)")
 
-    # Oct - Dec.
+    # Oct - Dec2
     # AMSIMP.
-    plt.plot(x, np.mean(y1_q4, axis=0), linestyle="-")
-    plt.scatter(x, np.mean(y1_q4, axis=0), label=types[0]+" (Oct-Dec Mean)")
+    plt.plot(x1, np.mean(y1_q4, axis=0), linestyle="-")
+    plt.scatter(x1, np.mean(y1_q4, axis=0), label=types[0]+" (Oct-Dec Mean)")
 
     # GFS.
-    # plt.plot(x, np.mean(y2_q4, axis=0), linestyle="--")
-    # plt.scatter(x, np.mean(y2_q4, axis=0), label=types[1]+" (Oct-Dec Mean)")
+    # plt.plot(x2, np.mean(y2_q4, axis=0), linestyle="--")
+    # plt.scatter(x2, np.mean(y2_q4, axis=0), label=types[1]+" (Oct-Dec Mean)")
 
     # Define the naïve forecast mean absolute scaled error.
     if metric == 'Mean Absolute Scaled Error':
-        plt.plot([x.min(), x.max()], [1, 1], label="Naïve", linestyle='dashdot')
+        plt.plot([x1.min(), x1.max()], [1, 1], label="Naïve", linestyle='dashdot')
     
     # Define the climatological normalised root mean squared error.
     if metric == "Normalised Root Mean Squared Error":
-        plt.plot([x.min(), x.max()], [1, 1], label="Climatology", linestyle='dashdot')
+        plt.plot([x1.min(), x1.max()], [1, 1], label="Climatology", linestyle='dashdot')
 
     # Add labels to the axes.
     plt.xlabel("Forecast Period (Hours)")
@@ -137,39 +152,40 @@ def label_decide(num):
         label = 'Mean Absolute Scaled Error'
     return label
 
-indices = np.linspace(2, 120, 60)
+x1 = np.linspace(2, 120, 60)
+x2 = np.linspace(6, 120, 20)
 
 # Temperature.
 # Air Temperature.
 for i in range(len(temp[0])):
     metric = label_decide(i)
     title = "Air Temperature"
-    plot(indices, temp[:, i, :], None, title, metric)
+    plot(x1, x2, temp[:, i, :], gfs_temp[:, i, :], title, metric)
 
 # Relative Humidity.
 for i in range(len(rh[0])):
     metric = label_decide(i)
     title = "Relative Humidity"
-    plot(indices, rh[:, i, :], None, title, metric)
+    plot(x1, x2, rh[:, i, :], gfs_rh[:, i, :], title, metric)
 
 # Wind.
 # Zonal Wind.
 for i in range(len(u[0])):
     metric = label_decide(i)
     title = "Zonal Wind"
-    plot(indices, u[:, i, :], None, title, metric)
+    plot(x1, x2, u[:, i, :], gfs_u[:, i, :], title, metric)
 
 # Meridional Wind.
 for i in range(len(v[0])):
     metric = label_decide(i)
     title = "Meridional Wind"
-    plot(indices, v[:, i, :], None, title, metric)
+    plot(x1, x2, v[:, i, :], gfs_v[:, i, :], title, metric)
 
 # Geopotential.
 for i in range(len(geo[0])):
     metric = label_decide(i)
     title = "Geopotential"
-    plot(indices, geo[:, i, :], None, title, metric)
+    plot(x1, x2, geo[:, i, :], gfs_geo[:, i, :], title, metric)
 
 # Performance.
 print("Performance: ")
