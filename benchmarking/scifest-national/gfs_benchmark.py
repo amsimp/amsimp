@@ -98,6 +98,7 @@ def accuracy(fct_cube, obs_cube):
     
     # Convert cube to xarray.
     # Forecast.
+    fct_cube.coord('pressure').units = units.Pa
     fct_xarray = xr.DataArray.from_iris(fct_cube)
     # Observations.
     obs_cube = obs_cube[:, :, ::-1, :]
@@ -107,6 +108,7 @@ def accuracy(fct_cube, obs_cube):
     obs_newcube.metadata.attributes['source'] = 'ECMWF'
     obs_cube = obs_newcube
     obs_xarray = xr.DataArray.from_iris(obs_cube)
+    print(fct_xarray, obs_xarray)
     # Naïve forecast.
     naive_data = np.resize(naive_data, obs_data.shape)
     naive_cube = fct_cube.copy()
