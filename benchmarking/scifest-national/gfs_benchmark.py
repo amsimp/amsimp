@@ -108,7 +108,6 @@ def accuracy(fct_cube, obs_cube):
     obs_newcube.metadata.attributes['source'] = 'ECMWF'
     obs_cube = obs_newcube
     obs_xarray = xr.DataArray.from_iris(obs_cube)
-    print(fct_xarray, obs_xarray)
     # Naïve forecast.
     naive_data = np.resize(naive_data, obs_data.shape)
     naive_cube = fct_cube.copy()
