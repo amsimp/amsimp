@@ -30,7 +30,7 @@ file_locations = [
 ]
 
 # Define the start date.
-date = datetime(2019, 11, 11, 0)
+date = datetime(2019, 1, 1, 0)
 end = datetime(2020, 1, 1, 0)
 diff = end - date
 days_diff = diff.days
@@ -235,7 +235,7 @@ for i in range(it):
         # Print progress.
         print("")
         print("Date: " + date.strftime('%Y-%m-%d'))
-    else:
+    except:
         print("Date (failed): " + date.strftime('%Y-%m-%d'))
 
     # Advance date.
