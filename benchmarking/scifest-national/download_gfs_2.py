@@ -124,47 +124,38 @@ for i in range(it):
     year = str(year)
     hour = str(hour)
 
+    # Retrieve GFS from the NOAA database.
+    # Define current forecast day.
+    folder = "https://www.ncei.noaa.gov/data/global-forecast-system/access/historical/forecast/grid-003-1.0-degree/"
+    folder += year + month + "/" + year + month + day + "/"
+
+    # Define cube lists.
+    # Air temperature.
+    temperature_cubelist = CubeList([])
+    # Wind.
+    # Zonal.
+    zonalwind_cubelist = CubeList([])
+    # Meridional.
+    meridionalwind_cubelist = CubeList([])
+    # Relative humidity.
+    relativehumidity_cubelist = CubeList([])
+    # Geopotential height.
+    geopotentialheight_cubelist = CubeList([])
+
+    # Download forecast of 120 hours in length.
+    t = 6
+    forecast_length = 120
     try:
-        # Retrieve GFS from the NOAA database.
-        # Define current forecast day.
-        folder = "http://www1.ncdc.noaa.gov/pub/has/model/" + file_locations[date.month-1] + "/"
-        file = "gfs_3_" + year + month + day
-        download_file = folder + file + hour + ".g2.tar"
-
-        # Download file.
-        data_file = wget.download(download_file)
-
-        # Unzip file.
-        os.mkdir("temp")
-        tar_file = tarfile.open(data_file)
-        tar_file.extractall('temp')
-        tar_file.close()
-        
-        # Remove zip file.
-        os.remove(data_file)
-
-        # Define cube lists.
-        # Air temperature.
-        temperature_cubelist = CubeList([])
-        # Wind.
-        # Zonal.
-        zonalwind_cubelist = CubeList([])
-        # Meridional.
-        meridionalwind_cubelist = CubeList([])
-        # Relative humidity.
-        relativehumidity_cubelist = CubeList([])
-        # Geopotential height.
-        geopotentialheight_cubelist = CubeList([])
-
-        # Download forecast of 120 hours in length.
-        t = 6
-        forecast_length = 120
         while t <= forecast_length:
-            # Define file to download.
-            fname = "temp/" + file + "_0000_" + ('%03d' % t) + ".grb2"
+            # Define download file.
+            file = "gfs_3_" + year + month + day + "_0000_" + ('%03d' % t) + ".grb2"
+            download_file = folder + file
+
+            # Download file.
+            data_file = wget.download(download_file)
 
             # Load file.
-            data = iris.load(fname)
+            data = iris.load(download_file)
 
             # Retrieve temperature, wind, relative humidity, and geopotential height data.
             temperature = data.extract('air_temperature')[0]
@@ -193,9 +184,6 @@ for i in range(it):
 
             # Add time.
             t += 6
-
-        # Remove temporary directory.
-        shutil.rmtree("temp")
 
         # Merge cubes.
         # Air temperature.
