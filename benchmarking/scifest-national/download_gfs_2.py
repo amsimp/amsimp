@@ -146,6 +146,7 @@ for i in range(it):
     t = 6
     forecast_length = 120
     try:
+        pbar = forecast_length
         while t <= forecast_length:
             # Define download file.
             file = "gfs_3_" + year + month + day + "_0000_" + ('%03d' % t) + ".grb2"
@@ -184,6 +185,9 @@ for i in range(it):
 
             # Add time.
             t += 6
+            pbar.update(6)
+
+        pbar.close()
 
         # Merge cubes.
         # Air temperature.
