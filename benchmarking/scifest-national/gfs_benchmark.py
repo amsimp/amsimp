@@ -98,7 +98,6 @@ def accuracy(fct_cube, obs_cube):
     
     # Convert cube to xarray.
     # Forecast.
-    fct_cube.coord('pressure').units = units.Pa
     fct_xarray = xr.DataArray.from_iris(fct_cube)
     # Observations.
     obs_cube = obs_cube[:, :, ::-1, :]
