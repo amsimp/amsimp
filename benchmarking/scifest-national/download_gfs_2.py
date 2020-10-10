@@ -30,7 +30,7 @@ file_locations = [
 ]
 
 # Define the start date.
-date = datetime(2019, 1, 23, 0)
+date = datetime(2019, 6, 1, 0)
 end = datetime(2020, 1, 1, 0)
 diff = end - date
 days_diff = diff.days
@@ -157,7 +157,7 @@ for i in range(it):
         geopotentialheight_cubelist = CubeList([])
 
         # Download forecast of 120 hours in length.
-        t = 3
+        t = 6
         forecast_length = 120
         while t <= forecast_length:
             # Define file to download.
@@ -192,7 +192,7 @@ for i in range(it):
             geopotentialheight_cubelist.append(geopotential_height)
 
             # Add time.
-            t += 3
+            t += 6
 
         # Remove temporary directory.
         shutil.rmtree("temp")
