@@ -42,7 +42,7 @@ year = date.year
 
 # Retrieve pressure and longitude grid from example.nc file.
 lon = iris.load('example.nc')[0].coord('longitude')
-p = iris.load('example.nc')[0].coord('air_pressure').points * 100
+p = iris.load('example.nc')[0].coord('air_pressure').points
 
 # Function to define coordinates of forecast and preprocess data.
 def preprocess(cube):

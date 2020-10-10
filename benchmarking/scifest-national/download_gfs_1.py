@@ -30,7 +30,7 @@ file_locations = [
 ]
 
 # Define the start date.
-date = datetime(2019, 2, 2, 0)
+date = datetime(2019, 1, 1, 0)
 end = datetime(2019, 6, 1, 0)
 diff = end - date
 days_diff = diff.days
@@ -42,7 +42,7 @@ year = date.year
 
 # Retrieve pressure and longitude grid from example.nc file.
 lon = iris.load('example.nc')[0].coord('longitude')
-p = iris.load('example.nc')[0].coord('air_pressure').points * 100
+p = iris.load('example.nc')[0].coord('air_pressure').points
 
 # Function to define coordinates of forecast and preprocess data.
 def preprocess(cube):
