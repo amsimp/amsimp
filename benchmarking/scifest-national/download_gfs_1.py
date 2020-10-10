@@ -50,7 +50,7 @@ def preprocess(cube):
     # and the south pole as the first index of latitude. Points of singularity
     # at poles not considered.
     cube = cube[::-1, ::-1, :]
-    cube = cube[1:-1, 1:-1, :]
+    cube = cube[:, 1:-1, :]
 
     # Decrease resolution to 3 degrees of latitude and longitude.
     cube = cube[:, ::3, ::3]
