@@ -27,20 +27,6 @@ zonal_wind.standard_name = 'x_wind'
 meridional_wind = historical_data.extract("northward_wind")[0][::3]
 meridional_wind.standard_name = 'y_wind'
 
-# Unavailable GFS dates.
-unavailable_gfs_dates = [
-    "20190202",
-    "20190204",
-    "20190419",
-    "20190427",
-    "20190519",
-    "20190614",
-    "20190616",
-    "20190618",
-    "20190904",
-    "20191109"
-]
-
 # Function to split data into windows (preprocessing).
 def preprocess_data(dataset, past_history, future_target):
     X, y = list(), list()
