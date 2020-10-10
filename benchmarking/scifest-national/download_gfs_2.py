@@ -146,7 +146,7 @@ for i in range(it):
     t = 6
     forecast_length = 120
     try:
-        pbar = forecast_length
+        pbar = tqdm(total=forecast_length)
         while t <= forecast_length:
             # Define download file.
             file = "gfs_3_" + year + month + day + "_0000_" + ('%03d' % t) + ".grb2"
