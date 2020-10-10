@@ -158,6 +158,9 @@ for i in range(it):
             # Load file.
             data = iris.load(data_file)
 
+            # Remove file.
+            os.remove(data_file)
+
             # Retrieve temperature, wind, relative humidity, and geopotential height data.
             temperature = data.extract('air_temperature')[0]
             rh = data.extract('relative_humidity')[0]
