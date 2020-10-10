@@ -30,7 +30,7 @@ file_locations = [
 ]
 
 # Define the start date.
-date = datetime(2019, 1, 23, 0)
+date = datetime(2019, 2, 2, 0)
 end = datetime(2019, 6, 1, 0)
 diff = end - date
 days_diff = diff.days
