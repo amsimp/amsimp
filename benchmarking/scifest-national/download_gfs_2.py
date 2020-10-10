@@ -152,10 +152,10 @@ for i in range(it):
             download_file = folder + file
 
             # Download file.
-            data_file = wget.download(download_file)
+            data_file = wget.download(download_file, bar=None)
 
             # Load file.
-            data = iris.load(download_file)
+            data = iris.load(data_file)
 
             # Retrieve temperature, wind, relative humidity, and geopotential height data.
             temperature = data.extract('air_temperature')[0]
