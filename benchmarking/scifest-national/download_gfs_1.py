@@ -235,6 +235,7 @@ for i in range(it):
         print("Date (failed): " + date.strftime('%Y-%m-%d'))
         str_date = date.strftime('%Y%m%d')
         unavailable_gfs_dates.append(str_date)
+        shutil.rmtree("temp")
 
     # Advance date.
     date = date + timedelta(days=+2)
