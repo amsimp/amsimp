@@ -127,16 +127,16 @@ len_test = len(input_temperature)
 # Store the skill and accuracy of the 5 day weather forecast produced by the
 # software.
 # Air temperature.
-accuracy_temperature = np.zeros((len_test, 6, (5*12)))
+accuracy_temperature = np.zeros((len_test, 4, (5*12)))
 # Relative humidity.
-accuracy_relativehumidity = np.zeros((len_test, 6, (5*12)))
+accuracy_relativehumidity = np.zeros((len_test, 4, (5*12)))
 # Geopotential.
-accuracy_geopotential = np.zeros((len_test, 6, (5*12)))
+accuracy_geopotential = np.zeros((len_test, 4, (5*12)))
 # Wind.
 # Zonal.
-accuracy_zonalwind = np.zeros((len_test, 6, (5*12)))
+accuracy_zonalwind = np.zeros((len_test, 4, (5*12)))
 # Meridional.
-accuracy_meridionalwind = np.zeros((len_test, 6, (5*12)))
+accuracy_meridionalwind = np.zeros((len_test, 4, (5*12)))
 
 for i in range(len_test):
     # Define progress bar (generating inputs).
