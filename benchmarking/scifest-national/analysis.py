@@ -120,9 +120,6 @@ for i in range(3):
         x1, x2, amsimp_geopotential[:, i, :], naive_geopotential[:, i, :], comparsion_geopotential[i, :, :], title, metric
     )
 
-# Performance.
-print("Performance: ")
-
 # Print the mean and median forecast generation time.
 print("Mean forecast generation time: " + str(np.mean(performace)))
 print("Median forecast generation time: " + str(np.median(performace)))
