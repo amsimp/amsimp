@@ -79,9 +79,7 @@ t.close()
 
 # Function to determine the skill and accuracy of the 5 day weather forecast produced by
 # the software.
-def accuracy(fct_cube, obs_cube):
-    naive_data = fct_cube.data[0]
-    
+def accuracy(fct_cube, obs_cube):    
     # Convert cube to xarray.
     # Observations.
     obs_cube.coords('pressure_level')[0].var_name = 'pressure_level'
@@ -91,13 +89,6 @@ def accuracy(fct_cube, obs_cube):
     fct_cube = fct_cube[1:, :, :, :]
     fct_cube = fct_cube.regrid(obs_cube, iris.analysis.Linear())
     fct_xarray = xr.DataArray.from_iris(fct_cube)
-    # Naïve forecast.
-    naive_data = fct_cube[0].data
-    naive_data = np.resize(naive_data, obs_cube.shape)
-    naive_cube = fct_cube.copy()
-    naive_cube.data = naive_data
-    naive_cube.metadata.attributes['source'] = None
-    naive_xarray = xr.DataArray.from_iris(naive_cube)
 
     # Anomaly Correlation Coefficient.
     acc = score.compute_weighted_acc(fct_xarray, obs_xarray)
@@ -108,12 +99,8 @@ def accuracy(fct_cube, obs_cube):
     # Mean Absolute Error.
     mae = score.compute_weighted_mae(fct_xarray, obs_xarray)
     mae = mae.values
-    # Mean Absolute Scaled Error.
-    mae_naive = score.compute_weighted_mae(naive_xarray, obs_xarray)
-    mae_naive = mae_naive.values
-    mase = mae / mae_naive
 
-    return acc, rmse, mae, mase
+    return acc, rmse, mae
 
 # Determine the amount of time needed to generate a 5 day forecast.
 performance = []
@@ -123,48 +110,38 @@ len_test = len(input_temperature)
 
 # Store the skill and accuracy of the 5 day weather forecast produced by the
 # software.
-# Air temperature.
-accuracy_temperature = np.zeros((len_test, 4, (5*12)))
-# Relative humidity.
-accuracy_relativehumidity = np.zeros((len_test, 4, (5*12)))
-# Geopotential.
-accuracy_geopotential = np.zeros((len_test, 4, (5*12)))
-# Wind.
-# Zonal.
-accuracy_zonalwind = np.zeros((len_test, 4, (5*12)))
-# Meridional.
-accuracy_meridionalwind = np.zeros((len_test, 4, (5*12)))
+# Air temperature at 800hPa.
+accuracy_temperature = np.zeros((len_test, 3, (5*12)))
+level_800 = iris.Constraint(pressure_level=800)
+# Geopotential at 500hPa.
+accuracy_geopotential = np.zeros((len_test, 3, (5*12)))
+level_500 = iris.Constraint(pressure_level=500)
 
 for i in range(len_test):
-    # Define progress bar (generating inputs).
-    t = tqdm(total=5, desc='Generating inputs')
-
     # Define current input, and the observations after the fact.
     # Air temperature.
     input_temp, obs_temp = input_temperature[i], obs_temperature[i]
-    t.update(1)
     # Relative humidity.
     input_rh, obs_rh = input_relativehumidity[i], obs_relativehumidity[i]
-    t.update(1)
     # Geopotential.
     input_geo, obs_geo = input_geopotential[i], obs_geopotential[i]
-    t.update(1)
     # Wind.
     # Zonal.
     input_u, obs_u = input_zonalwind[i], obs_zonalwind[i]
-    t.update(1)
     # Meridional.
     input_v, obs_v = input_meridionalwind[i], obs_meridionalwind[i]
-    t.update(1)
-    
-    # Progress bar finished (generating inputs).
-    t.close()   
+
+    # Extract air temperature at 800hPa and geopotential at 500hPa.
+    # Air temperature.
+    obs_temp = obs_temp.extract(level_800)
+    # Geopotential.
+    obs_geo = obs_geo.extract(level_500)
 
     # Create cube list of observations for AMSIMP.
-    input_data = CubeList([input_temp, input_rh, input_geo, input_u, input_v])
+    model_input = CubeList([input_temp, input_rh, input_geo, input_u, input_v])
 
     # Define atmospheric state in AMSIMP.
-    state = amsimp.Weather(historical_data=input_data)
+    state = amsimp.Weather(historical_data=model_input)
 
     # Generating forecast.
     start = time.time()
@@ -174,54 +151,24 @@ for i in range(len_test):
     runtime = time.time() - start
     performance.append(runtime)
 
-    # Define the weather forecast for the the various parameters.
-    # Define progress bar (postprocessing).
-    t = tqdm(total=5, desc='Post-processing historical data')
-
     # Load the various parameters.
-    # Air temperature.
+    # Air temperature at 800hPa.
     fct_temp = fct.extract("air_temperature")[0]
-    t.update(1)
-    # Relative humidity.
-    fct_rh = fct.extract("relative_humidity")[0]
-    t.update(1)
-    # Geopotential.
+    fct_temp = fct_temp.extract(level_800)
+    # Geopotential at 500hPa.
     fct_geo = fct.extract("geopotential")[0]
-    t.update(1)
-    # Wind.
-    # Zonal.
-    fct_u = fct.extract("x_wind")[0]
-    t.update(1)
-    # Meridional.
-    fct_v = fct.extract("y_wind")[0]
-    t.update(1)
-
-    # Progress bar finished (postprocessing).
-    t.close()
+    fct_geo = fct_geo.extract(level_500)
 
     # Determine the skill and accuracy of the 5 day weather forecast produced by
     # the software.
     # Air temperature.
-    acc, rmse, mae, mase = accuracy(fct_temp, obs_temp) 
-    accuracy_temp = np.array([acc, rmse, mae, mase])
+    acc, rmse, mae = accuracy(fct_temp, obs_temp) 
+    accuracy_temp = np.array([acc, rmse, mae])
     accuracy_temperature[i] = accuracy_temp
-    # Relative humidity.
-    acc, rmse, mae, mase = accuracy(fct_rh, obs_rh)
-    accuracy_rh = np.array([acc, rmse, mae, mase])
-    accuracy_relativehumidity[i] = accuracy_rh
     # Geopotential.
-    acc, rmse, mae, mase = accuracy(fct_geo, obs_geo)
-    accuracy_geo = np.array([acc, rmse, mae, mase])
+    acc, rmse, mae = accuracy(fct_geo, obs_geo)
+    accuracy_geo = np.array([acc, rmse, mae])
     accuracy_geopotential[i] = accuracy_geo
-    # Wind.
-    # Zonal.
-    acc, rmse, mae, mase = accuracy(fct_u, obs_u)
-    accuracy_u = np.array([acc, rmse, mae, mase])
-    accuracy_zonalwind[i] = accuracy_u
-    # Meridional.
-    acc, rmse, mae, mase = accuracy(fct_v, obs_v)
-    accuracy_v = np.array([acc, rmse, mae, mase])
-    accuracy_meridionalwind[i] = accuracy_v
     
     print("Progress: " + str(i+1) + "/" + str(len_test))
 
@@ -233,10 +180,3 @@ np.save('results/performance.npy', np.asarray(performance))
 np.save('results/temperature.npy', accuracy_temperature)
 # Geopotential.
 np.save('results/geopotential.npy', accuracy_geopotential)
-# Relative humidity.
-np.save('results/relative_humidity.npy', accuracy_relativehumidity)
-# Wind.
-# Zonal.
-np.save('results/zonal_wind.npy', accuracy_zonalwind)
-# Meridional.
-np.save('results/meridional_wind.npy', accuracy_meridionalwind)
