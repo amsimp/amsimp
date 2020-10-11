@@ -2,7 +2,7 @@
 import time
 import sys
 import amsimp
-import xskillscore as xs
+import score
 import xarray as xr
 import iris
 from iris.cube import CubeList
@@ -102,43 +102,21 @@ def accuracy(fct_cube, obs_cube):
     naive_cube.metadata.attributes['source'] = None
     naive_xarray = xr.DataArray.from_iris(naive_cube)
 
-    # Pearson Correlation
-    r = xs.pearson_r(
-        obs_xarray, fct_xarray, dim=["pressure_level", "latitude", "longitude"]
-    )
-    r = r.values
+    # Anomaly Correlation Coefficient.
+    acc = score.compute_weighted_acc(fct_xarray, obs_xarray)
+    acc = acc.values
     # Root Mean Squared Error.
-    rmse = xs.rmse(
-        obs_xarray, fct_xarray, dim=["pressure_level", "latitude", "longitude"]
-    )
+    rmse = score.compute_weighted_rmse(fct_xarray, obs_xarray)
     rmse = rmse.values
-    # Normalised Root Mean Squared Error.
-    obs_max = np.resize(np.max(obs_data, axis=0), obs_data.shape)
-    obs_max = np.mean(np.mean(obs_max, axis=3), axis=2)
-    obs_min = np.resize(np.min(obs_data, axis=0), obs_data.shape)
-    obs_min = np.mean(np.mean(obs_min, axis=3), axis=2)
-    nrmse = xs.rmse(
-        obs_xarray, fct_xarray, dim=["latitude", "longitude"]
-    ).values / (obs_max - obs_min)
-    nrmse = np.mean(nrmse, axis=1)
-    # Mean Squared Error.
-    mse = xs.mse(
-        obs_xarray, fct_xarray, dim=["pressure_level", "latitude", "longitude"]
-    )
-    mse = mse.values
     # Mean Absolute Error.
-    mae = xs.mae(
-        obs_xarray, fct_xarray, dim=["pressure_level", "latitude", "longitude"]
-    )
+    mae = score.compute_weighted_mae(fct_xarray, obs_xarray)
     mae = mae.values
     # Mean Absolute Scaled Error.
-    mae_naive = xs.mae(
-        obs_xarray, naive_xarray, dim=["pressure_level", "latitude", "longitude"]
-    )
+    mae_naive = score.compute_weighted_mae(naive_xarray, obs_xarray)
     mae_naive = mae_naive.values
     mase = mae / mae_naive
 
-    return r, rmse, nrmse, mse, mae, mase
+    return acc, rmse, mae, mase
 
 # Determine the amount of time needed to generate a 5 day forecast.
 performance = []
@@ -227,25 +205,25 @@ for i in range(len_test):
     # Determine the skill and accuracy of the 5 day weather forecast produced by
     # the software.
     # Air temperature.
-    temp_r, temp_rmse, temp_nrmse, temp_mse, temp_mae, temp_mase = accuracy(fct_temp, obs_temp) 
-    accuracy_temp = np.array([temp_r, temp_rmse, temp_nrmse, temp_mse, temp_mae, temp_mase])
+    acc, rmse, mae, mase = accuracy(fct_temp, obs_temp) 
+    accuracy_temp = np.array([acc, rmse, mae, mase])
     accuracy_temperature[i] = accuracy_temp
     # Relative humidity.
-    rh_r, rh_rmse, rh_nrmse, rh_mse, rh_mae, rh_mase = accuracy(fct_rh, obs_rh)
-    accuracy_rh = np.array([rh_r, rh_rmse, rh_nrmse, rh_mse, rh_mae, rh_mase])
+    acc, rmse, mae, mase = accuracy(fct_rh, obs_rh)
+    accuracy_rh = np.array([acc, rmse, mae, mase])
     accuracy_relativehumidity[i] = accuracy_rh
     # Geopotential.
-    r_geo, rmse_geo, nrmse_geo, mse_geo, mae_geo, mase_geo = accuracy(fct_geo, obs_geo)
-    accuracy_geo = np.array([r_geo, rmse_geo, nrmse_geo, mse_geo, mae_geo, mase_geo])
+    acc, rmse, mae, mase = accuracy(fct_geo, obs_geo)
+    accuracy_geo = np.array([acc, rmse, mae, mase])
     accuracy_geopotential[i] = accuracy_geo
     # Wind.
     # Zonal.
-    r_u, rmse_u, nrmse_u, mse_u, mae_u, mase_u = accuracy(fct_u, obs_u)
-    accuracy_u = np.array([r_u, rmse_u, nrmse_u, mse_u, mae_u, mase_u])
+    acc, rmse, mae, mase = accuracy(fct_u, obs_u)
+    accuracy_u = np.array([acc, rmse, mae, mase])
     accuracy_zonalwind[i] = accuracy_u
     # Meridional.
-    r_v, rmse_v, nrmse_v, mse_v, mae_v, mase_v = accuracy(fct_v, obs_v)
-    accuracy_v = np.array([r_v, rmse_v, nrmse_v, mse_v, mae_v, mase_v])
+    acc, rmse, mae, mase = accuracy(fct_v, obs_v)
+    accuracy_v = np.array([acc, rmse, mae, mase])
     accuracy_meridionalwind[i] = accuracy_v
     
     print("Progress: " + str(i+1) + "/" + str(len_test))

@@ -513,7 +513,7 @@ cdef class Weather(Wind):
         p = DimCoord(
             pressure,
             long_name='pressure_level', 
-            units='hPa'
+            units='millibars'
         )
         # Time.
         time = DimCoord(

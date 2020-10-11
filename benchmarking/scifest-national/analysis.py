@@ -26,20 +26,20 @@ performace = np.load(folder+"performance.npy")
 
 # Global Forecast System.
 # Folder.
-folder = "gfs-results/"
+folder = "ecmwf-results/"
 
 # Geopotential.
-gfs_geo = np.load(folder+"geopotential.npy")
+ecmwf_geo = np.load(folder+"geopotential.npy")
 # Temperature
 # Air Temperature.
-gfs_temp = np.load(folder+"temperature.npy")
+ecmwf_temp = np.load(folder+"temperature.npy")
 # Relative Humidity.
-gfs_rh = np.load(folder+"relative_humidity.npy")
+ecmwf_rh = np.load(folder+"relative_humidity.npy")
 # Wind.
 # Zonal Wind.
-gfs_u = np.load(folder+"zonal_wind.npy")
+ecmwf_u = np.load(folder+"zonal_wind.npy")
 # Meridional Wind.
-gfs_v = np.load(folder+"meridional_wind.npy")
+ecmwf_v = np.load(folder+"meridional_wind.npy")
 
 # Plotting.
 # Function.
@@ -49,7 +49,7 @@ def plot(x1, x2, y1, y2, title, metric):
     plt.plot(x1, np.mean(y1, axis=0), linestyle="-")
     plt.scatter(x1, np.mean(y1, axis=0), label=types[0]+" (Annual Mean)")
 
-    # Annual mean (GFS).
+    # Annual mean (ECMWF).
     plt.plot(x2, np.mean(y2, axis=0), linestyle="--")
     plt.scatter(x2, np.mean(y2, axis=0), label=types[1]+" (Annual Mean)")
 
@@ -58,44 +58,25 @@ def plot(x1, x2, y1, y2, title, metric):
     # AMSIMP.
     y1_q1, y1_q2, y1_q3, y1_q4 = np.split(y1[1:, :], 4, axis=0)
 
-    # GFS.
-    # y2_q1, y2_q2, y2_q3, y2_q4 = np.split(y2[1:, :], 4, axis=0)
-
     # Jan - Mar.
     # AMSIMP.
     plt.plot(x1, np.mean(y1_q1, axis=0), linestyle="-")
     plt.scatter(x1, np.mean(y1_q1, axis=0), label=types[0]+" (Jan-Mar Mean)")
-
-    # GFS.
-    # plt.plot(x2, np.mean(y2_q1, axis=0), linestyle="--")
-    # plt.scatter(x2, np.mean(y2_q1, axis=0), label=types[1]+" (Jan-Mar Mean)")
 
     # Apr - Jun.
     # AMSIMP.
     plt.plot(x1, np.mean(y1_q2, axis=0), linestyle="-")
     plt.scatter(x1, np.mean(y1_q2, axis=0), label=types[0]+" (Apr-Jun Mean)")
 
-    # GFS.
-    # plt.plot(x2, np.mean(y2_q2, axis=0), linestyle="--")
-    # plt.scatter(x2, np.mean(y2_q2, axis=0), label=types[1]+" (Apr-Jun Mean)")
-
     # Jul - Sept.
     # AMSIMP.
     plt.plot(x1, np.mean(y1_q3, axis=0), linestyle="-")
     plt.scatter(x1, np.mean(y1_q3, axis=0), label=types[0]+" (Jul-Sept Mean)")
 
-    # GFS.
-    # plt.plot(x2, np.mean(y2_q3, axis=0), linestyle="--")
-    # plt.scatter(x2, np.mean(y2_q3, axis=0), label=types[1]+" (Jul-Sept Mean)")
-
     # Oct - Dec2
     # AMSIMP.
     plt.plot(x1, np.mean(y1_q4, axis=0), linestyle="-")
     plt.scatter(x1, np.mean(y1_q4, axis=0), label=types[0]+" (Oct-Dec Mean)")
-
-    # GFS.
-    # plt.plot(x2, np.mean(y2_q4, axis=0), linestyle="--")
-    # plt.scatter(x2, np.mean(y2_q4, axis=0), label=types[1]+" (Oct-Dec Mean)")
 
     # Define the naïve forecast mean absolute scaled error.
     if metric == 'Mean Absolute Scaled Error':
@@ -160,32 +141,32 @@ x2 = np.linspace(6, 120, 20)
 for i in range(len(temp[0])):
     metric = label_decide(i)
     title = "Air Temperature"
-    plot(x1, x2, temp[:, i, :], gfs_temp[:, i, :], title, metric)
+    plot(x1, x2, temp[:, i, :], ecmwf_temp[:, i, :], title, metric)
 
 # Relative Humidity.
 for i in range(len(rh[0])):
     metric = label_decide(i)
     title = "Relative Humidity"
-    plot(x1, x2, rh[:, i, :], gfs_rh[:, i, :], title, metric)
+    plot(x1, x2, rh[:, i, :], ecmwf_rh[:, i, :], title, metric)
 
 # Wind.
 # Zonal Wind.
 for i in range(len(u[0])):
     metric = label_decide(i)
     title = "Zonal Wind"
-    plot(x1, x2, u[:, i, :], gfs_u[:, i, :], title, metric)
+    plot(x1, x2, u[:, i, :], ecmwf_u[:, i, :], title, metric)
 
 # Meridional Wind.
 for i in range(len(v[0])):
     metric = label_decide(i)
     title = "Meridional Wind"
-    plot(x1, x2, v[:, i, :], gfs_v[:, i, :], title, metric)
+    plot(x1, x2, v[:, i, :], ecmwf_v[:, i, :], title, metric)
 
 # Geopotential.
 for i in range(len(geo[0])):
     metric = label_decide(i)
     title = "Geopotential"
-    plot(x1, x2, geo[:, i, :], gfs_geo[:, i, :], title, metric)
+    plot(x1, x2, geo[:, i, :], ecmwf_geo[:, i, :], title, metric)
 
 # Performance.
 print("Performance: ")
@@ -203,20 +184,20 @@ print("Median forecast generation time: " + str(np.median(performace)))
 # Metric (MSE)
 i = 2
 
-# Determine if the GFS leads to a significantly significant increase in accuracy.
+# Determine if the ECMWF leads to a significantly significant increase in accuracy.
 # print("Two-sample independent t-test")
 
 # Air temperature.
-# print("Air temperature (GFS): " + str(stats.ttest_ind(temp[:, i, :], temp_gfs[:, i, :])))
+# print("Air temperature (ECMWF): " + str(stats.ttest_ind(temp[:, i, :], temp_ecmwf[:, i, :])))
 
 # Geopotential.
-# print("Geopotential (GFS): " + str(stats.ttest_ind(geo[:, i, :], geo_gfs[:, i, :])))
+# print("Geopotential (ECMWF): " + str(stats.ttest_ind(geo[:, i, :], geo_ecmwf[:, i, :])))
 
 # Relative Humidity.
-# print("Relative humidity (GFS): " + str(stats.ttest_ind(rh[:, i, :], rh_gfs[:, i, :])))
+# print("Relative humidity (ECMWF): " + str(stats.ttest_ind(rh[:, i, :], rh_ecmwf[:, i, :])))
 
 # Zonal Wind.
-# print("Zonal wind (GFS): " + str(stats.ttest_ind(u[:, i, :], u_gfs[:, i, :])))
+# print("Zonal wind (ECMWF): " + str(stats.ttest_ind(u[:, i, :], u_ecmwf[:, i, :])))
 
 # Meridional Wind.
-# print("Meridional wind (GFS): " + str(stats.ttest_ind(v[:, i, :], v_gfs[:, i, :])))
+# print("Meridional wind (ECMWF): " + str(stats.ttest_ind(v[:, i, :], v_ecmwf[:, i, :])))

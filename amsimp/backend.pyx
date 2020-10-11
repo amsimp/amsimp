@@ -216,12 +216,6 @@ cdef class Backend:
         """
         latitude_lines = self.lat * units.deg
 
-        # Ensure latitude points increase.
-        if latitude_lines[0] > latitude_lines[-1]:
-            raise Exception(
-                "The latitude points appear to decrease from one point to the next."
-            )
-
         return latitude_lines
     
     cpdef np.ndarray longitude_lines(self):
@@ -237,12 +231,6 @@ cdef class Backend:
         latitude_lines, pressure_surfaces
         """
         longitude_lines = self.lon * units.deg
-
-        # Ensure longitude points increase.
-        if longitude_lines[0] > longitude_lines[-1]:
-            raise Exception(
-                "The longitude points appear to decrease from one point to the next."
-            )
 
         return longitude_lines
 
@@ -268,12 +256,6 @@ cdef class Backend:
         latitude_lines, longitude_lines
         """
         pressure_surfaces = self.psurfaces
-
-        # Ensure pressure surfaces decrease.
-        if pressure_surfaces[0] < pressure_surfaces[-1]:
-            raise Exception(
-                "The pressure surfaces appear to increase from one point to the next."
-            )
         
         return pressure_surfaces
 
