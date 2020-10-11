@@ -21,9 +21,9 @@ forecast_models = ["Operational", "IFS T63", "IFS T42", "Persistence", "Climatol
 
 # Parameters.
 # Geopotential.
-geopotential = np.zeros((3, len(forecast_models), 10))
+geopotential = np.zeros((3, len(forecast_models), 14))
 # Temperature.
-temperature = np.zeros((3, len(forecast_models), 10))
+temperature = np.zeros((3, len(forecast_models), 14))
 
 # Loop through to get models and metrics of interest.
 for i in range(3):
@@ -41,11 +41,11 @@ for i in range(3):
         elif forecast_models[j] == "Climatology":
             # Geopotential.
             z = model.z.values
-            z = np.zeros(10) + z
+            z = np.zeros(14) + z
 
             # Temperature.
             t = model.t.values
-            t = np.zeros(10) + t
+            t = np.zeros(14) + t
         else:
             # Geopotential.
             z = model.z.values[1:]
@@ -56,14 +56,11 @@ for i in range(3):
         # Change shape.
         if len(z) == 20:
             z = z[1::2]
+            z = np.resize(z, (14))
             t = t[1::2]
-        elif len(z) == 14:
-            z = z[:10]
-            t = t[:10]
+            t = np.resize(t, (14))
         elif len(z) == 28:
-            z = z[:20]
             z = z[1::2]
-            t = t[:20]
             t = t[1::2]
 
         # Add to NumPy array.

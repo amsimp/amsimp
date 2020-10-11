@@ -53,25 +53,25 @@ t = tqdm(total=5, desc='Preprocessing historical data')
 
 # Define the weather forecasting inputs and the observations after the fact.
 # Air temperature.
-input_temperature, obs_temperature = preprocess_data(temperature, (15*12), (5*12))
-input_temperature, obs_temperature = input_temperature[::(24*5)], obs_temperature[::(24*5)]
+input_temperature, obs_temperature = preprocess_data(temperature, (15*12), (7*12))
+input_temperature, obs_temperature = input_temperature[::(10*12)], obs_temperature[::(10*12)]
 t.update(1)
 # Relative humidity.
-input_relativehumidity, obs_relativehumidity = preprocess_data(relative_humidity, (15*12), (5*12))
-input_relativehumidity, obs_relativehumidity = input_relativehumidity[::(24*5)], obs_relativehumidity[::(24*5)]
+input_relativehumidity, obs_relativehumidity = preprocess_data(relative_humidity, (15*12), (7*12))
+input_relativehumidity, obs_relativehumidity = input_relativehumidity[::(10*12)], obs_relativehumidity[::(10*12)]
 t.update(1)
 # Geopotential.
-input_geopotential, obs_geopotential = preprocess_data(geopotential, (15*12), (5*12))
-input_geopotential, obs_geopotential = input_geopotential[::(24*5)], obs_geopotential[::(24*5)]
+input_geopotential, obs_geopotential = preprocess_data(geopotential, (15*12), (7*12))
+input_geopotential, obs_geopotential = input_geopotential[::(10*12)], obs_geopotential[::(10*12)]
 t.update(1)
 # Wind.
 # Zonal.
-input_zonalwind, obs_zonalwind = preprocess_data(zonal_wind, (15*12), (5*12))
-input_zonalwind, obs_zonalwind = input_zonalwind[::(24*5)], obs_zonalwind[::(24*5)]
+input_zonalwind, obs_zonalwind = preprocess_data(zonal_wind, (15*12), (7*12))
+input_zonalwind, obs_zonalwind = input_zonalwind[::(10*12)], obs_zonalwind[::(10*12)]
 t.update(1)
 # Meridional.
-input_meridionalwind, obs_meridionalwind = preprocess_data(meridional_wind, (15*12), (5*12))
-input_meridionalwind, obs_meridionalwind = input_meridionalwind[::(24*5)], obs_meridionalwind[::(24*5)]
+input_meridionalwind, obs_meridionalwind = preprocess_data(meridional_wind, (15*12), (7*12))
+input_meridionalwind, obs_meridionalwind = input_meridionalwind[::(10*12)], obs_meridionalwind[::(10*12)]
 t.update(1)
 
 # Progress bar finished (preprocessing).
@@ -85,11 +85,16 @@ def accuracy(fct_cube, obs_cube):
     obs_cube.coords('pressure_level')[0].var_name = 'pressure_level'
     obs_cube = obs_cube[:, ::-1, ::-1, :]
     obs_xarray = xr.DataArray.from_iris(obs_cube)
+    # Naive.
+    naive_cube = fct_cube.copy()
+    naive_cube.data = np.resize(naive_cube[0].data, naive_cube.shape)
+    naive_xarray = xr.DataArray.from_iris(naive_cube)
     # Forecast.
     fct_cube = fct_cube[1:, :, :, :]
     fct_cube = fct_cube.regrid(obs_cube, iris.analysis.Linear())
     fct_xarray = xr.DataArray.from_iris(fct_cube)
 
+    # Forecast.
     # Anomaly Correlation Coefficient.
     acc = score.compute_weighted_acc(fct_xarray, obs_xarray)
     acc = acc.values
@@ -100,7 +105,18 @@ def accuracy(fct_cube, obs_cube):
     mae = score.compute_weighted_mae(fct_xarray, obs_xarray)
     mae = mae.values
 
-    return acc, rmse, mae
+    # Naive.
+    # Anomaly Correlation Coefficient.
+    naive_acc = score.compute_weighted_acc(naive_xarray, obs_xarray)
+    naive_acc = naive_acc.values
+    # Root Mean Squared Error.
+    naive_rmse = score.compute_weighted_rmse(naive_xarray, obs_xarray)
+    naive_rmse = naive_rmse.values
+    # Mean Absolute Error.
+    naive_mae = score.compute_weighted_mae(naive_xarray, obs_xarray)
+    naive_mae = naive_mae.values
+
+    return acc, rmse, mae, naive_acc, naive_rmse, naive_mae
 
 # Determine the amount of time needed to generate a 5 day forecast.
 performance = []
@@ -111,10 +127,10 @@ len_test = len(input_temperature)
 # Store the skill and accuracy of the 5 day weather forecast produced by the
 # software.
 # Air temperature at 800hPa.
-accuracy_temperature = np.zeros((len_test, 3, (5*12)))
+accuracy_temperature = np.zeros((len_test, 6, (7*12)))
 level_800 = iris.Constraint(pressure_level=800)
 # Geopotential at 500hPa.
-accuracy_geopotential = np.zeros((len_test, 3, (5*12)))
+accuracy_geopotential = np.zeros((len_test, 6, (7*12)))
 level_500 = iris.Constraint(pressure_level=500)
 
 for i in range(len_test):
@@ -141,7 +157,7 @@ for i in range(len_test):
     model_input = CubeList([input_temp, input_rh, input_geo, input_u, input_v])
 
     # Define atmospheric state in AMSIMP.
-    state = amsimp.Weather(historical_data=model_input)
+    state = amsimp.Weather(historical_data=model_input, forecast_length=168)
 
     # Generating forecast.
     start = time.time()
@@ -162,12 +178,12 @@ for i in range(len_test):
     # Determine the skill and accuracy of the 5 day weather forecast produced by
     # the software.
     # Air temperature.
-    acc, rmse, mae = accuracy(fct_temp, obs_temp) 
-    accuracy_temp = np.array([acc, rmse, mae])
+    acc, rmse, mae, naive_acc, naive_rmse, naive_mae = accuracy(fct_temp, obs_temp) 
+    accuracy_temp = np.array([acc, rmse, mae, naive_acc, naive_rmse, naive_mae])
     accuracy_temperature[i] = accuracy_temp
     # Geopotential.
-    acc, rmse, mae = accuracy(fct_geo, obs_geo)
-    accuracy_geo = np.array([acc, rmse, mae])
+    acc, rmse, mae, naive_acc, naive_rmse, naive_mae = accuracy(fct_geo, obs_geo)
+    accuracy_geo = np.array([acc, rmse, mae, naive_acc, naive_rmse, naive_mae])
     accuracy_geopotential[i] = accuracy_geo
     
     print("Progress: " + str(i+1) + "/" + str(len_test))

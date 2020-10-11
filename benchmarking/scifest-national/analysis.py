@@ -11,9 +11,11 @@ folder = "results/"
 
 # AMSIMP.
 # Geopotential.
-amsimp_geopotential = np.load(folder + "geopotential.npy")
+geopotential = np.load(folder + "geopotential.npy")
+amsimp_geopotential, naive_geopotential = np.split(geopotential, 2, axis=1)
 # Air Temperature.
-amsimp_temperature = np.load(folder + "temperature.npy")
+temperature = np.load(folder + "temperature.npy")
+amsimp_temperature, naive_temperature = np.split(temperature, 2, axis=1)
 # Performance
 performace = np.load(folder + "performance.npy")
 
@@ -30,57 +32,31 @@ comparsion_temperature = np.load(folder + "temperature.npy")
 # Plotting.
 # Function.
 types = "Operational IFS", "IFS T63", "IFS T42", "Persistence", "Climateology"
-def plot(x1, x2, y, comparsion, title, metric):
+def plot(x1, x2, y, naive, comparsion, title, metric):
     # AMSIMP.
-    # Annual mean (AMSIMP).
-    plt.plot(x1, np.mean(y, axis=0), linestyle="-")
-    plt.scatter(x1, np.mean(y, axis=0), label="AMSIMP (Annual Mean)")
-
-    # Seasonal variation in performance.
-    # Split dataset into the appropriate months.
-    # AMSIMP.
-    y_q1, y_q2, y_q3, y_q4 = np.split(y[1:, :], 4, axis=0)
-
-    # Jan - Mar.
-    # AMSIMP.
-    plt.plot(x1, np.mean(y_q1, axis=0), linestyle="-")
-    plt.scatter(x1, np.mean(y_q1, axis=0), label="AMSIMP (Jan-Mar Mean)")
-
-    # Apr - Jun.
-    # AMSIMP.
-    plt.plot(x1, np.mean(y_q2, axis=0), linestyle="-")
-    plt.scatter(x1, np.mean(y_q2, axis=0), label="AMSIMP (Apr-Jun Mean)")
-
-    # Jul - Sept.
-    # AMSIMP.
-    plt.plot(x1, np.mean(y_q3, axis=0), linestyle="-")
-    plt.scatter(x1, np.mean(y_q3, axis=0), label="AMSIMP (Jul-Sept Mean)")
-
-    # Oct - Dec.
-    # AMSIMP.
-    plt.plot(x1, np.mean(y_q4, axis=0), linestyle="-")
-    plt.scatter(x1, np.mean(y_q4, axis=0), label="AMSIMP (Oct-Dec Mean)")
+    plt.plot(x1[::3], np.mean(y, axis=0)[::3], linestyle="-")
+    plt.scatter(x1[::3], np.mean(y, axis=0)[::3], label="AMSIMP")
 
     # Comparsion.
     # Operational IFS.
-    plt.plot(x1, np.mean(comparsion[0], axis=0), linestyle="-")
-    plt.scatter(x1, np.mean(comparsion[0], axis=0), label=types[0])
+    plt.plot(x2[:10], comparsion[0][:10], linestyle="-")
+    plt.scatter(x2[:10], comparsion[0][:10], label=types[0])
 
     # IFS T63.
-    plt.plot(x1, np.mean(comparsion[1], axis=0), linestyle="-")
-    plt.scatter(x1, np.mean(comparsion[1], axis=0), label=types[1])
+    plt.plot(x2, comparsion[1], linestyle="-")
+    plt.scatter(x2, comparsion[1], label=types[1])
 
     # IFS T42.
-    plt.plot(x1, np.mean(comparsion[2], axis=0), linestyle="-")
-    plt.scatter(x1, np.mean(comparsion[2], axis=0), label=types[2])
+    plt.plot(x2, comparsion[2], linestyle="-")
+    plt.scatter(x2, comparsion[2], label=types[2])
 
     # Persistence.
-    plt.plot(x1, np.mean(comparsion[3], axis=0), linestyle=":")
-    plt.scatter(x1, np.mean(comparsion[3], axis=0), label=types[3])
+    plt.plot(x1[::3], np.mean(naive, axis=0)[::3], linestyle=":")
+    plt.scatter(x1[::3], np.mean(naive, axis=0)[::3], label=types[3])
 
     # Climateology.
-    plt.plot(x1, np.mean(comparsion[4], axis=0), linestyle="--")
-    plt.scatter(x1, np.mean(comparsion[4], axis=0), label=types[4])
+    plt.plot(x2, comparsion[4], linestyle="--")
+    plt.scatter(x2, comparsion[4], label=types[4])
 
     # Add labels to the axes.
     plt.xlabel("Forecast Period (Hours)")
@@ -94,7 +70,7 @@ def plot(x1, x2, y, comparsion, title, metric):
 
     # Save figure to file.
     # Define folder.
-    folder = title.lower()
+    folder = title[:-10].lower()
     folder = folder.replace(" ", "_")
     folder = "plots/"+folder+"/"
 
@@ -124,21 +100,25 @@ def label_decide(num):
 
     return label
 
-x1 = np.linspace(2, 120, 60)
-x2 = np.linspace(12, 120, 10)
+x1 = np.linspace(2, 168, 84)
+x2 = np.linspace(12, 168, 14)
 
 # Temperature.
 # Air Temperature.
 for i in range(3):
     metric = label_decide(i)
-    title = "Air Temperature"
-    plot(x1, x2, amsimp_temperature[:, i, :], comparsion_temperature[i, :, :], title, metric)
+    title = "Air Temperature (800 hPa)"
+    plot(
+        x1, x2, amsimp_temperature[:, i, :], naive_temperature[:, i, :], comparsion_temperature[i, :, :], title, metric
+    )
 
 # Geopotential.
 for i in range(3):
     metric = label_decide(i)
-    title = "Geopotential"
-    plot(x1, x2, amsimp_geopotential[:, i, :], comparsion_geopotential[i, :, :], title, metric)
+    title = "Geopotential (500 hPa)"
+    plot(
+        x1, x2, amsimp_geopotential[:, i, :], naive_geopotential[:, i, :], comparsion_geopotential[i, :, :], title, metric
+    )
 
 # Performance.
 print("Performance: ")
@@ -148,6 +128,6 @@ print("Mean forecast generation time: " + str(np.mean(performace)))
 print("Median forecast generation time: " + str(np.median(performace)))
 
 # Time taken to generate a monthly forecast.
-performace_month = np.load(folder + 'performance_month.npy')
+performace_month = np.load('results/performance_month.npy')
 print("Time taken to generate a monthly forecast: " + str(np.mean(performace_month)))
 print("Times faster against a physical model: " + str((24*60) / np.mean(performace_month)))
