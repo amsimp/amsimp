@@ -4,7 +4,7 @@ Functions for evaluating forecasts.
 import numpy as np
 import xarray as xr
 
-def compute_weighted_rmse(da_fc, da_true, mean_dims=xr.ALL_DIMS):
+def compute_weighted_rmse(da_fc, da_true, mean_dims="time, pressure_level, latitude, longitude"):
     """
     Compute the RMSE with latitudeitude weighting from two xr.DataArrays.
     Args:
@@ -20,7 +20,7 @@ def compute_weighted_rmse(da_fc, da_true, mean_dims=xr.ALL_DIMS):
     rmse = np.sqrt(((error)**2 * weights_latitude).mean(mean_dims))
     return rmse
 
-def compute_weighted_acc(da_fc, da_true, mean_dims=xr.ALL_DIMS):
+def compute_weighted_acc(da_fc, da_true, mean_dims="time, pressure_level, latitude, longitude"):
     """
     Compute the ACC with latitudeitude weighting from two xr.DataArrays.
     WARNING: Does not work if datasets contain NaNs
@@ -56,7 +56,7 @@ def compute_weighted_acc(da_fc, da_true, mean_dims=xr.ALL_DIMS):
     )
     return acc
 
-def compute_weighted_mae(da_fc, da_true, mean_dims=xr.ALL_DIMS):
+def compute_weighted_mae(da_fc, da_true, mean_dims="time, pressure_level, latitude, longitude"):
     """
     Compute the MAE with latitudeitude weighting from two xr.DataArrays.
     Args:
