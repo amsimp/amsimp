@@ -146,3 +146,8 @@ print("Performance: ")
 # Print the mean and median forecast generation time.
 print("Mean forecast generation time: " + str(np.mean(performace)))
 print("Median forecast generation time: " + str(np.median(performace)))
+
+# Time taken to generate a monthly forecast.
+performace_month = np.load(folder + 'performance_month.npy')
+print("Time taken to generate a monthly forecast: " + str(np.mean(performace_month)))
+print("Times faster against a physical model: " + str((24*60) / np.mean(performace_month)))
