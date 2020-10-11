@@ -49,9 +49,9 @@ def compute_weighted_acc(da_fc, da_true, mean_dims=["pressure_level", "latitude"
     a_prime = a - a.mean(mean_dims)
 
     acc = (
-            np.sum(w * fa_prime * a_prime) /
+            (w * fa_prime * a_prime).sum(mean_dims) /
             np.sqrt(
-                np.sum(w * fa_prime ** 2) * np.sum(w * a_prime ** 2)
+                (w * fa_prime ** 2).sum(mean_dims) * (w * a_prime ** 2).sum(mean_dims)
             )
     )
     return acc
