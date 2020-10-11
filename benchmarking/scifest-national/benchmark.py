@@ -102,16 +102,20 @@ def accuracy(fct_cube, obs_cube):
     # Anomaly Correlation Coefficient.
     acc = score.compute_weighted_acc(fct_xarray, obs_xarray)
     acc = acc.values
+    print(acc.shape)
     # Root Mean Squared Error.
     rmse = score.compute_weighted_rmse(fct_xarray, obs_xarray)
     rmse = rmse.values
+    print(rmse.shape)
     # Mean Absolute Error.
     mae = score.compute_weighted_mae(fct_xarray, obs_xarray)
     mae = mae.values
+    print(mae.shape)
     # Mean Absolute Scaled Error.
     mae_naive = score.compute_weighted_mae(naive_xarray, obs_xarray)
     mae_naive = mae_naive.values
     mase = mae / mae_naive
+    print(mase.shape)
 
     return acc, rmse, mae, mase
 
