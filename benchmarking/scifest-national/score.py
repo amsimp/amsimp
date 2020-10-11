@@ -6,7 +6,7 @@ import xarray as xr
 
 def compute_weighted_rmse(da_fc, da_true, mean_dims=["pressure_level", "latitude", "longitude"]):
     """
-    Compute the RMSE with latitudeitude weighting from two xr.DataArrays.
+    Compute the RMSE with latitude weighting from two xr.DataArrays.
     Args:
         da_fc (xr.DataArray): Forecast. Time coordinate must be validation time.
         da_true (xr.DataArray): Truth.
@@ -16,13 +16,13 @@ def compute_weighted_rmse(da_fc, da_true, mean_dims=["pressure_level", "latitude
     """
     error = da_fc - da_true
     weights_latitude = np.cos(np.deg2rad(error.latitude))
-    weights_latitude /= weights_latitude.mean()
+    weights_latitude /= weights_latitude.mean(mean_dims)
     rmse = np.sqrt(((error)**2 * weights_latitude).mean(mean_dims))
     return rmse
 
 def compute_weighted_acc(da_fc, da_true, mean_dims=["pressure_level", "latitude", "longitude"]):
     """
-    Compute the ACC with latitudeitude weighting from two xr.DataArrays.
+    Compute the ACC with latitude weighting from two xr.DataArrays.
     WARNING: Does not work if datasets contain NaNs
     Args:
         da_fc (xr.DataArray): Forecast. Time coordinate must be validation time.
@@ -42,11 +42,11 @@ def compute_weighted_acc(da_fc, da_true, mean_dims=["pressure_level", "latitude"
     a = da_true.sel(time=t) - clim
 
     weights_latitude = np.cos(np.deg2rad(da_fc.latitude))
-    weights_latitude /= weights_latitude.mean()
+    weights_latitude /= weights_latitude.mean(mean_dims)
     w = weights_latitude
 
-    fa_prime = fa - fa.mean()
-    a_prime = a - a.mean()
+    fa_prime = fa - fa.mean(mean_dims)
+    a_prime = a - a.mean(mean_dims)
 
     acc = (
             np.sum(w * fa_prime * a_prime) /
@@ -58,7 +58,7 @@ def compute_weighted_acc(da_fc, da_true, mean_dims=["pressure_level", "latitude"
 
 def compute_weighted_mae(da_fc, da_true, mean_dims=["pressure_level", "latitude", "longitude"]):
     """
-    Compute the MAE with latitudeitude weighting from two xr.DataArrays.
+    Compute the MAE with latitude weighting from two xr.DataArrays.
     Args:
         da_fc (xr.DataArray): Forecast. Time coordinate must be validation time.
         da_true (xr.DataArray): Truth.
@@ -68,6 +68,6 @@ def compute_weighted_mae(da_fc, da_true, mean_dims=["pressure_level", "latitude"
     """
     error = da_fc - da_true
     weights_latitude = np.cos(np.deg2rad(error.latitude))
-    weights_latitude /= weights_latitude.mean()
+    weights_latitude /= weights_latitude.mean(mean_dims)
     mae = (np.abs(error) * weights_latitude).mean(mean_dims)
     return mae
