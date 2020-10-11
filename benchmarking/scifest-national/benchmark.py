@@ -54,24 +54,24 @@ t = tqdm(total=5, desc='Preprocessing historical data')
 # Define the weather forecasting inputs and the observations after the fact.
 # Air temperature.
 input_temperature, obs_temperature = preprocess_data(temperature, (15*12), (5*12))
-input_temperature, obs_temperature = input_temperature[::24], obs_temperature[::24]
+input_temperature, obs_temperature = input_temperature[::(24*5)], obs_temperature[::(24*5)]
 t.update(1)
 # Relative humidity.
 input_relativehumidity, obs_relativehumidity = preprocess_data(relative_humidity, (15*12), (5*12))
-input_relativehumidity, obs_relativehumidity = input_relativehumidity[::24], obs_relativehumidity[::24]
+input_relativehumidity, obs_relativehumidity = input_relativehumidity[::(24*5)], obs_relativehumidity[::(24*5)]
 t.update(1)
 # Geopotential.
 input_geopotential, obs_geopotential = preprocess_data(geopotential, (15*12), (5*12))
-input_geopotential, obs_geopotential = input_geopotential[::24], obs_geopotential[::24]
+input_geopotential, obs_geopotential = input_geopotential[::(24*5)], obs_geopotential[::(24*5)]
 t.update(1)
 # Wind.
 # Zonal.
 input_zonalwind, obs_zonalwind = preprocess_data(zonal_wind, (15*12), (5*12))
-input_zonalwind, obs_zonalwind = input_zonalwind[::24], obs_zonalwind[::24]
+input_zonalwind, obs_zonalwind = input_zonalwind[::(24*5)], obs_zonalwind[::(24*5)]
 t.update(1)
 # Meridional.
 input_meridionalwind, obs_meridionalwind = preprocess_data(meridional_wind, (15*12), (5*12))
-input_meridionalwind, obs_meridionalwind = input_meridionalwind[::24], obs_meridionalwind[::24]
+input_meridionalwind, obs_meridionalwind = input_meridionalwind[::(24*5)], obs_meridionalwind[::(24*5)]
 t.update(1)
 
 # Progress bar finished (preprocessing).
