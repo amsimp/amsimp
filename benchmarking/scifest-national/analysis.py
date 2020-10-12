@@ -124,7 +124,5 @@ for i in range(3):
 print("Mean forecast generation time: " + str(np.mean(performace)))
 print("Median forecast generation time: " + str(np.median(performace)))
 
-# Time taken to generate a monthly forecast.
-performace_month = np.load('results/performance_month.npy')
-print("Time taken to generate a monthly forecast: " + str(np.mean(performace_month)))
-print("Times faster against a physical model: " + str((24*60) / np.mean(performace_month)))
+# Compare against the amount of time taken to generate a IFS T42.
+print("Performance Increase (IFS T42): " + str(240 / np.mean(performace)))
