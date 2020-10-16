@@ -37,4 +37,4 @@ jobs:
         python3.7 setup.py install --user
         python3.7 setup.py build_ext --inplace
         python3.7 compile.py build_ext --inplace
-        python3.7 -c "import amsimp; state = amsimp.Dynamics(ai=False, forecast_length=6); state.simulate()"
+        python3.7 test.py
