@@ -4,7 +4,7 @@ channels:
   - defaults
 dependencies:
   - cython
-  - python=3.7
+  - python
   - astropy
   - matplotlib
   - numpy
