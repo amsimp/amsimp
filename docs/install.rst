@@ -21,8 +21,7 @@ AMSIMP is distributed on `Anaconda Cloud <https://anaconda.org/amsimp/amsimp>`_ 
 
 If you run into any issues, you can either create an issue on
 `GitHub <https://github.com/amsimp/amsimp/issues>`_ or
-contact us by `email <support@amsimp.com>`_. **This installation
-option is not currently available, please install from source.**
+contact us by `email <support@amsimp.com>`_.
 
 Installing from Source
 ----------------------

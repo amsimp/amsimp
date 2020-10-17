@@ -24,8 +24,7 @@ This package is available on [Anaconda Cloud](https://anaconda.org/amsimp/amsimp
 $ conda install -c amsimp amsimp  
 ```
 
-For more information, please [read the documentation](https://docs.amsimp.com) on the website. **This installation
-option is not currently available, please install from source.**
+For more information, please [read the documentation](https://docs.amsimp.com) on the website.
 
 ## License
 This program is free software: you can redistribute it and/or modify
