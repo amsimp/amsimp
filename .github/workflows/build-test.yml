@@ -34,7 +34,7 @@ jobs:
         source ~/miniconda/etc/profile.d/conda.sh
         sudo conda env create -f environment.yml
         conda activate amsimp
-        python3.7 setup.py install --user
-        python3.7 setup.py build_ext --inplace
-        python3.7 compile.py build_ext --inplace
-        python3.7 test.py
+        python setup.py install --user
+        python setup.py build_ext --inplace
+        python compile.py build_ext --inplace
+        python test.py
