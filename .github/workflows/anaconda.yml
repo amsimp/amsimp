@@ -14,11 +14,11 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: macOS
-      if: matrix.os == 'ubuntu-latest'
+      if: startsWith(matrix.os, 'ubuntu')
         run: |
           wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
     - name: Linux
-      if: matrix.os == 'macos-latest'
+      iif: startsWith(matrix.os,'macOS')
         run: |
           wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
     - name: Install dependencies
