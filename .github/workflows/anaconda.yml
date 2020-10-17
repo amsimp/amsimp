@@ -32,7 +32,7 @@ jobs:
     - name: Upload to Anaconda Upload
       uses: fdiblen/anaconda-action@0.1.7
       with:
-        envFileName: 'environment.yml'
+        env-file-name: 'environment.yml'
         publish: 'true'
-        publishChannel: 'AMSIMP'
-        anacondaToken: $ANACONDA_PASSWORD
+        publish-channel: 'AMSIMP'
+        anaconda-token: $ANACONDA_PASSWORD
