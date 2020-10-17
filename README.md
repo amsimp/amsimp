@@ -1,6 +1,6 @@
 # AMSIMP - Numerical Weather Prediction using Machine Learning
 
-![AMSIMP Build](https://github.com/amsimp/amsimp/workflows/AMSIMP%20Build/badge.svg)
+![AMSIMP Build](https://github.com/amsimp/amsimp/workflows/Build%20AMSIMP/badge.svg)
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/version.svg)
 ![GitHub](https://img.shields.io/github/license/amsimp/amsimp.svg?style=flat-square)
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/downloads.svg)

@@ -3,7 +3,7 @@ package:
   version: "0.5.0"
 
 source:
-  git_url: https://github.com/amsimp/amsimp.git
+  path: .
 
 channels:
   - conda-forge
