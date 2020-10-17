@@ -1,4 +1,4 @@
-name: Upload to Anaconda Cloud
+name: Upload to PyPI
 
 on:
   release:
@@ -30,7 +30,7 @@ jobs:
         export PATH="$HOME/miniconda/bin:$PATH"
         conda init
         source ~/miniconda/etc/profile.d/conda.sh
-        sudo conda env create -f environment.yml
+        conda env create -f environment.yml
         conda activate amsimp
         python setup.py install --user
         python setup.py sdist
