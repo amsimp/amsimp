@@ -16,5 +16,7 @@ dependencies:
   - matplotlib
   - tqdm
   - pip
+  - conda-build 
+  - anaconda-client
   - pip:
     - tensorflow

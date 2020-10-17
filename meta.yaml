@@ -3,7 +3,12 @@ package:
   version: "0.5.0"
 
 source:
-  path: .
+  git_url: https://github.com/amsimp/amsimp.git
+
+build:
+  script: python setup.py install
+  always_include_files:
+    - amsimp/rnn/models/
 
 channels:
   - conda-forge
@@ -12,7 +17,7 @@ channels:
 requirements:
   dependices:
     - cython
-    - python=3.7
+    - python
     - astropy
     - matplotlib
     - numpy
@@ -29,11 +34,6 @@ requirements:
 test:
   imports:
     - amsimp
-
-outputs:
-  - name: amsimp-models
-    files:
-      - amsimp/rnn/models
 
 about:
   home: https://amsimp.com
