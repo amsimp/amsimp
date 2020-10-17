@@ -34,7 +34,7 @@ def save_response_content(response, destination):
         total=total_size, 
         unit='iB', 
         unit_scale=True,
-        desc='Downloading models'
+        desc='Downloading example dataset'
     )
     with open(destination, "wb") as f:
         for chunk in response.iter_content(CHUNK_SIZE):
@@ -45,7 +45,7 @@ def save_response_content(response, destination):
     t.close()
 
 # Download file.
-file_id = '1ta1pf0l1bbyG5aJkxVDJ5b0QqNHMZUv'
+file_id = '1ta1pf0l1bbyG5aJkxVDJ5b0QqNHMZUvo'
 destination = 'example.nc'
 download_file_from_google_drive(file_id, destination)
 
