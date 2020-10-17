@@ -146,7 +146,7 @@ concentration to an area of low concentration.</p>
 generally fall into three distinct categories: initial value problems,
 boundary value problems, and eigenvalue problems. The meteorological
 problems associated with this project are solely initial value
-problems <span class="bibtex" id="id1">[numerical_methods]</span>. An initial value problem
+problems <a class="bibtex reference internal" href="refs.html#numerical-methods" id="id1">[13]</a>. An initial value problem
 is a situation where you want to predict the future state of a given
 system, given the necessary initial conditions. Unfortunately, the
 equations describing the evolution of the atmosphere do not have exact
@@ -156,7 +156,7 @@ physical field as it gives us the value of this field at any point in
 space, and at any instant in time.</p>
 <p>When an analytical solution does not exist, an approximate numerical
 solution is found using a specified computational
-technique <span class="bibtex" id="id2">[numerical_methods]</span>. For the purposes of this
+technique <a class="bibtex reference internal" href="refs.html#numerical-methods" id="id2">[13]</a>. For the purposes of this
 project, the finite difference method will be utilised. It must be
 noted, however, that there are several other methods to acquire an
 approximate numerical solution, with the finite element method and the
@@ -248,7 +248,7 @@ important in meteorological problems because if slight deviations from
 the mathematical model caused by unavoidable errors in measurement do
 not have a correspondingly slight effect on the approximate numerical
 solution, the mathematical equations describing the problem will not
-accurately predict the future outcome <span class="bibtex" id="id4">[ftcs_leapfrog]</span>.
+accurately predict the future outcome <a class="bibtex reference internal" href="refs.html#ftcs-leapfrog" id="id4">[14]</a>.
 For a more detailed technical explanation of the stability of this
 scheme and the leapfrog scheme, please see the following article:
 <a class="reference external" href="https://www.ecmwf.int/sites/default/files/elibrary/2002/16948-numerical-methods.pdf">https://www.ecmwf.int/sites/default/files/elibrary/2002/16948-numerical-methods.pdf</a>.</p>
@@ -266,7 +266,7 @@ in:</p>
 <p>It can be shown that this scheme is stable using a similar technique
 previously mentioned. This equation can then be
 rearranged for the forecast value
-<span class="math notranslate nohighlight">\(T^{n+1}_{i}\)</span> <span class="bibtex" id="id5">[ftcs_leapfrog]</span>:</p>
+<span class="math notranslate nohighlight">\(T^{n+1}_{i}\)</span> <a class="bibtex reference internal" href="refs.html#ftcs-leapfrog" id="id5">[14]</a>:</p>
 <div class="math notranslate nohighlight">
 \[T^{n+1}_{i} = T^{n-1}_{i} - u \frac{2 \Delta t}{2 \Delta x}(T^{n}_{i+1} - T^{n}_{i-1})\]</div>
 <p>For the physical equation, a single initial condition <span class="math notranslate nohighlight">\(T^{0}\)</span> is
@@ -289,7 +289,7 @@ utilised within the software.</p>
 <p>A major problem which occurs while dealing with nonlinear partial
 differential equations is nonlinear instability. This is a problem where
 there is a nonlinear interaction between atmospheric
-waves <a class="bibtex reference internal" href="refs.html#nonlinear-instability" id="id7">[13]</a>.</p>
+waves <a class="bibtex reference internal" href="refs.html#nonlinear-instability" id="id7">[15]</a>.</p>
 <p>An atmospheric wave is a periodic disturbance in the fields of
 atmospheric variables (like geopotential height, temperature, or wind
 velocity) which may either propagate (travelling wave) or not (standing
@@ -301,7 +301,7 @@ feedback of energy leads to a catastrophic rise in the kinetic energy of
 wavelengths between <span class="math notranslate nohighlight">\(2 \Delta x\)</span> and <span class="math notranslate nohighlight">\(4 \Delta x\)</span>. Within
 the software, a smoothing operator, which reduces the amplitude of the
 short waves while having little effect on the meteorologically important
-waves, is utilised <a class="bibtex reference internal" href="refs.html#nonlinear-instability" id="id8">[13]</a>.</p>
+waves, is utilised <a class="bibtex reference internal" href="refs.html#nonlinear-instability" id="id8">[15]</a>.</p>
 <p>Another problem to mention before moving on is that for nonlinear
 equations, the leapfrog scheme has a tendency to increase the amplitude
 of the computational mode with time This can separate the space
@@ -497,7 +497,7 @@ thirty days of data and combine this RNN prediction with the physical
 model prediction in an attempt to make a more accurate prediction
 overall. In order to make such predictions, it is necessary to create a
 window of the last 120 (<span class="math notranslate nohighlight">\(30 \times 4\)</span>) observations to train the
-model <a class="bibtex reference internal" href="refs.html#time-series" id="id19">[17]</a>.</p>
+model <a class="bibtex reference internal" href="refs.html#time-series" id="id19">[19]</a>.</p>
 <p>At the start, a seed is set in order to ensure reproducibility. As
 mentioned previously, it is important to scale features before training
 a neural network. Normalisation is a common way of doing this scaling by
@@ -511,7 +511,7 @@ represents the state of the atmosphere. This is done in order to avoid
 the need of repeatably running the RNN. Batches are then created to
 split the data into manageable sequences. The diagram on the following
 page shows how the data is represented after flattening the data and
-batching it (provided by Tensorflow) <a class="bibtex reference internal" href="refs.html#time-series" id="id21">[17]</a>.</p>
+batching it (provided by Tensorflow) <a class="bibtex reference internal" href="refs.html#time-series" id="id21">[19]</a>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Images/data_rnn.png"><img alt="Visualisation of how the data is represented after flattening and batching." src="https://github.com/amsimp/papers/raw/master/scifest-online/project-book/Images/data_rnn.png" style="width: 95%;" /></a>
 </div>
@@ -617,7 +617,7 @@ explicit variable in the tendency equations <a class="bibtex reference internal"
 Thus,a given geopotential gradient implies the same geostrophic wind at
 any height, whereas a given horizontal pressure gradient implies
 different values of the geostrophic wind depending on the
-density <a class="bibtex reference internal" href="refs.html#isobar-ii" id="id26">[18]</a>.</p>
+density <a class="bibtex reference internal" href="refs.html#isobar-ii" id="id26">[20]</a>.</p>
 <p>From the Global Data Assimilation System, three prognostic variables are
 chosen: geopotential height, air temperature, and relative humidity.</p>
 <p>Geopotential Height is the height above sea level of a pressure level.
