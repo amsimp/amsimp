@@ -1,6 +1,6 @@
 package:
   name: amsimp
-  version: "1.0.0"
+  version: "0.5.0"
 
 source:
   git_url: https://github.com/amsimp/amsimp.git
@@ -13,7 +13,6 @@ requirements:
   dependices:
     - cython
     - python=3.7
-    - pip
     - astropy
     - matplotlib
     - numpy
@@ -23,49 +22,9 @@ requirements:
     - iris
     - progress
     - tqdm
+    - pip
     - pip:
       - tensorflow
-  host:
-    - cython
-    - python=3.7
-    - pip
-    - astropy
-    - matplotlib
-    - numpy
-    - cartopy
-    - pandas
-    - scikit-learn
-    - iris
-    - progress
-    - tqdm
-    - pip:
-      - tensorflow
-  build:
-    - cython
-    - python=3.7
-    - pip
-    - astropy
-    - matplotlib
-    - numpy
-    - cartopy
-    - pandas
-    - scikit-learn
-    - iris
-    - progress
-    - tqdm
-  run:
-    - cython
-    - python=3.7
-    - pip
-    - astropy
-    - matplotlib
-    - numpy
-    - cartopy
-    - pandas
-    - scikit-learn
-    - iris
-    - progress
-    - tqdm
 
 test:
   imports:

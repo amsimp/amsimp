@@ -32,7 +32,7 @@ setup(
     name="amsimp",
     ext_modules=extensions,
     include_dirs=[numpy.get_include()],
-    version="1.0.0",
+    version="0.5.0",
     author="AMSIMP",
     author_email="support@amsimp.com",
     description="Numerical Weather Prediction using Machine Learning",

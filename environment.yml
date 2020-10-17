@@ -5,7 +5,6 @@ channels:
 dependencies:
   - cython
   - python=3.7
-  - pip
   - astropy
   - matplotlib
   - numpy
@@ -16,5 +15,6 @@ dependencies:
   - progress
   - matplotlib
   - tqdm
+  - pip
   - pip:
     - tensorflow

@@ -1,4 +1,4 @@
-name: AMSIMP Build
+name: Build AMSIMP
 
 on:
   push:
