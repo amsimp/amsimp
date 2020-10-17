@@ -12,17 +12,13 @@ jobs:
         os: [ubuntu-latest, macos-latest]
 
     steps:
-    - uses: actions/checkout@v1
-    - name: macOS
-      if: startsWith(matrix.os, 'ubuntu')
-        run: |
-          wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-    - name: Linux
-      iif: startsWith(matrix.os,'macOS')
-        run: |
-          wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
+    - uses: actions/checkout@v1  
     - name: Install dependencies
       run: |
+        if [ "$RUNNER_OS" == "Linux" ]; then
+          wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+        elif [ "$RUNNER_OS" == "macOS" ]; then
+          wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
         bash miniconda.sh -b -p $HOME/miniconda
         source "$HOME/miniconda/etc/profile.d/conda.sh"
         hash -r
