@@ -13,6 +13,13 @@ please visit `Anaconda's documentation page`_.
 
 Installing from Anaconda Cloud
 ------------------------------
+Before installation via this particular method, TensorFlow needs to be installed through the Python Package Index (PyPI)
+using the following command:
+
+.. code:: sh
+
+   $ pip install tensorflow
+
 AMSIMP is distributed on `Anaconda Cloud <https://anaconda.org/amsimp/amsimp>`_ and can be installed using conda:
 
 .. code:: sh
