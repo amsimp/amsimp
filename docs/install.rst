@@ -57,7 +57,7 @@ Further information about the required dependencies can be found here:
   A Python package for scientific computing.
 - **scikit-learn** (https://scikit-learn.org/stable/) |
   Machine Learning in Python
-- **Tensorflow** 0.2 or later (https://www.tensorflow.org) |
+- **Tensorflow** 2.0 or later (https://www.tensorflow.org) |
   TensorFlow is an end-to-end open source platform for machine learning.
 - **Progress** (http://github.com/verigak/progress/) |
   Easy progress reporting for Python.
