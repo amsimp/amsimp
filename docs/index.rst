@@ -19,7 +19,7 @@ Badge|
 
 AMSIMP is an open-source solution that leverages machine learning to improve numerical weather prediction.
 The aim of the software to apply the recent advancements in machine learning architectures to make weather
-prediction better for **everyone**. Read the `paper <https://github.com/amsimp/papers/raw/master/scifest-online/project-book/main.pdf>`_.
+prediction better for **everyone**. Read the `paper <https://github.com/amsimp/papers/raw/master/scifest/national/project-book/main.pdf>`_.
 
 Table of Contents
 =================
