@@ -27,11 +27,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # Importing Dependencies
 from datetime import timedelta, datetime
 import os, sys
-from sklearn.preprocessing import MinMaxScaler
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense, RepeatVector, TimeDistributed
-from tensorflow.keras.layers import Bidirectional
-from tensorflow.keras.optimizers import Adam
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from matplotlib import style, ticker, gridspec

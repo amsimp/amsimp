@@ -3,7 +3,7 @@ AMSIMP
 ======
 
 .. warning::
-    Please note that versions of AMSIMP 0.x.x
+    Please note that versions of AMSIMP below 0.5.x are
     longer supported. Please instal the latest version of
     AMSIMP to get access to the latest features.
     Please note that it is strongly recommended that you
