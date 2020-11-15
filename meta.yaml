@@ -52,10 +52,6 @@ requirements:
     - progress
     - tqdm
 
-test:
-  imports:
-    - amsimp
-
 about:
   home: https://amsimp.com
   license: GPL-3.0
