@@ -20,8 +20,7 @@ Moist Class
    :language: cython
    :linenos:
 
-Dynamics Class
---------------
-.. literalinclude:: ../amsimp/dynamics.pyx
-   :language: cython
-   :linenos:
+Weather Class
+-------------
+
+To be added.
