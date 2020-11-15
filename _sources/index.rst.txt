@@ -31,9 +31,6 @@ Table of Contents
 
    install
    quickstart
-   visualisations
-   core
-   math
    refs
    api/index
    code
