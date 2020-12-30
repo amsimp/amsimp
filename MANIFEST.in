@@ -1,1 +1,1 @@
-recursive-include amsimp/rnn/models *
+recursive-include amsimp/model *

@@ -127,3 +127,6 @@ benchmarking/scifest-national/gfs-forecasts
 # .icloud.
 *.icloud
 
+# BTYSTE benchmarking.
+benchmarking/btyste
+

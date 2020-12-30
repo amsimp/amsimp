@@ -10,7 +10,7 @@ AMSIMP is an open-source solution that leverages machine learning to improve num
 
 **Features:**
 
-* Fast and accurate, AMSIMP's recurrent neural networks provide high quality weather forecasts and predictions.
+* Fast and accurate, AMSIMP's neural networks provide high quality weather forecasts and predictions.
 * AMSIMP offers a wide variety of exquisite atmospheric contour and vector plots, fit for any academic journal.
 * The core of AMSIMP is well-optimized Cython code. Enjoy the flexibility of Python with the speed of compiled C code.
 * AMSIMP's high level and intuitive syntax makes it accessible for programmers and atmospheric scientists of any experience level.

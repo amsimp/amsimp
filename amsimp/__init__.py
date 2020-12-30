@@ -1,5 +1,5 @@
 """
-AMSIMP - An open-source solution that leverages machine learning to improve
+AMSIMP - An open source solution that leverages machine learning to improve
 numerical weather prediction.
 """
 import sys
@@ -17,19 +17,17 @@ switch to Python 3. You can find this article at:
 https://wiki.python.org/moin/Python2orPython3
 
 We apologise for any inconvience caused."""
-)
+    )
 
-# Backend Module.
-from amsimp.backend import Backend
+# Preprocessing Class.
+from amsimp.preprocessing import PreProcessing
 
-# Wind Module.
-from amsimp.wind import Wind
+# Developmental Forecasting Model Class.
+from amsimp.forecasting import DevelopmentalModel
 
-# Moist Module.
-from amsimp.moist import Moist
+# Operational Forecasting Model Class.
+from amsimp.forecasting import OperationalModel
 
-# Weather Forecasting Module.
-from amsimp.weather import Weather
 
 def get_version():
     """
@@ -39,10 +37,10 @@ def get_version():
 
     return get_distribution(__package__).version
 
+
 # Version of AMSIMP.
 try:
     __version__ = get_version()
-    del  get_version
+    del get_version
 except:
     pass
-

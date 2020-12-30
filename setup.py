@@ -1,38 +1,12 @@
-from setuptools import find_packages, Extension, setup
+from setuptools import find_packages, setup
 import numpy
-import sys
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-if '--use-cython' in sys.argv:
-    USE_CYTHON = True
-    sys.argv.remove('--use-cython')
-else:
-    USE_CYTHON = False
-
-ext = '.pyx' if USE_CYTHON else '.c'
-
-extensions = [
-    Extension("amsimp.backend", ["amsimp/backend"+ext], language='c',
-    include_dirs=['amsimp/']),
-    Extension("amsimp.wind", ["amsimp/wind"+ext], language='c',
-    include_dirs=['amsimp/']),
-    Extension("amsimp.moist", ["amsimp/moist"+ext], language='c',
-    include_dirs=['amsimp/']),
-    Extension("amsimp.weather", ["amsimp/weather"+ext], language='c',
-    include_dirs=['amsimp/']),
-]
-
-if USE_CYTHON:
-    from Cython.Build import cythonize
-    extensions = cythonize(extensions)
-
 setup(
     name="amsimp",
-    ext_modules=extensions,
-    include_dirs=[numpy.get_include()],
-    version="0.5.0",
+    version="0.6.0",
     author="AMSIMP",
     author_email="support@amsimp.com",
     description="Numerical Weather Prediction using Machine Learning",
