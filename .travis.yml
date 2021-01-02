@@ -41,4 +41,4 @@ deploy:
   keep_history: true
   local_dir: ./docs/_build/html
   on:
-    branch: dev
+    branch: main
