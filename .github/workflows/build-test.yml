@@ -34,5 +34,6 @@ jobs:
         source ~/miniconda/etc/profile.d/conda.sh
         sudo conda env create -f environment.yml
         conda activate amsimp
+        pip install tensorflow
         python setup.py install --user
         python test.py

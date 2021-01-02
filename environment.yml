@@ -11,4 +11,3 @@ dependencies:
   - pip
   - conda-build 
   - anaconda-client
-  - tensorflow
