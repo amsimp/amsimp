@@ -175,7 +175,7 @@ class OperationalModel(Preprocessing):
 
         See Also
         --------
-        normalise_dataset
+        model_architecture
         """
         # Define model input.
         model_input = self.normalise_dataset()
