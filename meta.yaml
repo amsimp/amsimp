@@ -1,6 +1,6 @@
 package:
   name: amsimp
-  version: "0.6.0"
+  version: "0.6.1"
 
 source:
   git_url: https://github.com/amsimp/amsimp.git
@@ -12,8 +12,10 @@ channels:
 requirements:
   build:
     - python=3.8
+    - numpy
   host:
     - python=3.8
+    - numpy
   dependices:
     - python
     - astropy

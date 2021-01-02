@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="amsimp",
-    version="0.6.0",
+    version="0.6.1",
     author="AMSIMP",
     author_email="support@amsimp.com",
     description="Numerical Weather Prediction using Machine Learning",
