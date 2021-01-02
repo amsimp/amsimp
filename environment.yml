@@ -3,17 +3,10 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - cython
   - python
   - astropy
-  - matplotlib
   - numpy
-  - cartopy
-  - pandas
-  - scikit-learn
   - iris
-  - progress
-  - matplotlib
   - tqdm
   - pip
   - conda-build 
