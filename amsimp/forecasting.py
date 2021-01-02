@@ -31,12 +31,12 @@ from tensorflow.keras.layers import ConvLSTM2D, Dropout, Dense
 from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras.optimizers import Adam
 import tensorflow as tf
-from amsimp.preprocessing import PreProcessing
+from amsimp.preprocessing import Preprocessing
 
 # -----------------------------------------------------------------------------------------#
 
 
-class OperationalModel(PreProcessing):
+class OperationalModel(Preprocessing):
     """
     This is the operational model class for AMSIMP.
     """

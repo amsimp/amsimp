@@ -22,9 +22,6 @@ We apologise for any inconvience caused."""
 # Preprocessing Class.
 from amsimp.preprocessing import PreProcessing
 
-# Developmental Forecasting Model Class.
-from amsimp.forecasting import DevelopmentalModel
-
 # Operational Forecasting Model Class.
 from amsimp.forecasting import OperationalModel
 

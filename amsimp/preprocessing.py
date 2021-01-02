@@ -35,7 +35,7 @@ import numpy as np
 # ------------------------------------------------------------------------------#
 
 
-class PreProcessing:
+class Preprocessing:
     """
     This is the preprocessing class for AMSIMP.
     """

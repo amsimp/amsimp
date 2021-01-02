@@ -17,11 +17,11 @@ import amsimp
 # -- Project information -----------------------------------------------------
 
 project = 'AMSIMP'
-copyright = '2020, AMSIMP'
+copyright = '2021, AMSIMP'
 author = 'AMSIMP'
 
 # The full version, including alpha/beta/rc tags
-release = '0.5.0'
+release = '0.6.0'
 
 
 # -- General configuration ---------------------------------------------------
