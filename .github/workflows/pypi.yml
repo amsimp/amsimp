@@ -30,12 +30,12 @@ jobs:
     - name: Test AMSIMP compilation and installation
       run: |
         export PATH="$HOME/miniconda/bin:$PATH"
-        conda init
+        conda init bash
         source ~/miniconda/etc/profile.d/conda.sh
-        sudo conda env create -f environment.yml
-        sudo conda activate amsimp
-        pip install tensorflow
-        python setup.py install --user
+        source ~/.bashrc
+        conda env create -f environment.yml
+        conda activate amsimp
+        python setup.py install
     - name: Publish package
       if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@master

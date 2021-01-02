@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python
+  - python=3.8
   - astropy
   - numpy
   - iris
@@ -11,3 +11,5 @@ dependencies:
   - pip
   - conda-build 
   - anaconda-client
+  - pip:
+    - tensorflow
