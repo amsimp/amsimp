@@ -22,7 +22,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Importing Dependencies.
 import os
-import sys
 from tqdm import tqdm
 import iris
 import numpy as np
@@ -30,7 +29,6 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import ConvLSTM2D, Dropout, Dense
 from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras.optimizers import Adam
-import tensorflow as tf
 from amsimp.preprocessing import Preprocessing
 
 # -----------------------------------------------------------------------------------------#

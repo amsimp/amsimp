@@ -11,10 +11,10 @@ channels:
 
 requirements:
   build:
-    - python=3.8
+    - python
     - numpy
   host:
-    - python=3.8
+    - python
     - numpy
   dependices:
     - python
@@ -23,8 +23,10 @@ requirements:
     - iris
     - tqdm
     - pip
+    - pip:
+      - tensorflow
   run:
-    - python=3.8
+    - python
     - astropy
     - numpy
     - iris
@@ -40,4 +42,4 @@ about:
   doc_url: https://docs.amsimp.com
   doc_source_url: https://github.com/amsimp/amsimp/tree/dev/docspackage
   name: AMSIMP
-  version: "0.6.0"
+  version: "0.6.1"
