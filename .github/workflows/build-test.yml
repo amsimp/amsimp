@@ -35,6 +35,4 @@ jobs:
         sudo conda env create -f environment.yml
         conda activate amsimp
         python setup.py install --user
-        python setup.py build_ext --inplace
-        python compile.py build_ext --inplace
         python test.py

@@ -1,5 +1,5 @@
 """
-AMSIMP Preprocessing Class. For information about this classes is
+AMSIMP Preprocessing Class. For information about this class is
 described below.
 
 Copyright (C) 2020 AMSIMP
@@ -34,6 +34,7 @@ import numpy as np
 
 # ------------------------------------------------------------------------------#
 
+
 class PreProcessing:
     """
     This is the preprocessing class for AMSIMP.
@@ -65,7 +66,7 @@ class PreProcessing:
         (total_precipitation). The expected input parameter is
         a file name. Each file must have the same grid points as
         all of the other cubes. The grid must be 2 dimensional, and have
-        ha spatial resolution of 0.25 degree, which is approximately 25
+        ha spatial resolution of 1 degree, which is approximately 100
         kilometres. Introplation will be invoked if this is not the case,
         which may have a negative impact on the performance of the software and
         by extension the forecast produced. The latitude points must range from
@@ -73,7 +74,7 @@ class PreProcessing:
         """
         # Suppress Tensorflow warnings.
         tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-        os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+        os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
         # Make the aforementioned variables available else where in the class.
         self.amsimp_ic = amsimp_ic
@@ -92,10 +93,12 @@ class PreProcessing:
                 "The parameter, forecast_length, must be a positive number greater than, or equal to 1. "
                 + "The value of forecast_length was: {}".format(self.forecast_length)
             )
-        
+
         # Ensure self.forecast_length is a factor of 4.
         if self.forecast_length.value % 4 != 0:
-            raise ValueError("The parameter, forecast_length, must be evenly divisible by four.")
+            raise ValueError(
+                "The parameter, forecast_length, must be evenly divisible by four."
+            )
 
         # Ensure the parameter, self.initialisation_conditions, is not defined when the
         # parameter self.amsimp_ic is defined to be true.
@@ -143,15 +146,34 @@ class PreProcessing:
                 + " Apologies for any inconvenience caused."
             )
 
-# ------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------#
 
-    def download_dataset(self):
-        """
-        Enter description.
-        """
-        # Define url.
-        url = "https://github.com/amsimp/initial-conditions/raw/main/initialisation_conditions.nc"
+    def __download_file(self, url, desc):
+        r"""Generates and downloads a cube with the required parameter.
 
+        Parameters
+        ----------
+        url : `str`
+            The url of the required parameter to download
+        desc : `str`
+            The name of the required parameter to download
+
+        Returns
+        -------
+        `iris.cube.Cube`
+            Cube of the downloaded parameter
+
+        Notes
+        -----
+        This method is activated when the parameter, amsimp_ic, is defined to
+        be true. The data is downloaded from the AMSIMP Initial Conditions
+        repository. This is intended as a private method, and may not function
+        correctly if used.
+
+        See Also
+        --------
+        load_dataset
+        """
         # Create download request.
         response = requests.get(url, stream=True)
 
@@ -166,11 +188,11 @@ class PreProcessing:
             total=total_size_in_bytes,
             unit="iB",
             unit_scale=True,
-            desc="Downloading initialisation conditions",
+            desc="Downloading {} initialisation condition".format(desc),
         )
 
         # Download file
-        with open("initialisation_conditions.nc", "wb") as file:
+        with open("temp.nc", "wb") as file:
             for data in response.iter_content(block_size):
                 progress_bar.update(len(data))
                 file.write(data)
@@ -184,16 +206,66 @@ class PreProcessing:
                 "An unknown error occurred, which resulted in the download failing."
             )
 
+        # Load parameter from dataset.
+        parameter = iris.load("temp.nc")[0]
+        parameter.data
+
+        # Remove temporary file.
+        os.remove("temp.nc")
+
+        return parameter
+
     def load_dataset(self):
-        """
-        Enter description.
+        r"""Generates a cube list with the required dataset loaded, either the
+        file provided is loaded or the files from the AMSIMP Initial Conditions
+        repository are downloaded and saved into a single file.
+
+        Returns
+        -------
+        `iris.cube.CubeList`
+            Cube list with the required dataset loaded
+
+        Notes
+        -----
+        The AMSIMP Initial Conditions repository is update four times daily, at
+        1 am, 7 am, 1 pm, and 7 pm. The near real-time initialisation conditions
+        are provided by the National Oceanic and Atmospheric Adminstrations'
+        Global Data Assimilation System (GDAS).
         """
         # Load dataset based on whether the user defined the initialisation
         # conditions, or not.
         if self.amsimp_ic:
             # Download file from the GitHub repository if necessary.
             if not os.path.exists("initialisation_conditions.nc"):
-                self.download_dataset()
+                # 2 metre temperature.
+                t2m = self.__download_file(
+                    "https://github.com/amsimp/initial-conditions/raw/main/initialisation_conditions/2m_temperature.nc",
+                    "2 metre temperature",
+                )
+
+                # Total precipitation.
+                tp = self.__download_file(
+                    "https://github.com/amsimp/initial-conditions/raw/main/initialisation_conditions/total_precipitation.nc",
+                    "total precipitation",
+                )
+
+                # Air temperature at 850 hPa.
+                t850 = self.__download_file(
+                    "https://github.com/amsimp/initial-conditions/raw/main/initialisation_conditions/air_temperature.nc",
+                    "850 hPa air temperature",
+                )
+
+                # Geopotential at 500 hPa.
+                z500 = self.__download_file(
+                    "https://github.com/amsimp/initial-conditions/raw/main/initialisation_conditions/geopotential.nc",
+                    "500 hPa geopotential",
+                )
+
+                # Define dataset.
+                dataset = iris.cube.CubeList([t2m, tp, t850, z500])
+
+                # Save dataset.
+                iris.save(dataset, "initialisation_conditions.nc")
 
             # Load dataset.
             dataset = iris.load("initialisation_conditions.nc")
@@ -203,29 +275,70 @@ class PreProcessing:
 
         return dataset
 
-# ------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------#
 
     def lat(self):
-        """
-        Enter description.
+        r"""Generates an array of latitude lines in accordance with the shape
+        expected by the operational model of the AMSIMP Global Forecast Model.
+
+        Returns
+        -------
+        `numpy.ndarray`
+            Latitude lines
+
+        Notes
+        -----
+        The resolution of this model is approximately 100 kilometres (1 degree).
+
+        See Also
+        --------
+        lon
         """
         lat = np.linspace(90, -90, 721)[4:-3:4]
 
         return lat
 
     def lon(self):
-        """
-        Enter description.
+        r"""Generates an array of longitude lines in accordance with the shape
+        expected by the operational model of the AMSIMP Global Forecast Model.
+
+        Returns
+        -------
+        `numpy.ndarray`
+            Longitude lines
+
+        Notes
+        -----
+        The resolution of this model is approximately 100 kilometres (1 degree).
+
+        See Also
+        --------
+        lon
         """
         lon = np.linspace(0, 359.75, 1440)[::4]
 
         return lon
 
-# ------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------#
 
     def parameter_extraction(self):
-        """
-        Enter description.
+        r"""Generates a cube list with the expected parameters extracted in the
+        expected order for interplolation and normalisation.
+
+        Returns
+        -------
+        `iris.cube.CubeList`
+            Cube list with expected parameters extracted
+
+        Notes
+        -----
+        The parameters, in this order, are: air temperature at 2 metres above
+        the surface, air temperature at a pressure surface of 850 hectopascals,
+        and geopotential at a pressure surface of 500 hectopascals.
+
+        See Also
+        --------
+        load_dataset, interpolate_dataset, normalise_dataset
         """
         # Extract the relevant parameters from the dataset.
         parameters = ["t2m", "t", "z"]
@@ -274,8 +387,24 @@ class PreProcessing:
         return dataset
 
     def interpolate_dataset(self):
-        """
-        Enter description.
+        r"""Generates a cube list with the expected parameters, interpolated
+        if necessary onto the grid required for input into the operational AMSIMP
+        Global Forecast Model.
+
+        Returns
+        -------
+        `iris.cube.CubeList`
+            Cube list with interpolated grid for operational model
+
+        Notes
+        -----
+        This method also ensures the expected number of time steps are
+        included, and raises an error when an insufficient number is present.
+        The number of time steps required is 6.
+
+        See Also
+        --------
+        load_dataset, parameter_extraction, normalise_dataset
         """
         # Define dataset.
         dataset = self.parameter_extraction()
@@ -313,14 +442,30 @@ class PreProcessing:
         return dataset
 
     def normalise_dataset(self):
-        """
-        Enter description.
+        r"""Generates a NumPy array with the expected parameters, normalised,
+        processed onto the grid required for input into the operational AMSIMP
+        Global Forecast Model.
+
+        Returns
+        -------
+        `numpy.ndarray`
+            Normalised and preprocessed dataset for forecast model input
+
+        Notes
+        -----
+        This method also converts the parameters into the correct units of
+        measurement if it is necessary to do so.
+
+        See Also
+        --------
+        load_dataset, parameter_extraction, interpolate_dataset
         """
         # Define dataset.
         dataset = self.interpolate_dataset()
 
         # Define directory.
         import amsimp.preprocessing
+
         directory = os.path.dirname(amsimp.preprocessing.__file__)
 
         # Load normalisation variables.
@@ -351,7 +496,7 @@ class PreProcessing:
         dataset[2].convert_units("m2 s-2")
 
         # Loop through dataset.
-        for i in tqdm(range(len(dataset)), desc='Interpolating dataset'):
+        for i in tqdm(range(len(dataset)), desc="Interpolating dataset"):
             # Add to NumPy array.
             dataset_numpy[i] = dataset[i].data
 
