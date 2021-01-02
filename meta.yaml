@@ -1,6 +1,6 @@
 package:
   name: amsimp
-  version: "0.5.0"
+  version: "0.6.0"
 
 source:
   git_url: https://github.com/amsimp/amsimp.git

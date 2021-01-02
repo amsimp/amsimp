@@ -2,11 +2,8 @@ name: Upload and publish package to PyPI
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    tags:
+       - '*'
 
 jobs:
   build:
@@ -35,7 +32,7 @@ jobs:
         source ~/.bashrc
         conda env create -f environment.yml
         conda activate amsimp
-        python setup.py install
+        python setup.py sdist
     - name: Publish package
       if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@master
