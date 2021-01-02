@@ -33,7 +33,7 @@ jobs:
         conda init
         source ~/miniconda/etc/profile.d/conda.sh
         sudo conda env create -f environment.yml
-        conda activate amsimp
+        sudo conda activate amsimp
         pip install tensorflow
         python setup.py install --user
     - name: Publish package
