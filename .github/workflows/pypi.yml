@@ -34,7 +34,7 @@ jobs:
         source ~/miniconda/etc/profile.d/conda.sh
         sudo conda env create -f environment.yml
         conda activate amsimp
-        python setup.py install
+        python setup.py install --user
     - name: Publish package
       if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@master
