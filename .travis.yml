@@ -21,11 +21,8 @@ script:
   - pip install autoapi
   - pip install guzzle_sphinx_theme
   - pip install sphinxcontrib-bibtex
-  - conda install tqdm
-  - conda install numpy
-  - conda install astropy
-  - conda install -c conda-forge iris
-  - pip install tensorflow
+  - sudo conda env create -f environment.yml
+  - conda activate amsimp
   - python setup.py install
   - cd docs
   - make clean && make html
