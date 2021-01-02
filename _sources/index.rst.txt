@@ -3,7 +3,7 @@ AMSIMP
 ======
 
 .. warning::
-    Please note that versions of AMSIMP below 0.5.x are
+    Please note that versions of AMSIMP below 0.6.x are
     longer supported. Please install the latest version of
     AMSIMP to get access to the latest features.
     Please note that it is strongly recommended that you
@@ -29,6 +29,5 @@ Table of Contents
 
    install
    quickstart
-   refs
    api/index
    code

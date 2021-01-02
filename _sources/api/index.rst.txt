@@ -8,6 +8,5 @@ in AMSIMP.
 .. toctree::
     :maxdepth: 2
 
-    backend
-    moist
-    wind
+    preprocessing
+    forecasting

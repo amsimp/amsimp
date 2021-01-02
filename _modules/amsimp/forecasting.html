@@ -1,0 +1,439 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>amsimp.forecasting &#8212; AMSIMP 0.6.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">AMSIMP 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../index.html">Docs</a></li>
+              
+                <li><a href="../index.html">Module code</a></li>
+              
+              <li>amsimp.forecasting</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <h1>Source code for amsimp.forecasting</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">AMSIMP Operational Model Class. For information about this</span>
+<span class="sd">class is described below.</span>
+
+<span class="sd">Copyright (C) 2020 AMSIMP</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># -----------------------------------------------------------------------------------------#</span>
+
+<span class="c1"># Importing Dependencies.</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">iris</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.layers</span> <span class="kn">import</span> <span class="n">ConvLSTM2D</span><span class="p">,</span> <span class="n">Dropout</span><span class="p">,</span> <span class="n">Dense</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.layers</span> <span class="kn">import</span> <span class="n">BatchNormalization</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.optimizers</span> <span class="kn">import</span> <span class="n">Adam</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">amsimp.preprocessing</span> <span class="kn">import</span> <span class="n">Preprocessing</span>
+
+<span class="c1"># -----------------------------------------------------------------------------------------#</span>
+
+
+<div class="viewcode-block" id="OperationalModel"><a class="viewcode-back" href="../../api/forecasting.html#amsimp.forecasting.OperationalModel">[docs]</a><span class="k">class</span> <span class="nc">OperationalModel</span><span class="p">(</span><span class="n">Preprocessing</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the operational model class for AMSIMP.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="OperationalModel.model_architecture"><a class="viewcode-back" href="../../api/forecasting.html#amsimp.forecasting.OperationalModel.model_architecture">[docs]</a>    <span class="k">def</span> <span class="nf">model_architecture</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Generates the operational AMSIMP Global Forecast Model architecture.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        `tf.keras.Sequential`</span>
+<span class="sd">            Operational AMSIMP Global Forecast Model architecture.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This architecture is currently based on the ConvLSTM layer, which has</span>
+<span class="sd">        been pretrained on the dataset from the year 2009 to the year 2016.</span>
+<span class="sd">        A major drawback of LSTMs in its handling of spatiotemporal data is due</span>
+<span class="sd">        to its usage of full connections in input-to-state and state-to-state</span>
+<span class="sd">        transitions in which no spatial information is encoded. To overcome</span>
+<span class="sd">        this problem, a distinguishing feature of a ConvLSTM cell is that all</span>
+<span class="sd">        the inputs and gates of the ConvLSTM layer are 3D tensors whose last</span>
+<span class="sd">        two dimensions are spatial dimensions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create, and train models.</span>
+        <span class="c1"># Optimiser.</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">decay</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+        <span class="c1"># Create model.</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+
+        <span class="c1"># First layer.</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="n">ConvLSTM2D</span><span class="p">(</span>
+                <span class="n">filters</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+                <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
+                <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">179</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+                <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+                <span class="n">return_sequences</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;tanh&quot;</span><span class="p">,</span>
+                <span class="n">recurrent_activation</span><span class="o">=</span><span class="s2">&quot;hard_sigmoid&quot;</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;glorot_uniform&quot;</span><span class="p">,</span>
+                <span class="n">unit_forget_bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">dropout</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                <span class="n">recurrent_dropout</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                <span class="n">go_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># Batch normalisation.</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
+        <span class="c1"># Dropout.</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.1</span><span class="p">))</span>
+
+        <span class="c1"># Second layer.</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="n">ConvLSTM2D</span><span class="p">(</span>
+                <span class="n">filters</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+                <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
+                <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+                <span class="n">return_sequences</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;tanh&quot;</span><span class="p">,</span>
+                <span class="n">recurrent_activation</span><span class="o">=</span><span class="s2">&quot;hard_sigmoid&quot;</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;glorot_uniform&quot;</span><span class="p">,</span>
+                <span class="n">unit_forget_bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">dropout</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+                <span class="n">recurrent_dropout</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                <span class="n">go_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># Batch normalisation.</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
+
+        <span class="c1"># Third layer.</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="n">ConvLSTM2D</span><span class="p">(</span>
+                <span class="n">filters</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+                <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
+                <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+                <span class="n">return_sequences</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;tanh&quot;</span><span class="p">,</span>
+                <span class="n">recurrent_activation</span><span class="o">=</span><span class="s2">&quot;hard_sigmoid&quot;</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;glorot_uniform&quot;</span><span class="p">,</span>
+                <span class="n">unit_forget_bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">dropout</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+                <span class="n">recurrent_dropout</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                <span class="n">go_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># Batch normalisation.</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
+        <span class="c1"># Dropout.</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.1</span><span class="p">))</span>
+
+        <span class="c1"># Final layer.</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="n">ConvLSTM2D</span><span class="p">(</span>
+                <span class="n">filters</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+                <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
+                <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+                <span class="n">return_sequences</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;tanh&quot;</span><span class="p">,</span>
+                <span class="n">recurrent_activation</span><span class="o">=</span><span class="s2">&quot;hard_sigmoid&quot;</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;glorot_uniform&quot;</span><span class="p">,</span>
+                <span class="n">unit_forget_bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">dropout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                <span class="n">recurrent_dropout</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                <span class="n">go_backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># Batch normalisation.</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
+
+        <span class="c1"># Add dense layer.</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+
+        <span class="c1"># Compile model.</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s2">&quot;mse&quot;</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mean_absolute_error&quot;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">model</span></div>
+
+<div class="viewcode-block" id="OperationalModel.generate_forecast"><a class="viewcode-back" href="../../api/forecasting.html#amsimp.forecasting.OperationalModel.generate_forecast">[docs]</a>    <span class="k">def</span> <span class="nf">generate_forecast</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Generates a forecast with the current AMSIMP Global Forecast Model</span>
+<span class="sd">        architecture.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        `iris.cube.CubeList`</span>
+<span class="sd">            The forecast generated with the operational model</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This model has been pretrained on the dataset from the year 2009 to the</span>
+<span class="sd">        year 2016. The architecture of the current operational model is</span>
+<span class="sd">        currently based on the ConvLSTM layer. The prognostic variables are: air</span>
+<span class="sd">        temperature at 2 metres above the surface, air temperature at a pressure</span>
+<span class="sd">        surface of 850 hectopascals, and geopotential at a pressure surface of</span>
+<span class="sd">        500 hectopascals.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        normalise_dataset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Define model input.</span>
+        <span class="n">model_input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalise_dataset</span><span class="p">()</span>
+
+        <span class="c1"># Define directory.</span>
+        <span class="kn">import</span> <span class="nn">amsimp.preprocessing</span>
+
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">amsimp</span><span class="o">.</span><span class="n">preprocessing</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span>
+
+        <span class="c1"># Define model and load weights.</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_architecture</span><span class="p">()</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">load_weights</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="s2">&quot;/model/global_forecast_model.h5&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Define forecast output array.</span>
+        <span class="n">model_output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">forecast_length</span><span class="o">.</span><span class="n">value</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">model_input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">model_input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                <span class="n">model_input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># Add current conditions to output array.</span>
+        <span class="n">model_output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_input</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Create iterative predictions.</span>
+        <span class="n">it</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">pbar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span>
+            <span class="n">total</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">forecast_length</span><span class="o">.</span><span class="n">value</span> <span class="o">/</span> <span class="mi">12</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Generating forecast&quot;</span>
+        <span class="p">)</span>
+        <span class="k">while</span> <span class="n">it</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">forecast_length</span><span class="o">.</span><span class="n">value</span> <span class="o">/</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="c1"># Generate predictions based on current model input.</span>
+            <span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">model_input</span><span class="p">)</span>
+
+            <span class="c1"># Add predictions to output array.</span>
+            <span class="n">model_output</span><span class="p">[</span><span class="n">it</span> <span class="p">:</span> <span class="n">it</span> <span class="o">+</span> <span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">predictions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># Define as new model input.</span>
+            <span class="n">model_input</span> <span class="o">=</span> <span class="n">predictions</span>
+
+            <span class="c1"># Increment iteration.</span>
+            <span class="n">it</span> <span class="o">+=</span> <span class="mi">6</span>
+            <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+        <span class="c1"># Close progress bar.</span>
+        <span class="n">pbar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># Define progress bar.</span>
+        <span class="n">pbar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Outputting forecast&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Inverse of normalisation.</span>
+        <span class="c1"># Load normalisation variables.</span>
+        <span class="c1"># Mean.</span>
+        <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="s2">&quot;/model/mean.npy&quot;</span><span class="p">)</span>
+        <span class="c1"># Standard deviation.</span>
+        <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="s2">&quot;/model/std.npy&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Determine inverse.</span>
+        <span class="n">model_output</span> <span class="o">=</span> <span class="p">(</span><span class="n">model_output</span> <span class="o">*</span> <span class="n">std</span><span class="p">)</span> <span class="o">+</span> <span class="n">mean</span>
+
+        <span class="c1"># Define forecast for each parameter.</span>
+        <span class="c1"># 2 metre temperature.</span>
+        <span class="n">t2m</span> <span class="o">=</span> <span class="n">model_output</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># 850 hPa temperature.</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">model_output</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># 500 hPa geopotential.</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">model_output</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]</span>
+
+        <span class="c1"># Define time coordinate.</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate_dataset</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">coord</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+        <span class="c1"># Define unit of measurement.</span>
+        <span class="n">time_unit</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">units</span>
+        <span class="c1"># Define values.</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">forecast_length</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">model_output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Define the coordinates for the cubes.</span>
+        <span class="c1"># Time.</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">DimCoord</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">standard_name</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">time_unit</span><span class="p">)</span>
+        <span class="c1"># Latitude.</span>
+        <span class="n">lat</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">DimCoord</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">(),</span> <span class="n">standard_name</span><span class="o">=</span><span class="s2">&quot;latitude&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;degrees&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># Longitude</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">DimCoord</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lon</span><span class="p">(),</span> <span class="n">standard_name</span><span class="o">=</span><span class="s2">&quot;longitude&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;degrees&quot;</span>
+        <span class="p">)</span>
+        <span class="c1">#  Aux coords.</span>
+        <span class="c1"># 850 hPa for temperature.</span>
+        <span class="n">p850</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">AuxCoord</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">850</span><span class="p">]),</span> <span class="n">standard_name</span><span class="o">=</span><span class="s2">&quot;air_pressure&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;hPa&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># 500 hPa for geopotential.</span>
+        <span class="n">p500</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">AuxCoord</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">500</span><span class="p">]),</span> <span class="n">standard_name</span><span class="o">=</span><span class="s2">&quot;air_pressure&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;hPa&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Define cubes.</span>
+        <span class="c1"># 2 metre temperature.</span>
+        <span class="n">t2m</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">cube</span><span class="o">.</span><span class="n">Cube</span><span class="p">(</span>
+            <span class="n">t2m</span><span class="p">,</span>
+            <span class="n">long_name</span><span class="o">=</span><span class="s2">&quot;2m_temperature&quot;</span><span class="p">,</span>
+            <span class="n">var_name</span><span class="o">=</span><span class="s2">&quot;t2m&quot;</span><span class="p">,</span>
+            <span class="n">units</span><span class="o">=</span><span class="s2">&quot;K&quot;</span><span class="p">,</span>
+            <span class="n">dim_coords_and_dims</span><span class="o">=</span><span class="p">[(</span><span class="n">time</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
+            <span class="n">attributes</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;AMSIMP Global Forecast Model&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+        <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+        <span class="c1"># 850 hPa temperature.</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">cube</span><span class="o">.</span><span class="n">Cube</span><span class="p">(</span>
+            <span class="n">t</span><span class="p">,</span>
+            <span class="n">standard_name</span><span class="o">=</span><span class="s2">&quot;air_temperature&quot;</span><span class="p">,</span>
+            <span class="n">var_name</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">,</span>
+            <span class="n">units</span><span class="o">=</span><span class="s2">&quot;K&quot;</span><span class="p">,</span>
+            <span class="n">dim_coords_and_dims</span><span class="o">=</span><span class="p">[(</span><span class="n">time</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
+            <span class="n">attributes</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;AMSIMP Global Forecast Model&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">add_aux_coord</span><span class="p">(</span><span class="n">p850</span><span class="p">)</span>
+        <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+        <span class="c1"># 500 hPa geopotential.</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">cube</span><span class="o">.</span><span class="n">Cube</span><span class="p">(</span>
+            <span class="n">z</span><span class="p">,</span>
+            <span class="n">standard_name</span><span class="o">=</span><span class="s2">&quot;geopotential&quot;</span><span class="p">,</span>
+            <span class="n">var_name</span><span class="o">=</span><span class="s2">&quot;z&quot;</span><span class="p">,</span>
+            <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m2 s-2&quot;</span><span class="p">,</span>
+            <span class="n">dim_coords_and_dims</span><span class="o">=</span><span class="p">[(</span><span class="n">time</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
+            <span class="n">attributes</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;AMSIMP Global Forecast Model&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+        <span class="n">z</span><span class="o">.</span><span class="n">add_aux_coord</span><span class="p">(</span><span class="n">p500</span><span class="p">)</span>
+        <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+        <span class="c1"># Finish progress bar.</span>
+        <span class="n">pbar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># Define output forecast.</span>
+        <span class="n">forecast</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">cube</span><span class="o">.</span><span class="n">CubeList</span><span class="p">([</span><span class="n">t2m</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">forecast</span></div></div>
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">AMSIMP 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2021, AMSIMP. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

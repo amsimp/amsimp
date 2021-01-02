@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Preprocessing Class &#8212; AMSIMP 0.6.0 documentation</title>
+    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Operational Model Class" href="forecasting.html" />
+    <link rel="prev" title="Reference Guide" href="index.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="forecasting.html" title="Operational Model Class"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Reference Guide"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">AMSIMP 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Reference Guide</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Reference Guide</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="forecasting.html"
+                        title="next chapter">Operational Model Class</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/preprocessing.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../index.html">Docs</a></li>
+              
+                <li><a href="index.html">Reference Guide</a></li>
+              
+              <li>Preprocessing Class</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="module-amsimp.preprocessing">
+<span id="preprocessing-class"></span><h1>Preprocessing Class<a class="headerlink" href="#module-amsimp.preprocessing" title="Permalink to this headline">¶</a></h1>
+<p>AMSIMP Preprocessing Class. For information about this class is
+described below.</p>
+<p>Copyright (C) 2020 AMSIMP</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see <a class="reference external" href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+<dl class="class">
+<dt id="amsimp.preprocessing.Preprocessing">
+<em class="property">class </em><code class="sig-prename descclassname">amsimp.preprocessing.</code><code class="sig-name descname">Preprocessing</code><span class="sig-paren">(</span><em class="sig-param">forecast_length=120</em>, <em class="sig-param">amsimp_ic=True</em>, <em class="sig-param">initialisation_conditions=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/amsimp/preprocessing.html#Preprocessing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#amsimp.preprocessing.Preprocessing" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the preprocessing class for AMSIMP.</p>
+<dl class="method">
+<dt id="amsimp.preprocessing.Preprocessing.interpolate_dataset">
+<code class="sig-name descname">interpolate_dataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/amsimp/preprocessing.html#Preprocessing.interpolate_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#amsimp.preprocessing.Preprocessing.interpolate_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a cube list with the expected parameters, interpolated
+if necessary onto the grid required for input into the operational AMSIMP
+Global Forecast Model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Cube list with interpolated grid for operational model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>iris.cube.CubeList</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This method also ensures the expected number of time steps are
+included, and raises an error when an insufficient number is present.
+The number of time steps required is 6.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.preprocessing.Preprocessing.load_dataset" title="amsimp.preprocessing.Preprocessing.load_dataset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_dataset()</span></code></a>, <a class="reference internal" href="#amsimp.preprocessing.Preprocessing.parameter_extraction" title="amsimp.preprocessing.Preprocessing.parameter_extraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">parameter_extraction()</span></code></a>, <a class="reference internal" href="#amsimp.preprocessing.Preprocessing.normalise_dataset" title="amsimp.preprocessing.Preprocessing.normalise_dataset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">normalise_dataset()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="amsimp.preprocessing.Preprocessing.lat">
+<code class="sig-name descname">lat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/amsimp/preprocessing.html#Preprocessing.lat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#amsimp.preprocessing.Preprocessing.lat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an array of latitude lines in accordance with the shape
+expected by the operational model of the AMSIMP Global Forecast Model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Latitude lines</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>numpy.ndarray</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The resolution of this model is approximately 100 kilometres (1 degree).</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.preprocessing.Preprocessing.lon" title="amsimp.preprocessing.Preprocessing.lon"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lon()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="amsimp.preprocessing.Preprocessing.load_dataset">
+<code class="sig-name descname">load_dataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/amsimp/preprocessing.html#Preprocessing.load_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#amsimp.preprocessing.Preprocessing.load_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a cube list with the required dataset loaded, either the
+file provided is loaded or the files from the AMSIMP Initial Conditions
+repository are downloaded and saved into a single file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Cube list with the required dataset loaded</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>iris.cube.CubeList</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The AMSIMP Initial Conditions repository is update four times daily, at
+1 am, 7 am, 1 pm, and 7 pm. The near real-time initialisation conditions
+are provided by the National Oceanic and Atmospheric Adminstrations’
+Global Data Assimilation System (GDAS).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="amsimp.preprocessing.Preprocessing.lon">
+<code class="sig-name descname">lon</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/amsimp/preprocessing.html#Preprocessing.lon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#amsimp.preprocessing.Preprocessing.lon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an array of longitude lines in accordance with the shape
+expected by the operational model of the AMSIMP Global Forecast Model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Longitude lines</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>numpy.ndarray</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The resolution of this model is approximately 100 kilometres (1 degree).</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.preprocessing.Preprocessing.lon" title="amsimp.preprocessing.Preprocessing.lon"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lon()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="amsimp.preprocessing.Preprocessing.normalise_dataset">
+<code class="sig-name descname">normalise_dataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/amsimp/preprocessing.html#Preprocessing.normalise_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#amsimp.preprocessing.Preprocessing.normalise_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a NumPy array with the expected parameters, normalised,
+processed onto the grid required for input into the operational AMSIMP
+Global Forecast Model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Normalised and preprocessed dataset for forecast model input</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>numpy.ndarray</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This method also converts the parameters into the correct units of
+measurement if it is necessary to do so.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.preprocessing.Preprocessing.load_dataset" title="amsimp.preprocessing.Preprocessing.load_dataset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_dataset()</span></code></a>, <a class="reference internal" href="#amsimp.preprocessing.Preprocessing.parameter_extraction" title="amsimp.preprocessing.Preprocessing.parameter_extraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">parameter_extraction()</span></code></a>, <a class="reference internal" href="#amsimp.preprocessing.Preprocessing.interpolate_dataset" title="amsimp.preprocessing.Preprocessing.interpolate_dataset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interpolate_dataset()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="amsimp.preprocessing.Preprocessing.parameter_extraction">
+<code class="sig-name descname">parameter_extraction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/amsimp/preprocessing.html#Preprocessing.parameter_extraction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#amsimp.preprocessing.Preprocessing.parameter_extraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a cube list with the expected parameters extracted in the
+expected order for interplolation and normalisation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Cube list with expected parameters extracted</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>iris.cube.CubeList</cite></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The parameters, in this order, are: air temperature at 2 metres above
+the surface, air temperature at a pressure surface of 850 hectopascals,
+and geopotential at a pressure surface of 500 hectopascals.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#amsimp.preprocessing.Preprocessing.load_dataset" title="amsimp.preprocessing.Preprocessing.load_dataset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_dataset()</span></code></a>, <a class="reference internal" href="#amsimp.preprocessing.Preprocessing.interpolate_dataset" title="amsimp.preprocessing.Preprocessing.interpolate_dataset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interpolate_dataset()</span></code></a>, <a class="reference internal" href="#amsimp.preprocessing.Preprocessing.normalise_dataset" title="amsimp.preprocessing.Preprocessing.normalise_dataset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">normalise_dataset()</span></code></a></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="index.html" title="previous chapter (use the left arrow)">Reference Guide</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="forecasting.html" title="next chapter (use the right arrow)">Operational Model Class</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="forecasting.html" title="Operational Model Class"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Reference Guide"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">AMSIMP 0.6.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Reference Guide</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2021, AMSIMP. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>
