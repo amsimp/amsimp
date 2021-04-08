@@ -22,6 +22,7 @@ along with this program.  If not, see https://www.gnu.org/licenses/.
 
 # Importing Dependencies
 import os
+from datetime import datetime, timedelta
 import socket
 import requests
 import tensorflow as tf
@@ -41,7 +42,11 @@ class Preprocessing:
     """
 
     def __init__(
-        self, forecast_length=120, amsimp_ic=True, initialisation_conditions=None
+        self,
+        forecast_length=120,
+        amsimp_ic=True,
+        initialisation_conditions=None,
+        use_efs=False,
     ):
         """
         The parameter, forecast_length, defines the length of the
@@ -82,6 +87,7 @@ class Preprocessing:
             forecast_length *= units.hr
         self.forecast_length = forecast_length.to(units.hr)
         self.initialisation_conditions = initialisation_conditions
+        self.use_efs = use_efs
 
         # Ensure self.amsimp_ic is a boolean value.
         if not isinstance(self.amsimp_ic, bool):
@@ -92,12 +98,6 @@ class Preprocessing:
             raise ValueError(
                 "The parameter, forecast_length, must be a positive number greater than, or equal to 1. "
                 + "The value of forecast_length was: {}".format(self.forecast_length)
-            )
-
-        # Ensure self.forecast_length is a factor of 4.
-        if self.forecast_length.value % 4 != 0:
-            raise ValueError(
-                "The parameter, forecast_length, must be evenly divisible by four."
             )
 
         # Ensure the parameter, self.initialisation_conditions, is not defined when the
@@ -127,6 +127,10 @@ class Preprocessing:
                 raise Warning(
                     "Currently AMSIMP only officially supports the NetCDF file format."
                 )
+
+        # Ensure use_efs is a boolean value.
+        if not isinstance(self.use_efs, bool):
+            raise ValueError("The parameter, use_efs, must be a boolean value.")
 
         # Function to check for an internet connection.
         def is_connected():
@@ -232,43 +236,66 @@ class Preprocessing:
         are provided by the National Oceanic and Atmospheric Adminstrations'
         Global Data Assimilation System (GDAS).
         """
+        # Determine whether the type is determinstic or an ensemble spread.
+        if self.use_efs:
+            type_init = "gefs"
+        else:
+            type_init = "gfs"
+
+        # Function to download files and save appropriately.
+        def download_files():
+            # Air temperature.
+            t = self.__download_file(
+                "https://github.com/amsimp/initial-conditions/raw/main/{}/t.nc".format(
+                    type_init
+                ),
+                "air temperature",
+            )
+
+            # Geopotential.
+            z = self.__download_file(
+                "https://github.com/amsimp/initial-conditions/raw/main/{}/z.nc".format(
+                    type_init
+                ),
+                "geopotential",
+            )
+
+            # Define dataset.
+            dataset = iris.cube.CubeList([t, z])
+
+            # Save dataset.
+            iris.save(dataset, "{}.nc".format(type_init))
+
         # Load dataset based on whether the user defined the initialisation
         # conditions, or not.
         if self.amsimp_ic:
             # Download file from the GitHub repository if necessary.
-            if not os.path.exists("initialisation_conditions.nc"):
-                # 2 metre temperature.
-                t2m = self.__download_file(
-                    "https://github.com/amsimp/initial-conditions/raw/main/initialisation_conditions/2m_temperature.nc",
-                    "2 metre temperature",
+            if not os.path.exists("{}.nc".format(type_init)):
+                # Download files.
+                download_files()
+            else:
+                # Load dataset.
+                dataset = iris.load("{}.nc".format(type_init))
+
+                # Define dates.
+                dataset_date = (
+                    dataset[0]
+                    .coord("time")
+                    .units.num2date(dataset[0].coord("time").points[0])
                 )
+                old = datetime.now() - timedelta(days=1)
 
-                # Total precipitation.
-                tp = self.__download_file(
-                    "https://github.com/amsimp/initial-conditions/raw/main/initialisation_conditions/total_precipitation.nc",
-                    "total precipitation",
-                )
+                # Check if the dataset is old and delete if it is.
+                # Following which download the new dataset.
+                if old > dataset_date:
+                    # Remove old files.
+                    os.remove("{}.nc".format(type_init))
 
-                # Air temperature at 850 hPa.
-                t850 = self.__download_file(
-                    "https://github.com/amsimp/initial-conditions/raw/main/initialisation_conditions/air_temperature.nc",
-                    "850 hPa air temperature",
-                )
-
-                # Geopotential at 500 hPa.
-                z500 = self.__download_file(
-                    "https://github.com/amsimp/initial-conditions/raw/main/initialisation_conditions/geopotential.nc",
-                    "500 hPa geopotential",
-                )
-
-                # Define dataset.
-                dataset = iris.cube.CubeList([t2m, tp, t850, z500])
-
-                # Save dataset.
-                iris.save(dataset, "initialisation_conditions.nc")
+                    # Download files.
+                    download_files()
 
             # Load dataset.
-            dataset = iris.load("initialisation_conditions.nc")
+            dataset = iris.load("{}.nc".format(type_init))
         else:
             # Load dataset provided by the user.
             dataset = iris.load(self.initialisation_conditions)
@@ -294,7 +321,13 @@ class Preprocessing:
         --------
         lon
         """
-        lat = np.linspace(90, -90, 721)[4:-3:4]
+        # Define directory.
+        import amsimp.preprocessing
+
+        directory = os.path.dirname(amsimp.preprocessing.__file__)
+
+        # Retrieve lines of latitude.
+        lat = np.load(directory + "/gfm/lat.npy")
 
         return lat
 
@@ -313,9 +346,15 @@ class Preprocessing:
 
         See Also
         --------
-        lon
+        lat
         """
-        lon = np.linspace(0, 359.75, 1440)[::4]
+        # Define directory.
+        import amsimp.preprocessing
+
+        directory = os.path.dirname(amsimp.preprocessing.__file__)
+
+        # Retrieve lines of longitude.
+        lon = np.load(directory + "/gfm/lon.npy")
 
         return lon
 
@@ -341,48 +380,14 @@ class Preprocessing:
         load_dataset, interpolate_dataset, normalise_dataset
         """
         # Extract the relevant parameters from the dataset.
-        parameters = ["t2m", "t", "z"]
+        parameters = ["t", "z"]
         dataset = self.load_dataset().extract(parameters)
 
         # Ensure all parameters are present.
-        if len(dataset) != 3:
+        if len(dataset) != 2:
             raise Exception(
                 "All of the expected parameters were not present in the dataset."
             )
-
-        # Ensure the pressure surface defined is correct if it is relevant for
-        # a given parameter.
-        # Air temperature at 850 hPa.
-        try:
-            # Retrieve DimCoord from cube.
-            t850_p = dataset.extract("air_temperature")[0].coord("pressure")
-
-            # Ensure units are in hectopascals.
-            t850_p.convert_units("hPa")
-
-            # Check if the pressure surface is at 850 hPa.
-            if not int(t850_p.points[0]) == 850:
-                raise Exception(
-                    "The air temperature values provided are not on the correct pressure surface, which is 850 hPa."
-                )
-        except:
-            pass
-
-        # Geopotential at 500 hPa.
-        try:
-            # Retrieve DimCoord from cube.
-            z500_p = dataset.extract("geopotential")[0].coord("pressure")
-
-            # Ensure units are in hectopascals.
-            z500_p.convert_units("hPa")
-
-            # Check if the pressure surface is at 500 hPa.
-            if not int(z500_p.points[0]) == 500:
-                raise Exception(
-                    "The geopotential values provided are not on the correct pressure surface, which is 500 hPa."
-                )
-        except:
-            pass
 
         return dataset
 
@@ -415,17 +420,7 @@ class Preprocessing:
         # Longitude
         lon = self.lon()
 
-        # Check if the expected number of time steps are present.
-        # If an insufficient number is present.
-        if dataset[0].shape[0] < 6:
-            raise ValueError(
-                "Six timesteps are required in order to generate a forecast."
-            )
-        # If an excess number is present.
-        elif dataset[0].shape[0] > 6:
-            dataset = dataset[-6:]
-
-        #  Check if longitude values contain a negative number.
+        # Check if longitude values contain a negative number.
         if np.min(dataset[0].coord("longitude").points) < 0:
             raise ValueError(
                 "The longitude coordinate system provided is not supported. Longitude values must range from 0 to 360."
@@ -470,30 +465,34 @@ class Preprocessing:
 
         # Load normalisation variables.
         # Mean.
-        mean = np.load(directory + "/model/mean.npy")
+        mean = np.load(directory + "/gfm/mean.npy")
 
         # Standard deviation.
-        std = np.load(directory + "/model/std.npy")
+        std = np.load(directory + "/gfm/std.npy")
 
         # Convert cube list to NumPy array.
-        dataset_numpy = np.zeros(
-            (
-                len(dataset),
-                dataset[0].shape[0],
-                dataset[0].shape[1],
-                dataset[0].shape[2],
+        if self.use_efs:
+            # Ensemble forecast system.
+            dataset_numpy = np.zeros(
+                (
+                    len(dataset),
+                    dataset[0].shape[0],
+                    dataset[0].shape[1],
+                    dataset[0].shape[2],
+                )
             )
-        )
+        else:
+            # Deterministic forecast system.
+            dataset_numpy = np.zeros(
+                (len(dataset), dataset[0].shape[0], dataset[0].shape[1])
+            )
 
         # Ensure units are correct.
-        # 2 metre temperature (K).
+        # Air temperature (K).
         dataset[0].convert_units("K")
 
-        # Air temperature at 850 hPa (K).
-        dataset[1].convert_units("K")
-
-        # Geopotential at 500 hPa (m2 s-2).
-        dataset[2].convert_units("m2 s-2")
+        # Geopotential (m2 s-2).
+        dataset[1].convert_units("m2 s-2")
 
         # Loop through dataset.
         for i in tqdm(range(len(dataset)), desc="Interpolating dataset"):
@@ -501,18 +500,22 @@ class Preprocessing:
             dataset_numpy[i] = dataset[i].data
 
         # Transpose.
-        dataset_numpy = np.transpose(dataset_numpy, (1, 2, 3, 0))
+        if self.use_efs:
+            # Ensemble forecast system.
+            dataset = np.transpose(dataset_numpy, (1, 2, 3, 0))
+        else:
+            # Deterministic forecast system.
+            dataset = np.transpose(dataset_numpy, (1, 2, 0))
 
-        #  Normalise.
-        dataset_numpy = (dataset_numpy - mean) / std
+            # Reshape for model input.
+            dataset = dataset.reshape(
+                1,
+                dataset.shape[0],
+                dataset.shape[1],
+                dataset.shape[2],
+            )
 
-        # Reshape for model input.
-        dataset = dataset_numpy.reshape(
-            1,
-            dataset[0].shape[0],
-            dataset[0].shape[1],
-            dataset[0].shape[2],
-            len(dataset),
-        )
+        # Normalise.
+        dataset = (dataset - mean) / std
 
         return dataset

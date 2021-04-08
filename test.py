@@ -1,8 +1,20 @@
-# Import dependicies.
+# Import dependencies.
 import amsimp
 
-# Define model.
-model = amsimp.OperationalModel()
+# Deterministic.
+print("Deterministic")
 
-# Generate sample forecast.
-fct = model.generate_forecast()
+# Define state.
+state = amsimp.OperationalModel()
+
+# Generate forecast and save.
+state.generate_forecast(save=True)
+
+# Ensemble.
+print("Ensemble")
+
+# Define state.
+state = amsimp.OperationalModel(use_efs=True)
+
+# Generate forecast and save.
+state.generate_forecast(save=True)

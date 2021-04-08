@@ -22,15 +22,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Importing Dependencies.
 import os
-import sys
+import tensorflow as tf
 from tqdm import tqdm
 import iris
 import numpy as np
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import ConvLSTM2D, Dropout, Dense
-from tensorflow.keras.layers import BatchNormalization
-from tensorflow.keras.optimizers import Adam
-import tensorflow as tf
 from amsimp.preprocessing import Preprocessing
 
 # -----------------------------------------------------------------------------------------#
@@ -41,121 +36,7 @@ class OperationalModel(Preprocessing):
     This is the operational model class for AMSIMP.
     """
 
-    def model_architecture(self):
-        r"""Generates the operational AMSIMP Global Forecast Model architecture.
-
-        Returns
-        -------
-        `tf.keras.Sequential`
-            Operational AMSIMP Global Forecast Model architecture.
-
-        Notes
-        -----
-        This architecture is currently based on the ConvLSTM layer, which has
-        been pretrained on the dataset from the year 2009 to the year 2016.
-        A major drawback of LSTMs in its handling of spatiotemporal data is due
-        to its usage of full connections in input-to-state and state-to-state
-        transitions in which no spatial information is encoded. To overcome
-        this problem, a distinguishing feature of a ConvLSTM cell is that all
-        the inputs and gates of the ConvLSTM layer are 3D tensors whose last
-        two dimensions are spatial dimensions.
-        """
-        # Create, and train models.
-        # Optimiser.
-        opt = Adam(lr=1e-3, decay=1e-5)
-        # Create model.
-        model = Sequential()
-
-        # First layer.
-        model.add(
-            ConvLSTM2D(
-                filters=64,
-                kernel_size=(7, 7),
-                input_shape=(6, 179, 360, 3),
-                padding="same",
-                return_sequences=True,
-                activation="tanh",
-                recurrent_activation="hard_sigmoid",
-                kernel_initializer="glorot_uniform",
-                unit_forget_bias=True,
-                dropout=0.3,
-                recurrent_dropout=0.3,
-                go_backwards=True,
-            )
-        )
-        # Batch normalisation.
-        model.add(BatchNormalization())
-        # Dropout.
-        model.add(Dropout(0.1))
-
-        # Second layer.
-        model.add(
-            ConvLSTM2D(
-                filters=32,
-                kernel_size=(7, 7),
-                padding="same",
-                return_sequences=True,
-                activation="tanh",
-                recurrent_activation="hard_sigmoid",
-                kernel_initializer="glorot_uniform",
-                unit_forget_bias=True,
-                dropout=0.4,
-                recurrent_dropout=0.3,
-                go_backwards=True,
-            )
-        )
-        # Batch normalisation.
-        model.add(BatchNormalization())
-
-        # Third layer.
-        model.add(
-            ConvLSTM2D(
-                filters=32,
-                kernel_size=(7, 7),
-                padding="same",
-                return_sequences=True,
-                activation="tanh",
-                recurrent_activation="hard_sigmoid",
-                kernel_initializer="glorot_uniform",
-                unit_forget_bias=True,
-                dropout=0.4,
-                recurrent_dropout=0.3,
-                go_backwards=True,
-            )
-        )
-        # Batch normalisation.
-        model.add(BatchNormalization())
-        # Dropout.
-        model.add(Dropout(0.1))
-
-        # Final layer.
-        model.add(
-            ConvLSTM2D(
-                filters=32,
-                kernel_size=(7, 7),
-                padding="same",
-                return_sequences=True,
-                activation="tanh",
-                recurrent_activation="hard_sigmoid",
-                kernel_initializer="glorot_uniform",
-                unit_forget_bias=True,
-                dropout=0.5,
-                recurrent_dropout=0.3,
-                go_backwards=True,
-            )
-        )
-        # Batch normalisation.
-        model.add(BatchNormalization())
-
-        # Add dense layer.
-        model.add(Dense(3))
-
-        # Compile model.
-        model.compile(optimizer=opt, loss="mse", metrics=["mean_absolute_error"])
-
-        return model
-
-    def generate_forecast(self):
+    def generate_forecast(self, save=False):
         r"""Generates a forecast with the current AMSIMP Global Forecast Model
         architecture.
 
@@ -166,85 +47,75 @@ class OperationalModel(Preprocessing):
 
         Notes
         -----
-        This model has been pretrained on the dataset from the year 2009 to the
-        year 2016. The architecture of the current operational model is
+        This model has been pretrained on the dataset from the year 1980 to the
+        year 2018. The architecture of the current operational model is
         currently based on the ConvLSTM layer. The prognostic variables are: air
-        temperature at 2 metres above the surface, air temperature at a pressure
-        surface of 850 hectopascals, and geopotential at a pressure surface of
-        500 hectopascals.
+        temperature and geopotential at various pressure surfaces.
 
         See Also
         --------
-        normalise_dataset
+        load_models
         """
         # Define model input.
         model_input = self.normalise_dataset()
+
+        # Define forecast output array.
+        model_output = np.zeros(
+            (
+                int((self.forecast_length.value / 2) + 1),
+                model_input.shape[0],
+                model_input.shape[1],
+                model_input.shape[2],
+                model_input.shape[3],
+            )
+        )
+        # Add current conditions to output array.
+        model_output[0] = model_input
 
         # Define directory.
         import amsimp.preprocessing
 
         directory = os.path.dirname(amsimp.preprocessing.__file__)
 
-        # Define model and load weights.
-        model = self.model_architecture()
-        model.load_weights(directory + "/model/global_forecast_model.h5")
+        # Define model.
+        model = tf.keras.models.load_model(directory + "/gfm/model")
 
-        # Define forecast output array.
-        model_output = np.zeros(
-            (
-                int((self.forecast_length.value / 2) + 1),
-                model_input.shape[2],
-                model_input.shape[3],
-                model_input.shape[4],
-            )
+        # Create a progress bar.
+        pbar = tqdm(
+            total=int(self.forecast_length.value / 2),
+            desc="Generating forecast",
         )
-        # Add current conditions to output array.
-        model_output[0] = model_input[0, -1]
 
         # Create iterative predictions.
-        it = 1
-        pbar = tqdm(
-            total=int(self.forecast_length.value / 12), desc="Generating forecast"
-        )
-        while it < (self.forecast_length.value / 2):
+        it = 2
+        while it <= self.forecast_length.value:
             # Generate predictions based on current model input.
-            predictions = model.predict(model_input)
+            prediction = model.predict(model_input)
 
             # Add predictions to output array.
-            model_output[it : it + 6] = predictions[0]
+            model_output[int(it / 2)] = prediction
 
             # Define as new model input.
-            model_input = predictions
+            model_input = prediction
 
             # Increment iteration.
-            it += 6
+            it += 2
+
+            # Increment for progress bar.
             pbar.update()
 
-        # Close progress bar.
-        pbar.close()
-
-        # Define progress bar.
-        pbar = tqdm(total=3, desc="Outputting forecast")
-
-        # Inverse of normalisation.
         # Load normalisation variables.
         # Mean.
-        mean = np.load(directory + "/model/mean.npy")
-        # Standard deviation.
-        std = np.load(directory + "/model/std.npy")
+        mean = np.load(directory + "/gfm/mean.npy")
 
-        # Determine inverse.
+        # Standard deviation.
+        std = np.load(directory + "/gfm/std.npy")
+
+        # Inverse of normalisation.
         model_output = (model_output * std) + mean
 
-        # Define forecast for each parameter.
-        # 2 metre temperature.
-        t2m = model_output[:, :, :, 0]
-
-        # 850 hPa temperature.
-        t = model_output[:, :, :, 1]
-
-        # 500 hPa geopotential.
-        z = model_output[:, :, :, 2]
+        # Define progress bar.
+        pbar = tqdm(total=2, desc="Outputting forecast")
 
         # Define time coordinate.
         time = self.interpolate_dataset()[0].coord("time")
@@ -267,62 +138,88 @@ class OperationalModel(Preprocessing):
         lon = iris.coords.DimCoord(
             self.lon(), standard_name="longitude", units="degrees"
         )
-        #  Aux coords.
-        # 850 hPa for temperature.
-        p850 = iris.coords.AuxCoord(
-            np.array([850]), standard_name="air_pressure", units="hPa"
-        )
-        # 500 hPa for geopotential.
-        p500 = iris.coords.AuxCoord(
-            np.array([500]), standard_name="air_pressure", units="hPa"
-        )
+
+        # Forecast types.
+        if self.use_efs:
+            # Ensemble forecast system.
+            # Air temperature.
+            t = model_output[:, :, :, :, 0]
+
+            # Geopotential.
+            z = model_output[:, :, :, :, 1]
+
+            # Ensemble member dimcoord.
+            realization = iris.coords.DimCoord(
+                np.linspace(0, 30, 31), standard_name="realization"
+            )
+
+            # Co-ordinates.
+            coords = [(time, 0), (realization, 1), (lat, 2), (lon, 3)]
+
+            #  Source label.
+            source = "AMSIMP Global Ensemble Forecast Model"
+        else:
+            # Deterministic forecast system.
+            # Air temperature.
+            t = model_output[:, 0, :, :, 0]
+
+            # Geopotential.
+            z = model_output[:, 0, :, :, 1]
+
+            # Co-ordinates.
+            coords = [(time, 0), (lat, 1), (lon, 2)]
+
+            #  Source label.
+            source = "AMSIMP Global Deterministic Forecast Model"
 
         # Define cubes.
-        # 2 metre temperature.
-        t2m = iris.cube.Cube(
-            t2m,
-            long_name="2m_temperature",
-            var_name="t2m",
-            units="K",
-            dim_coords_and_dims=[(time, 0), (lat, 1), (lon, 2)],
-            attributes={
-                "source": "AMSIMP Global Forecast Model",
-            },
-        )
-        pbar.update()
-
-        # 850 hPa temperature.
+        # Air temperature.
         t = iris.cube.Cube(
             t,
             standard_name="air_temperature",
             var_name="t",
             units="K",
-            dim_coords_and_dims=[(time, 0), (lat, 1), (lon, 2)],
+            dim_coords_and_dims=coords,
             attributes={
-                "source": "AMSIMP Global Forecast Model",
+                "source": source,
             },
         )
-        t.add_aux_coord(p850)
         pbar.update()
 
-        # 500 hPa geopotential.
+        # Geopotential.
         z = iris.cube.Cube(
             z,
             standard_name="geopotential",
             var_name="z",
             units="m2 s-2",
-            dim_coords_and_dims=[(time, 0), (lat, 1), (lon, 2)],
+            dim_coords_and_dims=coords,
             attributes={
-                "source": "AMSIMP Global Forecast Model",
+                "source": source,
             },
         )
-        z.add_aux_coord(p500)
         pbar.update()
 
         # Finish progress bar.
         pbar.close()
 
         # Define output forecast.
-        forecast = iris.cube.CubeList([t2m, t, z])
+        forecast = iris.cube.CubeList([t, z])
+
+        # Initialism.
+        if self.use_efs:
+            # Model initialism.
+            initialism = "gefm"
+        else:
+            # Model initialism.
+            initialism = "gfm"
+
+        # Save forecast if requested.
+        if save:
+            iris.save(
+                forecast,
+                "amsimp_{}_{}.nc".format(
+                    initialism, time.units.num2date(time.points[0]).strftime("%Y%m%d%H")
+                ),
+            )
 
         return forecast
