@@ -1,1 +1,1 @@
-recursive-include amsimp/models *
+recursive-include amsimp/gfm *

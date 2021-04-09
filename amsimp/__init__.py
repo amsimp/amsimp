@@ -20,7 +20,7 @@ We apologise for any inconvience caused."""
     )
 
 # Preprocessing Class.
-from amsimp.preprocessing import PreProcessing
+from amsimp.preprocessing import Preprocessing
 
 # Operational Forecasting Model Class.
 from amsimp.forecasting import OperationalModel

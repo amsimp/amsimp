@@ -103,6 +103,9 @@ class OperationalModel(Preprocessing):
 
             # Increment for progress bar.
             pbar.update()
+            
+        # Complete progress bar.
+        pbar.close()
 
         # Load normalisation variables.
         # Mean.

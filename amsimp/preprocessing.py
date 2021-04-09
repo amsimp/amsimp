@@ -22,11 +22,12 @@ along with this program.  If not, see https://www.gnu.org/licenses/.
 
 # Importing Dependencies
 import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 from datetime import datetime, timedelta
 import socket
 import requests
 import tensorflow as tf
-from tensorflow.keras.mixed_precision import experimental as mixed_precision
+import logging
 from astropy import units
 from astropy.units.quantity import Quantity
 from tqdm import tqdm
@@ -79,7 +80,7 @@ class Preprocessing:
         """
         # Suppress Tensorflow warnings.
         tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-        os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+        tf.get_logger().setLevel(logging.ERROR)
 
         # Make the aforementioned variables available else where in the class.
         self.amsimp_ic = amsimp_ic
