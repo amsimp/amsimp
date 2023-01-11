@@ -1,12 +1,9 @@
-name: Build AMSIMP
+name: Upload and publish package to PyPI
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    tags:
+       - '*'
 
 jobs:
   build:
@@ -35,5 +32,9 @@ jobs:
         source ~/.bashrc
         conda env create -f environment.yml
         conda activate amsimp
-        python setup.py install
-        python test.py
+        python setup.py sdist
+    - name: Publish package
+      uses: pypa/gh-action-pypi-publish@master
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_API_TOKEN }}

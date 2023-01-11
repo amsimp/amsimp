@@ -11,7 +11,8 @@ AMSIMP is an open-source solution that leverages machine learning to improve num
 **Features:**
 
 * Fast and accurate, AMSIMP's neural networks provide high quality weather forecasts and predictions.
-* AMSIMP offers a pretrained operational AMSIMP Global Forecast Model (AMSIMP GFM) architecture. It is trained on a dataset from the past decade, ranging from the year 2009 to the year 2016. Over time, a future model will be trained on a larger dataset.
+* AMSIMP offers the pretrained operational AMSIMP Global Forecast Model (AMSIMP GFM) architecture. It is trained on a dataset from the past decade, ranging from the year 2009 to the year 2016. Over time, a future model will be trained on a larger dataset.
+* AMSIMP offers near real-time numerical weather prediction through initialisation conditions provided by the Global Data Assimilation System.
 * The core of AMSIMP is well-optimized Python code. A performance increase of 6.18 times can be expected in comparison against a physics-based model of a similar resolution.
 * AMSIMP's high level and intuitive syntax makes it accessible for programmers and atmospheric scientists of any experience level.
 * Distributed under the [GNU General Public License v3.0](https://github.com/amsimp/amsimp/blob/master/LICENSE), AMSIMP is developed [publicly on GitHub](https://github.com/amsimp/amsimp).

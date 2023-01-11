@@ -1,6 +1,6 @@
 package:
   name: amsimp
-  version: "0.5.0"
+  version: "0.6.1"
 
 source:
   git_url: https://github.com/amsimp/amsimp.git
@@ -9,48 +9,29 @@ channels:
   - conda-forge
   - defaults
 
-build:
-  run_exports:
-    strong:
-      - pip
-      - pip:
-        - tensorflow
-
 requirements:
   build:
-    - cython
     - python
     - numpy
   host:
-    - cython
     - python
     - numpy
   dependices:
-    - cython
     - python
     - astropy
-    - matplotlib
     - numpy
-    - cartopy
-    - pandas
-    - scikit-learn
     - iris
-    - progress
     - tqdm
+    - pip
     - pip:
       - tensorflow
   run:
-    - cython
     - python
     - astropy
-    - matplotlib
     - numpy
-    - cartopy
-    - pandas
-    - scikit-learn
     - iris
-    - progress
     - tqdm
+    - pip
 
 about:
   home: https://amsimp.com
@@ -61,4 +42,4 @@ about:
   doc_url: https://docs.amsimp.com
   doc_source_url: https://github.com/amsimp/amsimp/tree/dev/docspackage
   name: AMSIMP
-  version: "0.5.0"
+  version: "0.6.1"

@@ -2,7 +2,7 @@
 AMSIMP Preprocessing Class. For information about this class is
 described below.
 
-Copyright (C) 2020 AMSIMP
+Copyright (C) 2021 AMSIMP
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
