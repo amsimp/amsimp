@@ -1,12 +1,21 @@
-# Import dependicies.
+# Import dependencies.
 import amsimp
 import iris
 
-# Define the operational model and the forecast length.
-model = amsimp.OperationalModel(forecast_length=120)
+# Deterministic.
+print("Deterministic")
 
-# # Generate a near real-time weather forecast.
-fct = model.generate_forecast()
+# Define state.
+state = amsimp.OperationalModel()
 
-# Save forecast.
-iris.save(fct, 'gfm_example.nc')
+# Generate forecast and save.
+state.generate_forecast(save=True)
+
+# Ensemble.
+print("Ensemble")
+
+# Define state.
+state = amsimp.OperationalModel(use_efs=True)
+
+# Generate forecast and save.
+state.generate_forecast(save=True)
