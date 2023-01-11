@@ -6,7 +6,7 @@
 ![Anaconda-Server Badge](https://anaconda.org/amsimp/amsimp/badges/downloads.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/amsimp/amsimp.svg?style=flat-square)
 
-AMSIMP is an open-source solution that leverages machine learning to improve numerical weather prediction. Read the [paper](https://github.com/amsimp/papers/raw/master/scifest/national/project-book/main.pdf).
+AMSIMP is an open-source solution that leverages machine learning to improve numerical weather prediction. Read the [paper](https://github.com/amsimp/papers/raw/master/scifest/national/project-book/main.pdf). Due to data corruption on my end, the model no longer functions.
 
 **Features:**
 
