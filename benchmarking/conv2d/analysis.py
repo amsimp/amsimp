@@ -35,7 +35,7 @@ types = "Operational IFS", "IFS T63", "IFS T42", "Persistence", "Climateology"
 def plot(x1, x2, y, naive, comparsion, title, metric):
     # AMSIMP.
     plt.plot(x1[2::6], np.mean(y, axis=0)[2::6], linestyle="-")
-    plt.scatter(x1[2::6], np.mean(y, axis=0)[2::6], label="AMSIMP")
+    plt.scatter(x1[2::6], np.mean(y, axis=0)[2::6], label="My Model")
 
     # Comparsion.
     # Operational IFS.
@@ -88,7 +88,7 @@ def plot(x1, x2, y, naive, comparsion, title, metric):
     filename = filename.replace("-", "_")
 
     # Save.
-    plt.savefig(folder+filename, dpi=300)
+    plt.savefig(folder+filename, dpi=300, transparent=True)
 
     # Close figure.
     plt.close()
